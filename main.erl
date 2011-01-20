@@ -8,7 +8,7 @@ start(FileName) ->
     init:stop().
 
 loop(FileDescriptor) ->
-    case io:request(FileDescriptor, {get_until, prompt, yamucc_lexer, token, [1]}) of
+    case io:request(FileDescriptor, {get_until, prompt, ducc_lexer, token, [1]}) of
         {ok, Token = {Type, _, Value}, _} ->
             io:write({Type, Value}),
             io:nl(),

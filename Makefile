@@ -2,7 +2,7 @@ DIR_EBIN   = ebin
 DIR_LEXER  = lexer
 DIR_PARSER = parser
 
-PARSER_BASE_NAME = yamucc
+PARSER_BASE_NAME = ducc
 LEXER_NAME       = $(PARSER_BASE_NAME)_lexer
 PARSER_NAME      = $(PARSER_BASE_NAME)_parser
 
@@ -37,4 +37,4 @@ clean:
 all: clean ass1
 
 pack:
-	tar -czvf yamucc.tar.gz ebin lexer parser suite Makefile main.erl testfil
+	tar -czvf ducc.tar.gz ebin lexer parser suite Makefile main.erl testfil
