@@ -3,15 +3,15 @@
 
 start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
-    process(FileDescriptor),
+    process_file(FileDescriptor),
     file:close(FileDescriptor),
     erlang:halt().
 
-process(FileDescriptor) ->
+process_file(FileDescriptor) ->
     case io:request(FileDescriptor, {get_until, prompt, lexer, token, [1]}) of
         {ok, {Type, _, Value}, _} ->
             print_line({Type, Value}),
-            process(FileDescriptor);
+            process_file(FileDescriptor);
         {eof, _} ->
             ok;
         ErrorInfo ->
