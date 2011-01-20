@@ -1,4 +1,4 @@
--file("/usr/local/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 0).
+-file("/usr/local/Cellar/erlang/R14B01/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 0).
 %% The source of this file is part of leex distribution, as such it
 %% has the same Copyright as the other files in the leex
 %% distribution. The Copyright is defined in the accompanying file
@@ -29,7 +29,7 @@ is_reserved('void') -> true;
 is_reserved('while') -> true;
 is_reserved(_) -> false.
 
--file("/usr/local/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 14).
+-file("/usr/local/Cellar/erlang/R14B01/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 14).
 
 format_error({illegal,S}) -> ["illegal characters ",io_lib:write_string(S)];
 format_error({user,S}) -> S.
@@ -306,14 +306,14 @@ yystate(22, Ics, Line, Tlen, _, _) ->
     {3,Tlen,Ics,Line};
 yystate(21, [32|Ics], Line, Tlen, _, _) ->
     yystate(21, Ics, Line, Tlen+1, 8, Tlen);
+yystate(21, [12|Ics], Line, Tlen, _, _) ->
+    yystate(21, Ics, Line, Tlen+1, 8, Tlen);
 yystate(21, [13|Ics], Line, Tlen, _, _) ->
     yystate(21, Ics, Line, Tlen+1, 8, Tlen);
-yystate(21, [12|Ics], Line, Tlen, _, _) ->
+yystate(21, [9|Ics], Line, Tlen, _, _) ->
     yystate(21, Ics, Line, Tlen+1, 8, Tlen);
 yystate(21, [10|Ics], Line, Tlen, _, _) ->
     yystate(21, Ics, Line+1, Tlen+1, 8, Tlen);
-yystate(21, [9|Ics], Line, Tlen, _, _) ->
-    yystate(21, Ics, Line, Tlen+1, 8, Tlen);
 yystate(21, Ics, Line, Tlen, _, _) ->
     {8,Tlen,Ics,Line,21};
 yystate(20, [110|Ics], Line, Tlen, Action, Alen) ->
@@ -370,14 +370,14 @@ yystate(17, [33|Ics], Line, Tlen, Action, Alen) ->
     yystate(5, Ics, Line, Tlen+1, Action, Alen);
 yystate(17, [32|Ics], Line, Tlen, Action, Alen) ->
     yystate(21, Ics, Line, Tlen+1, Action, Alen);
+yystate(17, [12|Ics], Line, Tlen, Action, Alen) ->
+    yystate(21, Ics, Line, Tlen+1, Action, Alen);
 yystate(17, [13|Ics], Line, Tlen, Action, Alen) ->
     yystate(21, Ics, Line, Tlen+1, Action, Alen);
-yystate(17, [12|Ics], Line, Tlen, Action, Alen) ->
+yystate(17, [9|Ics], Line, Tlen, Action, Alen) ->
     yystate(21, Ics, Line, Tlen+1, Action, Alen);
 yystate(17, [10|Ics], Line, Tlen, Action, Alen) ->
     yystate(21, Ics, Line+1, Tlen+1, Action, Alen);
-yystate(17, [9|Ics], Line, Tlen, Action, Alen) ->
-    yystate(21, Ics, Line, Tlen+1, Action, Alen);
 yystate(17, [C|Ics], Line, Tlen, Action, Alen) when C >= 40, C =< 45 ->
     yystate(8, Ics, Line, Tlen+1, Action, Alen);
 yystate(17, [C|Ics], Line, Tlen, Action, Alen) when C >= 48, C =< 57 ->
@@ -595,4 +595,4 @@ yyaction_7(TokenChars, TokenLine) ->
 yyaction_8() ->
      skip_token .
 
--file("/usr/local/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 282).
+-file("/usr/local/Cellar/erlang/R14B01/lib/erlang/lib/parsetools-2.0.5/include/leexinc.hrl", 282).

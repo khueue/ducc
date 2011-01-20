@@ -2,7 +2,7 @@ Definitions.
 
 Boolean = (&&|!)
 Digit = [0-9]
-WhiteSpace = (\s|\n|\r|\f|\t)
+WhiteSpace = [\s\n\r\f\t]
 Letter = [A-Za-z_]
 Comparator = (<|>|<=|>=|==|!=)
 LineComment = (//)

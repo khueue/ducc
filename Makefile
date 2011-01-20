@@ -37,4 +37,3 @@ all: clean ass1
 
 pack:
 	tar -czvf yamucc.tar.gz ebin lexer parser suite Makefile main.erl testfil
-	

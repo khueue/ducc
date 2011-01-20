@@ -3,14 +3,14 @@
 
 start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
-    _ = loop(FileDescriptor),
+    loop(FileDescriptor),
     file:close(FileDescriptor),
     init:stop().
 
 loop(FileDescriptor) ->
     case io:request(FileDescriptor, {get_until, prompt, yamucc_lexer, token, [1]}) of
         {ok, Token = {Type, _, Value}, _} ->
-            _ = io:write({Type, Value}),
+            io:write({Type, Value}),
             io:nl(),
             loop(FileDescriptor);
         {eof, _} ->
@@ -22,5 +22,5 @@ loop(FileDescriptor) ->
         ErrorInfo ->
             io:write({lexer_error, ErrorInfo}),
             io:nl(),
-            init:stop()
+            halt()
     end.

@@ -1,2 +1,3 @@
 lexer/*.erl
-*.dump
+**/*.dump
+**/*.beam
