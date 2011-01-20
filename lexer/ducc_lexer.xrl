@@ -5,6 +5,7 @@ Digit = [0-9]
 WhiteSpace = [\s\n\r\f\t]
 Letter = [A-Za-z_]
 Comparator = (<|>|<=|>=|==|!=)
+Symbol = []()[}{/;,*+=-]
 LineComment = (//)
 MultiCommentStart = (/\*)
 MultiCommentEnd   = (\*/)
@@ -42,7 +43,7 @@ Rules.
     {token,
         {comparator,TokenLine,list_to_atom(TokenChars)}}.
 
-[]()[}{/;,*+=-] :
+{Symbol} :
     {token,
         {list_to_atom(TokenChars),TokenLine,list_to_atom(TokenChars)}}.
 
