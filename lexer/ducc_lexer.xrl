@@ -1,6 +1,6 @@
 Definitions.
 
-Boolean = (&&|!)
+Logical = (&&|(\|\|)|!)
 Digit = [0-9]
 WhiteSpace = [\s\n\r\f\t]
 Letter = [A-Za-z_]
@@ -13,9 +13,9 @@ StuffInComment = ([^*/]|[^*]/|\*[^/])
 
 Rules.
 
-{Boolean} :
+{Logical} :
     {token,
-        {boolean,TokenLine,list_to_atom(TokenChars)}}.
+        {logical,TokenLine,list_to_atom(TokenChars)}}.
 
 % Integer.
 {Digit}+ :
@@ -45,7 +45,7 @@ Rules.
 
 {Symbol} :
     {token,
-        {list_to_atom(TokenChars),TokenLine,list_to_atom(TokenChars)}}.
+        {symbol,TokenLine,list_to_atom(TokenChars)}}.
 
 {WhiteSpace}+ :
     skip_token.
