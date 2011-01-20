@@ -32,6 +32,7 @@ test: ass1
 clean:
 	rm $(DIR_LEXER)/$(LEXER_NAME).erl
 	rm $(DIR_EBIN)/*.beam
+	rm *.dump
 
 all: clean ass1
 
