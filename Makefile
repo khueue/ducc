@@ -2,8 +2,9 @@ DIR_EBIN   = ebin
 DIR_LEXER  = lexer
 DIR_PARSER = parser
 
-LEXER_NAME  = lexer
-PARSER_NAME = parser
+PROJECT_NAME = ducc
+LEXER_NAME   = lexer
+PARSER_NAME  = parser
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -21,7 +22,7 @@ clean:
 	rm -rf *.dump
 
 pack:
-	tar -czvf ducc.tar.gz ebin lexer parser suite Makefile *.erl testfil
+	tar -czvf $(PROJECT_NAME).tar.gz ebin lexer suite Makefile *.erl testfil
 
 ass1: setup
 	clear
