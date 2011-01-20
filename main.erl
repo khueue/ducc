@@ -3,24 +3,25 @@
 
 start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
-    loop(FileDescriptor),
+    process(FileDescriptor),
     file:close(FileDescriptor),
     init:stop().
 
-loop(FileDescriptor) ->
-    case io:request(FileDescriptor, {get_until, prompt, ducc_lexer, token, [1]}) of
-        {ok, Token = {Type, _, Value}, _} ->
-            io:write({Type, Value}),
-            io:nl(),
-            loop(FileDescriptor);
+process(FileDescriptor) ->
+    case io:request(FileDescriptor, {get_until, prompt, lexer, token, [1]}) of
+        {ok, {Type, _, Value}, _} ->
+            print_line({Type, Value}),
+            process(FileDescriptor);
         {eof, _} ->
             ok;
         %{error, _ErrorMessage = {_, _, Msg}, _} ->
-        %    io:write({lexer_error, Msg}),
-        %    io:nl(),
-        %    init:stop();
+        %    print_line({lexer_error, Msg}),
+        %    halt();
         ErrorInfo ->
-            io:write({lexer_error, ErrorInfo}),
-            io:nl(),
+            print_line({lexer_error, ErrorInfo}),
             halt()
     end.
+
+print_line(Stuff) ->
+    io:write(Stuff),
+    io:nl().
