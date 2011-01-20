@@ -39,7 +39,7 @@ ass1: setup
 
 # XXX
 ass2:
-    $(ERL) 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
+	$(ERL) 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
 
 # XXX
 test: ass1
