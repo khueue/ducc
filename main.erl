@@ -5,7 +5,7 @@ start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
     process(FileDescriptor),
     file:close(FileDescriptor),
-    init:stop().
+    erlang:halt().
 
 process(FileDescriptor) ->
     case io:request(FileDescriptor, {get_until, prompt, lexer, token, [1]}) of
@@ -14,12 +14,9 @@ process(FileDescriptor) ->
             process(FileDescriptor);
         {eof, _} ->
             ok;
-        %{error, _ErrorMessage = {_, _, Msg}, _} ->
-        %    print_line({lexer_error, Msg}),
-        %    halt();
         ErrorInfo ->
-            print_line({lexer_error, ErrorInfo}),
-            halt()
+            print_line({lexical_error, ErrorInfo}),
+            erlang:halt()
     end.
 
 print_line(Stuff) ->
