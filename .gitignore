@@ -1,5 +1,9 @@
+# Backup files and such.
+._*
+*~
+.DS_Store
+
 lexer/*.erl
 *.dump
 *.beam
-._*
 *.gz
