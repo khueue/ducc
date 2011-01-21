@@ -8,7 +8,7 @@ Emil Hessman (emhe9781@student...)
 
 Sebastian Lundström (selu7901@student...)
 
-Project Repository at GitHub: <https://github.com/khueue/> XXXXXXX tag?
+Project Repository at GitHub: <https://github.com/khueue/ducc/tree/ass1-lexer>
 
 The source and executables are also available on the IT departments server:
 /home/emhe9781/src/ducc/ 
