@@ -8,7 +8,7 @@ PARSER_NAME  = parser
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
-ERL        = erl -pa ebin -noshell -eval
+ERL        = erl -pa ebin -noshell
 
 all: clean ass1
 
@@ -23,12 +23,13 @@ clean:
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
-		$(DIR_EBIN) $(DIR_LEXER) report suite Makefile *.erl testfil
+		$(DIR_EBIN) $(DIR_LEXER) report suite \
+		Makefile *.erl testfil
 
 ass1: setup
 	clear
 	@- echo '--- Generating the lexer ...'
-	$(ERL) 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
+	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
 
 	@- echo '--- Compiling lexer ...'
 	$(ERLC) $(DIR_LEXER)/$(LEXER_NAME).erl
@@ -37,7 +38,7 @@ ass1: setup
 	$(ERLC) main.erl
 
 	@- echo '--- Testing lexer ...'
-	erl -pa ebin -noshell -run main start testfil
+	$(ERL) -run main start testfil
 
 # XXX
 ass2:
