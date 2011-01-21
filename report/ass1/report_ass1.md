@@ -13,6 +13,7 @@ Project Repository at GitHub: <https://github.com/khueue/> XXXXXXX tag?
 The source and executables are also available on the IT departments server:
 /home/emhe9781/src/ducc/ 
 
+
 ## Introduction
 
 Our compiler will be written in Erlang. Neither of us has any previous
@@ -23,6 +24,7 @@ language (a subset of C), so this is what the report will focus on:
 understanding the lexical part of uC, learning Leex and arriving at a
 (hopefully) working lexer.
 
+
 ## Tools Used
 
 ### Leex
@@ -31,10 +33,11 @@ Thankfully, the Erlang environment provides ports of both Lex and Yacc, namely
 Leex and Yecc. Leex documentation can be found here:
 <http://www.erlang.org/doc/man/leex.html>
 
-#### Input File
+#### Input File: Specification
 
-Leex takes as input a file with token definitions and gives as output a
-customized Erlang module, specifically molded from the token definitions.
+Leex takes as input a file (with file extension ".xrl") with token definitions
+and gives as output a customized Erlang module, specifically molded from
+the token definitions.
 
 The definitions file has the following format:
 
@@ -58,6 +61,16 @@ are defined as follows:
      the corresponding Erlang code is executed, usually emitting a token for
      the input matched.
  * _Erlang code_. Any additional code needed by the above.
+
+#### Output File: Lexer
+
+When feeding the input file to Leex using `leex:file(lexer)`, where _lexer_
+is the name of the input file, Leex generates a complete lexer according
+to the specification. This file is placed beside the specification but named
+with a different file extension: ".erl".
+
+See section "main.erl" below for information on how to use the lexer.
+
 
 ## Handling Comments
 
@@ -89,10 +102,12 @@ This prohibits the sequences `/*` and `*/` from appearing inside the comment,
 but anything else is allowed. This combined should be able to cope with
 proper multi-line comments in uC (and C).
 
+
 ## Handling EOF
 
 Since we are using Leex to create the lexical analyser we didn't need to 
 handle eof explicitly. 
+
 
 ## main.erl 
 
@@ -108,6 +123,7 @@ Upon seeing a valid token, the token and its value is printed to standard
 output using the io:format/2 function. If it sees an error, there's a
 lexical error in the input stream and an error message will be printed to
 standard output.
+
 
 ## Links
 
