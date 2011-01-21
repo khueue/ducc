@@ -1,5 +1,5 @@
 lexer/*.erl
-**/*.dump
-**/*.beam
+*.dump
+*.beam
 ._*
 *.gz
