@@ -10,6 +10,9 @@ Sebastian Lundström (selu7901@student.uu.se)
 
 Project Repository at GitHub: https://github.com/khueue/ XXXXXXX tag?
 
+The source and executables are also available on the IT departments server:
+/home/emhe9781/src/ducc/ 
+
 ## Introduction
 
 Our compiler will be written in Erlang. Neither of us has any previous
@@ -82,6 +85,26 @@ number of stars. The stuff in between that, InComment, is defined as
 ´([^*/]|[^*]/|\*[^/])´. This prohibits the sequences '/*' and '*/' from
 appearing inside the comment, but anything else is allowed. This combined
 should be able to cope with proper multi-line comments in uC (and C).
+
+## Handling EOF
+
+Since we are using Leex to create the lexical analyser we didn't need to 
+handle eof explicitly. 
+
+## main.erl 
+
+To perform lexical analysis on the input from a stream, e.g. a uC source file
+, and to output the result to the standard output we used the erlang file and
+io modules.
+
+The function start in the module main takes a file name as an argument and
+opens a stream, which is passed to the function process_file.
+The function process_file uses the io:request/2 function which uses the 
+generated lexer in order to tokenize the input stream.
+Upon seeing a valid token, the token and its value is printed to standard 
+output using the io:format/2 function. If it sees an error, there's a
+lexical error in the input stream and an error message will be printed to
+standard output.
 
 ## Links
 
