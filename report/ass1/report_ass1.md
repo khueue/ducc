@@ -67,8 +67,8 @@ Single-line comments are handled by the simple regexp:
 
     {LineComment}(.*)
 
-where LineComment is defined as //. The dot regexp does not match newline in
-Leex, so we did not have to handle that specifically.
+where _LineComment_ is defined as `//`. The dot regexp does not match
+newline in Leex, so we did not have to handle that specifically.
 
 ### Multi-Line Comments 
 
@@ -77,10 +77,11 @@ We eventually arrived at the following expression:
 
     {MultiCommentStart}(/*){InComment}*(\**){MultiCommentEnd}
 
-where MultiCommentStart is `/*` and MultiCommentEnd is `*/`. The tricky part
-is what is between: Immediately after the start, any number of slashes may be
-present. Then comes a lot of stuff, and just before the closing marker is any
-number of stars. The stuff in between that, InComment, is defined as:
+where _MultiCommentStart_ is `/*` and _MultiCommentEnd_ is `*/`. The tricky
+part is what is between: Immediately after the start, any number of slashes
+may be present. Then comes a lot of stuff, and just before the closing
+marker is any number of stars. The stuff in between that, _InComment_, is
+defined as:
 
     ([^*/]|[^*]/|\*[^/])
 
