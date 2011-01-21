@@ -4,11 +4,11 @@ Compiler Project, VT11
 
 2011-01-21
 
-Emil Hessman (emhe9781@student.uu.se)
+Emil Hessman (emhe9781@student...)
 
-Sebastian Lundström (selu7901@student.uu.se)
+Sebastian Lundström (selu7901@student...)
 
-Project Repository at GitHub: https://github.com/khueue/ XXXXXXX tag?
+Project Repository at GitHub: <https://github.com/khueue/> XXXXXXX tag?
 
 The source and executables are also available on the IT departments server:
 /home/emhe9781/src/ducc/ 
@@ -29,8 +29,7 @@ understanding the lexical part of uC, learning Leex and arriving at a
 
 Thankfully, the Erlang environment provides ports of both Lex and Yacc, namely
 Leex and Yecc. Leex documentation can be found here:
-
-    http://www.erlang.org/doc/man/leex.html
+<http://www.erlang.org/doc/man/leex.html>
 
 #### Input File
 
@@ -73,18 +72,21 @@ Leex, so we did not have to handle that specifically.
 
 ### Multi-Line Comments 
 
-Handling multi-line comments, _/* */_, was the trickiest part of the lexer. We
-eventually arrived at the following expression:
+Handling multi-line comments, _/* */_, was the trickiest part of the lexer.
+We eventually arrived at the following expression:
 
     {MultiCommentStart}(/*){InComment}*(\**){MultiCommentEnd}
 
 where MultiCommentStart is _/*_ and MultiCommentEnd is _*/_. The tricky part
 is what is between: Immediately after the start, any number of slashes may be
 present. Then comes a lot of stuff, and just before the closing marker is any
-number of stars. The stuff in between that, InComment, is defined as
-_([^*/]|[^*]/|\*[^/])_. This prohibits the sequences _/*_ and _*/_ from
-appearing inside the comment, but anything else is allowed. This combined
-should be able to cope with proper multi-line comments in uC (and C).
+number of stars. The stuff in between that, InComment, is defined as:
+
+    ([^*/]|[^*]/|\*[^/])
+
+This prohibits the sequences _/*_ and _*/_ from appearing inside the comment,
+but anything else is allowed. This combined should be able to cope with
+proper multi-line comments in uC (and C).
 
 ## Handling EOF
 
