@@ -4,9 +4,9 @@ Compiler Project, VT11
 
 2011-01-21
 
-Emil Hessman (emheXXXX)
+Emil Hessman (emhe9781@student.uu.se)
 
-Sebastian Lundström (selu7901)
+Sebastian Lundström (selu7901@student.uu.se)
 
 Git repository: https://github.com/khueue/ XXXXXXX tag?
 
