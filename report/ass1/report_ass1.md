@@ -62,6 +62,7 @@ are defined as follows:
      the input matched.
  * _Erlang code_. Any additional code needed by the above.
 
+
 #### Output File: Lexer
 
 When feeding the input file to Leex using `leex:file(lexer)`, where _lexer_
@@ -123,7 +124,3 @@ generated lexer in order to tokenize the input stream.
 Upon seeing a valid token, the token and its value is printed to standard 
 output using the io:format/2 function. If it sees a lexical error, an 
 error message will be printed to standard output.
-
-## Links
-
-Anything? XXX
