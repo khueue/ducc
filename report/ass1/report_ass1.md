@@ -72,6 +72,10 @@ Leex, so we did not have to handle that specifically.
 
 Coming soon. /Seb
 
+## Handling EOF
+
+Since we are using leex to create the lexical analyser we didn't need to handle eof explicitly. 
+
 ## Links
 
 
