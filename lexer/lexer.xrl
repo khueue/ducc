@@ -27,7 +27,7 @@ Rules.
 % Character literal.
 '(.|(\\n))' :
     {token,
-        {character,TokenLine,TokenChars}}.
+        {character,TokenLine,list_to_atom(TokenChars)}}.
 
 {LineComment}(.*) :
     skip_token.
