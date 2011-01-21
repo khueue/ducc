@@ -22,7 +22,8 @@ clean:
 	rm -rf *.dump
 
 pack:
-	tar -czvf $(PROJECT_NAME).tar.gz ebin lexer suite Makefile *.erl testfil
+	tar -czvf $(PROJECT_NAME).tar.gz \
+		$(DIR_EBIN) $(DIR_LEXER) report suite Makefile *.erl testfil
 
 ass1: setup
 	clear
