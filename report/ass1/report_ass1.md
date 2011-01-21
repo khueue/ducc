@@ -76,8 +76,23 @@ Coming soon. /Seb
 
 ## Handling EOF
 
-Since we are using leex to create the lexical analyser we didn't need to 
+Since we are using Leex to create the lexical analyser we didn't need to 
 handle eof explicitly. 
+
+## main.erl 
+
+To perform lexical analysis on the input from a stream, e.g. a uC source file
+, and to output the result to the standard output we used the erlang file and
+io modules.
+
+The function start in the module main takes a file name as an argument and
+opens a stream, which is passed to the function process_file.
+The function process_file uses the io:request/2 function which uses the 
+generated lexer in order to tokenize the input stream.
+Upon seeing a valid token, the token and its value is printed to standard 
+output using the io:format/2 function. If it sees an error, there's a
+lexical error in the input stream and an error message will be printed to
+standard output.
 
 ## Links
 
