@@ -10,6 +10,8 @@ Sebastian Lundström (selu7901@student.uu.se)
 
 Git repository: https://github.com/khueue/ XXXXXXX tag?
 
+The source and executables are also available on the IT-departments server: /home/emhe9781/src/ducc/ 
+
 ## Introduction
 
 Our compiler will be written in Erlang. Neither of us has any previous
