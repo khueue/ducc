@@ -62,6 +62,7 @@ are defined as follows:
      the input matched.
  * _Erlang code_. Any additional code needed by the above.
 
+  
 
 #### Output File: Lexer
 
