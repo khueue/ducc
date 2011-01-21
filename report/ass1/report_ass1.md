@@ -29,6 +29,8 @@ Leex and Yecc. Leex documentation can be found here:
 
     http://www.erlang.org/doc/man/leex.html
 
+#### Input File
+
 Leex takes as input a file with token definitions and gives as output a
 customized Erlang module, specifically molded from the token definitions.
 
@@ -48,13 +50,16 @@ The definitions file has the following format:
 We have no "Header" section, but the other sections are present. The sections
 are defined as follows:
 
- * _Macro Definitions_. xxx
- * _Rules_. xxx
- * _Erlang code_. xxx
+ * _Macro Definitions_. Named regular expressions, to make the rules more
+   readable and avoid duplication.
+ * _Rules_. Pairs of "Regexp : Erlang code". When Regexp matches input, the
+   the corresponding Erlang code is executed, usually emitting a token based
+   on the input matched.
+ * _Erlang code_. Any additional code needed by the above.
 
-## Handling comments
+## Handling Comments
 
-### Single-line comments
+### Single-Line Comments
 
 Single-line comments, //, were handled by the simple regexp:
 
@@ -63,7 +68,7 @@ Single-line comments, //, were handled by the simple regexp:
 where LineComment is defined as `//`. The dot regexp does not match newline in
 Leex, so we did not have to handle that specifically.
 
-### Multi-line comments 
+### Multi-Line Comments 
 
 Coming soon. /Seb
 
