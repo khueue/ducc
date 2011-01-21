@@ -54,7 +54,7 @@ are defined as follows:
 
  * _Macro Definitions_. Named regular expressions, to make the rules more
    readable and avoid duplication.
- * _Rules_. Pairs of "Regexp : Erlang code". When Regexp matches input, the
+ * _Rules_. Pairs of "Regexp : Erlang code". When Regexp matches input, then
    the corresponding Erlang code is executed, usually emitting a token based
    on the input matched.
  * _Erlang code_. Any additional code needed by the above.
@@ -76,7 +76,8 @@ Coming soon. /Seb
 
 ## Handling EOF
 
-Since we are using leex to create the lexical analyser we didn't need to handle eof explicitly. 
+Since we are using leex to create the lexical analyser we didn't need to 
+handle eof explicitly. 
 
 ## Links
 
