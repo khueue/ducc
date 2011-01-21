@@ -64,25 +64,25 @@ are defined as follows:
 
 ### Single-Line Comments
 
-Single-line comments, //, are handled by the simple regexp:
+Single-line comments, _//_, are handled by the simple regexp:
 
     {LineComment}(.*)
 
-where LineComment is defined as `//`. The dot regexp does not match newline in
+where LineComment is defined as _//_. The dot regexp does not match newline in
 Leex, so we did not have to handle that specifically.
 
 ### Multi-Line Comments 
 
-Handling multi-line comments was the trickiest part of the lexer. We
+Handling multi-line comments, _/* */_, was the trickiest part of the lexer. We
 eventually arrived at the following expression:
 
     {MultiCommentStart}(/*){InComment}*(\**){MultiCommentEnd}
 
-where MultiCommentStart is ´/*´ and MultiCommentEnd is ´*/´. The tricky part
+where MultiCommentStart is _/*_ and MultiCommentEnd is _*/_. The tricky part
 is what is between: Immediately after the start, any number of slashes may be
 present. Then comes a lot of stuff, and just before the closing marker is any
 number of stars. The stuff in between that, InComment, is defined as
-´([^*/]|[^*]/|\*[^/])´. This prohibits the sequences '/*' and '*/' from
+_([^*/]|[^*]/|\*[^/])_. This prohibits the sequences _/*_ and _*/_ from
 appearing inside the comment, but anything else is allowed. This combined
 should be able to cope with proper multi-line comments in uC (and C).
 
