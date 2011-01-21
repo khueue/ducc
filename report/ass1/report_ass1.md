@@ -111,9 +111,9 @@ handle eof explicitly.
 
 ## main.erl 
 
-To perform lexical analysis on the input from a stream, e.g. a uC source file
-, and to output the result to the standard output we used the erlang file and
-io modules.
+To perform lexical analysis on the input from a stream, e.g. a uC source
+file, and to output the result to the standard output we used the erlang
+file and io modules.
 
 The function start in the module main takes a file name as an argument and
 opens a stream, which is passed to the function process_file.
