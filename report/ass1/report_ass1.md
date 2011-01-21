@@ -8,7 +8,7 @@ Emil Hessman (emhe9781@student.uu.se)
 
 Sebastian Lundström (selu7901@student.uu.se)
 
-Git repository: https://github.com/khueue/ XXXXXXX tag?
+Project Repository at GitHub: https://github.com/khueue/ XXXXXXX tag?
 
 ## Introduction
 
@@ -51,17 +51,17 @@ We have no "Header" section, but the other sections are present. The sections
 are defined as follows:
 
  * _Macro Definitions_. Named regular expressions, to make the rules more
-   readable and avoid duplication.
+     readable and avoid duplication.
  * _Rules_. Pairs of "Regexp : Erlang code". When Regexp matches input, the
-   the corresponding Erlang code is executed, usually emitting a token based
-   on the input matched.
+     the corresponding Erlang code is executed, usually emitting a token for
+     the input matched.
  * _Erlang code_. Any additional code needed by the above.
 
 ## Handling Comments
 
 ### Single-Line Comments
 
-Single-line comments, //, were handled by the simple regexp:
+Single-line comments, //, are handled by the simple regexp:
 
     {LineComment}(.*)
 
@@ -70,8 +70,19 @@ Leex, so we did not have to handle that specifically.
 
 ### Multi-Line Comments 
 
-Coming soon. /Seb
+Handling multi-line comments was the trickiest part of the lexer. We
+eventually arrived at the following expression:
+
+    {MultiCommentStart}(/*){InComment}*(\**){MultiCommentEnd}
+
+where MultiCommentStart is ´/*´ and MultiCommentEnd is ´*/´. The tricky part
+is what is between: Immediately after the start, any number of slashes may be
+present. Then comes a lot of stuff, and just before the closing marker is any
+number of stars. The stuff in between that, InComment, is defined as
+´([^*/]|[^*]/|\*[^/])´. This prohibits the sequences '/*' and '*/' from
+appearing inside the comment, but anything else is allowed. This combined
+should be able to cope with proper multi-line comments in uC (and C).
 
 ## Links
 
-
+Anything? XXX

@@ -1,15 +1,23 @@
 Definitions.
 
-Digit = [0-9]
-WhiteSpace = [\s\n\r\f\t]
-Letter = [A-Za-z_]
-Logical = (&&|(\|\|)|!)
-Comparator = (<|>|<=|>=|==|!=)
-Symbol = []()[}{/;,*+=-]
-LineComment = (//)
-MultiCommentStart = (/\*)
-MultiCommentEnd   = (\*/)
-StuffInComment = ([^*/]|[^*]/|\*[^/])
+Digit               = [0-9]
+Letter              = [A-Za-z_]
+
+WhiteSpace          = [\s\n\r\f\t]
+
+Logical             = (&&|(\|\|)|!)
+Comparator          = (<|>|<=|>=|==|!=)
+Symbol              = []()[}{/;,*+=-]
+
+LineComment         = (//)
+
+MultiCommentStart   = (/\*)
+MultiCommentEnd     = (\*/)
+% Allowed inside multi-line comments:
+NormalChar          = [^*/]
+SafeStar            = (\*[^/])
+SafeSlash           = ([^*]/)
+
 
 Rules.
 
@@ -32,20 +40,12 @@ Rules.
 {LineComment}(.*) :
     skip_token.
 
-{MultiCommentStart}(/*)({StuffInComment}*)(\**){MultiCommentEnd} :
+{MultiCommentStart}(/*)({NormalChar}|{SafeStar}|{SafeSlash})*(\**){MultiCommentEnd} :
     skip_token.
 
 {Logical}|{Comparator}|{Symbol} :
     {token,
         {symbol,TokenLine,list_to_atom(TokenChars)}}.
-
-%{Comparator} :
-%    {token,
-%        {comparator,TokenLine,list_to_atom(TokenChars)}}.
-
-%{Symbol} :
-%    {token,
-%        {symbol,TokenLine,list_to_atom(TokenChars)}}.
 
 {WhiteSpace}+ :
     skip_token.
