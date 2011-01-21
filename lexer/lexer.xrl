@@ -1,9 +1,9 @@
 Definitions.
 
-Logical = (&&|(\|\|)|!)
 Digit = [0-9]
 WhiteSpace = [\s\n\r\f\t]
 Letter = [A-Za-z_]
+Logical = (&&|(\|\|)|!)
 Comparator = (<|>|<=|>=|==|!=)
 Symbol = []()[}{/;,*+=-]
 LineComment = (//)
@@ -12,10 +12,6 @@ MultiCommentEnd   = (\*/)
 StuffInComment = ([^*/]|[^*]/|\*[^/])
 
 Rules.
-
-{Logical} :
-    {token,
-        {logical,TokenLine,list_to_atom(TokenChars)}}.
 
 % Integer.
 {Digit}+ :
@@ -39,13 +35,17 @@ Rules.
 {MultiCommentStart}(/*)({StuffInComment}*)(\**){MultiCommentEnd} :
     skip_token.
 
-{Comparator} :
-    {token,
-        {comparator,TokenLine,list_to_atom(TokenChars)}}.
-
-{Symbol} :
+{Logical}|{Comparator}|{Symbol} :
     {token,
         {symbol,TokenLine,list_to_atom(TokenChars)}}.
+
+%{Comparator} :
+%    {token,
+%        {comparator,TokenLine,list_to_atom(TokenChars)}}.
+
+%{Symbol} :
+%    {token,
+%        {symbol,TokenLine,list_to_atom(TokenChars)}}.
 
 {WhiteSpace}+ :
     skip_token.
