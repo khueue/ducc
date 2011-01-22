@@ -34,7 +34,7 @@ Rules.
 
 % Character literal.
 '(.|(\\n))' :
-    Chars = string:substr(TokenChars, 1, TokenLen-1),
+    Chars = string:substr(TokenChars, 2, TokenLen-2),
     {token,
         {character,TokenLine,list_to_atom(Chars)}}.
 
