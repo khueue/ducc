@@ -17,9 +17,9 @@ setup:
 	@- ruby trim_and_clean.rb *.erl
 
 clean:
-	rm -rf  $(DIR_LEXER)/$(LEXER_NAME).erl
-	rm -rf  $(DIR_EBIN)/*.beam
-	rm -rf *.dump
+	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
+	rm -rf $(DIR_EBIN)/*.beam
+	rm -rf *.dump *.gz *.beam
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
