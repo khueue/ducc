@@ -10,7 +10,7 @@ ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
 ERL        = erl -pa ebin -noshell
 
-all: clean ass1
+all: clean ass1 ass2
 
 setup:
 	mkdir -p $(DIR_EBIN)
@@ -18,12 +18,13 @@ setup:
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
+	rm -rf $(DIR_PARSER)/$(PARSER_NAME).erl
 	rm -rf $(DIR_EBIN)/*.beam
 	rm -rf *.dump *.gz *.beam
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
-		$(DIR_EBIN) $(DIR_LEXER) report suite \
+		$(DIR_EBIN) $(DIR_LEXER) $(DIR_PARSER) report suite \
 		Makefile *.erl testfil
 
 ass1: setup
@@ -40,10 +41,8 @@ ass1: setup
 	@- echo '--- Testing lexer ...'
 	$(ERL) -run main start testfil
 
-# XXX
 ass2:
-	$(ERL) 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
+	$(ERL) -eval 'io:format("~w~n", [yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
 
-# XXX
 test: ass1
 	$(ERL) 'ass1_test:test(), halt().'
