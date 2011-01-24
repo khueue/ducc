@@ -14,7 +14,7 @@ all: clean ass1
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby trim_and_clean.rb *.erl
+	@- ruby trim_and_clean.rb *.erl **/*.xrl **/*.yrl
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl

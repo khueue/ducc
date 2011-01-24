@@ -18,7 +18,6 @@ NormalChar          = [^*/]
 SafeStar            = (\*[^/])
 SafeSlash           = ([^*]/)
 
-
 Rules.
 
 % Integer.
@@ -50,7 +49,6 @@ Rules.
 
 {WhiteSpace}+ :
     skip_token.
-
 
 Erlang code.
 
