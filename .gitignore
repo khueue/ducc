@@ -4,6 +4,7 @@
 .DS_Store
 
 lexer/*.erl
+parser/*.erl
 *.dump
 *.beam
 *.gz
