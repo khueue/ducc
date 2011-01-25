@@ -4,7 +4,7 @@
 start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
     TokenList = process_file(FileDescriptor, []),
-    io:format("~p~n", [TokenList]),
+    io:format("~p.~n", [TokenList]),
     {_, ParseTree} = parser:parse(TokenList),
     io:format("~12p.~n", [ParseTree]),
     file:close(FileDescriptor),

@@ -49,7 +49,8 @@ vardec           -> arraydec :
 scalardec        -> typename 'identifier' :
     {line_of('$1'), type_of('$1'), value_of('$2'), nil}.
 
-arraydec         -> typename 'identifier' '[' 'integer' ']'.
+arraydec         -> typename 'identifier' '[' 'integer' ']' :
+    {line_of('$1'), type_of('$1'), value_of('$2'), value_of('$4')}.
 
 typename         -> 'int' :
     '$1'.
