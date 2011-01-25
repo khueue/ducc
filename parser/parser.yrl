@@ -6,8 +6,8 @@ expr unop binop actuals expr_list if_stmt mif uif.
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
 ']' '(' ')' '[' '}' '{' '/' ';' ',' '*' '+' '=' '-'
-'reserved'
-'ident' 'intconst' 'int' 'char' 'void' 'return' 'while' 'if' 'else'.
+'integer' 'identifier' 'character'
+'char' 'else' 'if' 'int' 'return' 'void' 'while'.
 
 Rootsymbol program.
 
@@ -33,19 +33,19 @@ topdec           -> vardec ';' :
     {topdec, '$1'}.
 topdec           -> funtypeandname '(' formals ')' funbody.
 
-funtypeandname   -> typename ident.
-funtypeandname   -> void ident.
+funtypeandname   -> typename 'identifier'.
+funtypeandname   -> void 'identifier'.
 
 vardec           -> scalardec :
     {vardec, '$1'}.
 vardec           -> arraydec.
 
-scalardec        -> typename ident :
+scalardec        -> typename 'identifier' :
     {scalardec, '$1', '$2'}.
 
-arraydec         -> typename ident '[' intconst ']'.
+arraydec         -> typename 'identifier' '[' 'integer' ']'.
 
-typename         -> 'reserved' :
+typename         -> 'int' :
     '$1'.
 typename         -> 'char' :
     '$1'.
@@ -60,7 +60,7 @@ formal_list      -> formaldec.
 formal_list      -> formaldec ',' formal_list.
 
 formaldec        -> scalardec.
-formaldec        -> typename ident '[' ']'.
+formaldec        -> typename identifier '[' ']'.
 
 locals           -> '$empty'.
 locals           -> vardec ';' locals.
@@ -86,12 +86,12 @@ uif              -> 'if' condition mif 'else' uif.
 
 condition        -> '(' expr ')'.
 
-expr             -> intconst.
-expr             -> ident.
-expr             -> ident '[' expr ']'.
+expr             -> integer.
+expr             -> identifier.
+expr             -> identifier '[' expr ']'.
 expr             -> unop expr.
 expr             -> expr binop expr.
-expr             -> ident '(' actuals ')'.
+expr             -> identifier '(' actuals ')'.
 expr             -> '(' expr ')'.
 
 unop             -> '-'.

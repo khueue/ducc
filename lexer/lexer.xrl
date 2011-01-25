@@ -23,7 +23,7 @@ Rules.
 % Integer.
 {Digit}+ :
     {token,
-        {int,TokenLine,list_to_integer(TokenChars)}}.
+        {integer,TokenLine,list_to_integer(TokenChars)}}.
 
 % Identifier.
 {Letter}({Letter}|{Digit})* :
@@ -45,7 +45,7 @@ Rules.
 
 {Logical}|{Comparator}|{Symbol} :
     {token,
-        {symbol,TokenLine,list_to_atom(TokenChars)}}.
+        {list_to_atom(TokenChars),TokenLine,list_to_atom(TokenChars)}}.
 
 {WhiteSpace}+ :
     skip_token.
@@ -54,7 +54,7 @@ Erlang code.
 
 type_of(Word) ->
     case is_reserved(Word) of
-        true -> reserved;
+        true -> Word;
         false -> identifier
     end.
 
