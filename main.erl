@@ -13,7 +13,7 @@ start(FileName) ->
 
 process_file(FileDescriptor, Acc) ->
     case io:request(FileDescriptor, {get_until, prompt, lexer, token, [1]}) of
-        {ok, Token = {Type, _, Value}, _} ->
+        {ok, Token, _} ->
             %io:format('~p~n', [{Type, Value}]),
             process_file(FileDescriptor, Acc ++ [Token]);
         {eof, _} ->
