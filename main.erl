@@ -4,11 +4,9 @@
 start(FileName) ->
     {ok, FileDescriptor} = file:open(FileName, [read]),
     TokenList = process_file(FileDescriptor, []),
-    io:write(TokenList),
-    io:nl(),
+    io:format("~p~n", [TokenList]),
     {_, ParseTree} = parser:parse(TokenList),
-    io:write(ParseTree),
-    io:nl(),
+    io:format("~12p.~n", [ParseTree]),
     file:close(FileDescriptor),
 
     erlang:halt().
