@@ -9,13 +9,13 @@ PARSER_NAME  = parser
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
-ERL        = erl -pa ebin -noshell
+ERL        = erl -pa $(DIR_EBIN) -noshell
 
 all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby lib/trim_and_clean.rb **/*.xrl **/*.yrl lib/*
+	@- ruby src/trim_and_clean.rb src/**/*
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
