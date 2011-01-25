@@ -25,7 +25,8 @@ program          -> topdec_list :
     {program, '$1'}.
 
 topdec_list      -> '$empty'.
-topdec_list      -> topdec topdec_list.
+topdec_list      -> topdec topdec_list :
+    {topdec_list, '$1', '$2'}.
 
 topdec           -> vardec ';' :
     {topdec, '$1'}.
