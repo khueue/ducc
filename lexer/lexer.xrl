@@ -23,7 +23,7 @@ Rules.
 % Integer.
 {Digit}+ :
     {token,
-        {integer,TokenLine,list_to_integer(TokenChars)}}.
+        {int,TokenLine,list_to_integer(TokenChars)}}.
 
 % Identifier.
 {Letter}({Letter}|{Digit})* :

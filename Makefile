@@ -35,11 +35,11 @@ ass1: setup
 	@- echo '--- Compiling lexer ...'
 	$(ERLC) $(DIR_LEXER)/$(LEXER_NAME).erl
 
-	@- echo '--- Compiling main ...'
-	$(ERLC) main.erl
+	#@- echo '--- Compiling main ...'
+	#$(ERLC) main.erl
 
-	@- echo '--- Testing lexer ...'
-	$(ERL) -run main start testfil
+	#@- echo '--- Testing lexer ...'
+	#$(ERL) -run main start testfil
 
 ass2:
 	@- echo '--- Generating the parser ...'
@@ -47,6 +47,12 @@ ass2:
 
 	@- echo '--- Compiling parser ...'
 	$(ERLC) $(DIR_PARSER)/$(PARSER_NAME).erl
+
+	@- echo '--- Compiling main ...'
+	$(ERLC) main.erl
+
+	@- echo '--- Testing lexer ...'
+	$(ERL) -run main start testfil2.c
 
 test: ass1
 	$(ERL) 'ass1_test:test(), halt().'

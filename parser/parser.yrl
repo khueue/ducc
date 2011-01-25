@@ -6,6 +6,7 @@ expr unop binop actuals expr_list if_stmt mif uif.
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
 ']' '(' ')' '[' '}' '{' '/' ';' ',' '*' '+' '=' '-'
+'reserved'
 'ident' 'intconst' 'int' 'char' 'void' 'return' 'while' 'if' 'else'.
 
 Rootsymbol program.
@@ -44,7 +45,7 @@ scalardec        -> typename ident :
 
 arraydec         -> typename ident '[' intconst ']'.
 
-typename         -> 'int' :
+typename         -> 'reserved' :
     '$1'.
 typename         -> 'char' :
     '$1'.
