@@ -24,10 +24,6 @@ clean:
 	rm -rf $(DIR_EBIN)/*.beam
 	rm -rf *.dump *.gz *.beam
 
-pack:
-	tar -czvf $(PROJECT_NAME).tar.gz \
-		$(DIR_EBIN) $(DIR_SRC) report suite Makefile
-
 compile: 
 	clear
 	@- echo '--- Generating lexer and parser ...'
@@ -35,3 +31,9 @@ compile:
 	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
 	@- echo '--- Compiling ...'
 	$(ERLC) $(DIR_SRC)/**/*.erl
+	$(ERLC) $(DIR_SRC)/*.erl
+
+pack:
+	tar -czvf $(PROJECT_NAME).tar.gz \
+		$(DIR_EBIN) $(DIR_SRC) report suite \
+		$(SCRIPTS) Makefile *.md
