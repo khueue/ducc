@@ -16,7 +16,7 @@ all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby src/trim_and_clean.rb src/**/* $(SCRIPTS)
+	@- ruby src/trim_and_clean.rb src/*.* src/**/*.* $(SCRIPTS)
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
@@ -24,14 +24,14 @@ clean:
 	rm -rf $(DIR_EBIN)/*.beam
 	rm -rf *.dump *.gz *.beam
 
-compile: 
+compile:
 	clear
 	@- echo '--- Generating lexer and parser ...'
 	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
 	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
 	@- echo '--- Compiling ...'
 	$(ERLC) $(DIR_SRC)/**/*.erl
-	$(ERLC) $(DIR_SRC)/*.erl
+	$(ERLC) src/*.erl
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
