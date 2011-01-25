@@ -60,7 +60,7 @@ formal_list      -> formaldec.
 formal_list      -> formaldec ',' formal_list.
 
 formaldec        -> scalardec.
-formaldec        -> typename identifier '[' ']'.
+formaldec        -> typename 'identifier' '[' ']'.
 
 locals           -> '$empty'.
 locals           -> vardec ';' locals.
@@ -86,12 +86,12 @@ uif              -> 'if' condition mif 'else' uif.
 
 condition        -> '(' expr ')'.
 
-expr             -> integer.
-expr             -> identifier.
-expr             -> identifier '[' expr ']'.
+expr             -> 'integer'.
+expr             -> 'identifier'.
+expr             -> 'identifier' '[' expr ']'.
 expr             -> unop expr.
 expr             -> expr binop expr.
-expr             -> identifier '(' actuals ')'.
+expr             -> 'identifier' '(' actuals ')'.
 expr             -> '(' expr ')'.
 
 unop             -> '-'.
