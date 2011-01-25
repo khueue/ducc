@@ -10,7 +10,7 @@ ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
 ERL        = erl -pa ebin -noshell
 
-all: clean ass1 ass2
+all: setup clean ass1 ass2 main
 
 setup:
 	mkdir -p $(DIR_EBIN)
@@ -27,19 +27,13 @@ pack:
 		$(DIR_EBIN) $(DIR_LEXER) $(DIR_PARSER) report suite \
 		Makefile *.erl testfil
 
-ass1: setup
+ass1: 
 	clear
 	@- echo '--- Generating the lexer ...'
 	$(ERL) -eval 'io:format("~p~n", [leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
 
 	@- echo '--- Compiling lexer ...'
 	$(ERLC) $(DIR_LEXER)/$(LEXER_NAME).erl
-
-	#@- echo '--- Compiling main ...'
-	#$(ERLC) main.erl
-
-	#@- echo '--- Testing lexer ...'
-	#$(ERL) -run main start testfil
 
 ass2:
 	@- echo '--- Generating the parser ...'
@@ -48,10 +42,11 @@ ass2:
 	@- echo '--- Compiling parser ...'
 	$(ERLC) $(DIR_PARSER)/$(PARSER_NAME).erl
 
+main:
 	@- echo '--- Compiling main ...'
 	$(ERLC) main.erl
 
-	@- echo '--- Testing lexer ...'
+	@- echo '--- Testing lexer and parser ...'
 	$(ERL) -run main start testfil2.c
 
 test: ass1
