@@ -21,26 +21,32 @@ Left 40 '||'.
 
 Right 20 '='.
 
-program          -> topdec_list.
+program          -> topdec_list :
+    {program, '$1'}.
 
 topdec_list      -> '$empty'.
 topdec_list      -> topdec topdec_list.
 
-topdec           -> vardec ';'.
+topdec           -> vardec ';' :
+    {topdec, '$1'}.
 topdec           -> funtypeandname '(' formals ')' funbody.
 
 funtypeandname   -> typename ident.
 funtypeandname   -> void ident.
 
-vardec           -> scalardec.
+vardec           -> scalardec :
+    {vardec, '$1'}.
 vardec           -> arraydec.
 
-scalardec        -> typename ident.
+scalardec        -> typename ident :
+    {scalardec, '$1', '$2'}.
 
 arraydec         -> typename ident '[' intconst ']'.
 
-typename         -> 'int'.
-typename         -> 'char'.
+typename         -> 'int' :
+    '$1'.
+typename         -> 'char' :
+    '$1'.
 
 funbody          -> '{' locals stmts '}'.
 funbody          -> ';'.
