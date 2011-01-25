@@ -38,4 +38,3 @@ compile:
 	$(ERLC) $(DIR_LEXER)/*.erl
 	$(ERLC) $(DIR_PARSER)/*.erl
 	$(ERLC) $(DIR_LIB)/*.erl
-	$(ERLC) *.erl
