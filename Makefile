@@ -34,6 +34,4 @@ compile:
 	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
 	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
 	@- echo '--- Compiling ...'
-	$(ERLC) $(DIR_LEXER)/*.erl
-	$(ERLC) $(DIR_PARSER)/*.erl
-	$(ERLC) $(DIR_SRC)/*.erl
+	$(ERLC) $(DIR_SRC)/**/*.erl
