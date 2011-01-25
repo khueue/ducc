@@ -30,8 +30,8 @@ compile:
 	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
 	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
 	@- echo '--- Compiling ...'
-	$(ERLC) $(DIR_SRC)/**/*.erl
 	$(ERLC) src/*.erl
+	$(ERLC) $(DIR_SRC)/**/*.erl
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
