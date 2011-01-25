@@ -2,7 +2,6 @@ DIR_EBIN   = ebin
 DIR_SRC    = src
 DIR_LEXER  = $(DIR_SRC)/lexer
 DIR_PARSER = $(DIR_SRC)/parser
-DIR_LIB    = lib
 
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
@@ -19,15 +18,14 @@ setup:
 	@- ruby lib/trim_and_clean.rb **/*.xrl **/*.yrl lib/*
 
 clean:
-	$(RM) $(DIR_LEXER)/$(LEXER_NAME).erl
-	$(RM) $(DIR_PARSER)/$(PARSER_NAME).erl
-	$(RM) $(DIR_EBIN)/*.beam
-	$(RM) *.dump *.gz *.beam
+	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
+	rm -rf $(DIR_PARSER)/$(PARSER_NAME).erl
+	rm -rf $(DIR_EBIN)/*.beam
+	rm -rf *.dump *.gz *.beam
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
-		$(DIR_EBIN) $(DIR_SRC) report suite \
-		Makefile
+		$(DIR_EBIN) $(DIR_SRC) report suite Makefile
 
 compile: 
 	clear
@@ -37,4 +35,4 @@ compile:
 	@- echo '--- Compiling ...'
 	$(ERLC) $(DIR_LEXER)/*.erl
 	$(ERLC) $(DIR_PARSER)/*.erl
-	$(ERLC) $(DIR_LIB)/*.erl
+	$(ERLC) $(DIR_SRC)/*.erl
