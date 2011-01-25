@@ -6,6 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
+SCRIPTS      = lexer parser
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -15,7 +16,7 @@ all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby src/trim_and_clean.rb src/**/*
+	@- ruby src/trim_and_clean.rb src/**/* $(SCRIPTS)
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl

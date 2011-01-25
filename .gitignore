@@ -3,8 +3,8 @@
 *~
 .DS_Store
 
-lexer/*.erl
-parser/*.erl
+src/lexer/lexer.erl
+src/parser/parser.erl
 *.dump
 *.beam
 *.gz
