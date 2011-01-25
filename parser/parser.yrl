@@ -37,10 +37,12 @@ topdec           -> fundef :
     '$1'.
 
 fundef           -> funtypeandname '(' formals ')' funbody :
-    {line_of('$1'), type_of('$1'), value_of('$1'), '$3', '$5'}.
+    {'$1', '$3', '$5'}.
 
-funtypeandname   -> typename 'identifier'.
-funtypeandname   -> void 'identifier'.
+funtypeandname   -> typename 'identifier' :
+    {value_of('$1'), value_of('$2')}.
+funtypeandname   -> void 'identifier' :
+    {value_of('$1'), value_of('$2')}.
 
 vardec           -> scalardec :
     '$1'.
@@ -122,27 +124,39 @@ condition        -> '(' expr ')' :
 
 %expr             -> 'integer'.
 %expr             -> 'identifier'.
-expr             ->  array_element.
+expr             ->  array_element :
+    '$1'.
 %expr             -> unop expr.
 %expr             -> expr binop expr.
-expr             -> operation.
-expr             -> function_call.
+expr             -> operation :
+    '$1'.
+expr             -> function_call :
+    '$1'.
 %expr             -> '(' expr ')'.
 
-array_element    -> 'identifier' '[' expr ']'.
+array_element    -> 'identifier' '[' expr ']' :
+    {value_of('$1'), '$3'}.
 
-function_call    -> 'identifier' '(' actuals ')'.
+function_call    -> 'identifier' '(' actuals ')' :
+    {value_of('$1'), '$3'}.
 
-operation        -> rval.
+operation        -> rval :
+    '$1'.
 
-rval             -> lval '=' rval.
-rval             -> or.
+rval             -> lval '=' rval :
+    {binop, '$2', '$1', '$3'}.
+rval             -> or :
+    '$1'.
 
-lval             -> 'identifier'.
-lval             -> array_element.
+lval             -> 'identifier' :
+    '$1'.
+lval             -> array_element :
+    '$1'.
 
-or               -> or '||' and.
-or               -> and.
+or               -> or '||' and :
+    {binop, '$2', '$1', '$3'}.
+or               -> and :
+    '$1'.
 
 and              -> and '&&' comp.
 and              -> comp.
