@@ -1,16 +1,10 @@
--module(main).
--export([start/1]).
+-module(lexer_driver).
+-export([start/0]).
 
-start(FileName) ->
-    {ok, FileDescriptor} = file:open(FileName, [read]),
-    TokenList = process_file(FileDescriptor),
-    io:write(TokenList),
-    io:nl(),
-    {_, ParseTree} = parser:parse(TokenList),
-    io:write(ParseTree),
-    io:nl(),
-    file:close(FileDescriptor),
-    erlang:halt().
+start() ->
+    Tokens = process_file(standard_io),
+    term_io:term_to_stdout(Tokens),
+    init:stop().
 
 process_file(Stream) ->
     case next_token(Stream) of

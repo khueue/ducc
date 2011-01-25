@@ -1,6 +1,8 @@
 DIR_EBIN   = ebin
-DIR_LEXER  = lexer
-DIR_PARSER = parser
+DIR_SRC    = src
+DIR_LEXER  = $(DIR_SRC)/lexer
+DIR_PARSER = $(DIR_SRC)/parser
+DIR_LIB    = lib
 
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
@@ -10,44 +12,30 @@ ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
 ERL        = erl -pa ebin -noshell
 
-all: setup clean ass1 ass2 main
+all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby trim_and_clean.rb *.erl **/*.xrl **/*.yrl
+	@- ruby lib/trim_and_clean.rb **/*.xrl **/*.yrl lib/*
 
 clean:
-	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
-	rm -rf $(DIR_PARSER)/$(PARSER_NAME).erl
-	rm -rf $(DIR_EBIN)/*.beam
-	rm -rf *.dump *.gz *.beam
+	$(RM) $(DIR_LEXER)/$(LEXER_NAME).erl
+	$(RM) $(DIR_PARSER)/$(PARSER_NAME).erl
+	$(RM) $(DIR_EBIN)/*.beam
+	$(RM) *.dump *.gz *.beam
 
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
-		$(DIR_EBIN) $(DIR_LEXER) $(DIR_PARSER) report suite \
-		Makefile *.erl testfil
+		$(DIR_EBIN) $(DIR_SRC) report suite \
+		Makefile
 
-ass1: 
+compile: 
 	clear
-	@- echo '--- Generating the lexer ...'
-	$(ERL) -eval 'io:format("~p~n", [leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
-
-	@- echo '--- Compiling lexer ...'
-	$(ERLC) $(DIR_LEXER)/$(LEXER_NAME).erl
-
-ass2:
-	@- echo '--- Generating the parser ...'
-	$(ERL) -eval 'io:format("~p~n", [yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
-
-	@- echo '--- Compiling parser ...'
-	$(ERLC) $(DIR_PARSER)/$(PARSER_NAME).erl
-
-main:
-	@- echo '--- Compiling main ...'
-	$(ERLC) main.erl
-
-	@- echo '--- Testing lexer and parser ...'
-	$(ERL) -run main start testfil2.c
-
-test: ass1
-	$(ERL) 'ass1_test:test(), halt().'
+	@- echo '--- Generating lexer and parser ...'
+	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
+	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
+	@- echo '--- Compiling ...'
+	$(ERLC) $(DIR_LEXER)/*.erl
+	$(ERLC) $(DIR_PARSER)/*.erl
+	$(ERLC) $(DIR_LIB)/*.erl
+	$(ERLC) *.erl
