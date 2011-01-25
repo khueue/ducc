@@ -30,7 +30,7 @@ pack:
 ass1: setup
 	clear
 	@- echo '--- Generating the lexer ...'
-	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
+	$(ERL) -eval 'io:format("~p~n", [leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
 
 	@- echo '--- Compiling lexer ...'
 	$(ERLC) $(DIR_LEXER)/$(LEXER_NAME).erl
@@ -42,7 +42,11 @@ ass1: setup
 	$(ERL) -run main start testfil
 
 ass2:
-	$(ERL) -eval 'io:format("~w~n", [yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
+	@- echo '--- Generating the parser ...'
+	$(ERL) -eval 'io:format("~p~n", [yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
+
+	@- echo '--- Compiling parser ...'
+	$(ERLC) $(DIR_PARSER)/$(PARSER_NAME).erl
 
 test: ass1
 	$(ERL) 'ass1_test:test(), halt().'
