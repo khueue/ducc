@@ -85,11 +85,11 @@ stmts            -> stmt stmts :
 stmt             -> expr ';' :
     '$1'.
 stmt             -> 'return' expr ';' :
-    {'$1', '$2'}.
+    {value_of('$1'), '$2'}.
 stmt             -> 'return' ';' :
-    {'$1', nil}.
+    {value_of('$1'), nil}.
 stmt             -> 'while' condition stmt :
-    {'$1', '$2', '$3'}.
+    {value_of('$1'), '$2', '$3'}.
 stmt             -> if_stmt :
     '$1'.
 stmt             -> '{' stmts '}' :
@@ -111,7 +111,7 @@ uif              -> 'if' condition mif 'else' uif :
     {type_of('$1'), '$2', '$3', '$5'}.
 
 condition        -> '(' expr ')' :
-    '$1'.
+    '$2'.
 
 expr             ->  array_element :
     '$1'.
