@@ -7,7 +7,7 @@ rval lval or and comp ineq math term factor function_call array_element.
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
 ']' '(' ')' '[' '}' '{' '/' ';' ',' '*' '+' '=' '-'
-'integer' 'identifier'
+'integer' 'identifier' 'character'
 'char' 'else' 'if' 'int' 'return' 'void' 'while'.
 
 Rootsymbol program.
@@ -105,7 +105,7 @@ else_part          -> 'else' stmt :
 condition        -> '(' expr ')' :
     '$2'.
 
-expr             ->  array_element :
+expr             -> array_element :
     '$1'.
 expr             -> operation :
     '$1'.
@@ -178,6 +178,8 @@ factor           -> unop factor :
 factor           -> 'identifier' :
     value_of('$1').
 factor           -> 'integer' :
+    value_of('$1').
+factor           -> 'character' :
     value_of('$1').
 factor           -> '(' expr ')' :
     '$2'.
