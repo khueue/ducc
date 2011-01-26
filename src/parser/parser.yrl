@@ -29,9 +29,9 @@ fundef           -> funtypeandname '(' formals ')' funbody :
     {fundef, '$1', '$3', '$5'}.
 
 funtypeandname   -> typename 'identifier' :
-    {value_of('$1'), value_of('$2')}.
+    {type_of('$1'), value_of('$2')}.
 funtypeandname   -> void 'identifier' :
-    {value_of('$1'), value_of('$2')}.
+    {type_of('$1'), value_of('$2')}.
 
 vardec           -> scalardec :
     '$1'.
@@ -103,12 +103,12 @@ if_stmt          -> uif :
     '$1'.
 
 mif              -> 'if' condition mif 'else' mif :
-    {'$1', '$2', '$3', '$5'}.
+    {type_of('$1'), '$2', '$3', '$5'}.
 
 uif              -> 'if' condition stmt :
-    {'$1', '$2', '$3', nil}.
+    {type_of('$1'), '$2', '$3', nil}.
 uif              -> 'if' condition mif 'else' uif :
-    {'$1', '$2', '$3', '$5'}.
+    {type_of('$1'), '$2', '$3', '$5'}.
 
 condition        -> '(' expr ')' :
     '$1'.
@@ -130,7 +130,7 @@ operation        -> rval :
     '$1'.
 
 rval             -> lval '=' rval :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 rval             -> or :
     '$1'.
 
@@ -140,44 +140,44 @@ lval             -> array_element :
     '$1'.
 
 or               -> or '||' and :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 or               -> and :
     '$1'.
 
 and              -> and '&&' comp :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 and              -> comp :
     '$1'.
 
 comp             -> comp '==' ineq :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 comp             -> comp '!=' ineq :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 comp             -> ineq :
     '$1'.
 
 ineq             -> ineq '<' math :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 ineq             -> ineq '>' math :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 ineq             -> ineq '<=' math :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 ineq             -> ineq '>=' math :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 ineq             -> math :
     '$1'.
 
 math             -> math '+' term :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 math             -> math '-' term :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 math             -> term :
     '$1'.
 
 term             -> term '*' factor :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 term             -> term '/' factor :
-    {binop, value_of('$2'), '$1', '$3'}.
+    {binop, type_of('$2'), '$1', '$3'}.
 term             -> factor :
     '$1'.
 
@@ -191,9 +191,9 @@ factor           -> '(' expr ')' :
     '$2'.
 
 unop             -> '-' :
-    value_of('$1').
+    type_of('$1').
 unop             -> '!' :
-    value_of('$1').
+    type_of('$1').
 
 actuals          -> '$empty' :
     [].
@@ -208,10 +208,10 @@ expr_list        -> expr ',' expr_list :
 Erlang code.
 
 type_of(Token) ->
-    element(1, Token).
+    erlang:element(1, Token).
 
 line_of(Token) ->
-    element(2, Token).
+    erlang:element(2, Token).
 
 value_of(Token) ->
-    element(3, Token).
+    erlang:element(3, Token).

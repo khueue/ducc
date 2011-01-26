@@ -28,8 +28,14 @@ Rules.
 % Identifier.
 {Letter}({Letter}|{Digit})* :
     Identifier = list_to_atom(TokenChars),
-    {token,
-        {type_of(Identifier),TokenLine,Identifier}}.
+    case is_reserved(Identifier) of
+        true ->
+            {token,
+                {Identifier,TokenLine}};
+        false ->
+            {token,
+                {identifier,TokenLine,Identifier}}
+    end.
 
 % Character literal.
 '(.|(\\n))' :
@@ -45,7 +51,7 @@ Rules.
 
 {Logical}|{Comparator}|{Symbol} :
     {token,
-        {list_to_atom(TokenChars),TokenLine,list_to_atom(TokenChars)}}.
+        {list_to_atom(TokenChars),TokenLine}}.
 
 {WhiteSpace}+ :
     skip_token.
