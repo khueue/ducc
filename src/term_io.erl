@@ -2,7 +2,8 @@
 -export([stdin_to_term/0, term_to_stdout/1]).
 
 stdin_to_term() ->
-    {ok, Term} = io:read(''),
+    Prompt = '',
+    {ok, Term} = io:read(Prompt),
     Term.
 
 term_to_stdout(Term) ->
