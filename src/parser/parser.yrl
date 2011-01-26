@@ -85,11 +85,11 @@ stmts            -> stmt stmts :
 stmt             -> expr ';' :
     '$1'.
 stmt             -> 'return' expr ';' :
-    {'$1', '$2'}.
+    {value_of('$1'), '$2'}.
 stmt             -> 'return' ';' :
-    {'$1', nil}.
+    {value_of('$1'), nil}.
 stmt             -> 'while' condition stmt :
-    {'$1', '$2', '$3'}.
+    {value_of('$1'), '$2', '$3'}.
 stmt             -> if_stmt :
     '$1'.
 stmt             -> '{' stmts '}' :
@@ -103,15 +103,15 @@ if_stmt          -> uif :
     '$1'.
 
 mif              -> 'if' condition mif 'else' mif :
-    {'$1', '$2', '$3', '$5'}.
+    {value_of('$1'), '$2', '$3', '$5'}.
 
 uif              -> 'if' condition stmt :
-    {'$1', '$2', '$3', nil}.
+    {value_of('$1'), '$2', '$3', nil}.
 uif              -> 'if' condition mif 'else' uif :
-    {'$1', '$2', '$3', '$5'}.
+    {value_of('$1'), '$2', '$3', '$5'}.
 
 condition        -> '(' expr ')' :
-    '$1'.
+    '$2'.
 
 expr             ->  array_element :
     '$1'.
@@ -208,10 +208,10 @@ expr_list        -> expr ',' expr_list :
 Erlang code.
 
 type_of(Token) ->
-    element(1, Token).
+    erlang:element(1, Token).
 
 line_of(Token) ->
-    element(2, Token).
+    erlang:element(2, Token).
 
 value_of(Token) ->
-    element(3, Token).
+    erlang:element(3, Token).
