@@ -3,8 +3,7 @@
 
 stdin_to_term() ->
     Prompt = '',
-    {ok, Term} = io:read(Prompt),
-    Term.
+    io:read(Prompt).
 
 term_to_stdout(Term) ->
     io:format('~p.~n', [Term]).

@@ -162,7 +162,7 @@ ineq             -> ineq '>' math :
     {binop, value_of('$2'), '$1', '$3'}.
 ineq             -> ineq '<=' math :
     {binop, value_of('$2'), '$1', '$3'}.
-ineq             -> ineq '>=' math : 
+ineq             -> ineq '>=' math :
     {binop, value_of('$2'), '$1', '$3'}.
 ineq             -> math :
     '$1'.
@@ -171,21 +171,21 @@ math             -> math '+' term :
     {binop, value_of('$2'), '$1', '$3'}.
 math             -> math '-' term :
     {binop, value_of('$2'), '$1', '$3'}.
-math             -> term : 
+math             -> term :
     '$1'.
 
 term             -> term '*' factor :
     {binop, value_of('$2'), '$1', '$3'}.
-term             -> term '/' factor : 
+term             -> term '/' factor :
     {binop, value_of('$2'), '$1', '$3'}.
-term             -> factor : 
+term             -> factor :
     '$1'.
 
 factor           -> unop factor :
     {unop, '$1', '$2'}.
-factor           -> 'identifier' : 
+factor           -> 'identifier' :
     value_of('$1').
-factor           -> 'integer' : 
+factor           -> 'integer' :
     value_of('$1').
 factor           -> '(' expr ')' :
     '$2'.
