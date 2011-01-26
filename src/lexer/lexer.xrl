@@ -58,12 +58,6 @@ Rules.
 
 Erlang code.
 
-type_of(Word) ->
-    case is_reserved(Word) of
-        true -> Word;
-        false -> identifier
-    end.
-
 is_reserved('char') -> true;
 is_reserved('else') -> true;
 is_reserved('if') -> true;

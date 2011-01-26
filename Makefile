@@ -27,8 +27,8 @@ clean:
 compile:
 	clear
 	@- echo '--- Generating lexer and parser ...'
-	$(ERL) -eval 'leex:file("$(DIR_LEXER)/$(LEXER_NAME)"), halt().'
-	$(ERL) -eval 'yecc:file("$(DIR_PARSER)/$(PARSER_NAME)"), halt().'
+	$(ERL) -eval 'io:format("~p~n",[leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
+	$(ERL) -eval 'io:format("~p~n",[yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
 	@- echo '--- Compiling ...'
 	$(ERLC) src/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl

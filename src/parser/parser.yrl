@@ -1,7 +1,7 @@
 Nonterminals
 program topdec_list topdec fundef vardec scalardec arraydec typename
 funtypeandname funbody formals formal_list formaldec formal_arraydec locals
-stmts stmt condition expr operation unop actuals expr_list if_stmt mif uif
+stmts stmt condition expr operation unop actuals expr_list else_part
 rval lval or and comp ineq math term factor function_call array_element.
 
 Terminals '&&' '||' '!'
@@ -85,30 +85,22 @@ stmts            -> stmt stmts :
 stmt             -> expr ';' :
     '$1'.
 stmt             -> 'return' expr ';' :
-    {value_of('$1'), '$2'}.
+    {type_of('$1'), '$2'}.
 stmt             -> 'return' ';' :
-    {value_of('$1'), nil}.
+    {type_of('$1'), nil}.
 stmt             -> 'while' condition stmt :
-    {value_of('$1'), '$2', '$3'}.
-stmt             -> if_stmt :
-    '$1'.
+    {type_of('$1'), '$2', '$3'}.
+stmt             -> 'if' condition stmt else_part :
+    {type_of('$1'), '$2', '$3', '$4'}.
 stmt             -> '{' stmts '}' :
     '$2'.
 stmt             -> ';' :
     [].
 
-if_stmt          -> mif :
-    '$1'.
-if_stmt          -> uif :
-    '$1'.
-
-mif              -> 'if' condition mif 'else' mif :
-    {type_of('$1'), '$2', '$3', '$5'}.
-
-uif              -> 'if' condition stmt :
-    {type_of('$1'), '$2', '$3', nil}.
-uif              -> 'if' condition mif 'else' uif :
-    {type_of('$1'), '$2', '$3', '$5'}.
+else_part          -> '$empty' :
+    nil.
+else_part          -> 'else' stmt :
+    '$2'.
 
 condition        -> '(' expr ')' :
     '$2'.
