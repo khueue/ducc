@@ -12,17 +12,6 @@ Terminals '&&' '||' '!'
 
 Rootsymbol program.
 
-% Unary 140 '-' '!'.
-
-% Left 130 '*' '/'.
-% Left 120 '+' '-'.
-% Left 100 '<' '>' '<=' '>='.
-% Left 90 '==' '!='.
-% Left 50 '&&'.
-% Left 40 '||'.
-
-% Right 20 '='.
-
 program          -> topdec_list :
     {program, '$1'}.
 
@@ -37,7 +26,7 @@ topdec           -> fundef :
     '$1'.
 
 fundef           -> funtypeandname '(' formals ')' funbody :
-    {'$1', '$3', '$5'}.
+    {fundef, '$1', '$3', '$5'}.
 
 funtypeandname   -> typename 'identifier' :
     {value_of('$1'), value_of('$2')}.
@@ -61,8 +50,9 @@ typename         -> 'char' :
     '$1'.
 
 funbody          -> '{' locals stmts '}' :
-    {line_of('$2'), '$2', '$3'}.
-funbody          -> ';'.
+    {'$2', '$3'}.
+funbody          -> ';' :
+    nil.
 
 formals          -> 'void' :
     [].
@@ -93,18 +83,19 @@ stmts            -> stmt stmts :
     ['$1' | '$2'].
 
 stmt             -> expr ';' :
-    {line_of('$1'), '$1'}.
+    '$1'.
 stmt             -> 'return' expr ';' :
-    {line_of('$1'), '$1', '$2'}.
+    {'$1', '$2'}.
 stmt             -> 'return' ';' :
-    {line_of('$1'), '$1', nil}.
+    {'$1', nil}.
 stmt             -> 'while' condition stmt :
-    {line_of('$1'), '$1', '$2', '$3'}.
+    {'$1', '$2', '$3'}.
 stmt             -> if_stmt :
-    {line_of('$1'), $1}.
+    '$1'.
 stmt             -> '{' stmts '}' :
     '$2'.
-stmt             -> ';'.
+stmt             -> ';' :
+    [].
 
 if_stmt          -> mif :
     '$1'.
@@ -122,17 +113,12 @@ uif              -> 'if' condition mif 'else' uif :
 condition        -> '(' expr ')' :
     '$1'.
 
-%expr             -> 'integer'.
-%expr             -> 'identifier'.
 expr             ->  array_element :
     '$1'.
-%expr             -> unop expr.
-%expr             -> expr binop expr.
 expr             -> operation :
     '$1'.
 expr             -> function_call :
     '$1'.
-%expr             -> '(' expr ')'.
 
 array_element    -> 'identifier' '[' expr ']' :
     {value_of('$1'), '$3'}.
@@ -144,50 +130,70 @@ operation        -> rval :
     '$1'.
 
 rval             -> lval '=' rval :
-    {binop, '$2', '$1', '$3'}.
+    {binop, value_of('$2'), '$1', '$3'}.
 rval             -> or :
     '$1'.
 
 lval             -> 'identifier' :
-    '$1'.
+    value_of('$1').
 lval             -> array_element :
     '$1'.
 
 or               -> or '||' and :
-    {binop, '$2', '$1', '$3'}.
+    {binop, value_of('$2'), '$1', '$3'}.
 or               -> and :
     '$1'.
 
-and              -> and '&&' comp.
-and              -> comp.
+and              -> and '&&' comp :
+    {binop, value_of('$2'), '$1', '$3'}.
+and              -> comp :
+    '$1'.
 
-comp             -> comp '==' ineq.
-comp             -> comp '!=' ineq.
-comp             -> ineq.
+comp             -> comp '==' ineq :
+    {binop, value_of('$2'), '$1', '$3'}.
+comp             -> comp '!=' ineq :
+    {binop, value_of('$2'), '$1', '$3'}.
+comp             -> ineq :
+    '$1'.
 
-ineq             -> ineq '<' math.
-ineq             -> ineq '>' math.
-ineq             -> ineq '<=' math.
-ineq             -> ineq '>=' math.
-ineq             -> math.
+ineq             -> ineq '<' math :
+    {binop, value_of('$2'), '$1', '$3'}.
+ineq             -> ineq '>' math :
+    {binop, value_of('$2'), '$1', '$3'}.
+ineq             -> ineq '<=' math :
+    {binop, value_of('$2'), '$1', '$3'}.
+ineq             -> ineq '>=' math : 
+    {binop, value_of('$2'), '$1', '$3'}.
+ineq             -> math :
+    '$1'.
 
-math             -> math '+' term.
-math             -> math '-' term.
-math             -> term.
+math             -> math '+' term :
+    {binop, value_of('$2'), '$1', '$3'}.
+math             -> math '-' term :
+    {binop, value_of('$2'), '$1', '$3'}.
+math             -> term : 
+    '$1'.
 
-term             -> term '*' factor.
-term             -> term '/' factor.
-term             -> factor.
+term             -> term '*' factor :
+    {binop, value_of('$2'), '$1', '$3'}.
+term             -> term '/' factor : 
+    {binop, value_of('$2'), '$1', '$3'}.
+term             -> factor : 
+    '$1'.
 
-factor           -> unop.
-factor           -> 'identifier'.
-factor           -> 'integer'.
-factor           -> '(' expr ')'.
+factor           -> unop factor :
+    {unop, '$1', '$2'}.
+factor           -> 'identifier' : 
+    value_of('$1').
+factor           -> 'integer' : 
+    value_of('$1').
+factor           -> '(' expr ')' :
+    '$2'.
 
-%unop             -> '-'.
-%unop             -> '!'.
-unop             -> '-' factor.
-unop             -> '!' factor.
+unop             -> '-' :
+    value_of('$1').
+unop             -> '!' :
+    value_of('$1').
 
 actuals          -> '$empty' :
     [].
