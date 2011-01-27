@@ -8,6 +8,8 @@ usage() ->
 main([]) ->
     String = io_tools:string_from_input(),
     compile(String);
+main(["-v"]) ->
+    io:fwrite('~s~n', ['0.0.1']);
 main([File]) ->
     String = io_tools:string_from_file(File),
     compile(String);
