@@ -1,6 +1,9 @@
 #!/usr/bin/env escript
 %%! -pa ebin
 
+version() ->
+    '0.0.1'.
+
 usage() ->
     io:format('Usage: ducc [file]~n'),
     io:format('(Uses stdin/stdout if no file given.)~n').
@@ -9,7 +12,7 @@ main([]) ->
     String = io_tools:string_from_input(),
     compile(String);
 main(["-v"]) ->
-    io:fwrite('~s~n', ['0.0.1']);
+    io:fwrite('ducc ~s~n', [version()]);
 main([File]) ->
     String = io_tools:string_from_file(File),
     compile(String);
