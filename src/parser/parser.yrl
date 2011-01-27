@@ -54,7 +54,7 @@ formaldec        -> scalardec : '$1'.
 formaldec        -> formal_arraydec : '$1'.
 
 formal_arraydec  -> typename 'identifier' '[' ']' :
-    {line_of('$1'), type_of('$1'), value_of('$2'), nil}.
+    make_formal_arraydec(line_of('$1'), type_of('$1'), value_of('$2'), nil).
 
 locals           -> '$empty' : [].
 locals           -> vardec ';' locals : ['$1'|'$3'].
@@ -63,11 +63,11 @@ stmts            -> '$empty' : [].
 stmts            -> stmt stmts : ['$1'|'$2'].
 
 stmt             -> expr ';' : '$1'.
-stmt             -> 'return' expr ';' : {type_of('$1'), '$2'}.
-stmt             -> 'return' ';' : {type_of('$1'), nil}.
-stmt             -> 'while' condition stmt : {type_of('$1'), '$2', '$3'}.
+stmt             -> 'return' expr ';' : make_return(type_of('$1'), '$2').
+stmt             -> 'return' ';' : make_return(type_of('$1'), nil).
+stmt             -> 'while' condition stmt : make_while(type_of('$1'), '$2', '$3').
 stmt             -> 'if' condition stmt else_part :
-    {type_of('$1'), '$2', '$3', '$4'}.
+    make_if(type_of('$1'), '$2', '$3', '$4').
 stmt             -> '{' stmts '}' : '$2'.
 stmt             -> ';' : [].
 
@@ -78,41 +78,41 @@ condition        -> '(' expr ')' : '$2'.
 
 expr             -> rval : '$1'.
 
-array_element    -> 'identifier' '[' expr ']' : {value_of('$1'), '$3'}.
+array_element    -> 'identifier' '[' expr ']' : make_array_element(value_of('$1'), '$3').
 
 function_call    -> 'identifier' '(' actuals ')' :
-    {funcall, value_of('$1'), '$3'}.
+    make_function_call(value_of('$1'), '$3').
 
-rval             -> lval '=' rval : {binop, type_of('$2'), '$1', '$3'}.
+rval             -> lval '=' rval : make_binop(type_of('$2'), '$1', '$3').
 rval             -> or : '$1'.
 
 lval             -> 'identifier' : value_of('$1').
 lval             -> array_element : '$1'.
 
-or               -> or '||' and : {binop, type_of('$2'), '$1', '$3'}.
+or               -> or '||' and : make_binop(type_of('$2'), '$1', '$3').
 or               -> and : '$1'.
 
-and              -> and '&&' comp : {binop, type_of('$2'), '$1', '$3'}.
+and              -> and '&&' comp : make_binop(type_of('$2'), '$1', '$3').
 and              -> comp : '$1'.
 
-comp             -> comp op_eq ineq : {binop, '$2', '$1', '$3'}.
+comp             -> comp op_eq ineq : make_binop('$2', '$1', '$3').
 comp             -> ineq : '$1'.
 op_eq            -> '==' : type_of('$1').
 op_eq            -> '!=' : type_of('$1').
 
-ineq             -> ineq op_ineq math : {binop, '$2', '$1', '$3'}.
+ineq             -> ineq op_ineq math : make_binop('$2', '$1', '$3').
 ineq             -> math : '$1'.
 op_ineq          -> '<'  : type_of('$1').
 op_ineq          -> '>'  : type_of('$1').
 op_ineq          -> '<=' : type_of('$1').
 op_ineq          -> '>=' : type_of('$1').
 
-math             -> math op_term term : {binop, '$2', '$1', '$3'}.
+math             -> math op_term term : make_binop('$2', '$1', '$3').
 math             -> term : '$1'.
 op_term          -> '+' : type_of('$1').
 op_term          -> '-' : type_of('$1').
 
-term             -> term op_mult factor : {binop, '$2', '$1', '$3'}.
+term             -> term op_mult factor : make_binop('$2', '$1', '$3').
 term             -> factor : '$1'.
 op_mult          -> '*' : type_of('$1').
 op_mult          -> '/' : type_of('$1').
@@ -123,7 +123,7 @@ factor           -> 'character' : value_of('$1').
 factor           -> array_element : '$1'.
 factor           -> function_call : '$1'.
 factor           -> '(' expr ')' : '$2'.
-factor           -> unop factor : {unop, '$1', '$2'}.
+factor           -> unop factor : make_unop('$1', '$2').
 unop             -> '-' : type_of('$1').
 unop             -> '!' : type_of('$1').
 
@@ -163,3 +163,27 @@ line_of(Token) ->
 
 value_of(Token) ->
     erlang:element(3, Token).
+
+make_formal_arraydec(Line, Type, Ident, Size) ->
+    {Line, Type, Ident, Size}.
+
+make_if(Keyword, Cond, Then, Else) ->
+    {Keyword, Cond, Then, Else}.
+
+make_while(Keyword, Cond, Stmt) ->
+    {Keyword, Cond, Stmt}.
+
+make_return(Keyword, Expr) ->
+    {Keyword, Expr}.
+
+make_function_call(Ident, Actuals) ->
+    {funcall, Ident, Actuals}.
+
+make_array_element(Ident, Index) ->
+    {Ident, Index}.
+
+make_binop(Op, Lhs, Rhs) ->
+    {binop, Op, Lhs, Rhs}.
+
+make_unop(Op, Rhs) ->
+    {unop, Op, Rhs}.
