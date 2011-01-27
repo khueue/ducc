@@ -61,7 +61,7 @@ lexer. For example:
 
     Terminals '&&' '||' '!' 'return' 'void' 'while'.
 
-Start category of the grammar. For example:
+Start symbol of the grammar. For example:
 
     Rootsymbol program.
 
@@ -112,14 +112,43 @@ with a different file extension: ".erl".
 
 See `src/parser/parser.yrl` for the complete grammar definition.
 
-### Precedence of binary operators
+### Precedence and associativity of binary operators
 
-XXX
+Precedence of binary operators was handled by introducing new nonterminals,
+splitting the productions from lower to higher precedence.  
 
+Instead of having:
 
-### Associativity of binary operators
+    expr  -> expr binop expr
+    binop -> '='
+    binop -> '||'
+    binop -> '&&'
+    ...
 
-XXX
+... we introduced:
+
+    expr -> rval
+    rval -> lval '=' rval
+    rval -> or
+    or   -> or '||' and
+    or   -> and
+    and  -> and '&&' comp
+    ...
+
+Which forces the correct derivation of precedence between =, || and &&, etc. 
+We continued in a similar fashion for the rest of the binary operators.
+
+Associativity was handled by preventing left associative operators to produce 
+itself on the right hand side, and right associative operators to produce 
+itself on the left hand side.
+
+For example, '=' is right associative. The rule `rval -> lval '=' rval` in 
+the example above is only able to derive new '=' on the right hand side.
+Resulting in a derivation of the form `lval=(lval=(lval=or))`.
+
+The same goes for left associative operators, such as '||', which is only able 
+to derive new '||' on the left hand side. Resulting in a derivation of the
+form `((and || and) || and) || and`.
 
 
 ### Top-level declarations
