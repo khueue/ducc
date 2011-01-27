@@ -20,7 +20,13 @@ have an old release of OTP which doesn't include Leex.)
 
 ## Introduction
 
-XXX
+Our compiler will be written in Erlang. Neither of us has any previous 
+experience with Erlang, so we hope this to be both challenging and fun.
+
+This assignment involves creating a parser (syntax analyser) for the uC 
+language (a subset of C), so this is what the report will focus on: 
+understanding the syntax part of uC, learning Yecc and arriving at a 
+(hopefully) working parser.
 
 
 ## Tools Used
@@ -104,6 +110,8 @@ with a different file extension: ".erl".
 
 ## The Grammar
 
+See `src/parser/parser.yrl` for the complete grammar definition.
+
 ### Precedence of binary operators
 
 XXX
@@ -116,7 +124,11 @@ XXX
 
 ### Top-level declarations
 
-XXX
+We eliminated the problem of parsing top-level declarations by using the 
+proposed solution of adding an additional production. Resulting in:
+
+    funtypeandname   -> typename 'identifier' : Associated_Code.
+    funtypeandname   ->     void 'identifier' : Associated_Code.
 
 
 ### Dangling else
@@ -136,11 +148,65 @@ operator precedence declarations._"
 
 ## The Abstract Syntax Tree (AST)
 
-Representation of the abstract syntax tree. XXX
+In our representation of the abstract syntax tree, there are 14 different
+kinds of nodes. Each kind of node has an associated constructor. See 
+description below.
 
-### Node XXX
+### Node: program
 
-### Node XXX
+XXX
+
+### Node: fundef
+
+XXX
+
+### Node: funtypeandname
+
+XXX
+
+### Node: scalardec
+
+XXX
+
+### Node: arraydec
+
+XXX
+
+### Node: funbody
+
+XXX
+
+### Node: formal_arraydec
+
+XXX
+
+### Node: if
+
+XXX
+
+### Node: while
+
+XXX
+
+### Node: return
+
+XXX
+
+### Node: function_call
+
+XXX
+
+### Node: array_element
+
+XXX
+
+### Node: binop
+
+XXX
+
+### Node: unop
+
+XXX
 
 
 ## Running the parser
