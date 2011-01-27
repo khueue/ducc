@@ -2,8 +2,8 @@
 %%! -pa ebin
 
 usage() ->
-    io:write('Usage: lexer~n'),
-    io:write('Uses stdin/stdout.~n').
+    io:format('Usage: lexer~n'),
+    io:format('Uses stdin/stdout.~n').
 
 main([]) ->
     String = io_tools:string_from_input(),

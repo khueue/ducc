@@ -2,8 +2,8 @@
 %%! -pa ebin
 
 usage() ->
-    io:write('Usage: parser~n'),
-    io:write('Uses stdin/stdout.~n').
+    io:format('Usage: parser~n'),
+    io:format('Uses stdin/stdout.~n').
 
 main([]) ->
     {ok, Tokens} = io_tools:term_from_input(),

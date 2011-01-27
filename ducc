@@ -2,8 +2,8 @@
 %%! -pa ebin
 
 usage() ->
-    io:write('Usage: ducc [file]~n'),
-    io:write('Uses stdin/stdout if no file given.~n').
+    io:format('Usage: ducc [file]~n'),
+    io:format('Uses stdin/stdout if no file given.~n').
 
 main([]) ->
     compile_standard_input();
