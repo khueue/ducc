@@ -1,8 +1,13 @@
 #!/usr/bin/env escript
 %%! -pa ebin
 
+usage() ->
+    io:write('Usage: parser~n'),
+    io:write('Uses stdin/stdout.~n').
+
 main([]) ->
     {ok, Tokens} = io_tools:term_from_input(),
     ParseTree = parser_driver:parse(Tokens),
-    io_tools:term_to_output(ParseTree),
-    init:stop().
+    io_tools:term_to_output(ParseTree);
+main(_) ->
+    usage().

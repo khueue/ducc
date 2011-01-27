@@ -1,18 +1,27 @@
 #!/usr/bin/env escript
 %%! -pa ebin
 
-main([]) ->
-    String = io_tools:string_from_input(),
-    compile(String),
-    init:stop();
-main([File]) ->
-    {ok, Stream} = file:open(File, [read]),
-    String = io_tools:string_from_stream(Stream),
-    compile(String),
-    file:close(Stream),
-    init:stop().
+usage() ->
+    io:write('Usage: ducc [file]~n'),
+    io:write('Uses stdin/stdout if no file given.~n').
 
-compile(String) ->
+main([]) ->
+    compile_standard_input();
+main([File]) ->
+    compile_file(File);
+main(_) ->
+    usage().
+
+compile_standard_input() ->
+    compile_stream(standard_io).
+
+compile_file(File) ->
+    {ok, Stream} = file:open(File, [read]),
+    compile_stream(Stream),
+    file:close(Stream).
+
+compile_stream(Stream) ->
+    String = io_tools:string_from_stream(Stream),
     Tokens = lexer_driver:tokenize(String),
     ParseTree = parser_driver:parse(Tokens),
     io_tools:term_to_output(ParseTree).

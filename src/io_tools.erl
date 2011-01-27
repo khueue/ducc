@@ -27,4 +27,4 @@ term_to_output(Term) ->
 
 die(Message) ->
     io:format('~p~n', [{lexical_error, Message}]),
-    erlang:halt().
+    erlang:halt(1).

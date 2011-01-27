@@ -33,6 +33,10 @@ compile:
 	$(ERLC) src/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
+tests: all
+	lexer_test
+	parser_test
+
 pack:
 	tar -czvf $(PROJECT_NAME).tar.gz \
 		$(DIR_EBIN) $(DIR_SRC) report suite \

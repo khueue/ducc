@@ -1,8 +1,13 @@
 #!/usr/bin/env escript
 %%! -pa ebin
 
+usage() ->
+    io:write('Usage: lexer~n'),
+    io:write('Uses stdin/stdout.~n').
+
 main([]) ->
     String = io_tools:string_from_input(),
     Tokens = lexer_driver:tokenize(String),
-    io_tools:term_to_output(Tokens),
-    init:stop().
+    io_tools:term_to_output(Tokens);
+main(_) ->
+    usage().
