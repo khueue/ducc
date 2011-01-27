@@ -26,7 +26,7 @@ fundef           -> funtypeandname '(' formals ')' funbody :
 
 funtypeandname   -> typename 'identifier' :
     make_funtypeandname(type_of('$1'), value_of('$2')).
-funtypeandname   ->     void 'identifier' :
+funtypeandname   ->   'void' 'identifier' :
     make_funtypeandname(type_of('$1'), value_of('$2')).
 
 vardec           -> scalardec : '$1'.
