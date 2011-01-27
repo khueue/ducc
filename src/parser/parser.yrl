@@ -13,7 +13,7 @@ Terminals '&&' '||' '!'
 
 Rootsymbol program.
 
-program          -> topdec_list : {program, '$1'}.
+program          -> topdec_list : make_program('$1').
 
 topdec_list      -> '$empty' : [].
 topdec_list      -> topdec topdec_list : ['$1'|'$2'].
@@ -22,25 +22,27 @@ topdec           -> vardec ';' : '$1'.
 topdec           -> fundef : '$1'.
 
 fundef           -> funtypeandname '(' formals ')' funbody :
-    {fundef, '$1', '$3', '$5'}.
+    make_fundef('$1', '$3', '$5').
 
-funtypeandname   -> typename 'identifier' : {type_of('$1'), value_of('$2')}.
-funtypeandname   ->     void 'identifier' : {type_of('$1'), value_of('$2')}.
+funtypeandname   -> typename 'identifier' :
+    make_funtypeandname(type_of('$1'), value_of('$2')).
+funtypeandname   ->     void 'identifier' :
+    make_funtypeandname(type_of('$1'), value_of('$2')).
 
 vardec           -> scalardec : '$1'.
 vardec           -> arraydec : '$1'.
 
 scalardec        -> typename 'identifier' :
-    {line_of('$1'), type_of('$1'), value_of('$2'), nil}.
+    make_scalardec(line_of('$1'), type_of('$1'), value_of('$2'), nil).
 
 arraydec         -> typename 'identifier' '[' 'integer' ']' :
-    {line_of('$1'), type_of('$1'), value_of('$2'), value_of('$4')}.
+    make_arraydec(line_of('$1'), type_of('$1'), value_of('$2'), value_of('$4')).
 
 typename         -> 'int' : '$1'.
 typename         -> 'char' : '$1'.
 
-funbody          -> ';' : nil.
-funbody          -> '{' locals stmts '}' : {'$2', '$3'}.
+funbody          -> ';' : make_funbody(nil, nil).
+funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
 
 formals          -> 'void' : [].
 formals          -> formal_list : '$1'.
@@ -132,6 +134,26 @@ expr_list        -> expr : ['$1'].
 expr_list        -> expr ',' expr_list : ['$1'|'$3'].
 
 Erlang code.
+
+make_program(Topdec) ->
+    {program, Topdec}.
+
+make_fundef(FunTypeName, Formals, FunBody) ->
+    {fundef, FunTypeName, Formals, FunBody}.
+
+make_funtypeandname(Type, Ident) ->
+   {Type, Ident}.
+
+make_scalardec(Line, Type, Value, Nil) ->
+    {Line, Type, Value, Nil}.
+
+make_arraydec(Line, Type, IdentValue, IntValue) ->
+    {Line, Type, IdentValue, IntValue}.
+
+make_funbody(nil, nil) ->
+    nil;
+make_funbody(Locals, Stmts) ->
+    {Locals, Stmts}.
 
 type_of(Token) ->
     erlang:element(1, Token).
