@@ -3,7 +3,7 @@
 
 usage() ->
     io:format('Usage: lexer~n'),
-    io:format('Uses stdin/stdout.~n').
+    io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
     String = io_tools:string_from_input(),
