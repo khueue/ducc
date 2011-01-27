@@ -75,7 +75,7 @@ Optional declarations of operator precedences. For example:
     Unary 500 '-'.
 
 We don't use any operator precedence declarations since we resolve these 
-kind of ambiguities be modifying the grammar. See the section "The Grammar"
+kind of ambiguities by modifying the grammar. See the section "The Grammar"
 below.
 
 Grammar rules. Each rule has the general form:
@@ -86,7 +86,7 @@ For example:
     
     program          -> topdec_list : {program, '$1'}.
 
-Function definitions goes in the `Erlang code.` section:
+Function definitions goes in the `Erlang code.` section. For example:
 
     Erlang code.
 
