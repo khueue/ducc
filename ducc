@@ -6,22 +6,15 @@ usage() ->
     io:format('(Uses stdin/stdout if no file given.)~n').
 
 main([]) ->
-    compile_standard_input();
+    String = io_tools:string_from_input(),
+    compile(String);
 main([File]) ->
-    compile_file(File);
+    String = io_tools:string_from_file(File),
+    compile(String);
 main(_) ->
     usage().
 
-compile_standard_input() ->
-    compile_stream(standard_io).
-
-compile_file(File) ->
-    {ok, Stream} = file:open(File, [read]),
-    compile_stream(Stream),
-    file:close(Stream).
-
-compile_stream(Stream) ->
-    String = io_tools:string_from_stream(Stream),
+compile(String) ->
     Tokens = lexer_driver:tokenize(String),
     ParseTree = parser_driver:parse(Tokens),
     io_tools:term_to_output(ParseTree).
