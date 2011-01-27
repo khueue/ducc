@@ -11,6 +11,7 @@
 string_from_input() ->
     string_from_stream(standard_io).
 
+% Todo: Properly handle file errors.
 string_from_file(File) ->
     {ok, Stream} = file:open(File, [read]),
     String = string_from_stream(Stream),
@@ -18,25 +19,24 @@ string_from_file(File) ->
     String.
 
 string_from_stream(Stream) ->
-    case io:get_chars(Stream, _Prompt = '', 8192) of
-        eof ->
-            [];
-        Text ->
-            Text ++ string_from_stream(Stream)
+    case io:get_chars(Stream, _Prompt = '', _Count = 8192) of
+        eof  -> [];
+        Text -> Text ++ string_from_stream(Stream)
     end.
 
-% Ugly:
 term_from_string(String) ->
+    to_term(to_tokens(String)).
+
+to_tokens(String) ->
     case erl_scan:string(String) of
-        {ok, Tokens, _} ->
-            case erl_parse:parse_term(Tokens) of
-                {ok, Term} ->
-                    Term;
-                _Error ->
-                    {error, invalid_term}
-            end;
-        _Error ->
-            {error, invalid_term}
+        {ok, Tokens, _} -> Tokens;
+        _Error          -> {error, invalid_term}
+    end.
+
+to_term(Tokens) ->
+    case erl_parse:parse_term(Tokens) of
+        {ok, Term} -> Term;
+        _Error     -> {error, invalid_term}
     end.
 
 term_to_output(Term) ->

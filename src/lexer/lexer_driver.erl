@@ -3,10 +3,8 @@
 
 tokenize(String) ->
     case lexer:string(String) of
-        {ok, Tokens, _} ->
-            Tokens;
-        Error ->
-            handle_error(Error)
+        {ok, Tokens, _} -> Tokens;
+        Error           -> handle_error(Error)
     end.
 
 handle_error({error, {Line, _Module, {Message, Fault}}, _}) ->

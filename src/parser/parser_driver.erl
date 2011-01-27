@@ -3,10 +3,8 @@
 
 parse(Tokens) ->
     case parser:parse(Tokens) of
-        {ok, ParseTree} ->
-            ParseTree;
-        Error ->
-            handle_error(Error)
+        {ok, ParseTree} -> ParseTree;
+        Error           -> handle_error(Error)
     end.
 
 handle_error({error, {Line, _Module, [_Message,Fault|_]}}) ->
