@@ -157,7 +157,7 @@ We eliminated the problem of parsing top-level declarations by using the
 proposed solution of adding an additional production. Resulting in:
 
     funtypeandname   -> typename 'identifier' : Associated_Code.
-    funtypeandname   ->     void 'identifier' : Associated_Code.
+    funtypeandname   ->   'void' 'identifier' : Associated_Code.
 
 
 ### Dangling else
