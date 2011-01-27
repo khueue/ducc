@@ -2,4 +2,7 @@
 %%! -pa ebin
 
 main([]) ->
-    parser_driver:start().
+    {ok, Tokens} = io_tools:term_from_input(),
+    ParseTree = parser_driver:parse(Tokens),
+    io_tools:term_to_output(ParseTree),
+    init:stop().

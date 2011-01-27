@@ -2,4 +2,7 @@
 %%! -pa ebin
 
 main([]) ->
-    lexer_driver:start().
+    String = io_tools:string_from_input(),
+    Tokens = lexer_driver:tokenize(String),
+    io_tools:term_to_output(Tokens),
+    init:stop().

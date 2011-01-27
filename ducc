@@ -1,0 +1,18 @@
+#!/usr/bin/env escript
+%%! -pa ebin
+
+main([]) ->
+    String = io_tools:string_from_input(),
+    compile(String),
+    init:stop();
+main([File]) ->
+    {ok, Stream} = file:open(File, [read]),
+    String = io_tools:string_from_stream(Stream),
+    compile(String),
+    file:close(Stream),
+    init:stop().
+
+compile(String) ->
+    Tokens = lexer_driver:tokenize(String),
+    ParseTree = parser_driver:parse(Tokens),
+    io_tools:term_to_output(ParseTree).

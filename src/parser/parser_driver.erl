@@ -1,8 +1,10 @@
 -module(parser_driver).
--export([start/0]).
+-export([parse/1]).
 
-start() ->
-    {_, Tokens} = term_io:stdin_to_term(),
-    {_, ParseTree} = parser:parse(Tokens),
-    term_io:term_to_stdout(ParseTree),
-    init:stop().
+parse(Tokens) ->
+    case parser:parse(Tokens) of
+        {ok, ParseTree} ->
+            ParseTree;
+        Error ->
+            io_tools:die(Error)
+    end.

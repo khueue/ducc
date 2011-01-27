@@ -6,7 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = lexer parser
+SCRIPTS      = ducc lexer parser
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
