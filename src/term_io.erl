@@ -6,4 +6,10 @@ stdin_to_term() ->
     io:read(Prompt).
 
 term_to_stdout(Term) ->
-    io:format('~p.~n', [Term]).
+    case Term of
+        {_,parser,_} ->
+            io:format('~p.~n', [Term]),
+            erlang:halt(1);
+        _ ->
+            io:format('~p.~n', [Term])
+    end.
