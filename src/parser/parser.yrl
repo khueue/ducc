@@ -135,6 +135,15 @@ expr_list        -> expr ',' expr_list : ['$1'|'$3'].
 
 Erlang code.
 
+type_of(Token) ->
+    erlang:element(1, Token).
+
+line_of(Token) ->
+    erlang:element(2, Token).
+
+value_of(Token) ->
+    erlang:element(3, Token).
+
 make_program(Topdec) ->
     {program, Topdec}.
 
@@ -144,8 +153,8 @@ make_fundef(FunTypeName, Formals, FunBody) ->
 make_funtypeandname(Type, Ident) ->
    {Type, Ident}.
 
-make_scalardec(Line, Type, Value, Nil) ->
-    {Line, Type, Value, Nil}.
+make_scalardec(Line, Type, Value, Size) ->
+    {Line, Type, Value, Size}.
 
 make_arraydec(Line, Type, IdentValue, IntValue) ->
     {Line, Type, IdentValue, IntValue}.
@@ -154,15 +163,6 @@ make_funbody(nil, nil) ->
     nil;
 make_funbody(Locals, Stmts) ->
     {Locals, Stmts}.
-
-type_of(Token) ->
-    erlang:element(1, Token).
-
-line_of(Token) ->
-    erlang:element(2, Token).
-
-value_of(Token) ->
-    erlang:element(3, Token).
 
 make_formal_arraydec(Line, Type, Ident, Size) ->
     {Line, Type, Ident, Size}.
