@@ -6,7 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = ducc lexer parser
+SCRIPTS      = ducc lexer lexer_test parser parser_test
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -34,6 +34,7 @@ compile:
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 tests: all
+	@- echo '--- Running tests ...'
 	lexer_test
 	parser_test
 
