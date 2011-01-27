@@ -4,4 +4,5 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 Todo:
 
- * Automate testing!
+ * Better error messages. Make sure that all phases stop on errors.
+ * Improve the AST, add constructors for nodes.
