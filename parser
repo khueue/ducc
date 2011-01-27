@@ -6,8 +6,18 @@ usage() ->
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
-    {ok, Tokens} = io_tools:term_from_input(),
-    ParseTree = parser_driver:parse(Tokens),
-    io_tools:term_to_output(ParseTree);
+    String = io_tools:string_from_input(),
+    Term = io_tools:term_from_string(String),
+    process_term_or_echo(Term, String);
 main(_) ->
     usage().
+
+% Invalid term means that the previous step failed, so just it pass along.
+process_term_or_echo({error, invalid_term}, String) ->
+    io_tools:die(String);
+process_term_or_echo(Term, _String) ->
+    process(Term).
+
+process(Tokens) ->
+    ParseTree = parser_driver:parse(Tokens),
+    io_tools:term_to_output(ParseTree).
