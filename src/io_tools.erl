@@ -10,8 +10,7 @@ string_from_input() ->
     string_from_stream(standard_io).
 
 string_from_stream(Stream) ->
-    Prompt = '',
-    case io:get_chars(Stream, Prompt, 8192) of
+    case io:get_chars(Stream, _Prompt = '', 8192) of
         eof ->
             [];
         Text ->
@@ -19,8 +18,7 @@ string_from_stream(Stream) ->
     end.
 
 term_from_input() ->
-    Prompt = '',
-    io:read(Prompt).
+    io:read(_Prompt = '').
 
 term_to_output(Term) ->
     io:format('~p.~n', [Term]).
