@@ -177,7 +177,7 @@ operator precedence declarations._"
 
 ## The Abstract Syntax Tree (AST)
 
-In our representation of the abstract syntax tree, there are 14 different
+In our representation of the abstract syntax tree, there are 17 different
 kinds of nodes. Each kind of node has an associated constructor. See 
 description below.
 
@@ -236,6 +236,24 @@ XXX
 ### Node: unop
 
 XXX
+
+### Node: ident
+
+Alphanumeric identifiers. 
+
+Format: {Line, `ident`, Value}
+
+### Node: intconst
+
+Integer constants.
+
+Format: {Line, `intconst`, Value}
+
+### Node: charconst
+
+Character literals.
+
+Format: {Line, `charconst`, Value}
 
 
 ## Running the parser
