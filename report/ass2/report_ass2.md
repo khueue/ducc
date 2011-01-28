@@ -240,12 +240,29 @@ XXX
 
 ## Running the parser
 
-The parser has been implemented to read from standard input. As such it's 
-possible to, for example, pipe the result from the lexer to the parser:
+The parser (and the lexer) has been implemented to read from standard input
+and output to standard output. As such it's possible to, for example, pipe
+the result from the lexer to the parser:
 
     cat suite/quiet/parser/p01.c | lexer | parser
 
-... and the parser will output the resulting abstract syntax tree to standard
-output.
+The parser will output the resulting abstract syntax tree to standard output.
 
 XXX
+
+### Error Handling
+
+When a script (such as `lexer` or `parser`) receives invalid input, an error
+is printed and execution stops.
+
+A lexical error exhibited by the lexer looks like this:
+
+    Lexical error on line 13, illegal: "%"
+
+A syntax error exhibited by the parser looks like this:
+
+    Syntax error on line 5, before: "')'"
+
+If an unreadable file is given to `ducc`, the following error appears:
+
+    Error reading file: some_unreadable_file
