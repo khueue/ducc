@@ -183,11 +183,17 @@ description below.
 
 ### Node: program
 
-XXX
+This is the root node of every program.
+
+Format: {Line, `program`, ListOfTopLevelDecl}
 
 ### Node: fundef
 
-XXX
+Function definitions.
+
+Format: {Line, `fundef`, `funtypeandname`, Formals, `funbody`}
+
+Where Formals is a list of `scalardec` and `formal_arraydec`.
 
 ### Node: funtypeandname
 
