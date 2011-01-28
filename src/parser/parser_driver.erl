@@ -8,8 +8,8 @@ parse(Tokens) ->
     end.
 
 handle_error({error, {Line, _Module, [_Message,Fault|_]}}) ->
-    io_tools:die(
+    tool_chain:die(
         'Syntax error on line ~p, before: ~p~n',
         [Line, Fault]);
 handle_error(Unknown) ->
-    io_tools:die(Unknown).
+    tool_chain:die(Unknown).

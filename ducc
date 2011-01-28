@@ -9,12 +9,12 @@ usage() ->
     io:format('(Uses stdin if no file given.)~n').
 
 main([]) ->
-    String = io_tools:string_from_input(),
+    String = tool_chain:string_from_input(),
     compile(String);
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
 main([File]) ->
-    String = io_tools:string_from_file(File),
+    String = tool_chain:string_from_file(File),
     compile(String);
 main(_) ->
     usage().
@@ -22,4 +22,4 @@ main(_) ->
 compile(String) ->
     Tokens = lexer_driver:tokenize(String),
     ParseTree = parser_driver:parse(Tokens),
-    io_tools:term_to_output(ParseTree).
+    tool_chain:term_to_output(ParseTree).

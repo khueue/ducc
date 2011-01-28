@@ -6,8 +6,8 @@ usage() ->
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
-    String = io_tools:string_from_input(),
+    String = tool_chain:string_from_input(),
     Tokens = lexer_driver:tokenize(String),
-    io_tools:term_to_output(Tokens);
+    tool_chain:term_to_output(Tokens);
 main(_) ->
     usage().

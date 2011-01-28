@@ -1,4 +1,4 @@
--module(io_tools).
+-module(tool_chain).
 -export([
     string_from_input/0,
     string_from_file/1,

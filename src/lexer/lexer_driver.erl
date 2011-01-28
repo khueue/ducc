@@ -8,8 +8,8 @@ tokenize(String) ->
     end.
 
 handle_error({error, {Line, _Module, {Message, Fault}}, _}) ->
-    io_tools:die(
+    tool_chain:die(
         'Lexical error on line ~p, ~p: ~p~n',
         [Line, Message, Fault]);
 handle_error(Unknown) ->
-    io_tools:die(Unknown).
+    tool_chain:die(Unknown).
