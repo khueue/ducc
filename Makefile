@@ -16,7 +16,7 @@ all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby src/trim_and_clean.rb src/*.* src/**/*.* $(SCRIPTS)
+	@- ruby src/trim_and_clean.rb src/*.* src/**/*.* report/**/*.md $(SCRIPTS)
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl

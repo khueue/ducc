@@ -11,8 +11,7 @@ Sebastian Lundström (selu7901@student...)
 Project Repository at GitHub: <https://github.com/khueue/ducc/tree/ass1-lexer>
 
 The source and executables are also available on the IT departments server:
-/home/emhe9781/src/ducc/ 
-
+/home/emhe9781/src/ducc/
 
 ## Introduction
 
@@ -23,7 +22,6 @@ This assignment involves creating a lexer (lexical analyser) for the uC
 language (a subset of C), so this is what the report will focus on:
 understanding the lexical part of uC, learning Leex and arriving at a
 (hopefully) working lexer.
-
 
 ## Tools Used
 
@@ -62,8 +60,6 @@ are defined as follows:
      the input matched.
  * _Erlang code_. Any additional code needed by the above.
 
-  
-
 #### Output File: Lexer
 
 When feeding the input file to Leex using `leex:file(lexer)`, where _lexer_
@@ -72,7 +68,6 @@ to the specification. This file is placed beside the specification but named
 with a different file extension: ".erl".
 
 See section "main.erl" below for information on how to use the lexer.
-
 
 ## Handling Comments
 
@@ -85,7 +80,7 @@ Single-line comments are handled by the simple regexp:
 where _LineComment_ is defined as `//`. The dot regexp does not match
 newline in Leex, so we did not have to handle that specifically.
 
-### Multi-Line Comments 
+### Multi-Line Comments
 
 Handling multi-line comments was the trickiest part of the lexer.
 We eventually arrived at the following expression:
@@ -104,12 +99,10 @@ This prohibits the sequences `/*` and `*/` from appearing inside the comment,
 but anything else is allowed. This combined should be able to cope with
 proper multi-line comments in uC (and C).
 
-
 ## Handling EOF
 
-Since we are using Leex to create the lexical analyser we didn't need to 
-handle eof explicitly. 
-
+Since we are using Leex to create the lexical analyser we didn't need to
+handle eof explicitly.
 
 ## Running the lexer
 
@@ -120,8 +113,8 @@ modules.
 The function start/1 in the module main takes a file name as an argument and
 opens a stream. The stream is then passed to the function process_file/1.
 
-The function process_file/1 uses the io:request/2 function which uses the 
+The function process_file/1 uses the io:request/2 function which uses the
 generated lexer in order to tokenize the input stream.
-Upon seeing a valid token, the token and its value is printed to standard 
-output using the io:format/2 function. If it sees a lexical error, an 
+Upon seeing a valid token, the token and its value is printed to standard
+output using the io:format/2 function. If it sees a lexical error, an
 error message will be printed to standard output.
