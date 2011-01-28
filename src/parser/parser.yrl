@@ -130,31 +130,21 @@ Erlang code.
 type_of(Token) ->
     erlang:element(1, Token).
 
-line_of(_) -> 0;
-line_of([X|_]) ->
-    %io:format('token: ~p~n', [Line]),
-    line_of(X);
+line_of(Int) when is_integer(Int) ->
+    Int;
 line_of([]) ->
-    %io:format('token: ~p~n', [Line]),
-    0; % Error?
-line_of(Token) when is_integer(Token) ->
-    %io:format('token1: ~p~n', [Token]),
-    Token;
-line_of({Ett,Tva}) when is_integer(Ett) ->
-    %io:format('token2: ~p~n', [{Ett,Tva}]),
-    Ett;
-line_of({Ett,Tva}) when is_integer(Tva) ->
-    %io:format('token3: ~p~n', [{Ett,Tva}]),
-    Tva;
-line_of({Ett,Tva,Tre}) ->
-    io:format('token4: ~p~n', [{Ett,Tva,Tre}]),
-    line_of(Tva); % Tva?
-line_of({Ett,Tva,Tre,Fyra}) ->
-    %io:format('token5: ~p~n', [{Ett,Tva,Tre,Fyra}]),
-    line_of(Ett);
-line_of(Token) ->
-    %io:format('token6: ~p~n', [Token]),
-    line_of(erlang:element(1, Token)).
+    99999; % Error?
+line_of([X|_]) ->
+    line_of(X);
+line_of(_Meta  = {Line,_}) when is_integer(Line) ->
+    Line;
+line_of(_Token = {_,Line}) when is_integer(Line) ->
+    Line;
+line_of({First,Line,_}) when not(is_tuple(First)) ->
+    Line;
+line_of(Tuple) ->
+    First = erlang:element(1, Tuple),
+    line_of(First).
 
 value_of(Token) ->
     erlang:element(3, Token).
@@ -186,7 +176,7 @@ make_formal_arraydec(Type, Ident) ->
     {make_meta(line_of(Type), formal_arraydec), type_of(Type), value_of(Ident)}.
 
 make_if(Keyword, Cond, Then, Else) ->
-    {make_meta(line_of(Keyword), 'if'), Cond, Then, Else}. % if?
+    {make_meta(line_of(Keyword), 'if'), Cond, Then, Else}.
 
 make_while(Keyword, Cond, Stmt) ->
     {make_meta(line_of(Keyword), while), Cond, Stmt}.
