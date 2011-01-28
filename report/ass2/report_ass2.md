@@ -298,3 +298,19 @@ A syntax error exhibited by the parser looks like this:
 If an unreadable file is given to `ducc`, the following error appears:
 
     Error reading file: some_unreadable_file
+
+# Questions
+
+## AST
+
+As of now, we have strictly separated most node types using tags.
+For instance, we have variable declarations that look like this:
+
+    {{1,scalardec},char,a},
+    {{2,arraydec},int,b,42},
+
+Would it be better (or just different?) to merge them into a "vardec"
+and use something like "nil" appropriately? Like this:
+
+    {{1,vardec},char,a,nil},
+    {{2,vardec},int,b,42},
