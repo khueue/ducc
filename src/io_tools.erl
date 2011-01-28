@@ -11,12 +11,15 @@
 string_from_input() ->
     string_from_stream(standard_io).
 
-% Todo: Properly handle file errors.
 string_from_file(File) ->
-    {ok, Stream} = file:open(File, [read]),
-    String = string_from_stream(Stream),
-    file:close(Stream),
-    String.
+    case file:open(File, [read]) of
+        {ok, Stream} ->
+            String = string_from_stream(Stream),
+            file:close(Stream),
+            String;
+        _Error ->
+            die('Error reading file: ~s~n', [File])
+    end.
 
 string_from_stream(Stream) ->
     case io:get_chars(Stream, _Prompt = '', _Count = 8192) of
