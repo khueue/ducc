@@ -112,7 +112,7 @@ with a different file extension: ".erl".
 
 See `src/parser/parser.yrl` for the complete grammar definition.
 
-### Precedence and associativity of binary operators
+### Precedence and Associativity
 
 Precedence of binary operators was handled by introducing new nonterminals,
 splitting the productions from lower to higher precedence.  
@@ -151,7 +151,7 @@ to derive new '||' on the left hand side. Resulting in a derivation of the
 form `((and || and) || and) || and`.
 
 
-### Top-level declarations
+### Top-Level Declarations
 
 We eliminated the problem of parsing top-level declarations by using the 
 proposed solution of adding an additional production. Resulting in:
@@ -160,7 +160,7 @@ proposed solution of adding an additional production. Resulting in:
     funtypeandname   ->   'void' 'identifier' : Associated_Code.
 
 
-### Dangling else
+### Dangling Else
 
 Yecc reports one shift/reduce warning because we don't handle the dangling
 else ambiguity explicitly in the grammar.
@@ -175,9 +175,9 @@ Quoting Yecc's documentation:
 operator precedence declarations._"
 
 
-## The Abstract Syntax Tree (AST)
+## Abstract Syntax Tree
 
-In our representation of the abstract syntax tree, there are 17 different
+In our representation of the abstract syntax tree (AST), there are 17 different
 kinds of nodes. Each kind of node has an associated constructor. See 
 description below.
 
@@ -262,9 +262,9 @@ Character literals.
 Format: {{Line, `charconst`}, Value}
 
 
-## Running the parser
+## Running the Parser
 
-### Multiple-Step Compilation
+### Multi-Step Compilation
 
 The parser (and the lexer) has been implemented to read from standard input
 and output to standard output. As such it's possible to, for example, pipe
