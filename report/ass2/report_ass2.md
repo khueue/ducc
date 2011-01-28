@@ -244,7 +244,7 @@ Format: {{Line, `funcall`}, Ident, Actuals}
 
 Where Actuals is a list expressions.
 
-### Node: array_element
+### Node: arrelem
 
 Format: {{Line, `arrelem`}, Ident, Index}
 
