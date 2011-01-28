@@ -96,7 +96,7 @@ Function definitions goes in the `Erlang code.` section. For example:
 
     Erlang code.
 
-    type_of(Token) ->
+    type(Token) ->
         erlang:element(1, Token).
 
 
@@ -177,9 +177,9 @@ operator precedence declarations._"
 
 ## Abstract Syntax Tree
 
-In our representation of the abstract syntax tree (AST), there are 17 different
-kinds of nodes. Each kind of node has an associated constructor. See 
-description below.
+In our representation of the abstract syntax tree (AST), there are 16 
+different kinds of nodes. Each kind of node has an associated constructor. 
+See description below.
 
 ### Node: program
 
@@ -193,55 +193,70 @@ Function definitions.
 
 Format: {{Line, `fundef`}, `funtypeandname`, Formals, `funbody`}
 
-Where Formals is a list of `scalardec` and `formal_arraydec`.
+Where Formals is a list which may include nodes of `scalardec` and 
+`formal_arraydec`.
 
 ### Node: funtypeandname
 
-XXX
+Return type and name of function.
+
+Format: {{Line, `funtypeandname`}, Type, Name}
 
 ### Node: scalardec
 
-XXX
+Format: {{Line, `scalardec`}, Type, Name}
 
 ### Node: arraydec
 
-XXX
-
-### Node: funbody
-
-XXX
+Format: {{Line, `arraydec`}, Type, Name, Size}
 
 ### Node: formal_arraydec
 
-XXX
+Format: {{Line, `formal_arraydec`}, Type, Name}
 
 ### Node: if
 
-XXX
+If statements.
+
+Format: {{Line, `if`}, Condition, ThenStmt, ElseStmt}
 
 ### Node: while
 
-XXX
+While statements.
+
+Format: {{Line, `while`}, Condition, Statement}
 
 ### Node: return
 
-XXX
+Return has two kinds of nodes, either:
+
+Format: {{Line, `return`}}
+
+... which indicates return void, or:
+
+Format: {{Line, `return`}, Expr}
 
 ### Node: function_call
 
-XXX
+Function calls.
+
+Format: {{Line, `funcall`}, Ident, Actuals}
+
+Where Actuals is a list expressions.
 
 ### Node: array_element
 
-XXX
+Format: {{Line, `arrelem`}, Ident, Index}
 
 ### Node: binop
 
-XXX
+Binary operators.
+
+Format: {{Line, `binop`}, Lhs, Op, Rhs}
 
 ### Node: unop
 
-XXX
+Format: {{Line, `unop`}, Op, Rhs}
 
 ### Node: ident
 
