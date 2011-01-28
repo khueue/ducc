@@ -240,6 +240,8 @@ XXX
 
 ## Running the parser
 
+### Multiple-Step Compilation
+
 The parser (and the lexer) has been implemented to read from standard input
 and output to standard output. As such it's possible to, for example, pipe
 the result from the lexer to the parser:
@@ -248,7 +250,13 @@ the result from the lexer to the parser:
 
 The parser will output the resulting abstract syntax tree to standard output.
 
-XXX
+### Single-Step Compilation
+
+For a more conventionl approach to compilation, a script called `ducc` can
+be used. `ducc` takes as argument a single file name and runs all (implemented)
+successive steps on it, and prints the result to standard output:
+
+    ducc file.c
 
 ### Error Handling
 
