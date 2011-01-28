@@ -2,8 +2,8 @@ Nonterminals
 program topdec_list topdec fundef vardec scalardec arraydec typename
 funtypeandname funbody formals formal_list formaldec formal_arraydec locals
 stmts stmt condition expr unop actuals expr_list else_part
-rval lval or and comp ineq math term factor function_call array_element
-op_eq op_ineq op_term op_mult.
+rval lval or and comp ineq primary term factor function_call array_element
+op_ineq op_primary op_term op_factor.
 
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
@@ -95,27 +95,27 @@ or               -> and : '$1'.
 and              -> and '&&' comp : make_binop(type_of('$2'), '$1', '$3').
 and              -> comp : '$1'.
 
-comp             -> comp op_eq ineq : make_binop('$2', '$1', '$3').
+comp             -> comp op_ineq ineq : make_binop('$2', '$1', '$3').
 comp             -> ineq : '$1'.
-op_eq            -> '==' : type_of('$1').
-op_eq            -> '!=' : type_of('$1').
+op_ineq          -> '==' : type_of('$1').
+op_ineq          -> '!=' : type_of('$1').
 
-ineq             -> ineq op_ineq math : make_binop('$2', '$1', '$3').
-ineq             -> math : '$1'.
-op_ineq          -> '<'  : type_of('$1').
-op_ineq          -> '>'  : type_of('$1').
-op_ineq          -> '<=' : type_of('$1').
-op_ineq          -> '>=' : type_of('$1').
+ineq             -> ineq op_primary primary : make_binop('$2', '$1', '$3').
+ineq             -> primary : '$1'.
+op_primary       -> '<'  : type_of('$1').
+op_primary       -> '>'  : type_of('$1').
+op_primary       -> '<=' : type_of('$1').
+op_primary       -> '>=' : type_of('$1').
 
-math             -> math op_term term : make_binop('$2', '$1', '$3').
-math             -> term : '$1'.
+primary          -> primary op_term term : make_binop('$2', '$1', '$3').
+primary          -> term : '$1'.
 op_term          -> '+' : type_of('$1').
 op_term          -> '-' : type_of('$1').
 
-term             -> term op_mult factor : make_binop('$2', '$1', '$3').
+term             -> term op_factor factor : make_binop('$2', '$1', '$3').
 term             -> factor : '$1'.
-op_mult          -> '*' : type_of('$1').
-op_mult          -> '/' : type_of('$1').
+op_factor        -> '*' : type_of('$1').
+op_factor        -> '/' : type_of('$1').
 
 factor           -> 'ident' :
     make_ident(line_of('$1'), type_of('$1'), value_of('$1')).
