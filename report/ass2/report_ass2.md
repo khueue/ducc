@@ -241,25 +241,19 @@ XXX
 
 Alphanumeric identifiers. 
 
-Format: {Line, Type, Value}
-
-Where Type = ident.
+Format: {Line, `ident`, Value}
 
 ### Node: intconst
 
 Integer constants.
 
-Format: {Line, Type, Value}
-
-Where Type = intconst
+Format: {Line, `intconst`, Value}
 
 ### Node: charconst
 
 Character literals.
 
-Format: {Line, Type, Value}
-
-Where Type = charconst.
+Format: {Line, `charconst`, Value}
 
 
 ## Running the parser
