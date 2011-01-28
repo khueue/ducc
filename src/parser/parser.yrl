@@ -8,7 +8,7 @@ op_eq op_ineq op_term op_mult.
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
 ']' '(' ')' '[' '}' '{' '/' ';' ',' '*' '+' '=' '-'
-'integer' 'identifier' 'character'
+'intconst' 'ident' 'charconst'
 'char' 'else' 'if' 'int' 'return' 'void' 'while'.
 
 Rootsymbol program.
@@ -24,18 +24,18 @@ topdec           -> fundef : '$1'.
 fundef           -> funtypeandname '(' formals ')' funbody :
     make_fundef('$1', '$3', '$5').
 
-funtypeandname   -> typename 'identifier' :
+funtypeandname   -> typename 'ident' :
     make_funtypeandname(type_of('$1'), value_of('$2')).
-funtypeandname   ->   'void' 'identifier' :
+funtypeandname   ->   'void' 'ident' :
     make_funtypeandname(type_of('$1'), value_of('$2')).
 
 vardec           -> scalardec : '$1'.
 vardec           -> arraydec : '$1'.
 
-scalardec        -> typename 'identifier' :
+scalardec        -> typename 'ident' :
     make_scalardec(line_of('$1'), type_of('$1'), value_of('$2'), nil).
 
-arraydec         -> typename 'identifier' '[' 'integer' ']' :
+arraydec         -> typename 'ident' '[' 'intconst' ']' :
     make_arraydec(line_of('$1'), type_of('$1'), value_of('$2'), value_of('$4')).
 
 typename         -> 'int' : '$1'.
@@ -53,7 +53,7 @@ formal_list      -> formaldec ',' formal_list : ['$1'|'$3'].
 formaldec        -> scalardec : '$1'.
 formaldec        -> formal_arraydec : '$1'.
 
-formal_arraydec  -> typename 'identifier' '[' ']' :
+formal_arraydec  -> typename 'ident' '[' ']' :
     make_formal_arraydec(line_of('$1'), type_of('$1'), value_of('$2'), nil).
 
 locals           -> '$empty' : [].
@@ -78,15 +78,15 @@ condition        -> '(' expr ')' : '$2'.
 
 expr             -> rval : '$1'.
 
-array_element    -> 'identifier' '[' expr ']' : make_array_element(value_of('$1'), '$3').
+array_element    -> 'ident' '[' expr ']' : make_array_element(value_of('$1'), '$3').
 
-function_call    -> 'identifier' '(' actuals ')' :
+function_call    -> 'ident' '(' actuals ')' :
     make_function_call(value_of('$1'), '$3').
 
 rval             -> lval '=' rval : make_binop(type_of('$2'), '$1', '$3').
 rval             -> or : '$1'.
 
-lval             -> 'identifier' : value_of('$1').
+lval             -> 'ident' : value_of('$1').
 lval             -> array_element : '$1'.
 
 or               -> or '||' and : make_binop(type_of('$2'), '$1', '$3').
@@ -117,9 +117,12 @@ term             -> factor : '$1'.
 op_mult          -> '*' : type_of('$1').
 op_mult          -> '/' : type_of('$1').
 
-factor           -> 'identifier' : value_of('$1').
-factor           -> 'integer' : value_of('$1').
-factor           -> 'character' : value_of('$1').
+factor           -> 'ident' :
+    make_ident(line_of('$1'), type_of('$1'), value_of('$1')).
+factor           -> 'intconst' :
+    make_intconst(line_of('$1'), type_of('$1'), value_of('$1')).
+factor           -> 'charconst' :
+    make_charconst(line_of('$1'), type_of('$1'), value_of('$1')).
 factor           -> array_element : '$1'.
 factor           -> function_call : '$1'.
 factor           -> '(' expr ')' : '$2'.
@@ -184,6 +187,15 @@ make_array_element(Ident, Index) ->
 
 make_binop(Op, Lhs, Rhs) ->
     {binop, Op, Lhs, Rhs}.
+
+make_ident(Line, Type, Value) ->
+    {Line, Type, Value}.
+
+make_intconst(Line, Type, Value) ->
+    {Line, Type, Value}.
+
+make_charconst(Line, Type, Value) ->
+    {Line, Type, Value}.
 
 make_unop(Op, Rhs) ->
     {unop, Op, Rhs}.

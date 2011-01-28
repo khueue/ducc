@@ -23,7 +23,7 @@ Rules.
 % Integer.
 {Digit}+ :
     {token,
-        {integer,TokenLine,list_to_integer(TokenChars)}}.
+        {intconst,TokenLine,list_to_integer(TokenChars)}}.
 
 % Identifier.
 {Letter}({Letter}|{Digit})* :
@@ -34,14 +34,14 @@ Rules.
                 {Identifier,TokenLine}};
         false ->
             {token,
-                {identifier,TokenLine,Identifier}}
+                {ident,TokenLine,Identifier}}
     end.
 
 % Character literal.
 '(.|(\\n))' :
     Chars = string:substr(TokenChars, 2, TokenLen-2),
     {token,
-        {character,TokenLine,list_to_atom(Chars)}}.
+        {charconst,TokenLine,list_to_atom(Chars)}}.
 
 {LineComment}(.*) :
     skip_token.
