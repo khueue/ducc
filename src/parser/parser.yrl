@@ -133,14 +133,14 @@ type_of(Token) ->
 line_of(Int) when is_integer(Int) ->
     Int;
 line_of([]) ->
-    99999; % Error?
+    0; % Probably only appears on an empty file.
 line_of([X|_]) ->
     line_of(X);
 line_of(_Meta  = {Line,_}) when is_integer(Line) ->
     Line;
 line_of(_Token = {_,Line}) when is_integer(Line) ->
     Line;
-line_of({First,Line,_}) when not(is_tuple(First)) ->
+line_of(_Token = {Type,Line,_}) when not(is_tuple(Type)) ->
     Line;
 line_of(Tuple) ->
     First = erlang:element(1, Tuple),
