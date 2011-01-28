@@ -62,7 +62,7 @@ stmt             -> 'return' ';' : make_empty_return('$1').
 stmt             -> 'while' condition stmt : make_while('$1', '$2', '$3').
 stmt             -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
 stmt             -> '{' stmts '}' : '$2'.
-stmt             -> ';' : [].
+stmt             -> ';' : nil.
 
 else_part        -> '$empty' : nil.
 else_part        -> 'else' stmt : '$2'.
