@@ -10,6 +10,8 @@
     die/2]).
 
 % Invalid term means that the previous step failed, so just it pass along.
+% Should for instance the lexer fail, the piping will still continue:
+% $ cat file.c | lexer | parser
 process_term_or_echo(_Processor, {error, invalid_term}, String) ->
     tool_chain:die(String);
 process_term_or_echo(Processor, Term, _String) ->
