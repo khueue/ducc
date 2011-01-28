@@ -62,7 +62,7 @@ stmt             -> 'return' ';' : make_empty_return('$1').
 stmt             -> 'while' condition stmt : make_while('$1', '$2', '$3').
 stmt             -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
 stmt             -> '{' stmts '}' : '$2'.
-stmt             -> ';' : [].
+stmt             -> ';' : nil.
 
 else_part        -> '$empty' : nil.
 else_part        -> 'else' stmt : '$2'.
@@ -127,45 +127,45 @@ expr_list        -> expr ',' expr_list : ['$1'|'$3'].
 
 Erlang code.
 
-type_of(Token) ->
+type(Token) ->
     erlang:element(1, Token).
 
-line_of(Int) when is_integer(Int) ->
+line(Int) when is_integer(Int) ->
     Int;
-line_of([]) ->
-    99999; % Error?
-line_of([X|_]) ->
-    line_of(X);
-line_of(_Meta  = {Line,_}) when is_integer(Line) ->
+line([]) ->
+    0; % Probably only appears on an empty file.
+line([X|_]) ->
+    line(X);
+line(_Meta  = {Line,_}) when is_integer(Line) ->
     Line;
-line_of(_Token = {_,Line}) when is_integer(Line) ->
+line(_Token = {_,Line}) when is_integer(Line) ->
     Line;
-line_of({First,Line,_}) when not(is_tuple(First)) ->
+line(_Token = {Type,Line,_}) when not(is_tuple(Type)) ->
     Line;
-line_of(Tuple) ->
+line(Tuple) ->
     First = erlang:element(1, Tuple),
-    line_of(First).
+    line(First).
 
-value_of(Token) ->
+value(Token) ->
     erlang:element(3, Token).
 
-make_meta(Line, Tag) ->
+meta(Line, Tag) ->
     {Line, Tag}.
 
 make_program(Topdecs) ->
-    {make_meta(line_of(Topdecs), program), Topdecs}.
+    {meta(line(Topdecs), program), Topdecs}.
 
 make_fundef(FunTypeName, Formals, FunBody) ->
-    {make_meta(line_of(FunTypeName), fundef), FunTypeName, Formals, FunBody}.
+    {meta(line(FunTypeName), fundef), FunTypeName, Formals, FunBody}.
 
 make_funtypeandname(Type, Ident) ->
-   {make_meta(line_of(Type), funtypeandname), type_of(Type), value_of(Ident)}.
+   {meta(line(Type), funtypeandname), type(Type), value(Ident)}.
 
 make_scalardec(Type, Value) ->
-    {make_meta(line_of(Type), scalardec), type_of(Type), value_of(Value)}.
+    {meta(line(Type), scalardec), type(Type), value(Value)}.
 
 make_arraydec(Type, Ident, Size) ->
-    {make_meta(line_of(Type), arraydec), type_of(Type), value_of(Ident), value_of(Size)}.
+    {meta(line(Type), arraydec), type(Type), value(Ident), value(Size)}.
 
 make_funbody() ->
     nil.
@@ -173,37 +173,37 @@ make_funbody(Locals, Stmts) ->
     {Locals, Stmts}.
 
 make_formal_arraydec(Type, Ident) ->
-    {make_meta(line_of(Type), formal_arraydec), type_of(Type), value_of(Ident)}.
+    {meta(line(Type), formal_arraydec), type(Type), value(Ident)}.
 
 make_if(Keyword, Cond, Then, Else) ->
-    {make_meta(line_of(Keyword), 'if'), Cond, Then, Else}.
+    {meta(line(Keyword), 'if'), Cond, Then, Else}.
 
 make_while(Keyword, Cond, Stmt) ->
-    {make_meta(line_of(Keyword), while), Cond, Stmt}.
+    {meta(line(Keyword), while), Cond, Stmt}.
 
 make_empty_return(Keyword) ->
-    {make_meta(line_of(Keyword), return)}.
+    {meta(line(Keyword), return)}.
 
 make_return(Keyword, Expr) ->
-    {make_meta(line_of(Keyword), return), Expr}.
+    {meta(line(Keyword), return), Expr}.
 
 make_function_call(Ident, Actuals) ->
-    {make_meta(line_of(Ident), funcall), value_of(Ident), Actuals}.
+    {meta(line(Ident), funcall), value(Ident), Actuals}.
 
 make_array_element(Ident, Index) ->
-    {make_meta(line_of(Ident), arrelem), value_of(Ident), Index}.
+    {meta(line(Ident), arrelem), value(Ident), Index}.
 
 make_binop(Lhs, Op, Rhs) ->
-    {make_meta(line_of(Op), binop), Lhs, type_of(Op), Rhs}.
+    {meta(line(Op), binop), Lhs, type(Op), Rhs}.
 
 make_ident(Ident) ->
-    {make_meta(line_of(Ident), ident), value_of(Ident)}.
+    {meta(line(Ident), ident), value(Ident)}.
 
 make_intconst(Intconst) ->
-    {make_meta(line_of(Intconst), intconst), value_of(Intconst)}.
+    {meta(line(Intconst), intconst), value(Intconst)}.
 
 make_charconst(Charconst) ->
-    {make_meta(line_of(Charconst), charconst), value_of(Charconst)}.
+    {meta(line(Charconst), charconst), value(Charconst)}.
 
 make_unop(Op, Rhs) ->
-    {make_meta(line_of(Op), unop), type_of(Op), Rhs}.
+    {meta(line(Op), unop), type(Op), Rhs}.

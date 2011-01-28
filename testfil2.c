@@ -4,4 +4,5 @@ void c(void);
 void d(int e[], int f, int e[], int f)
 {
     b(1, 2, 3+4);
+    ;
 }
