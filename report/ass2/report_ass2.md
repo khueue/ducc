@@ -185,13 +185,13 @@ description below.
 
 This is the root node of every program.
 
-Format: {Line, `program`, ListOfTopLevelDecl}
+Format: {{Line, `program`}, ListOfTopLevelDecl}
 
 ### Node: fundef
 
 Function definitions.
 
-Format: {Line, `fundef`, `funtypeandname`, Formals, `funbody`}
+Format: {{Line, `fundef`}, `funtypeandname`, Formals, `funbody`}
 
 Where Formals is a list of `scalardec` and `formal_arraydec`.
 
@@ -247,19 +247,19 @@ XXX
 
 Alphanumeric identifiers. 
 
-Format: {Line, `ident`, Value}
+Format: {{Line, `ident`}, Value}
 
 ### Node: intconst
 
 Integer constants.
 
-Format: {Line, `intconst`, Value}
+Format: {{Line, `intconst`}, Value}
 
 ### Node: charconst
 
 Character literals.
 
-Format: {Line, `charconst`, Value}
+Format: {{Line, `charconst`}, Value}
 
 
 ## Running the parser
