@@ -1,5 +1,6 @@
 -module(tool_chain).
 -export([
+    process_term_or_echo/3,
     string_from_input/0,
     string_from_file/1,
     string_from_stream/1,
@@ -7,6 +8,12 @@
     term_to_output/1,
     die/1,
     die/2]).
+
+% Invalid term means that the previous step failed, so just it pass along.
+process_term_or_echo(_Processor, {error, invalid_term}, String) ->
+    tool_chain:die(String);
+process_term_or_echo(Processor, Term, _String) ->
+    Processor(Term).
 
 string_from_input() ->
     string_from_stream(standard_io).

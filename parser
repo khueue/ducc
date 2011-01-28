@@ -8,15 +8,10 @@ usage() ->
 main([]) ->
     String = tool_chain:string_from_input(),
     Term = tool_chain:term_from_string(String),
-    process_term_or_echo(Term, String);
+    Processor = fun(X) -> process(X) end,
+    tool_chain:process_term_or_echo(Processor, Term, String);
 main(_) ->
     usage().
-
-% Invalid term means that the previous step failed, so just it pass along.
-process_term_or_echo({error, invalid_term}, String) ->
-    tool_chain:die(String);
-process_term_or_echo(Term, _String) ->
-    process(Term).
 
 process(Tokens) ->
     ParseTree = parser_driver:parse(Tokens),
