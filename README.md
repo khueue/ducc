@@ -2,6 +2,8 @@
 
 Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
-Todo:
+## Todo
 
- * Better error messages. Make sure that all phases stop on errors.
+ * Rename certain grammar rules (math -> primary, ...).
+ * Think about the AST.
+ * Finish the report!
