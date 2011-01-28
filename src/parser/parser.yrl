@@ -13,7 +13,7 @@ Terminals '&&' '||' '!'
 
 Rootsymbol program.
 
-program          -> topdec_list : make_program('$1').
+program          -> topdec_list : make_program(line_of('$1'), '$1').
 
 topdec_list      -> '$empty' : [].
 topdec_list      -> topdec topdec_list : ['$1'|'$2'].
@@ -22,12 +22,12 @@ topdec           -> vardec ';' : '$1'.
 topdec           -> fundef : '$1'.
 
 fundef           -> funtypeandname '(' formals ')' funbody :
-    make_fundef('$1', '$3', '$5').
+    make_fundef(line_of('$1'), '$1', '$3', '$5').
 
 funtypeandname   -> typename 'ident' :
-    make_funtypeandname(type_of('$1'), value_of('$2')).
+    make_funtypeandname(line_of('$1'), type_of('$1'), value_of('$2')).
 funtypeandname   ->   'void' 'ident' :
-    make_funtypeandname(type_of('$1'), value_of('$2')).
+    make_funtypeandname(line_of('$1'), type_of('$1'), value_of('$2')).
 
 vardec           -> scalardec : '$1'.
 vardec           -> arraydec : '$1'.
@@ -41,8 +41,10 @@ arraydec         -> typename 'ident' '[' 'intconst' ']' :
 typename         -> 'int' : '$1'.
 typename         -> 'char' : '$1'.
 
-funbody          -> ';' : make_funbody(nil, nil).
-funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
+funbody          -> ';' :
+    make_funbody(line_of('$1'), nil, nil).
+funbody          -> '{' locals stmts '}' :
+    make_funbody(line_of('$1'), '$2', '$3').
 
 formals          -> 'void' : [].
 formals          -> formal_list : '$1'.
@@ -63,11 +65,14 @@ stmts            -> '$empty' : [].
 stmts            -> stmt stmts : ['$1'|'$2'].
 
 stmt             -> expr ';' : '$1'.
-stmt             -> 'return' expr ';' : make_return(type_of('$1'), '$2').
-stmt             -> 'return' ';' : make_return(type_of('$1'), nil).
-stmt             -> 'while' condition stmt : make_while(type_of('$1'), '$2', '$3').
+stmt             -> 'return' expr ';' :
+    make_return(line_of('$1'), type_of('$1'), '$2').
+stmt             -> 'return' ';' :
+    make_return(line_of('$1'), type_of('$1'), nil).
+stmt             -> 'while' condition stmt :
+    make_while(line_of('$1'), type_of('$1'), '$2', '$3').
 stmt             -> 'if' condition stmt else_part :
-    make_if(type_of('$1'), '$2', '$3', '$4').
+    make_if(line_of('$1'), type_of('$1'), '$2', '$3', '$4').
 stmt             -> '{' stmts '}' : '$2'.
 stmt             -> ';' : [].
 
@@ -78,41 +83,49 @@ condition        -> '(' expr ')' : '$2'.
 
 expr             -> rval : '$1'.
 
-array_element    -> 'ident' '[' expr ']' : make_array_element(value_of('$1'), '$3').
+array_element    -> 'ident' '[' expr ']' :
+    make_array_element(line_of('$1'), value_of('$1'), '$3').
 
 function_call    -> 'ident' '(' actuals ')' :
-    make_function_call(value_of('$1'), '$3').
+    make_function_call(line_of('$1'), value_of('$1'), '$3').
 
-rval             -> lval '=' rval : make_binop(type_of('$2'), '$1', '$3').
+rval             -> lval '=' rval :
+    make_binop(line_of('$1'), type_of('$2'), '$1', '$3').
 rval             -> or : '$1'.
 
 lval             -> 'ident' : value_of('$1').
 lval             -> array_element : '$1'.
 
-or               -> or '||' and : make_binop(type_of('$2'), '$1', '$3').
+or               -> or '||' and :
+    make_binop(line_of('$1'), type_of('$2'), '$1', '$3').
 or               -> and : '$1'.
 
-and              -> and '&&' comp : make_binop(type_of('$2'), '$1', '$3').
+and              -> and '&&' comp :
+    make_binop(line_of('$1'), type_of('$2'), '$1', '$3').
 and              -> comp : '$1'.
 
-comp             -> comp op_ineq ineq : make_binop('$2', '$1', '$3').
+comp             -> comp op_ineq ineq :
+    make_binop(line_of('$1'), '$2', '$1', '$3').
 comp             -> ineq : '$1'.
 op_ineq          -> '==' : type_of('$1').
 op_ineq          -> '!=' : type_of('$1').
 
-ineq             -> ineq op_primary primary : make_binop('$2', '$1', '$3').
+ineq             -> ineq op_primary primary :
+    make_binop(line_of('$1'), '$2', '$1', '$3').
 ineq             -> primary : '$1'.
 op_primary       -> '<'  : type_of('$1').
 op_primary       -> '>'  : type_of('$1').
 op_primary       -> '<=' : type_of('$1').
 op_primary       -> '>=' : type_of('$1').
 
-primary          -> primary op_term term : make_binop('$2', '$1', '$3').
+primary          -> primary op_term term :
+    make_binop(line_of('$1'), '$2', '$1', '$3').
 primary          -> term : '$1'.
 op_term          -> '+' : type_of('$1').
 op_term          -> '-' : type_of('$1').
 
-term             -> term op_factor factor : make_binop('$2', '$1', '$3').
+term             -> term op_factor factor :
+    make_binop(line_of('$1'), '$2', '$1', '$3').
 term             -> factor : '$1'.
 op_factor        -> '*' : type_of('$1').
 op_factor        -> '/' : type_of('$1').
@@ -126,7 +139,7 @@ factor           -> 'charconst' :
 factor           -> array_element : '$1'.
 factor           -> function_call : '$1'.
 factor           -> '(' expr ')' : '$2'.
-factor           -> unop factor : make_unop('$1', '$2').
+factor           -> unop factor : make_unop(line_of('$1'), '$1', '$2').
 unop             -> '-' : type_of('$1').
 unop             -> '!' : type_of('$1').
 
@@ -147,55 +160,58 @@ line_of(Token) ->
 value_of(Token) ->
     erlang:element(3, Token).
 
-make_program(Topdec) ->
-    {program, Topdec}.
+make_meta(Line, Tag) ->
+    {Line, Tag}.
 
-make_fundef(FunTypeName, Formals, FunBody) ->
-    {fundef, FunTypeName, Formals, FunBody}.
+make_program(Line, Topdec) ->
+    {make_meta(Line, program), Topdec}.
 
-make_funtypeandname(Type, Ident) ->
-   {Type, Ident}.
+make_fundef(Line, FunTypeName, Formals, FunBody) ->
+    {make_meta(Line, fundef), FunTypeName, Formals, FunBody}.
+
+make_funtypeandname(Line, Type, Ident) ->
+   {make_meta(Line, Type), Ident}.
 
 make_scalardec(Line, Type, Value, Size) ->
-    {Line, Type, Value, Size}.
+    {make_meta(Line, Type), Value, Size}.
 
 make_arraydec(Line, Type, IdentValue, IntValue) ->
-    {Line, Type, IdentValue, IntValue}.
+    {make_meta(Line, Type), IdentValue, IntValue}.
 
-make_funbody(nil, nil) ->
-    nil;
-make_funbody(Locals, Stmts) ->
-    {Locals, Stmts}.
+make_funbody(Line, nil, nil) ->
+    {make_meta(Line, funbody), nil};
+make_funbody(Line, Locals, Stmts) ->
+    {make_meta(Line, funbody), Locals, Stmts}.
 
 make_formal_arraydec(Line, Type, Ident, Size) ->
-    {Line, Type, Ident, Size}.
+    {make_meta(Line, Type), Ident, Size}.
 
-make_if(Keyword, Cond, Then, Else) ->
-    {Keyword, Cond, Then, Else}.
+make_if(Line, Keyword, Cond, Then, Else) ->
+    {make_meta(Line, Keyword), Cond, Then, Else}.
 
-make_while(Keyword, Cond, Stmt) ->
-    {Keyword, Cond, Stmt}.
+make_while(Line, Keyword, Cond, Stmt) ->
+    {make_meta(Line, Keyword), Cond, Stmt}.
 
-make_return(Keyword, Expr) ->
-    {Keyword, Expr}.
+make_return(Line, Keyword, Expr) ->
+    {make_meta(Line, Keyword), Expr}.
 
-make_function_call(Ident, Actuals) ->
-    {funcall, Ident, Actuals}.
+make_function_call(Line, Ident, Actuals) ->
+    {make_meta(Line, funcall), Ident, Actuals}.
 
-make_array_element(Ident, Index) ->
-    {Ident, Index}.
+make_array_element(Line, Ident, Index) ->
+    {make_meta(Line, arrelem), Ident, Index}.
 
-make_binop(Op, Lhs, Rhs) ->
-    {binop, Op, Lhs, Rhs}.
+make_binop(Line, Op, Lhs, Rhs) ->
+    {make_meta(Line, binop), Op, Lhs, Rhs}.
 
 make_ident(Line, Type, Value) ->
-    {Line, Type, Value}.
+    {make_meta(Line, Type), Value}.
 
 make_intconst(Line, Type, Value) ->
-    {Line, Type, Value}.
+    {make_meta(Line, Type), Value}.
 
 make_charconst(Line, Type, Value) ->
-    {Line, Type, Value}.
+    {make_meta(Line, Type), Value}.
 
-make_unop(Op, Rhs) ->
-    {unop, Op, Rhs}.
+make_unop(Line, Op, Rhs) ->
+    {make_meta(Line, unop), Op, Rhs}.
