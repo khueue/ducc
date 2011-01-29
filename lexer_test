@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%! -pa ebin
+%%! -pa ebin -Wall
 
 main([]) ->
     lexer_test:test().

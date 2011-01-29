@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%! -pa ebin
+%%! -pa ebin -Wall
 
 main([]) ->
     parser_test:test().
