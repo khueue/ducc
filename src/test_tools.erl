@@ -2,12 +2,16 @@
 -export([run_tests/3, expected_output/2, command/2]).
 -include_lib("eunit/include/eunit.hrl").
 
-output_file(File, Suffix) ->
-    File ++ "." ++ Suffix.
+run_tests([dummy], _, _) ->
+    ok;
+run_tests([File|Files], ExpectedFun, CommandFun) ->
+    run_test(File, ExpectedFun, CommandFun),
+    run_tests(Files, ExpectedFun, CommandFun).
 
-file_to_string(File) ->
-    {ok, Binary} = file:read_file(File),
-    binary_to_list(Binary).
+run_test(File, ExpectedFun, CommandFun) ->
+    Expected = ExpectedFun(File),
+    Command = CommandFun(File),
+    ?assertCmdOutput(Expected, Command).
 
 command(File, Programs) ->
     Cat = "cat " ++ File,
@@ -22,13 +26,9 @@ expected_output(File, Suffix) ->
     OutputFile = output_file(File, Suffix),
     file_to_string(OutputFile).
 
-run_tests([dummy], _, _) ->
-    ok;
-run_tests([File|Files], ExpectedFun, CommandFun) ->
-    run_test(File, ExpectedFun, CommandFun),
-    run_tests(Files, ExpectedFun, CommandFun).
+output_file(File, Suffix) ->
+    File ++ "." ++ Suffix.
 
-run_test(File, ExpectedFun, CommandFun) ->
-    Expected = ExpectedFun(File),
-    Command = CommandFun(File),
-    ?assertCmdOutput(Expected, Command).
+file_to_string(File) ->
+    {ok, Binary} = file:read_file(File),
+    binary_to_list(Binary).
