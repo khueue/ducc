@@ -39,7 +39,6 @@ arraydec         -> typename 'ident' '[' 'intconst' ']' : make_arraydec('$1', '$
 typename         -> 'int' : '$1'.
 typename         -> 'char' : '$1'.
 
-%funbody          -> ';' : make_funbody().
 funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
 
 formals          -> 'void' : [].
@@ -158,13 +157,13 @@ meta(Line, Tag) ->
 make_program(Topdecs) ->
     {meta(line(Topdecs), program), Topdecs}.
 
-make_fundec(FunTypeName, Formals) ->
-    {_Meta, FunType, FunName} = FunTypeName,
-    {meta(line(FunTypeName), fundec), FunType, FunName, Formals}.
+make_fundec(TypeAndName, Formals) ->
+    {_Meta, Type, Name} = TypeAndName,
+    {meta(line(TypeAndName), fundec), Type, Name, Formals}.
 
-make_fundef(FunTypeName, Formals, FunBody) ->
-    {_Meta, FunType, FunName} = FunTypeName,
-    {meta(line(FunTypeName), fundef), FunType, FunName, Formals, FunBody}.
+make_fundef(TypeAndName, Formals, Body) ->
+    {_Meta, Type, Name} = TypeAndName,
+    {meta(line(TypeAndName), fundef), Type, Name, Formals, Body}.
 
 make_funtypeandname(Type, Ident) ->
    {meta(line(Type), funtypeandname), type(Type), value(Ident)}.
