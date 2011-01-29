@@ -293,7 +293,7 @@ Function calls. The format is:
 
 `Actuals` is a list of expressions.
 
-#### Node: arrelem
+#### Node: array_element
 
 Array elements. The format is:
 

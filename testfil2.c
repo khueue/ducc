@@ -2,7 +2,7 @@ char a;
 int b[42];
 void c(void);
 
-void foo(void);
+void foo(int a);
 
 void
 
