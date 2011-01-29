@@ -2,14 +2,11 @@
 -include_lib("eunit/include/eunit.hrl").
 
 lexer_test_() ->
-    Fun = fun() -> run_tests(all_tests()) end,
+    Tests = all_tests(),
+    Program = "lexer",
+    ToolChain = ["lexer"],
+    Fun = fun() -> test_tools:run_all_tests(Tests, Program, ToolChain) end,
     test_tools:test_tuple(Fun).
-
-run_tests(Tests) ->
-    test_tools:run_tests(
-        Tests,
-        fun(File) -> test_tools:expected_output(File, "lexer") end,
-        fun(File) -> test_tools:command(File, ["lexer"]) end).
 
 all_tests() ->
     [

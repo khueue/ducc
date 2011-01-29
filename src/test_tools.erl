@@ -1,9 +1,19 @@
 -module(test_tools).
--export([test_tuple/1, run_tests/3, expected_output/2, command/2]).
 -include_lib("eunit/include/eunit.hrl").
+-export([
+    test_tuple/1,
+    run_all_tests/3,
+    run_tests/3,
+    expected_output/2,
+    command/2]).
 
-test_tuple(Fun) ->
-    {timeout, 1200, [{?LINE, Fun}]}.
+test_tuple(TestFun) ->
+    {timeout, 1200, [{?LINE, TestFun}]}.
+
+run_all_tests(Tests, Program, ToolChain) ->
+    ExpectFun  = fun(File) -> expected_output(File, Program) end,
+    CommandFun = fun(File) -> command(File, ToolChain) end,
+    run_tests(Tests, ExpectFun, CommandFun).
 
 run_tests([dummy], _, _) ->
     ok;
@@ -13,7 +23,7 @@ run_tests([File|Files], ExpectedFun, CommandFun) ->
 
 run_test(File, ExpectedFun, CommandFun) ->
     Expected = ExpectedFun(File),
-    Command = CommandFun(File),
+    Command  = CommandFun(File),
     ?assertCmdOutput(Expected, Command).
 
 command(File, Programs) ->
