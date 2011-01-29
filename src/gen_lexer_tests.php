@@ -40,5 +40,5 @@ foreach ($files as $file)
     $file_output = $file . '.lexer';
     $cmd = "cat $file | lexer > $file_output";
     echo $cmd, "\n";
-    `$cmd`;
+    shell_exec($cmd);
 }
