@@ -1,6 +1,9 @@
 -module(test_tools).
--export([run_tests/3, expected_output/2, command/2]).
+-export([test_tuple/1, run_tests/3, expected_output/2, command/2]).
 -include_lib("eunit/include/eunit.hrl").
+
+test_tuple(Fun) ->
+    {timeout, 1200, [{?LINE, Fun}]}.
 
 run_tests([dummy], _, _) ->
     ok;

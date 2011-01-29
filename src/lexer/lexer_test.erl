@@ -2,26 +2,14 @@
 -include_lib("eunit/include/eunit.hrl").
 
 lexer_test_() ->
-    {timeout, 1200, [{?LINE, fun() -> test_suite() end}]}.
+    Fun = fun() -> run_tests(all_tests()) end,
+    test_tools:test_tuple(Fun).
 
-run_lexer_tests(Tests) ->
+run_tests(Tests) ->
     test_tools:run_tests(
         Tests,
-        fun(F) -> lexer_exp(F) end,
-        fun(F) -> lexer_cmd(F) end).
-
-lexer() ->
-    "lexer".
-
-lexer_exp(File) ->
-    test_tools:expected_output(File, lexer()).
-
-lexer_cmd(File) ->
-    test_tools:command(File, [lexer()]).
-
-test_suite() ->
-    Tests = all_tests(),
-    run_lexer_tests(Tests).
+        fun(File) -> test_tools:expected_output(File, "lexer") end,
+        fun(File) -> test_tools:command(File, ["lexer"]) end).
 
 all_tests() ->
     [

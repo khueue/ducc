@@ -1,18 +1,8 @@
--module(parser_test).
--include_lib("eunit/include/eunit.hrl").
+<?php
 
-parser_test_() ->
-    Fun = fun() -> run_tests(all_tests()) end,
-    test_tools:test_tuple(Fun).
-
-run_tests(Tests) ->
-    test_tools:run_tests(
-        Tests,
-        fun(File) -> test_tools:expected_output(File, "parser") end,
-        fun(File) -> test_tools:command(File, ["lexer","parser"]) end).
-
-all_tests() ->
-    [
+// Todo: Traverse dirs instead.
+$files = array
+    (
         "suite/quiet/lexer/l04.c",
         "suite/quiet/lexer/l05.c",
         "suite/quiet/parser/p01.c",
@@ -54,5 +44,12 @@ all_tests() ->
         "suite/incorrect/parser/pe12.c",
         "suite/incorrect/parser/pe13.c",
         "suite/incorrect/parser/pe14.c",
-        dummy
-    ].
+    );
+
+foreach ($files as $file)
+{
+    $file_output = $file . '.parser';
+    $cmd = "cat $file | lexer | parser > $file_output";
+    echo $cmd, "\n";
+    shell_exec($cmd);
+}
