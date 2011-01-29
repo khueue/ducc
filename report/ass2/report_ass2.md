@@ -274,15 +274,7 @@ Function calls. The format is:
 
 `Ident` is the identifier value.
 
-`Actuals` is a list which is composed of a list of expressions. For example,
-the empty function call would produce the following `Actuals`:
-
-    []
-
-... whereas a function call with two arguments would produce the following
-`Actuals`:
-
-    [[Expr, Expr]]
+`Actuals` is a list of expressions.
 
 #### Node: arrelem
 
