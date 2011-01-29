@@ -100,7 +100,7 @@ section. For example:
 #### Output File: Parser
 
 When feeding the input file to Yecc using `yecc:file(parser)`, where _parser_
-is the name of the input file, Yecc generates a complete parser LALR(1)
+is the name of the input file, Yecc generates a complete LALR(1) parser
 according to the grammar definition. This file is placed beside the
 grammar file but given a different file extension: ".erl".
 
