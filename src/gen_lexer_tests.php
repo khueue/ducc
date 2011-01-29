@@ -1,30 +1,8 @@
--module(lexer_test).
--include_lib("eunit/include/eunit.hrl").
+<?php
 
-lexer_test_() ->
-    {timeout, 1200, [{?LINE, fun() -> test_suite() end}]}.
-
-run_lexer_tests(Tests) ->
-    test_tools:run_tests(
-        Tests,
-        fun(F) -> lexer_exp(F) end,
-        fun(F) -> lexer_cmd(F) end).
-
-lexer() ->
-    "lexer".
-
-lexer_exp(File) ->
-    test_tools:expected_output(File, lexer()).
-
-lexer_cmd(File) ->
-    test_tools:command(File, [lexer()]).
-
-test_suite() ->
-    Tests = all_tests(),
-    run_lexer_tests(Tests).
-
-all_tests() ->
-    [
+// Todo: Traverse dirs instead.
+$files = array
+    (
         "suite/quiet/lexer/l01.c",
         "suite/quiet/lexer/l02.c",
         "suite/quiet/lexer/l03.c",
@@ -55,5 +33,12 @@ all_tests() ->
         "suite/incorrect/lexer/bad.c",
         "suite/incorrect/lexer/long-char.c",
         "suite/incorrect/lexer/ugly.c",
-        dummy
-    ].
+    );
+
+foreach ($files as $file)
+{
+    $file_output = $file . '.lexer';
+    $cmd = "cat $file | lexer > $file_output";
+    echo $cmd, "\n";
+    `$cmd`;
+}
