@@ -355,7 +355,7 @@ The parser will output the resulting abstract syntax tree to standard output.
 
 ### Single-Step Compilation
 
-For a more conventionl approach to compilation, a script called `ducc` can
+For a more conventional approach to compilation, a script called `ducc` can
 be used. `ducc` takes as argument a single file name and runs all (implemented)
 successive steps on it, and prints the result to standard output:
 
