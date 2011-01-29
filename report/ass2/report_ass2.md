@@ -180,7 +180,9 @@ meta data is:
 
 Line is the line number where Tag starts. Tag is the name of the node.
 
-### Node: program
+### Nodes
+
+#### Node: program
 
 Root node. The format is:
 
@@ -189,7 +191,7 @@ Root node. The format is:
 `Topdecs` is a list which may include nodes of `scalardec`, `arraydec`, and
 `fundef`.
 
-### Node: fundef
+#### Node: fundef
 
 Function definitions. The format is:
 
@@ -198,7 +200,7 @@ Function definitions. The format is:
 `Formals` is a list which may include nodes of `scalardec` and
 `formal_arraydec`.
 
-### Node: funtypeandname
+#### Node: funtypeandname
 
 Return type and name of function. The format is:
 
@@ -206,7 +208,7 @@ Return type and name of function. The format is:
 
 `Type` is either `int`, `char` or `void`.
 
-### Node: scalardec
+#### Node: scalardec
 
 The format is:
 
@@ -214,7 +216,7 @@ The format is:
 
 `Type` is `int` or `char`. `Ident` is the identifier value.
 
-### Node: arraydec
+#### Node: arraydec
 
 The format is:
 
@@ -223,7 +225,7 @@ The format is:
 `Type` is `int` or `char`. `Ident` is the identifier value. `Size` is an
 integer which indicates the size of the array.
 
-### Node: formal_arraydec
+#### Node: formal_arraydec
 
 The format is:
 
@@ -231,7 +233,7 @@ The format is:
 
 `Type` is `int` or `char`. `Ident` is the identifier value.
 
-### Node: if
+#### Node: if
 
 If statements. The format is:
 
@@ -241,7 +243,7 @@ If statements. The format is:
 `ThenStmts` and `ElseStmts` is either a list of statements, or a single tuple
 including a statement (see the multiple `stmt` rules in the grammar).
 
-### Node: while
+#### Node: while
 
 While statements. The format is:
 
@@ -251,7 +253,7 @@ While statements. The format is:
 `Stmts` is either a list of statements, or a single tuple including a
 statement (see the multiple `stmt` rules in the grammar).
 
-### Node: return
+#### Node: return
 
 Return has two kinds of nodes, either:
 
@@ -264,7 +266,7 @@ Return has two kinds of nodes, either:
 ... where `Expr` is an expression (see the rule `expr -> rval` in the
 grammar).
 
-### Node: function_call
+#### Node: function_call
 
 Function calls. The format is:
 
@@ -282,7 +284,7 @@ the empty function call would produce the following `Actuals`:
 
     [[Expr, Expr]]
 
-### Node: arrelem
+#### Node: arrelem
 
 Array elements. The format is:
 
@@ -290,7 +292,7 @@ Array elements. The format is:
 
 `Ident` is the identifier value. `Index` is an expression.
 
-### Node: binop
+#### Node: binop
 
 Binary operators. The format is:
 
@@ -298,7 +300,7 @@ Binary operators. The format is:
 
 `Lhs` and `Rhs` is an expression. `Op` is the operator value.
 
-### Node: unop
+#### Node: unop
 
 Unary operators. The format is:
 
@@ -306,7 +308,7 @@ Unary operators. The format is:
 
 `Op` is the operator value. `Rhs` is an expression.
 
-### Node: ident
+#### Node: ident
 
 Alphanumeric identifiers. The format is:
 
@@ -314,7 +316,7 @@ Alphanumeric identifiers. The format is:
 
 `Value` is the identifier value.
 
-### Node: intconst
+#### Node: intconst
 
 Integer constants. The format is:
 
@@ -322,7 +324,7 @@ Integer constants. The format is:
 
 `Value` is the integer value.
 
-### Node: charconst
+#### Node: charconst
 
 Character literals. The format is:
 
