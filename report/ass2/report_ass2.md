@@ -14,7 +14,7 @@ Project Repository at GitHub:
 The source and executables are also available on the IT department server:
 /home/emhe9781/src/ducc.tar.gz
 
-(Note that the source won't compile and the executables won't run on the IT 
+(Note that the source won't compile and the executables won't run on the IT
 department servers since they have an old release of OTP which doesn't
 include Leex and escript).
 
@@ -173,7 +173,7 @@ different kinds of nodes. Each kind of node has an associated constructor.
 
 ### Meta Data
 
-Each node has, as its first element, a tuple of meta data. The format of the 
+Each node has, as its first element, a tuple of meta data. The format of the
 meta data is:
 
     {Line, Tag}
@@ -186,7 +186,7 @@ Root node. The format is:
 
     {{Line, program}, Topdecs}
 
-`Topdecs` is a list which may include nodes of `scalardec`, `arraydec`, and 
+`Topdecs` is a list which may include nodes of `scalardec`, `arraydec`, and
 `fundef`.
 
 ### Node: fundef
@@ -220,13 +220,13 @@ The format is:
 
     {{Line, arraydec}, Type, Ident, Size}
 
-`Type` is `int` or `char`. `Ident` is the identifier value. `Size` is an 
+`Type` is `int` or `char`. `Ident` is the identifier value. `Size` is an
 integer which indicates the size of the array.
 
 ### Node: formal_arraydec
 
-The format is: 
-    
+The format is:
+
     {{Line, formal_arraydec}, Type, Ident}
 
 `Type` is `int` or `char`. `Ident` is the identifier value.
@@ -237,7 +237,7 @@ If statements. The format is:
 
     {{Line, 'if'}, Cond, ThenStmts, ElseStmts}
 
-`Cond` is an expression (see the rule `expr -> rval` in the grammar). 
+`Cond` is an expression (see the rule `expr -> rval` in the grammar).
 `ThenStmts` and `ElseStmts` is either a list of statements, or a single tuple
 including a statement (see the multiple `stmt` rules in the grammar).
 
@@ -247,8 +247,8 @@ While statements. The format is:
 
     {{Line, while}, Cond, Stmts}
 
-`Cond` is an expression (see the rule `expr -> rval` in the grammar). 
-`Stmts` is either a list of statements, or a single tuple including a 
+`Cond` is an expression (see the rule `expr -> rval` in the grammar).
+`Stmts` is either a list of statements, or a single tuple including a
 statement (see the multiple `stmt` rules in the grammar).
 
 ### Node: return
@@ -261,7 +261,7 @@ Return has two kinds of nodes, either:
 
     {{Line, return}, Expr}
 
-... where `Expr` is an expression (see the rule `expr -> rval` in the 
+... where `Expr` is an expression (see the rule `expr -> rval` in the
 grammar).
 
 ### Node: function_call
@@ -272,12 +272,12 @@ Function calls. The format is:
 
 `Ident` is the identifier value.
 
-`Actuals` is a list which is composed of a list of expressions. For example, 
-the empty function call would produce the following `Actuals`: 
-    
+`Actuals` is a list which is composed of a list of expressions. For example,
+the empty function call would produce the following `Actuals`:
+
     []
 
-... whereas a function call with two arguments would produce the following 
+... whereas a function call with two arguments would produce the following
 `Actuals`:
 
     [[Expr, Expr]]
@@ -328,7 +328,7 @@ Character literals. The format is:
 
     {{Line, charconst}, Value}
 
-`Value` is the character value (although not the integer constant whose value 
+`Value` is the character value (although not the integer constant whose value
 is the representation code of the character).
 
 ## Running the Parser
