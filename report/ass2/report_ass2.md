@@ -12,10 +12,11 @@ Project Repository at GitHub:
 <https://github.com/khueue/ducc/tree/ass2-parser>
 
 The source and executables are also available on the IT department server:
-/home/emhe9781/src/ducc/ 
+/home/emhe9781/src/ducc.tar.gz
 
-(Note that the source won't compile on the IT department servers since they
-have an old release of OTP which doesn't include Leex.)
+(Note that the source won't compile and the executables won't run on the IT 
+department servers since they have an old release of OTP which doesn't
+include Leex and escript).
 
 
 ## Introduction
