@@ -1,5 +1,5 @@
 Nonterminals
-program topdec_list topdec fundef vardec scalardec arraydec typename
+program topdec_list topdec fundec fundef vardec scalardec arraydec typename
 funtypeandname funbody formals formal_list formaldec formal_arraydec locals
 stmts stmt condition expr op_unary actuals expr_list else_part
 rval lval or and comp ineq primary term factor function_call array_element
@@ -19,7 +19,10 @@ topdec_list      -> '$empty' : [].
 topdec_list      -> topdec topdec_list : ['$1'|'$2'].
 
 topdec           -> vardec ';' : '$1'.
+topdec           -> fundec ';' : '$1'.
 topdec           -> fundef : '$1'.
+
+fundec           -> funtypeandname '(' formals ')' : make_fundec('$1', '$3').
 
 fundef           -> funtypeandname '(' formals ')' funbody : make_fundef('$1', '$3', '$5').
 
@@ -36,7 +39,7 @@ arraydec         -> typename 'ident' '[' 'intconst' ']' : make_arraydec('$1', '$
 typename         -> 'int' : '$1'.
 typename         -> 'char' : '$1'.
 
-funbody          -> ';' : make_funbody().
+%funbody          -> ';' : make_funbody().
 funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
 
 formals          -> 'void' : [].
@@ -155,8 +158,13 @@ meta(Line, Tag) ->
 make_program(Topdecs) ->
     {meta(line(Topdecs), program), Topdecs}.
 
+make_fundec(FunTypeName, Formals) ->
+    {_Meta, FunType, FunName} = FunTypeName,
+    {meta(line(FunTypeName), fundec), FunType, FunName, Formals}.
+
 make_fundef(FunTypeName, Formals, FunBody) ->
-    {meta(line(FunTypeName), fundef), FunTypeName, Formals, FunBody}.
+    {_Meta, FunType, FunName} = FunTypeName,
+    {meta(line(FunTypeName), fundef), FunType, FunName, Formals, FunBody}.
 
 make_funtypeandname(Type, Ident) ->
    {meta(line(Type), funtypeandname), type(Type), value(Ident)}.
@@ -167,8 +175,6 @@ make_scalardec(Type, Value) ->
 make_arraydec(Type, Ident, Size) ->
     {meta(line(Type), arraydec), type(Type), value(Ident), value(Size)}.
 
-make_funbody() ->
-    nil.
 make_funbody(Locals, Stmts) ->
     {Locals, Stmts}.
 
