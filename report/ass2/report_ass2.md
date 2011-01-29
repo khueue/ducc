@@ -188,17 +188,28 @@ Root node. The format is:
 
     {{Line, program}, Topdecs}
 
-`Topdecs` is a list which may include nodes of `scalardec`, `arraydec`, and
-`fundef`.
+`Topdecs` is a list of top-level declarations: a mix of `scalardec`,
+`arraydec`, `fundec` and `fundef`.
+
+#### Node: fundec
+
+Function declarations. The format is:
+
+    {{Line, fundec}, Type, Name, Formals}
+
+`Type` is the return type of the function. `Name` is the name of the
+function. `Formals` is a list of formal arguments: a mix of `scalardec` and
+`formal_arraydec`.
 
 #### Node: fundef
 
 Function definitions. The format is:
 
-    {{Line, fundef}, funtypeandname, Formals, funbody}
+    {{Line, fundef}, Type, Name, Formals, Body}
 
-`Formals` is a list which may include nodes of `scalardec` and
-`formal_arraydec`.
+`Type` is the return type of the function. `Name` is the name of the
+function. `Formals` is a list of formal arguments: a mix of `scalardec`
+and `formal_arraydec`. `Body` is the function's statement body.
 
 #### Node: funtypeandname
 
@@ -207,6 +218,12 @@ Return type and name of function. The format is:
     {{Line, funtypeandname}, Type, Ident}
 
 `Type` is either `int`, `char` or `void`.
+
+Note that the resulting parse
+tree does not contain this node anywhere. It is just used internally to
+solve the problem of parsing top-levels. A function definition or declaration
+will extract the type and name from this node an incorporate that data
+directly.
 
 #### Node: scalardec
 
