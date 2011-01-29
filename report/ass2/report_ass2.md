@@ -12,10 +12,11 @@ Project Repository at GitHub:
 <https://github.com/khueue/ducc/tree/ass2-parser>
 
 The source and executables are also available on the IT department server:
-/home/emhe9781/src/ducc/
+/home/emhe9781/src/ducc.tar.gz
 
-(Note that the source won't compile on the IT department servers since they
-have an old release of OTP which doesn't include Leex.)
+(Note that the source won't compile and the executables won't run on the IT 
+department servers since they have an old release of OTP which doesn't
+include Leex and escript).
 
 ## Introduction
 
@@ -170,100 +171,165 @@ operator precedence declarations."_
 In our representation of the abstract syntax tree (AST), there are 16
 different kinds of nodes. Each kind of node has an associated constructor.
 
+### Meta Data
+
+Each node has, as its first element, a tuple of meta data. The format of the 
+meta data is:
+
+    {Line, Tag}
+
+Line is the line number where Tag starts. Tag is the name of the node.
+
 ### Node: program
 
-This is the root node of every program.
+Root node. The format is:
 
-Format: {{Line, `program`}, ListOfTopLevelDecl}
+    {{Line, program}, Topdecs}
+
+`Topdecs` is a list which may include nodes of `scalardec`, `arraydec`, and 
+`fundef`.
 
 ### Node: fundef
 
-Function definitions.
+Function definitions. The format is:
 
-Format: {{Line, `fundef`}, `funtypeandname`, Formals, `funbody`}
+    {{Line, fundef}, funtypeandname, Formals, funbody}
 
-Where Formals is a list which may include nodes of `scalardec` and
+`Formals` is a list which may include nodes of `scalardec` and
 `formal_arraydec`.
 
 ### Node: funtypeandname
 
-Return type and name of function.
+Return type and name of function. The format is:
 
-Format: {{Line, `funtypeandname`}, Type, Name}
+    {{Line, funtypeandname}, Type, Ident}
+
+`Type` is either `int`, `char` or `void`.
 
 ### Node: scalardec
 
-Format: {{Line, `scalardec`}, Type, Name}
+The format is:
+
+    {{Line, scalardec}, Type, Ident}
+
+`Type` is `int` or `char`. `Ident` is the identifier value.
 
 ### Node: arraydec
 
-Format: {{Line, `arraydec`}, Type, Name, Size}
+The format is:
+
+    {{Line, arraydec}, Type, Ident, Size}
+
+`Type` is `int` or `char`. `Ident` is the identifier value. `Size` is an 
+integer which indicates the size of the array.
 
 ### Node: formal_arraydec
 
-Format: {{Line, `formal_arraydec`}, Type, Name}
+The format is: 
+    
+    {{Line, formal_arraydec}, Type, Ident}
+
+`Type` is `int` or `char`. `Ident` is the identifier value.
 
 ### Node: if
 
-If statements.
+If statements. The format is:
 
-Format: {{Line, `if`}, Condition, ThenStmt, ElseStmt}
+    {{Line, 'if'}, Cond, ThenStmts, ElseStmts}
+
+`Cond` is an expression (see the rule `expr -> rval` in the grammar). 
+`ThenStmts` and `ElseStmts` is either a list of statements, or a single tuple
+including a statement (see the multiple `stmt` rules in the grammar).
 
 ### Node: while
 
-While statements.
+While statements. The format is:
 
-Format: {{Line, `while`}, Condition, Statement}
+    {{Line, while}, Cond, Stmts}
+
+`Cond` is an expression (see the rule `expr -> rval` in the grammar). 
+`Stmts` is either a list of statements, or a single tuple including a 
+statement (see the multiple `stmt` rules in the grammar).
 
 ### Node: return
 
 Return has two kinds of nodes, either:
 
-Format: {{Line, `return`}}
+    {{Line, return}}
 
 ... which indicates return void, or:
 
-Format: {{Line, `return`}, Expr}
+    {{Line, return}, Expr}
+
+... where `Expr` is an expression (see the rule `expr -> rval` in the 
+grammar).
 
 ### Node: function_call
 
-Function calls.
+Function calls. The format is:
 
-Format: {{Line, `funcall`}, Ident, Actuals}
+    {{Line, funcall}, Ident, Actuals}
 
-Where Actuals is a list expressions.
+`Ident` is the identifier value.
 
-### Node: array_element
+`Actuals` is a list which is composed of a list of expressions. For example, 
+the empty function call would produce the following `Actuals`: 
+    
+    []
 
-Format: {{Line, `arrelem`}, Ident, Index}
+... whereas a function call with two arguments would produce the following 
+`Actuals`:
+
+    [[Expr, Expr]]
+
+### Node: arrelem
+
+Array elements. The format is:
+
+    {{Line, arrelem}, Ident, Index}
+
+`Ident` is the identifier value. `Index` is an expression.
 
 ### Node: binop
 
-Binary operators.
+Binary operators. The format is:
 
-Format: {{Line, `binop`}, Lhs, Op, Rhs}
+    {{Line, binop}, Lhs, Op, Rhs}
+
+`Lhs` and `Rhs` is an expression. `Op` is the operator value.
 
 ### Node: unop
 
-Format: {{Line, `unop`}, Op, Rhs}
+Unary operators. The format is:
+
+    {{Line, unop}, Op, Rhs}
+
+`Op` is the operator value. `Rhs` is an expression.
 
 ### Node: ident
 
-Alphanumeric identifiers.
+Alphanumeric identifiers. The format is:
 
-Format: {{Line, `ident`}, Value}
+    {{Line, ident}, Value}
+
+`Value` is the identifier value.
 
 ### Node: intconst
 
-Integer constants.
+Integer constants. The format is:
 
-Format: {{Line, `intconst`}, Value}
+    {{Line, intconst}, Value}
+
+`Value` is the integer value.
 
 ### Node: charconst
 
-Character literals.
+Character literals. The format is:
 
-Format: {{Line, `charconst`}, Value}
+    {{Line, charconst}, Value}
+
+`Value` is the character value (although not the integer constant whose value 
+is the representation code of the character).
 
 ## Running the Parser
 
