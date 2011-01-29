@@ -253,8 +253,6 @@ including a statement (see the multiple `stmt` rules in the grammar).
 
 ### Node: while
 
-While statements.
-
 While statements. The format is:
 
     {{Line, while}, Cond, Stmts}
