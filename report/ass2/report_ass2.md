@@ -370,9 +370,9 @@ If an unreadable file is given to `ducc`, the error looks like this:
 
     Error reading file: some_unreadable_file
 
-# Questions and Issues
+## Questions and Issues
 
-## AST
+### AST
 
 As of now, we have strictly separated most node types using tags.
 For instance, we have variable declarations that look like this:
