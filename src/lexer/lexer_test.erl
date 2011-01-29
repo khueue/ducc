@@ -4,51 +4,35 @@
 lexer_test_() ->
     {timeout, 1200, [{?LINE, fun() -> test_suite() end}]}.
 
-lexer_cmd(File) ->
-    Cat = "cat " ++ File,
-    cmd([Cat, "lexer"]).
+run_lexer_tests(Tests) ->
+    test_tools:run_tests(
+        Tests,
+        fun(F) -> lexer_exp(F) end,
+        fun(F) -> lexer_cmd(F) end).
 
-cmd([Step]) ->
-    Step;
-cmd([Step|Steps]) ->
-    Step ++ " | " ++ cmd(Steps).
+lexer() ->
+    "lexer".
 
 lexer_exp(File) ->
-    OutputFile = output_file(File, "lexer"),
-    file_to_string(OutputFile).
+    test_tools:expected_output(File, lexer()).
 
-output_file(File, Suffix) ->
-    File ++ "." ++ Suffix.
-
-file_to_string(File) ->
-    {ok, Binary} = file:read_file(File),
-    binary_to_list(Binary).
-
-lexer_tests([dummy]) ->
-    ok;
-lexer_tests([Test|Tests]) ->
-    lexer_test(Test),
-    lexer_tests(Tests).
-
-lexer_test(File) ->
-    Expected = lexer_exp(File),
-    Command  = lexer_cmd(File),
-    ?assertCmdOutput(Expected, Command).
+lexer_cmd(File) ->
+    test_tools:command(File, [lexer()]).
 
 test_suite() ->
 
-    ValidLexerTests =
+    ValidTests =
     [
         "suite/quiet/lexer/l01.c",
         "suite/quiet/lexer/l02.c",
-        %,"suite/quiet/lexer/l03.c",
-        %"suite/quiet/lexer/l04.c",
-        %"suite/quiet/lexer/l05.c",
-        %"suite/quiet/lexer/l06.c",
+        "suite/quiet/lexer/l03.c",
+        "suite/quiet/lexer/l04.c",
+        "suite/quiet/lexer/l05.c",
+        "suite/quiet/lexer/l06.c",
         dummy
     ],
 
-    lexer_tests(ValidLexerTests),
+    run_lexer_tests(ValidTests),
 
     ?assertCmd("cat suite/incorrect/lexer/good.c | lexer"),
 
