@@ -1,5 +1,7 @@
 <?php
 
+// Run from project root: php src/gen_parser_tests.php
+
 // Todo: Traverse dirs instead.
 $files = array
     (
