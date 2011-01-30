@@ -39,6 +39,6 @@ tests: all
 	parser_test
 
 pack:
-	tar -czvf $(PROJECT_NAME).tar.gz \
+	tar -czvf $(PROJECT_NAME)-$(shell date "+%Y-%m-%d").tar.gz \
 		$(DIR_EBIN) $(DIR_SRC) report suite \
 		$(SCRIPTS) Makefile *.md
