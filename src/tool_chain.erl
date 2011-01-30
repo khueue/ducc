@@ -21,11 +21,9 @@ string_from_input() ->
     string_from_stream(standard_io).
 
 string_from_file(File) ->
-    case file:open(File, [read]) of
-        {ok, Stream} ->
-            String = string_from_stream(Stream),
-            file:close(Stream),
-            String;
+    case file:read_file(File) of
+        {ok, Binary} ->
+            binary_to_list(Binary);
         _Error ->
             die('Error reading file: ~s~n', [File])
     end.
