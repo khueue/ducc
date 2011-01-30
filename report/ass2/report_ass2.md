@@ -2,7 +2,7 @@
 
 Compiler Project, VT11
 
-2011-01-XX
+2011-01-30
 
 Emil Hessman (emhe9781@student...)
 
@@ -16,7 +16,7 @@ The source and executables are also available on the IT department server:
 
 (Note that the source won't compile and the executables won't run on the IT
 department servers since they have an old release of OTP which doesn't
-include Leex and escript).
+include Leex nor escript).
 
 ## Introduction
 
