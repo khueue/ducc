@@ -1,0 +1,8 @@
+{{1,program},
+ [{{1,fundef},
+   int,main,[],
+   {[{{3,arraydec},char,s,27},{{4,scalardec},char,t}],
+    [{{5,binop},
+      {{5,arrelem},s,{{5,intconst},0}},
+      '=',
+      {{5,binop},{{5,charconst},a},'+',{{5,ident},t}}}]}}]}.

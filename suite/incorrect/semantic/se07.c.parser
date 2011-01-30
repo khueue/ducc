@@ -1,0 +1,6 @@
+{{3,program},
+ [{{3,fundef},
+   void,a,
+   [{{3,scalardec},int,n}],
+   {[],[{{4,return},{{4,binop},{{4,intconst},2},'*',{{4,ident},n}}}]}},
+  {{7,fundef},int,main,[],{[],[{{8,funcall},a,[{{8,intconst},2}]}]}}]}.

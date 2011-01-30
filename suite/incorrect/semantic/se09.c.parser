@@ -1,0 +1,10 @@
+{{3,program},
+ [{{3,fundef},
+   int,a,
+   [{{3,scalardec},int,n}],
+   {[{{4,arraydec},char,x,1}],
+    [{{5,'if'},
+      {{5,binop},{{5,ident},n},'!=',{{5,intconst},0}},
+      {{5,return},{{5,intconst},2}},
+      {{6,return},{{6,ident},x}}}]}},
+  {{9,fundef},int,main,[],{[],[{{10,funcall},a,[{{10,intconst},5}]}]}}]}.

@@ -1,0 +1,7 @@
+{{3,program},
+ [{{3,scalardec},int,n},
+  {{4,fundef},
+   int,main,[],
+   {[],
+    [{{5,binop},{{5,ident},n},'=',{{5,intconst},42}},
+     {{6,arrelem},n,{{6,intconst},2}}]}}]}.

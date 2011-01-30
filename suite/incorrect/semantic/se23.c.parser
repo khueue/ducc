@@ -1,0 +1,6 @@
+{{5,program},
+ [{{5,fundef},
+   int,first,
+   [{{5,scalardec},int,b}],
+   {[],[{{6,return},{{6,arrelem},b,{{6,intconst},0}}}]}},
+  {{9,fundef},int,main,[],{[],[{{10,funcall},first,[{{10,intconst},42}]}]}}]}.

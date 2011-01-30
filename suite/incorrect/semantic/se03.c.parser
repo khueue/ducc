@@ -1,0 +1,2 @@
+{{2,program},
+ [{{2,fundef},int,main,[],{[],[{{3,funcall},output,[{{3,intconst},0}]}]}}]}.
