@@ -6,19 +6,18 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = ducc lexer lexer_test parser parser_test
+SCRIPTS      = analyzer analyzer_test ducc lexer lexer_test parser parser_test
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
 ERL        = erl -pa $(DIR_EBIN) -noshell
 
-DATE	   = ` date +"%Y-%m-%d" `
-
 all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby src/trim_and_clean.rb src/*.* src/**/*.* report/**/*.md $(SCRIPTS)
+	@- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
+		report/**/*.md $(SCRIPTS)
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
@@ -32,7 +31,7 @@ compile:
 	$(ERL) -eval 'io:format("~p~n",[leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
 	$(ERL) -eval 'io:format("~p~n",[yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
 	@- echo '--- Compiling ...'
-	$(ERLC) src/*.erl
+	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 tests: all
@@ -41,6 +40,6 @@ tests: all
 	parser_test
 
 pack:
-	tar -czvf $(PROJECT_NAME)-$(DATE).tar.gz \
+	tar -czvf $(PROJECT_NAME)-`date +"%Y-%m-%d"`.tar.gz \
 		$(DIR_EBIN) $(DIR_SRC) report suite \
 		$(SCRIPTS) Makefile *.md
