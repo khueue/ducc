@@ -10,16 +10,16 @@ usage() ->
 
 main([]) ->
     String = tool_chain:string_from_input(),
-    compile(String);
+    compile('<stdin>', String);
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
 main([File]) ->
     String = tool_chain:string_from_file(File),
-    compile(String);
+    compile(File, String);
 main(_) ->
     usage().
 
-compile(String) ->
-    Tokens = lexer_driver:tokenize(String),
-    ParseTree = parser_driver:parse(Tokens),
+compile(Stream, String) ->
+    Tokens = lexer_driver:tokenize(Stream, String),
+    ParseTree = parser_driver:parse(Stream, Tokens),
     tool_chain:term_to_output(ParseTree).

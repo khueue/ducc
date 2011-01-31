@@ -1,5 +1,5 @@
 {{3,program},
- [{{3,arraydec},char,a,10},
-  {{5,fundef},
-   int,main,[],
-   {[],[{{6,binop},{{6,ident},a},'=',{{6,intconst},42}}]}}]}.
+ {[{{3,arraydec},{char,"a",10}},
+   {{5,fundef},
+    {int,"main",[],
+         {[],[{{6,binop},{{{6,ident},{"a"}},'=',{{6,intconst},{42}}}}]}}}]}}.

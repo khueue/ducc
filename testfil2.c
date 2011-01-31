@@ -16,6 +16,10 @@ d
     d(1, 2);
     b(1, 2, b = c);
     ;
+    while (2 != 3 /* condition */)
+    {
+        // int x;
+    }
     return e;
     return;
 }

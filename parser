@@ -8,11 +8,11 @@ usage() ->
 main([]) ->
     String = tool_chain:string_from_input(),
     Term = tool_chain:term_from_string(String),
-    Processor = fun(X) -> process(X) end,
+    Processor = fun(X) -> process('<stdin>', X) end,
     tool_chain:process_term_or_echo(Processor, Term, String);
 main(_) ->
     usage().
 
-process(Tokens) ->
-    ParseTree = parser_driver:parse(Tokens),
+process(Stream, Tokens) ->
+    ParseTree = parser_driver:parse(Stream, Tokens),
     tool_chain:term_to_output(ParseTree).

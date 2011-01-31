@@ -1,3 +1,4 @@
 {{1,program},
- [{{1,fundec},void,putint,[{{1,scalardec},int,x}]},
-  {{6,fundef},int,main,[],{[],[{{7,funcall},putint,[{{7,intconst},42}]}]}}]}.
+ {[{{1,fundec},{void,"putint",[{{1,scalardec},{int,"x"}}]}},
+   {{6,fundef},
+    {int,"main",[],{[],[{{7,funcall},{"putint",[{{7,intconst},{42}}]}}]}}}]}}.

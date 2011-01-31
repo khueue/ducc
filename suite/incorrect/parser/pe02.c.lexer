@@ -1,5 +1,5 @@
 [{int,2},
- {ident,2,main},
+ {ident,2,"main"},
  {'(',2},
  {void,2},
  {')',2},

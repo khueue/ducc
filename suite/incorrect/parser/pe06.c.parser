@@ -1,1 +1,1 @@
-Syntax error on line 3, before: ["b"]
+<stdin>:3: syntax error: ["\"b\""]

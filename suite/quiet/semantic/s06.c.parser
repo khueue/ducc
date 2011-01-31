@@ -1,6 +1,6 @@
 {{1,program},
- [{{1,fundef},
-   int,main,[],
-   {[{{2,scalardec},char,x},{{3,scalardec},int,y}],
-    [{{5,binop},{{5,ident},x},'=',{{5,ident},y}},
-     {{6,binop},{{6,ident},y},'=',{{6,ident},x}}]}}]}.
+ {[{{1,fundef},
+    {int,"main",[],
+         {[{{2,scalardec},{char,"x"}},{{3,scalardec},{int,"y"}}],
+          [{{5,binop},{{{5,ident},{"x"}},'=',{{5,ident},{"y"}}}},
+           {{6,binop},{{{6,ident},{"y"}},'=',{{6,ident},{"x"}}}}]}}}]}}.

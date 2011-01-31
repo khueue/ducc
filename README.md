@@ -4,4 +4,5 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## Todo
 
- * Finish the report!
+ * Replace calls to die()...
+ * Write an analyzer.

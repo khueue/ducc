@@ -1,9 +1,10 @@
 {{3,program},
- [{{3,fundef},void,foo,[{{3,scalardec},int,n}],{[],[{{4,ident},n}]}},
-  {{7,fundef},
-   int,main,[],
-   {[],
-    [{{8,binop},
-      {{8,intconst},1},
-      '+',
-      {{8,funcall},foo,[{{8,intconst},0}]}}]}}]}.
+ {[{{3,fundef},
+    {void,"foo",[{{3,scalardec},{int,"n"}}],{[],[{{4,ident},{"n"}}]}}},
+   {{7,fundef},
+    {int,"main",[],
+         {[],
+          [{{8,binop},
+            {{{8,intconst},{1}},
+             '+',
+             {{8,funcall},{"foo",[{{8,intconst},{0}}]}}}}]}}}]}}.

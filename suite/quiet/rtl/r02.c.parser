@@ -1,4 +1,5 @@
 {{1,program},
- [{{1,fundef},void,f,[{{1,formal_arraydec},int,x}],{[],[]}},
-  {{4,arraydec},int,a,10},
-  {{6,fundef},int,main,[],{[],[{{7,funcall},f,[{{7,ident},a}]}]}}]}.
+ {[{{1,fundef},{void,"f",[{{1,formal_arraydec},{int,"x"}}],{[],[]}}},
+   {{4,arraydec},{int,"a",10}},
+   {{6,fundef},
+    {int,"main",[],{[],[{{7,funcall},{"f",[{{7,ident},{"a"}}]}}]}}}]}}.

@@ -1,15 +1,15 @@
 -module(lexer_driver).
--export([tokenize/1]).
+-export([tokenize/2]).
 
-tokenize(String) ->
+tokenize(File, String) ->
     case lexer:string(String) of
         {ok, Tokens, _} -> Tokens;
-        Error           -> handle_error(Error)
+        Error           -> handle_error(File, Error)
     end.
 
-handle_error({error, {Line, _Module, {Message, Fault}}, _}) ->
+handle_error(File, {error, {Line, _Module, {Message, Fault}}, _}) ->
     tool_chain:die(
-        'Lexical error on line ~p, ~p: ~p~n',
-        [Line, Message, Fault]);
-handle_error(Unknown) ->
+        '~s:~p: lexical error, ~p: ~p~n',
+        [File, Line, Message, Fault]);
+handle_error(_File, Unknown) ->
     tool_chain:die(Unknown).

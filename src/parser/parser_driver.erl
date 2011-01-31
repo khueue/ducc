@@ -1,15 +1,19 @@
 -module(parser_driver).
--export([parse/1]).
+-export([parse/2]).
 
-parse(Tokens) ->
+parse(Stream, Tokens) ->
     case parser:parse(Tokens) of
-        {ok, ParseTree} -> ParseTree;
-        Error           -> handle_error(Error)
+        {ok, ParseTree} -> fix(Stream, ParseTree);
+        Error           -> handle_error(Stream, Error)
     end.
 
-handle_error({error, {Line, _Module, [_Message,Fault|_]}}) ->
+handle_error(Stream, {error, {Line, _Module, [_Message,Fault|_]}}) ->
     tool_chain:die(
-        'Syntax error on line ~p, before: ~p~n',
-        [Line, Fault]);
-handle_error(Unknown) ->
+        '~s:~p: syntax error: ~p~n',
+        [Stream, Line, Fault]);
+handle_error(_Stream, Unknown) ->
     tool_chain:die(Unknown).
+
+fix(Stream, Topdecs) ->
+    [{{Line,_},_}|_] = Topdecs,
+    {{Line,Stream},{Topdecs}}.

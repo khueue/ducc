@@ -1,6 +1,10 @@
 {{1,program},
- [{{1,scalardec},int,a},
-  {{2,fundef},int,foo,[{{2,scalardec},int,x}],{[],[nil]}},
-  {{5,fundef},
-   int,main,[],
-   {[],[{{6,binop},{{6,ident},a},'=',{{6,funcall},foo,[{{6,ident},a}]}}]}}]}.
+ {[{{1,scalardec},{int,"a"}},
+   {{2,fundef},{int,"foo",[{{2,scalardec},{int,"x"}}],{[],[nil]}}},
+   {{5,fundef},
+    {int,"main",[],
+         {[],
+          [{{6,binop},
+            {{{6,ident},{"a"}},
+             '=',
+             {{6,funcall},{"foo",[{{6,ident},{"a"}}]}}}}]}}}]}}.

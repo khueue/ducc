@@ -27,14 +27,14 @@ Rules.
 
 % Identifier.
 {Letter}({Letter}|{Digit})* :
-    Identifier = list_to_atom(TokenChars),
-    case is_reserved(Identifier) of
+    Word = list_to_atom(TokenChars),
+    case is_reserved(Word) of
         true ->
             {token,
-                {Identifier,TokenLine}};
+                {Word,TokenLine}};
         false ->
             {token,
-                {ident,TokenLine,Identifier}}
+                {ident,TokenLine,TokenChars}}
     end.
 
 % Character literal.

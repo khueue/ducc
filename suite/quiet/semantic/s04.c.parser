@@ -1,8 +1,9 @@
 {{1,program},
- [{{1,fundef},
-   int,foo,
-   [{{1,formal_arraydec},char,x}],
-   {[],[{{2,return},{{2,arrelem},x,{{2,intconst},0}}}]}},
-  {{5,fundef},
-   int,main,[],
-   {[{{6,arraydec},char,a,10}],[{{7,funcall},foo,[{{7,ident},a}]}]}}]}.
+ {[{{1,fundef},
+    {int,"foo",
+         [{{1,formal_arraydec},{char,"x"}}],
+         {[],[{{2,return},{{{2,arrelem},{"x",{{2,intconst},{0}}}}}}]}}},
+   {{5,fundef},
+    {int,"main",[],
+         {[{{6,arraydec},{char,"a",10}}],
+          [{{7,funcall},{"foo",[{{7,ident},{"a"}}]}}]}}}]}}.

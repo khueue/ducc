@@ -1,4 +1,4 @@
 {{3,program},
- [{{3,scalardec},int,a},
-  {{5,fundec},void,a,[]},
-  {{8,fundef},int,main,[],{[],[{{9,intconst},42}]}}]}.
+ {[{{3,scalardec},{int,"a"}},
+   {{5,fundec},{void,"a",[]}},
+   {{8,fundef},{int,"main",[],{[],[{{9,intconst},{42}}]}}}]}}.
