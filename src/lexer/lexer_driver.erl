@@ -12,5 +12,5 @@ tokenize(Stream, String) ->
 
 format_error(Stream, {error, {Line, _Module, {Message, Fault}}, _}) ->
     io_lib:format(
-        '~s:~p: lexical error, ~p: ~p~n',
+        '~s:~w: lexical error, ~s: ~s~n',
         [Stream, Line, Message, Fault]).
