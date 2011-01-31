@@ -6,13 +6,22 @@ usage() ->
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
+    Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Term = tool_chain:term_from_string(String),
-    Processor = fun(X) -> process('<stdin>', X) end,
-    tool_chain:process_term_or_echo(Processor, Term, String);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, ParseTree} ->
+            tool_chain:term_to_output(ParseTree);
+        {parser_exception, Message} ->
+            tool_chain:die(Message);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String);
+        UnknownError ->
+            tool_chain:die(UnknownError)
+    end;
 main(_) ->
     usage().
 
-process(Stream, Tokens) ->
-    {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-    tool_chain:term_to_output(ParseTree).
+process(Stream, String) ->
+    Tokens = tool_chain:term_from_string(String),
+    _ParseTree = parser_driver:parse(Stream, Tokens).

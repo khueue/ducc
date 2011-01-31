@@ -2,17 +2,26 @@
 %%! -pa ebin -Wall
 
 usage() ->
-    io:format('Usage: analyzer~n'),
+    io:format('Usage: parser~n'),
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
+    Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Term = tool_chain:term_from_string(String),
-    Processor = fun(X) -> process('<stdin>', X) end,
-    tool_chain:process_term_or_echo(Processor, Term, String);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, ParseTree1} ->
+            tool_chain:term_to_output(ParseTree1);
+        {analyzer_exception, Message} ->
+            tool_chain:die(Message);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String);
+        UnknownError ->
+            tool_chain:die(UnknownError)
+    end;
 main(_) ->
     usage().
 
-process(Stream, ParseTree) ->
-    ParseTree1 = analyzer_driver:analyze(Stream, ParseTree),
-    tool_chain:term_to_output(ParseTree1).
+process(Stream, String) ->
+    ParseTree = tool_chain:term_from_string(String),
+    _ParseTree1 = analyzer_driver:analyze(Stream, ParseTree).

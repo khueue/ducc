@@ -6,13 +6,19 @@ usage() ->
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
+    Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Tokens = lexer_driver:tokenize('<stdin>', String),
-    handle_it(Tokens);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, Tokens} ->
+            tool_chain:term_to_output(Tokens);
+        {lexer_exception, Message} ->
+            tool_chain:die(Message);
+        UnknownError ->
+            tool_chain:die(UnknownError)
+    end;
 main(_) ->
     usage().
 
-handle_it({ok, Tokens}) ->
-    tool_chain:term_to_output(Tokens);
-handle_it(_Error) ->
-    ok.
+process(Stream, String) ->
+    _Tokens = lexer_driver:tokenize(Stream, String).

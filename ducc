@@ -8,24 +8,46 @@ usage() ->
     io:format('Usage: ducc [file]~n'),
     io:format('(Uses stdin if no file given.)~n').
 
-main([]) ->
-    String = tool_chain:string_from_input(),
-    compile('<stdin>', String);
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
+main([]) ->
+    String = read_string(standard_io),
+    compile('<stdin>', String);
 main([File]) ->
-    String = tool_chain:string_from_file(File),
+    String = read_string(File),
     compile(File, String);
 main(_) ->
     usage().
 
-compile(Stream, String) ->
-    {ok, Tokens} = catch_it(lexer_driver:tokenize(Stream, String)),
-    {ok, ParseTree} = catch_it(parser_driver:parse(Stream, Tokens)),
-    ParseTree1 = analyzer_driver:analyze(Stream, ParseTree),
-    tool_chain:term_to_output(ParseTree1).
+read_string(standard_io) ->
+    tool_chain:term_from_input();
+read_string(Stream) ->
+    Result = (catch tool_chain:string_from_file(Stream)),
+    case Result of
+        {file_exception, Message} ->
+            tool_chain:die(Message);
+        String ->
+            String
+    end.
 
-catch_it({error, _}) ->
-    erlang:halt(1);
-catch_it(Term) ->
-    Term.
+compile(Stream, String) ->
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, ParseTree} ->
+            tool_chain:term_to_output(ParseTree);
+        {lexer_exception, Message} ->
+            tool_chain:die(Message);
+        {parser_exception, Message} ->
+            tool_chain:die(Message);
+        {analyzer_exception, Message} ->
+            tool_chain:die(Message);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String);
+        UnknownError ->
+            tool_chain:die(UnknownError)
+    end.
+
+process(Stream, String) ->
+    {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+    {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+    _ParseTree1 = analyzer_driver:analyze(Stream, ParseTree).

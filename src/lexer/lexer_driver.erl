@@ -1,15 +1,16 @@
 -module(lexer_driver).
--export([tokenize/2]).
+-export([tokenize/2, format_error/2]).
 
 tokenize(Stream, String) ->
     case lexer:string(String) of
-        {ok, Tokens, _} -> {ok, Tokens};
-        Error           -> handle_error(Stream, Error)
+        {ok, Tokens, _} ->
+            {ok, Tokens};
+        Error ->
+            Message = format_error(Stream, Error),
+            throw({lexer_exception, Message})
     end.
 
-handle_error(Stream, {error, {Line, _Module, {Message, Fault}}, _}) ->
-    io:format('~s:~p: lexical error, ~p: ~p~n', [Stream, Line, Message, Fault]),
-    {error, tokenizer};
-handle_error(_Stream, Unknown) ->
-    io:write(Unknown), io:nl(),
-    {error, tokenizer}.
+format_error(Stream, {error, {Line, _Module, {Message, Fault}}, _}) ->
+    io_lib:format(
+        '~s:~p: lexical error, ~p: ~p~n',
+        [Stream, Line, Message, Fault]).
