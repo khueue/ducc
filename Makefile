@@ -12,6 +12,8 @@ ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
 ERL        = erl -pa $(DIR_EBIN) -noshell
 
+DATE	   = ` date +"%Y-%m-%d" `
+
 all: setup clean compile
 
 setup:
@@ -39,6 +41,6 @@ tests: all
 	parser_test
 
 pack:
-	tar -czvf $(PROJECT_NAME)-$(shell date "+%Y-%m-%d").tar.gz \
+	tar -czvf $(PROJECT_NAME)-$(DATE).tar.gz \
 		$(DIR_EBIN) $(DIR_SRC) report suite \
 		$(SCRIPTS) Makefile *.md
