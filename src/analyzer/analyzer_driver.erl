@@ -2,4 +2,4 @@
 -export([analyze/2]).
 
 analyze(_Stream, ParseTree) ->
-    ParseTree.
+    analyzer:analyze(ParseTree).

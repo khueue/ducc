@@ -163,7 +163,8 @@ make_fundec(TypeAndName, Formals) ->
 
 make_fundef(TypeAndName, Formals, Body) ->
     {_Meta, {Type, Name}} = TypeAndName,
-    {meta(line(TypeAndName), fundef), {Type, Name, Formals, Body}}.
+    {Locals, Stmts} = Body,
+    {meta(line(TypeAndName), fundef), {Type, Name, Formals, Locals, Stmts}}.
 
 make_funtypeandname(Type, Ident) ->
    {meta(line(Type), funtypeandname), {type(Type), value(Ident)}}.

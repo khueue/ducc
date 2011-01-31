@@ -8,10 +8,10 @@ parse(Stream, Tokens) ->
     end.
 
 fix(Stream, []) ->
-    {{0,Stream},{[]}};
+    {{0,program},{Stream,[]}};
 fix(Stream, Topdecs) ->
     [{{Line,_},_}|_] = Topdecs,
-    {{Line,Stream},{Topdecs}}.
+    {{Line,program},{Stream,Topdecs}}.
 
 handle_error(Stream, {error, {Line, _Module, [_Message,Fault|_]}}) ->
     io:format('~s:~p: syntax error: ~p~n', [Stream, Line, Fault]),
