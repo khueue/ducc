@@ -5,7 +5,7 @@ analyze([]) -> ok;
 analyze([X|Xs]) ->
     analyze(X),
     analyze(Xs);
-analyze(Node) when is_tuple(Node) ->
+analyze(Node) when erlang:is_tuple(Node) ->
     {_Line, Tag} = erlang:element(1, Node),
     analyze_node(Tag, Node);
 analyze(U) ->
