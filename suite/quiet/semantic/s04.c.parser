@@ -1,4 +1,4 @@
-{{1,program},
+{{1,'<stdin>'},
  {[{{1,fundef},
     {int,"foo",
          [{{1,formal_arraydec},{char,"x"}}],

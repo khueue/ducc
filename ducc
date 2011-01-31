@@ -20,6 +20,11 @@ main(_) ->
     usage().
 
 compile(Stream, String) ->
-    Tokens = lexer_driver:tokenize(Stream, String),
-    ParseTree = parser_driver:parse(Stream, Tokens),
+    {ok, Tokens} = catch_it(lexer_driver:tokenize(Stream, String)),
+    {ok, ParseTree} = catch_it(parser_driver:parse(Stream, Tokens)),
     tool_chain:term_to_output(ParseTree).
+
+catch_it({error, _}) ->
+    erlang:halt(1);
+catch_it(Term) ->
+    Term.

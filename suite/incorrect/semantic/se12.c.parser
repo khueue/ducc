@@ -1,4 +1,4 @@
-{{4,program},
+{{4,'<stdin>'},
  {[{{4,scalardec},{int,"a"}},
    {{5,fundef},
     {int,"main",[],{[],[{{6,funcall},{"a",[{{6,intconst},{2}}]}}]}}}]}}.

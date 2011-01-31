@@ -1,4 +1,4 @@
-{{1,program},
+{{1,'<stdin>'},
  {[{{1,scalardec},{int,"foo"}},
    {{3,scalardec},{char,"bar"}},
    {{5,scalardec},{int,"BarBara"}},

@@ -8,6 +8,11 @@ usage() ->
 main([]) ->
     String = tool_chain:string_from_input(),
     Tokens = lexer_driver:tokenize('<stdin>', String),
-    tool_chain:term_to_output(Tokens);
+    handle_it(Tokens);
 main(_) ->
     usage().
+
+handle_it({ok, Tokens}) ->
+    tool_chain:term_to_output(Tokens);
+handle_it(_Error) ->
+    ok.

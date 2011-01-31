@@ -1,4 +1,4 @@
-{{5,program},
+{{5,'<stdin>'},
  {[{{5,fundec},{void,"putstring",[{{5,formal_arraydec},{char,"s"}}]}},
    {{7,arraydec},{char,"eol",1}},
    {{8,scalardec},{int,"n"}},

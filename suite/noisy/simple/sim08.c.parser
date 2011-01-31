@@ -1,4 +1,4 @@
-{{4,program},
+{{4,'<stdin>'},
  {[{{4,fundec},{void,"putint",[{{4,scalardec},{int,"i"}}]}},
    {{6,fundef},
     {void,"foo",

@@ -1,4 +1,4 @@
-{{1,program},
+{{1,'<stdin>'},
  {[{{1,scalardec},{int,"x"}},
    {{2,scalardec},{char,"y"}},
    {{4,fundef},

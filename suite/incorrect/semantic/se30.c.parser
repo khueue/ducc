@@ -1,4 +1,4 @@
-{{2,program},
+{{2,'<stdin>'},
  {[{{2,fundef},
     {int,"main",[],
          {[{{3,scalardec},{int,"a"}},{{4,arraydec},{int,"b",10}}],

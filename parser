@@ -14,5 +14,5 @@ main(_) ->
     usage().
 
 process(Stream, Tokens) ->
-    ParseTree = parser_driver:parse(Stream, Tokens),
+    {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
     tool_chain:term_to_output(ParseTree).
