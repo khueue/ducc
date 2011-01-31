@@ -1,5 +1,5 @@
 -module(lexer_driver).
--export([tokenize/2, format_error/2]).
+-export([tokenize/2]).
 
 tokenize(Stream, String) ->
     case lexer:string(String) of

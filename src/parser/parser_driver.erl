@@ -1,5 +1,5 @@
 -module(parser_driver).
--export([parse/2, format_error/2]).
+-export([parse/2]).
 
 parse(Stream, Tokens) ->
     case parser:parse(Tokens) of
