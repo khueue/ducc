@@ -24,10 +24,10 @@ read_string(standard_io) ->
 read_string(Stream) ->
     Result = (catch tool_chain:string_from_file(Stream)),
     case Result of
+        {ok, String} ->
+            String;
         {file_exception, Message} ->
-            tool_chain:die(Message);
-        String ->
-            String
+            tool_chain:die(Message)
     end.
 
 compile(Stream, String) ->

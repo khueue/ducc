@@ -14,7 +14,7 @@ string_from_input() ->
 string_from_file(File) ->
     case file:read_file(File) of
         {ok, Binary} ->
-            binary_to_list(Binary);
+            {ok, binary_to_list(Binary)};
         _Error ->
             Message = io_lib:format('Error reading file: ~s~n', [File]),
             throw({file_exception, Message})
