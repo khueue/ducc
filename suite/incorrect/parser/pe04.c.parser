@@ -1,1 +1,1 @@
-<stdin>:5: syntax error: ["\"a\""]
+<stdin>:5: syntax error: "a"
