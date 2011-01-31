@@ -1,2 +1,1 @@
 <stdin>:5: syntax error: ["\"a\""]
-escript: exception error: no match of right hand side value {error,parser}
