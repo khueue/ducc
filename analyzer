@@ -2,7 +2,7 @@
 %%! -pa ebin -Wall
 
 usage() ->
-    io:format('Usage: parser~n'),
+    io:format('Usage: analyzer~n'),
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
