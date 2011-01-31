@@ -12,7 +12,7 @@ parse(Stream, Tokens) ->
 
 format_error(Stream, {error, {Line, _Module, [_Message,Fault|_]}}) ->
     io_lib:format(
-        '~s:~p: syntax error: ~p~n',
+        '~s:~p: syntax error: ~s~n',
         [Stream, Line, Fault]).
 
 wrap(Stream, []) ->
