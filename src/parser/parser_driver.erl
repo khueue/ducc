@@ -8,10 +8,10 @@ parse(Stream, Tokens) ->
     end.
 
 fix(Stream, []) ->
-    {{0,program},{Stream,[]}};
-fix(Stream, Topdecs) ->
-    [{{Line,_},_}|_] = Topdecs,
-    {{Line,program},{Stream,Topdecs}}.
+    {{0,program}, Stream, []};
+fix(Stream, Topdecs = [Topdec|_]) ->
+    {Line, _} = erlang:element(1, Topdec),
+    {{Line,program}, Stream, Topdecs}.
 
 handle_error(Stream, {error, {Line, _Module, [_Message,Fault|_]}}) ->
     io:format('~s:~p: syntax error: ~p~n', [Stream, Line, Fault]),

@@ -1,8 +1,9 @@
-{{2,'<stdin>'},
- {[{{2,fundef},
-    {int,"main",[],
-         {[{{3,scalardec},{int,"x"}}],
-          [{{4,'if'},
-            {{{4,binop},{{{4,intconst},{1}},'<',{{4,intconst},{2}}}},
-             {{4,binop},{{{4,ident},{"x"}},'=',{{4,intconst},{1}}}},
-             {{5,binop},{{{5,ident},{"x"}},'=',{{5,intconst},{2}}}}}}]}}}]}}.
+{{2,program},
+ '<stdin>',
+ [{{2,fundef},
+   int,"main",[],
+   [{{3,scalardec},int,"x"}],
+   [{{4,'if'},
+     {{4,binop},{{4,intconst},1},'<',{{4,intconst},2}},
+     {{4,binop},{{4,ident},"x"},'=',{{4,intconst},1}},
+     {{5,binop},{{5,ident},"x"},'=',{{5,intconst},2}}}]}]}.

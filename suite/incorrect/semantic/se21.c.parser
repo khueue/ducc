@@ -1,8 +1,8 @@
-{{3,'<stdin>'},
- {[{{3,fundef},
-    {int,"a",
-         [{{3,scalardec},{int,"n"}}],
-         {[{{4,arraydec},{char,"bv",10}}],
-          [{{5,return},{{{5,ident},{"bv"}}}}]}}},
-   {{7,fundef},
-    {int,"main",[],{[],[{{8,funcall},{"a",[{{8,intconst},{2}}]}}]}}}]}}.
+{{3,program},
+ '<stdin>',
+ [{{3,fundef},
+   int,"a",
+   [{{3,scalardec},int,"n"}],
+   [{{4,arraydec},char,"bv",10}],
+   [{{5,return},{{5,ident},"bv"}}]},
+  {{7,fundef},int,"main",[],[],[{{8,funcall},"a",[{{8,intconst},2}]}]}]}.

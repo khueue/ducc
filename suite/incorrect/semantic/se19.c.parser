@@ -1,8 +1,6 @@
-{{3,'<stdin>'},
- {[{{3,arraydec},{char,"a",10}},
-   {{4,fundef},
-    {int,"main",[],
-         {[],
-          [{{5,'if'},
-            {{{5,binop},{{{5,ident},{"a"}},'==',{{5,intconst},{42}}}},
-             nil,nil}}]}}}]}}.
+{{3,program},
+ '<stdin>',
+ [{{3,arraydec},char,"a",10},
+  {{4,fundef},
+   int,"main",[],[],
+   [{{5,'if'},{{5,binop},{{5,ident},"a"},'==',{{5,intconst},42}},nil,nil}]}]}.

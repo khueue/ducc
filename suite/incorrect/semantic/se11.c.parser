@@ -1,7 +1,7 @@
-{{3,'<stdin>'},
- {[{{3,fundef},
-    {int,"a",[],
-         {[],
-          [{{4,binop},{{{4,ident},{"a"}},'=',{{4,intconst},{1}}}},
-           {{5,return},{{{5,intconst},{0}}}}]}}},
-   {{7,fundef},{int,"main",[],{[],[{{8,funcall},{"a",[]}}]}}}]}}.
+{{3,program},
+ '<stdin>',
+ [{{3,fundef},
+   int,"a",[],[],
+   [{{4,binop},{{4,ident},"a"},'=',{{4,intconst},1}},
+    {{5,return},{{5,intconst},0}}]},
+  {{7,fundef},int,"main",[],[],[{{8,funcall},"a",[]}]}]}.

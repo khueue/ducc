@@ -158,58 +158,58 @@ make_program(Topdecs) ->
     Topdecs.
 
 make_fundec(TypeAndName, Formals) ->
-    {_Meta, {Type, Name}} = TypeAndName,
-    {meta(line(TypeAndName), fundec), {Type, Name, Formals}}.
+    {_Meta, Type, Name} = TypeAndName,
+    {meta(line(TypeAndName), fundec), Type, Name, Formals}.
 
 make_fundef(TypeAndName, Formals, Body) ->
-    {_Meta, {Type, Name}} = TypeAndName,
+    {_Meta, Type, Name} = TypeAndName,
     {Locals, Stmts} = Body,
-    {meta(line(TypeAndName), fundef), {Type, Name, Formals, Locals, Stmts}}.
+    {meta(line(TypeAndName), fundef), Type, Name, Formals, Locals, Stmts}.
 
 make_funtypeandname(Type, Ident) ->
-   {meta(line(Type), funtypeandname), {type(Type), value(Ident)}}.
+   {meta(line(Type), funtypeandname), type(Type), value(Ident)}.
 
 make_scalardec(Type, Value) ->
-    {meta(line(Type), scalardec), {type(Type), value(Value)}}.
+    {meta(line(Type), scalardec), type(Type), value(Value)}.
 
 make_arraydec(Type, Ident, Size) ->
-    {meta(line(Type), arraydec), {type(Type), value(Ident), value(Size)}}.
+    {meta(line(Type), arraydec), type(Type), value(Ident), value(Size)}.
 
 make_funbody(Locals, Stmts) ->
     {Locals, Stmts}.
 
 make_formal_arraydec(Type, Ident) ->
-    {meta(line(Type), formal_arraydec), {type(Type), value(Ident)}}.
+    {meta(line(Type), formal_arraydec), type(Type), value(Ident)}.
 
 make_if(Keyword, Cond, Then, Else) ->
-    {meta(line(Keyword), 'if'), {Cond, Then, Else}}.
+    {meta(line(Keyword), 'if'), Cond, Then, Else}.
 
 make_while(Keyword, Cond, Stmt) ->
-    {meta(line(Keyword), while), {Cond, Stmt}}.
+    {meta(line(Keyword), while), Cond, Stmt}.
 
 make_empty_return(Keyword) ->
-    {meta(line(Keyword), return), {nil}}.
+    {meta(line(Keyword), return), nil}.
 
 make_return(Keyword, Expr) ->
-    {meta(line(Keyword), return), {Expr}}.
+    {meta(line(Keyword), return), Expr}.
 
 make_function_call(Ident, Actuals) ->
-    {meta(line(Ident), funcall), {value(Ident), Actuals}}.
+    {meta(line(Ident), funcall), value(Ident), Actuals}.
 
 make_array_element(Ident, Index) ->
-    {meta(line(Ident), arrelem), {value(Ident), Index}}.
+    {meta(line(Ident), arrelem), value(Ident), Index}.
 
 make_binop(Lhs, Op, Rhs) ->
-    {meta(line(Op), binop), {Lhs, type(Op), Rhs}}.
+    {meta(line(Op), binop), Lhs, type(Op), Rhs}.
 
 make_ident(Ident) ->
-    {meta(line(Ident), ident), {value(Ident)}}.
+    {meta(line(Ident), ident), value(Ident)}.
 
 make_intconst(Intconst) ->
-    {meta(line(Intconst), intconst), {value(Intconst)}}.
+    {meta(line(Intconst), intconst), value(Intconst)}.
 
 make_charconst(Charconst) ->
-    {meta(line(Charconst), charconst), {value(Charconst)}}.
+    {meta(line(Charconst), charconst), value(Charconst)}.
 
 make_unop(Op, Rhs) ->
-    {meta(line(Op), unop), {type(Op), Rhs}}.
+    {meta(line(Op), unop), type(Op), Rhs}.
