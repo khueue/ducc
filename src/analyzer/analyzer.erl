@@ -1,15 +1,18 @@
 -module(analyzer).
 -export([analyze/1]).
 
+get_meta(Node) ->
+    erlang:element(1, Node).
+
 analyze([]) -> ok;
 analyze([X|Xs]) ->
     analyze(X),
     analyze(Xs);
 analyze(Node) when erlang:is_tuple(Node) ->
-    {_Line, Tag} = erlang:element(1, Node),
+    {_Line, Tag} = get_meta(Node),
     analyze_node(Tag, Node);
-analyze(U) ->
-    io:format('~p unhandled~n', [U]),
+analyze(Unhandled) ->
+    io:format('Unhandled: ~p~n', [Unhandled]),
     ok.
 
 analyze_node(program, Node)         -> analyze_program(Node);
