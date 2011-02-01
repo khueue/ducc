@@ -4,13 +4,9 @@ void c(void);
 
 void foo(int a);
 
-void
-
-d
-
-(int e[], int f, int e[], int f)
-
+void d(int e[], int f, int eeu[], int oof)
 {
+    int oof;
     a();
     c(1);
     d(1, 2);

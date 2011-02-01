@@ -14,10 +14,10 @@ get_meta(Node) ->
 
 analyze(ParseTree) ->
     SymTab = dict:new(),
-    Env = {SymTab},
-    {SymTab1} = analyze(ParseTree, Env),
-    List = dict:to_list(SymTab1),
-    io:format('~p~n', [List]),
+    Env = {[SymTab]},
+    {_SymTabs1} = analyze(ParseTree, Env),
+    %List = dict:to_list(SymTab1),
+    %io:format('~p~n', [List]),
     ok.
 
 analyze([], Env) ->
@@ -54,21 +54,36 @@ analyze_node(Tag, _, Env) ->
     io:format('Unhandled tag: ~p~n', [Tag]),
     Env.
 
+push_symtab(SymTabNew, {SymTabs}) ->
+    {[SymTabNew|SymTabs]}.
+
+peek_symtab({[]}) ->
+    throw(oooooooooooooooooooj);
+peek_symtab({[SymTab|SymTabs]}) ->
+    {SymTab, SymTabs}.
+
 process(X) ->
     io:format('~p~n', [X]).
 
-analyze_program(Node = {Meta, _File, Topdecs}, Env) ->
-    process(Meta),
-    _Env1 = analyze(Topdecs, Env).
+add_key(Key, Value, {SymTabs}) ->
+    {CurrentSymTab, Rest} = peek_symtab({SymTabs}),
+    CurrentSymTab1 = dict:store(Key, Value, CurrentSymTab),
+    {[CurrentSymTab1|Rest]}.
 
-analyze_scalardec({Meta, _Type, Name}, Env) ->
+analyze_program({Meta, _File, Topdecs}, Env) ->
     process(Meta),
-    Env1 = store_key(Name, Meta, Env),
+    Env1 = analyze(Topdecs, Env),
     Env1.
 
-store_key(Key, Value, {SymTab}) ->
-    SymTab1 = dict:store(Key, Value, SymTab),
-    {SymTab1}.
+analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
+    process(Meta),
+    {CurrentSymTab, _Others} = peek_symtab(Env),
+    Defined = dict:is_key(Name, CurrentSymTab),
+    Env1 = case Defined of
+        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        false -> add_key(Name, Meta, Env)
+    end,
+    Env1.
 
 analyze_arraydec({Meta, _Type, _Name, _Size}, Env) ->
     process(Meta),
@@ -76,13 +91,17 @@ analyze_arraydec({Meta, _Type, _Name, _Size}, Env) ->
 
 analyze_fundec({Meta, _Type, _Name, Formals}, Env) ->
     process(Meta),
-    analyze(Formals, Env).
+    Env1 = push_symtab(dict:new(), Env),
+    _Env2 = analyze(Formals, Env1),
+    Env. % Updates to the environment are local to the function!
 
 analyze_fundef({Meta, _Type, _Name, Formals, Locals, Stmts}, Env) ->
     process(Meta),
-    analyze(Formals, Env),
-    analyze(Locals, Env),
-    analyze(Stmts, Env).
+    Env1 = push_symtab(dict:new(), Env),
+    Env2 = analyze(Formals, Env1),
+    Env3 = analyze(Locals, Env2),
+    _Env4 = analyze(Stmts, Env3),
+    Env. % Updates to the environment are local to the function!
 
 analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
     process(Meta),
@@ -90,31 +109,37 @@ analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
 
 analyze_if({Meta, Cond, Then, Else}, Env) ->
     process(Meta),
-    analyze(Cond, Env),
-    analyze(Then, Env),
-    analyze(Else, Env).
+    Env1 = analyze(Cond, Env),
+    Env2 = analyze(Then, Env1),
+    Env3 = analyze(Else, Env2),
+    Env3.
 
 analyze_while({Meta, Cond, Stmt}, Env) ->
     process(Meta),
-    analyze(Cond, Env),
-    analyze(Stmt, Env).
+    Env1 = analyze(Cond, Env),
+    Env2 = analyze(Stmt, Env1),
+    Env2.
 
 analyze_return({Meta, Expr}, Env) ->
     process(Meta),
-    analyze(Expr, Env).
+    Env1 = analyze(Expr, Env),
+    Env1.
 
 analyze_funcall({Meta, _Name, Actuals}, Env) ->
     process(Meta),
-    analyze(Actuals, Env).
+    Env1 = analyze(Actuals, Env),
+    Env1.
 
 analyze_arrelem({Meta, _Name, Index}, Env) ->
     process(Meta),
-    analyze(Index, Env).
+    Env1 = analyze(Index, Env),
+    Env1.
 
 analyze_binop({Meta, Lhs, _Op, Rhs}, Env) ->
     process(Meta),
-    analyze(Lhs, Env),
-    analyze(Rhs, Env).
+    Env1 = analyze(Lhs, Env),
+    Env2 = analyze(Rhs, Env1),
+    Env2.
 
 analyze_ident({Meta, _Name}, Env) ->
     process(Meta),
@@ -130,4 +155,5 @@ analyze_charconst({Meta, _Char}, Env) ->
 
 analyze_unop({Meta, _Op, Rhs}, Env) ->
     process(Meta),
-    analyze(Rhs, Env).
+    Env1 = analyze(Rhs, Env),
+    Env1.
