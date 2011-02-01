@@ -81,7 +81,7 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
     Defined = dict:is_key(Name, CurrentSymTab),
     Env1 = case Defined of
         true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
-        false -> add_key(Name, Meta, Env)
+        false -> add_key(Name, Node, Env)
     end,
     Env1.
 
@@ -94,24 +94,26 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env) ->
         false -> Env
     end,
     Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
-        true -> add_key(Name, Meta, Env1);
+        true -> add_key(Name, Node, Env1);
         false -> throw({analyzer_exception, {get_line(Node), 'invalid size'}})
     end,
     Env2.
 
-analyze_fundec({Meta, _Type, _Name, Formals}, Env) ->
+analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
-    Env1 = push_symtab(dict:new(), Env),
-    _Env2 = analyze(Formals, Env1),
-    Env. % Updates to the environment are local to the function!
+    Env1 = add_key(Name, Node, Env0), % xxx does not check exists yet
+    Env2 = push_symtab(dict:new(), Env1),
+    _Env3 = analyze(Formals, Env2),
+    Env1. % Updates to the environment are local to the function!
 
-analyze_fundef({Meta, _Type, _Name, Formals, Locals, Stmts}, Env) ->
+analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     process(Meta),
-    Env1 = push_symtab(dict:new(), Env),
-    Env2 = analyze(Formals, Env1),
-    Env3 = analyze(Locals, Env2),
-    _Env4 = analyze(Stmts, Env3),
-    Env. % Updates to the environment are local to the function!
+    Env1 = add_key(Name, Node, Env0), % xxx does not check exists yet
+    Env2 = push_symtab(dict:new(), Env1),
+    Env3 = analyze(Formals, Env2),
+    Env4 = analyze(Locals, Env3),
+    _Env5 = analyze(Stmts, Env4),
+    Env1. % Updates to the environment are local to the function!
 
 analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
     process(Meta),
@@ -135,10 +137,41 @@ analyze_return({Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     Env1.
 
-analyze_funcall({Meta, _Name, Actuals}, Env) ->
+analyze_funcall(Node = {Meta, _Name, Actuals}, Env0) ->
+    Env1 = analyze(Actuals, Env0),
+    proper_funcall(Node, Env1),
     process(Meta),
-    Env1 = analyze(Actuals, Env),
     Env1.
+
+proper_funcall(Node = {_, Name, Actuals}, Env0) ->
+    print_symtabs(Env0),
+    FunInfo = lookup_fundef(Name, Node, Env0),
+    Env0.
+
+print_symtabs({[S]}) ->
+    io:format('Global: ~p~n', [dict:to_list(S)]);
+print_symtabs({[S|Ss]}) ->
+    io:format('Local: ~p~n', [dict:to_list(S)]),
+    print_symtabs({Ss}).
+
+lookup_fundef(Name, Node, Env) ->
+    Info = lookup(Name, Node, Env),
+    case get_tag(Info) of
+        fundec -> Info;
+        fundef -> Info;
+        _Other ->
+            throw({analyzer_exception, {get_line(Node), 'function not found'}})
+    end.
+
+lookup(_Name, Node, {[]}) ->
+    throw({analyzer_exception, {get_line(Node), 'identifier not found'}});
+lookup(Name, Node, {[SymTab|SymTabs]}) ->
+    case dict:find(Name, SymTab) of
+        {ok, Val} ->
+            Val;
+        error ->
+            lookup(Name, Node, {SymTabs})
+    end.
 
 analyze_arrelem({Meta, _Name, Index}, Env) ->
     process(Meta),

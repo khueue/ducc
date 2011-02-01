@@ -6,8 +6,8 @@ void foo(int a);
 
 void d(int e[], int f, int eeu[], int oof)
 {
-    int oof;
-    a();
+    int oeof;
+    c();
     c(1);
     d(1, 2);
     b(1, 2, b = c);
