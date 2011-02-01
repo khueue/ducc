@@ -142,16 +142,12 @@ analyze_return({Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     Env1.
 
-analyze_funcall(Node = {Meta, _Name, Actuals}, Env0) ->
+analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
-    proper_funcall(Node, Env1),
+    function_must_exist(Name, Node, Env1),
+    print_symtabs(Env1), % temporary
     process(Meta),
     Env1.
-
-proper_funcall(Node = {_, Name, Actuals}, Env0) ->
-    print_symtabs(Env0),
-    function_must_exist(Name, Node, Env0),
-    Env0.
 
 print_symtabs({[S]}) ->
     io:format('Global: ~p~n', [dict:to_list(S)]);
