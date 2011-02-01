@@ -65,7 +65,7 @@ peek_symtab({[SymTab|SymTabs]}) ->
 process(X) ->
     io:format('~p~n', [X]).
 
-add_key(Key, Value, {SymTabs}) ->
+add_symbol(Key, Value, {SymTabs}) ->
     {CurrentSymTab, Rest} = peek_symtab({SymTabs}),
     CurrentSymTab1 = dict:store(Key, Value, CurrentSymTab),
     {[CurrentSymTab1|Rest]}.
@@ -81,7 +81,7 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
     Defined = dict:is_key(Name, CurrentSymTab),
     Env1 = case Defined of
         true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
-        false -> add_key(Name, Node, Env)
+        false -> add_symbol(Name, Node, Env)
     end,
     Env1.
 
@@ -101,12 +101,8 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
 
 analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
-    {CurrentSymTab, _Rest} = peek_symtab(Env0),
-    Defined = dict:is_key(Name, CurrentSymTab),
-    Env1 = case Defined of
-        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
-        false -> add_key(Name, Node, Env0)
-    end,
+    function_must_not_exist(Name, Node, Env0),
+    Env1 = add_symbol(Name, Node, Env0),
     Env2 = push_symtab(dict:new(), Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
@@ -166,16 +162,12 @@ analyze_return({Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     Env1.
 
-analyze_funcall(Node = {Meta, _Name, Actuals}, Env0) ->
+analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
-    proper_funcall(Node, Env1),
+    function_must_exist(Name, Node, Env1),
+    print_symtabs(Env1), % temporary
     process(Meta),
     Env1.
-
-proper_funcall(Node = {_, Name, Actuals}, Env0) ->
-    print_symtabs(Env0),
-    FunInfo = function_must_exist(Name, Node, Env0),
-    Env0.
 
 print_symtabs({[S]}) ->
     io:format('Global: ~p~n', [dict:to_list(S)]);
@@ -186,7 +178,7 @@ print_symtabs({[S|Ss]}) ->
 function_must_exist(Name, Node, Env) ->
     Exception = {analyzer_exception, {get_line(Node), 'function not found'}},
     case lookup(Name, Node, Env) of
-        {error, not_found} ->
+        not_found ->
             throw(Exception);
         SymbolInfo ->
             case get_tag(SymbolInfo) of
@@ -196,14 +188,21 @@ function_must_exist(Name, Node, Env) ->
             end
     end.
 
+function_must_not_exist(Name, Node, Env) ->
+    Exception = {analyzer_exception, {get_line(Node), 'function already defined'}},
+    case (catch function_must_exist(Name, Node, Env)) of
+        {analyzer_exception, _} ->
+            ok;
+        _SymbolInfo ->
+            throw(Exception)
+    end.
+
 lookup(_Name, _Node, {[]}) ->
-    {error, not_found};
+    not_found;
 lookup(Name, Node, {[SymTab|SymTabs]}) ->
     case dict:find(Name, SymTab) of
-        {ok, Val} ->
-            Val;
-        error ->
-            lookup(Name, Node, {SymTabs})
+        {ok, Val} -> Val;
+        error     -> lookup(Name, Node, {SymTabs})
     end.
 
 analyze_arrelem({Meta, _Name, Index}, Env) ->
