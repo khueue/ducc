@@ -151,6 +151,7 @@ identical_types([F1|Formals1], [F2|Formals2]) ->
     same_tag_and_type(F1, F2) andalso
     identical_types(Formals1, Formals2).
 
+% xxx pure (un)luck that this works with both scalar and formal_array
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
 same_tag_and_type(_, _) -> false.
 
