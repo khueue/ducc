@@ -34,7 +34,7 @@ compile:
 	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
-gen_tests:
+gen_tests: all
 	src/gen_lexer_tests.rb suite/**/*.c
 	src/gen_parser_tests.rb suite/**/*.c
 
