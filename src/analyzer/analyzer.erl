@@ -85,9 +85,19 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
     end,
     Env1.
 
-analyze_arraydec({Meta, _Type, _Name, _Size}, Env) ->
+analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env) ->
     process(Meta),
-    Env.
+    {CurrentSymTab, _Rest} = peek_symtab(Env),
+    Defined = dict:is_key(Name, CurrentSymTab),
+    Env1 = case Defined of
+        true -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        false -> Env
+    end,
+    Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
+        true -> add_key(Name, Meta, Env1);
+        false -> throw({analyzer_exception, {get_line(Node), 'invalid size'}})
+    end,
+    Env2.
 
 analyze_fundec({Meta, _Type, _Name, Formals}, Env) ->
     process(Meta),
