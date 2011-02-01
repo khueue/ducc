@@ -99,11 +99,17 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env) ->
     end,
     Env2.
 
-analyze_fundec({Meta, _Type, _Name, Formals}, Env) ->
+analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env) ->
     process(Meta),
-    Env1 = push_symtab(dict:new(), Env),
-    _Env2 = analyze(Formals, Env1),
-    Env. % Updates to the environment are local to the function!
+    {CurrentSymTab, _Rest} = peek_symtab(Env),
+    Defined = dict:is_key(Name, CurrentSymTab),
+    Env1 = case Defined of
+        true -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        false -> add_key(Name, Meta, Env)
+    end,
+    Env2 = push_symtab(dict:new(), Env),
+    _Env3 = analyze(Formals, Env2),
+    Env1. % Updates to the environment are local to the function!
 
 analyze_fundef({Meta, _Type, _Name, Formals, Locals, Stmts}, Env) ->
     process(Meta),
