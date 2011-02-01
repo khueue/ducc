@@ -101,7 +101,12 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env) ->
 
 analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
-    Env1 = add_key(Name, Node, Env0), % xxx does not check exists yet
+    {CurrentSymTab, _Rest} = peek_symtab(Env0),
+    Defined = dict:is_key(Name, CurrentSymTab),
+    Env1 = case Defined of
+        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        false -> add_key(Name, Node, Env0)
+    end,
     Env2 = push_symtab(dict:new(), Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
