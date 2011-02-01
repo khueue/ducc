@@ -150,7 +150,7 @@ analyze_funcall(Node = {Meta, _Name, Actuals}, Env0) ->
 
 proper_funcall(Node = {_, Name, Actuals}, Env0) ->
     print_symtabs(Env0),
-    FunInfo = function_must_exist(Name, Node, Env0),
+    function_must_exist(Name, Node, Env0),
     Env0.
 
 print_symtabs({[S]}) ->
@@ -176,10 +176,8 @@ lookup(_Name, _Node, {[]}) ->
     {error, not_found};
 lookup(Name, Node, {[SymTab|SymTabs]}) ->
     case dict:find(Name, SymTab) of
-        {ok, Val} ->
-            Val;
-        error ->
-            lookup(Name, Node, {SymTabs})
+        {ok, Val} -> Val;
+        error     -> lookup(Name, Node, {SymTabs})
     end.
 
 analyze_arrelem({Meta, _Name, Index}, Env) ->
