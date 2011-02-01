@@ -12,99 +12,122 @@ get_line(Node) ->
 get_meta(Node) ->
     erlang:element(1, Node).
 
-analyze([]) -> ok;
-analyze([X|Xs]) ->
-    analyze(X),
-    analyze(Xs);
-analyze(Node) when erlang:is_tuple(Node) ->
-    Tag = get_tag(Node),
-    analyze_node(Tag, Node);
-analyze(Unhandled) ->
-    io:format('Unhandled: ~p~n', [Unhandled]),
+analyze(ParseTree) ->
+    SymTab = dict:new(),
+    Env = {SymTab},
+    {SymTab1} = analyze(ParseTree, Env),
+    List = dict:to_list(SymTab1),
+    io:format('~p~n', [List]),
     ok.
 
-analyze_node(program, Node)         -> analyze_program(Node);
-analyze_node(scalardec, Node)       -> analyze_scalardec(Node);
-analyze_node(arraydec, Node)        -> analyze_arraydec(Node);
-analyze_node(fundec, Node)          -> analyze_fundec(Node);
-analyze_node(fundef, Node)          -> analyze_fundef(Node);
-analyze_node(formal_arraydec, Node) -> analyze_formal_arraydec(Node);
-analyze_node('if', Node)            -> analyze_if(Node);
-analyze_node(while, Node)           -> analyze_while(Node);
-analyze_node(return, Node)          -> analyze_return(Node);
-analyze_node(funcall, Node)         -> analyze_funcall(Node);
-analyze_node(arrelem, Node)         -> analyze_arrelem(Node);
-analyze_node(binop, Node)           -> analyze_binop(Node);
-analyze_node(ident, Node)           -> analyze_ident(Node);
-analyze_node(intconst, Node)        -> analyze_intconst(Node);
-analyze_node(charconst, Node)       -> analyze_charconst(Node);
-analyze_node(unop, Node)            -> analyze_unop(Node);
-analyze_node(Tag, _) ->
-    io:format('Unhandled tag: ~p~n', [Tag]).
+analyze([], Env) ->
+    Env;
+analyze([X|Xs], Env) ->
+    Env1 = analyze(X, Env),
+    Env2 = analyze(Xs, Env1),
+    Env2;
+analyze(Node, Env) when erlang:is_tuple(Node) ->
+    Tag = get_tag(Node),
+    Env1 = analyze_node(Tag, Node, Env),
+    Env1;
+analyze(Unhandled, Env) ->
+    io:format('Unhandled: ~p~n', [Unhandled]),
+    Env.
+
+analyze_node(program, Node, Env)         -> analyze_program(Node, Env);
+analyze_node(scalardec, Node, Env)       -> analyze_scalardec(Node, Env);
+analyze_node(arraydec, Node, Env)        -> analyze_arraydec(Node, Env);
+analyze_node(fundec, Node, Env)          -> analyze_fundec(Node, Env);
+analyze_node(fundef, Node, Env)          -> analyze_fundef(Node, Env);
+analyze_node(formal_arraydec, Node, Env) -> analyze_formal_arraydec(Node, Env);
+analyze_node('if', Node, Env)            -> analyze_if(Node, Env);
+analyze_node(while, Node, Env)           -> analyze_while(Node, Env);
+analyze_node(return, Node, Env)          -> analyze_return(Node, Env);
+analyze_node(funcall, Node, Env)         -> analyze_funcall(Node, Env);
+analyze_node(arrelem, Node, Env)         -> analyze_arrelem(Node, Env);
+analyze_node(binop, Node, Env)           -> analyze_binop(Node, Env);
+analyze_node(ident, Node, Env)           -> analyze_ident(Node, Env);
+analyze_node(intconst, Node, Env)        -> analyze_intconst(Node, Env);
+analyze_node(charconst, Node, Env)       -> analyze_charconst(Node, Env);
+analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env);
+analyze_node(Tag, _, Env) ->
+    io:format('Unhandled tag: ~p~n', [Tag]),
+    Env.
 
 process(X) ->
     io:format('~p~n', [X]).
 
-analyze_program({Meta, _File, Topdecs}) ->
+analyze_program(Node = {Meta, _File, Topdecs}, Env) ->
     process(Meta),
-    analyze(Topdecs).
+    _Env1 = analyze(Topdecs, Env).
 
-analyze_scalardec({Meta, _Type, _Name}) ->
-    process(Meta).
-
-analyze_arraydec({Meta, _Type, _Name, _Size}) ->
-    process(Meta).
-
-analyze_fundec({Meta, _Type, _Name, Formals}) ->
+analyze_scalardec({Meta, _Type, Name}, Env) ->
     process(Meta),
-    analyze(Formals).
+    Env1 = store_key(Name, Meta, Env),
+    Env1.
 
-analyze_fundef({Meta, _Type, _Name, Formals, Locals, Stmts}) ->
+store_key(Key, Value, {SymTab}) ->
+    SymTab1 = dict:store(Key, Value, SymTab),
+    {SymTab1}.
+
+analyze_arraydec({Meta, _Type, _Name, _Size}, Env) ->
     process(Meta),
-    analyze(Formals),
-    analyze(Locals),
-    analyze(Stmts).
+    Env.
 
-analyze_formal_arraydec({Meta, _Type, _Name}) ->
-    process(Meta).
-
-analyze_if({Meta, Cond, Then, Else}) ->
+analyze_fundec({Meta, _Type, _Name, Formals}, Env) ->
     process(Meta),
-    analyze(Cond),
-    analyze(Then),
-    analyze(Else).
+    analyze(Formals, Env).
 
-analyze_while({Meta, Cond, Stmt}) ->
+analyze_fundef({Meta, _Type, _Name, Formals, Locals, Stmts}, Env) ->
     process(Meta),
-    analyze(Cond),
-    analyze(Stmt).
+    analyze(Formals, Env),
+    analyze(Locals, Env),
+    analyze(Stmts, Env).
 
-analyze_return({Meta, Expr}) ->
+analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
     process(Meta),
-    analyze(Expr).
+    Env.
 
-analyze_funcall({Meta, _Name, Actuals}) ->
+analyze_if({Meta, Cond, Then, Else}, Env) ->
     process(Meta),
-    analyze(Actuals).
+    analyze(Cond, Env),
+    analyze(Then, Env),
+    analyze(Else, Env).
 
-analyze_arrelem({Meta, _Name, Index}) ->
+analyze_while({Meta, Cond, Stmt}, Env) ->
     process(Meta),
-    analyze(Index).
+    analyze(Cond, Env),
+    analyze(Stmt, Env).
 
-analyze_binop({Meta, Lhs, _Op, Rhs}) ->
+analyze_return({Meta, Expr}, Env) ->
     process(Meta),
-    analyze(Lhs),
-    analyze(Rhs).
+    analyze(Expr, Env).
 
-analyze_ident({Meta, _Name}) ->
-    process(Meta).
-
-analyze_intconst({Meta, _Value}) ->
-    process(Meta).
-
-analyze_charconst({Meta, _Char}) ->
-    process(Meta).
-
-analyze_unop({Meta, _Op, Rhs}) ->
+analyze_funcall({Meta, _Name, Actuals}, Env) ->
     process(Meta),
-    analyze(Rhs).
+    analyze(Actuals, Env).
+
+analyze_arrelem({Meta, _Name, Index}, Env) ->
+    process(Meta),
+    analyze(Index, Env).
+
+analyze_binop({Meta, Lhs, _Op, Rhs}, Env) ->
+    process(Meta),
+    analyze(Lhs, Env),
+    analyze(Rhs, Env).
+
+analyze_ident({Meta, _Name}, Env) ->
+    process(Meta),
+    Env.
+
+analyze_intconst({Meta, _Value}, Env) ->
+    process(Meta),
+    Env.
+
+analyze_charconst({Meta, _Char}, Env) ->
+    process(Meta),
+    Env.
+
+analyze_unop({Meta, _Op, Rhs}, Env) ->
+    process(Meta),
+    analyze(Rhs, Env).

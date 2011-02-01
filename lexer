@@ -15,7 +15,7 @@ main([]) ->
         {lexer_exception, Message} ->
             tool_chain:die(Message);
         UnknownError ->
-            tool_chain:die(UnknownError)
+            tool_chain:die('~p~n', [UnknownError])
     end;
 main(_) ->
     usage().

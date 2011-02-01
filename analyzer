@@ -17,7 +17,7 @@ main([]) ->
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->
-            tool_chain:die(UnknownError)
+            tool_chain:die('~p~n', [UnknownError])
     end;
 main(_) ->
     usage().
