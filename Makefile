@@ -34,6 +34,10 @@ compile:
 	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
+gen_tests:
+	src/gen_lexer_tests.rb suite/**/*.c
+	src/gen_parser_tests.rb suite/**/*.c
+
 tests: all
 	@- echo '--- Running tests ...'
 	lexer_test
