@@ -166,15 +166,11 @@ function_must_exist(Name, Node, Env) ->
 
 function_must_not_exist(Name, Node, Env) ->
     Exception = {analyzer_exception, {get_line(Node), 'function already defined'}},
-    case lookup(Name, Node, Env) of
-        not_found ->
+    case (catch function_must_exist(Name, Node, Env)) of
+        {analyzer_exception, _} ->
             ok;
-        SymbolInfo ->
-            case get_tag(SymbolInfo) of
-                fundec -> throw(Exception);
-                fundef -> throw(Exception);
-                _Other -> ok
-            end
+        _SymbolInfo ->
+            throw(Exception)
     end.
 
 lookup(_Name, _Node, {[]}) ->
