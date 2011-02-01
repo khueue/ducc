@@ -85,16 +85,16 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
     end,
     Env1.
 
-analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env) ->
+analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
     process(Meta),
-    {CurrentSymTab, _Rest} = peek_symtab(Env),
+    {CurrentSymTab, _Rest} = peek_symtab(Env0),
     Defined = dict:is_key(Name, CurrentSymTab),
     Env1 = case Defined of
-        true -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
-        false -> Env
+        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        false -> Env0
     end,
     Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
-        true -> add_key(Name, Node, Env1);
+        true  -> add_key(Name, Node, Env1);
         false -> throw({analyzer_exception, {get_line(Node), 'invalid size'}})
     end,
     Env2.
@@ -113,12 +113,36 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
 
 analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     process(Meta),
-    Env1 = add_key(Name, Node, Env0), % xxx does not check exists yet
+    Redefinition = {analyzer_exception, {get_line(Node), 'already defined'}},
+    Conflicts    = {analyzer_exception, {get_line(Node), 'conflicting types'}},
+    
+    {CurrentSymTab, _Rest} = peek_symtab(Env0),
+    Env1 = case dict:find(Name, CurrentSymTab) of
+        {ok, Val} ->
+            case get_tag(Val) of
+                fundec ->
+                    case check_formals(Formals, Val) of
+                        true ->
+                            add_key(Name, Node, Env0);
+                        false ->
+                            throw(Conflicts)
+                    end;
+                _Other ->
+                    throw(Redefinition)
+            end;
+        error ->
+            add_key(Name, Node, Env0)
+    end,
+
     Env2 = push_symtab(dict:new(), Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
     _Env5 = analyze(Stmts, Env4),
     Env1. % Updates to the environment are local to the function!
+
+check_formals(FundefFormals, Fundec) ->
+    FundecFormals = element(4, Fundec),
+    FundefFormals =:= FundecFormals.
 
 analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
     process(Meta),
