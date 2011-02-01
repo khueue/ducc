@@ -15,9 +15,11 @@ get_meta(Node) ->
 analyze(ParseTree) ->
     SymTab = dict:new(),
     Env = {[SymTab]},
-    {_SymTabs1} = analyze(ParseTree, Env),
-    %List = dict:to_list(SymTab1),
-    %io:format('~p~n', [List]),
+    try analyze(ParseTree, Env)
+    catch
+        Details = {_Line, _Message} ->
+            throw({analyzer_exception, Details})
+    end,
     ok.
 
 analyze([], Env) ->
@@ -80,7 +82,7 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
     {CurrentSymTab, _Others} = peek_symtab(Env),
     Defined = dict:is_key(Name, CurrentSymTab),
     Env1 = case Defined of
-        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        true  -> throw({get_line(Node), 'already defined'});
         false -> add_symbol(Name, Node, Env)
     end,
     Env1.
@@ -90,12 +92,12 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
     {CurrentSymTab, _Rest} = peek_symtab(Env0),
     Defined = dict:is_key(Name, CurrentSymTab),
     Env1 = case Defined of
-        true  -> throw({analyzer_exception, {get_line(Node), 'already defined'}});
+        true  -> throw({get_line(Node), 'already defined'});
         false -> Env0
     end,
     Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
         true  -> add_symbol(Name, Node, Env1);
-        false -> throw({analyzer_exception, {get_line(Node), 'invalid size'}})
+        false -> throw({get_line(Node), 'invalid size'})
     end,
     Env2.
 
@@ -109,8 +111,8 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
 
 analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     process(Meta),
-    Redefinition = {analyzer_exception, {get_line(Node), 'already defined'}},
-    Conflicts    = {analyzer_exception, {get_line(Node), 'conflicting types'}},
+    Redefinition = {get_line(Node), 'already defined'},
+    Conflicts    = {get_line(Node), 'conflicting types'},
 
     Env1 = case lookup(Name, Node, Env0) of
         not_found ->
@@ -137,7 +139,20 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
 
 check_formals(FundefFormals, Fundec) ->
     FundecFormals = element(4, Fundec),
-    FundefFormals =:= FundecFormals.
+    %io:format('~p~n', [FundecFormals]),
+    %io:format('~p~n', [FundefFormals]),
+    %FundefFormals =:= FundecFormals. % xxx what if meta or var names differ?
+    identical_types(FundefFormals, FundecFormals).
+
+% xxx cannot handle different arity (make another check for that)
+% can probably be rewritten using a list comprehension or such
+identical_types([], []) -> true;
+identical_types([F1|Formals1], [F2|Formals2]) ->
+    same_tag_and_type(F1, F2) andalso
+    identical_types(Formals1, Formals2).
+
+same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
+same_tag_and_type(_, _) -> false.
 
 analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
     process(Meta),
@@ -175,25 +190,25 @@ print_symtabs({[S|Ss]}) ->
     print_symtabs({Ss}).
 
 function_must_exist(Name, Node, Env) ->
-    Exception = {analyzer_exception, {get_line(Node), 'function not found'}},
+    NotFound = {get_line(Node), 'function not found'},
     case lookup(Name, Node, Env) of
         not_found ->
-            throw(Exception);
+            throw(NotFound);
         SymbolInfo ->
             case get_tag(SymbolInfo) of
                 fundec -> ok;
                 fundef -> ok;
-                _Other -> throw(Exception)
+                _Other -> throw(NotFound)
             end
     end.
 
 function_must_not_exist(Name, Node, Env) ->
-    Exception = {analyzer_exception, {get_line(Node), 'function already defined'}},
-    case (catch function_must_exist(Name, Node, Env)) of
-        {analyzer_exception, _} ->
-            ok;
-        _SymbolInfo ->
-            throw(Exception)
+    AlreadyDefined = {get_line(Node), 'function already defined'},
+    try
+        function_must_exist(Name, Node, Env),
+        throw(AlreadyDefined)
+    catch
+        _ -> ok
     end.
 
 lookup(_Name, _Node, {[]}) ->
