@@ -94,7 +94,7 @@ analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
         false -> Env0
     end,
     Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
-        true  -> add_key(Name, Node, Env1);
+        true  -> add_symbol(Name, Node, Env1);
         false -> throw({analyzer_exception, {get_line(Node), 'invalid size'}})
     end,
     Env2.
@@ -111,23 +111,22 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     process(Meta),
     Redefinition = {analyzer_exception, {get_line(Node), 'already defined'}},
     Conflicts    = {analyzer_exception, {get_line(Node), 'conflicting types'}},
-    
-    {CurrentSymTab, _Rest} = peek_symtab(Env0),
-    Env1 = case dict:find(Name, CurrentSymTab) of
-        {ok, Val} ->
+
+    Env1 = case lookup(Name, Node, Env0) of
+        not_found ->
+            add_symbol(Name, Node, Env0);
+        Val ->
             case get_tag(Val) of
                 fundec ->
                     case check_formals(Formals, Val) of
                         true ->
-                            add_key(Name, Node, Env0);
+                            add_symbol(Name, Node, Env0);
                         false ->
                             throw(Conflicts)
                     end;
                 _Other ->
                     throw(Redefinition)
-            end;
-        error ->
-            add_key(Name, Node, Env0)
+            end
     end,
 
     Env2 = push_symtab(dict:new(), Env1),
