@@ -150,7 +150,7 @@ analyze_funcall(Node = {Meta, _Name, Actuals}, Env0) ->
 
 proper_funcall(Node = {_, Name, Actuals}, Env0) ->
     print_symtabs(Env0),
-    FunInfo = lookup_fundef(Name, Node, Env0),
+    FunInfo = function_must_exist(Name, Node, Env0),
     Env0.
 
 print_symtabs({[S]}) ->
@@ -159,17 +159,21 @@ print_symtabs({[S|Ss]}) ->
     io:format('Local: ~p~n', [dict:to_list(S)]),
     print_symtabs({Ss}).
 
-lookup_fundef(Name, Node, Env) ->
-    Info = lookup(Name, Node, Env),
-    case get_tag(Info) of
-        fundec -> Info;
-        fundef -> Info;
-        _Other ->
-            throw({analyzer_exception, {get_line(Node), 'function not found'}})
+function_must_exist(Name, Node, Env) ->
+    Exception = {analyzer_exception, {get_line(Node), 'function not found'}},
+    case lookup(Name, Node, Env) of
+        {error, not_found} ->
+            throw(Exception);
+        SymbolInfo ->
+            case get_tag(SymbolInfo) of
+                fundec -> ok;
+                fundef -> ok;
+                _Other -> throw(Exception)
+            end
     end.
 
-lookup(_Name, Node, {[]}) ->
-    throw({analyzer_exception, {get_line(Node), 'identifier not found'}});
+lookup(_Name, _Node, {[]}) ->
+    {error, not_found};
 lookup(Name, Node, {[SymTab|SymTabs]}) ->
     case dict:find(Name, SymTab) of
         {ok, Val} ->

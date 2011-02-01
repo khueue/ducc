@@ -10,7 +10,7 @@ void d(int e[], int f, int eeu[], int oof)
     c();
     c(1);
     d(1, 2);
-    b(1, 2, b = c);
+    //b(1, 2, b = c);
     ;
     while (2 != 3 /* condition */)
     {
