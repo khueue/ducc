@@ -228,22 +228,22 @@ must_be_tag(Name, Node, Env, Tags) ->
             end
     end.
 
-analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env) ->
+analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
     process(Meta),
+    Env1 = analyze(Lhs, Env0),
+    Env2 = analyze(Rhs, Env1),
     Types = ['&&', '||', '!',
              '<', '>', '<=', '>=', '==', '!=',
              '/', '*', '+', '-'],
     case lists:member(Op, Types) of
         true ->
-            case eval_type(Node, Env) of
+            case eval_type(Node, Env2) of
                 Type ->
                     io:format('eval_type: ~p~n', [Type]),
                     ok
             end;
         _Other -> ok
     end,
-    Env1 = analyze(Lhs, Env),
-    Env2 = analyze(Rhs, Env1),
     Env2.
 
 analyze_ident(Node = {Meta, Name}, Env) ->
@@ -290,6 +290,7 @@ eval_type(Node = {{_, funcall}, Name, _Actuals}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
     get_type(SymbolInfo).
 
+biggest_type(int, int)   -> int;
 biggest_type(int, char)  -> int;
 biggest_type(char, int)  -> int;
 biggest_type(char, char) -> char;
