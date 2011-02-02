@@ -16,8 +16,7 @@ get_meta(Node) ->
     erlang:element(1, Node).
 
 analyze(ParseTree) ->
-    SymTab = dict:new(),
-    Env = {[SymTab]},
+    Env = analyzer_env:new(),
     try analyze(ParseTree, Env)
     catch
         Details = {_Line, _Message} ->
@@ -58,26 +57,8 @@ analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env);
 analyze_node(Tag, _, Env) ->
     io:format('Unhandled tag: ~p~n', [Tag]),
     Env.
-
-push_symtab(SymTabNew, {SymTabs}) ->
-    {[SymTabNew|SymTabs]}.
-
-peek_symtab({[]}) ->
-    throw(oooooooooooooooooooj);
-peek_symtab({[SymTab|SymTabs]}) ->
-    {SymTab, SymTabs}.
-
-enter_scope(Env) ->
-    NewScope = dict:new(),
-    push_symtab(NewScope, Env).
-
 process(X) ->
     io:format('~p~n', [X]).
-
-add_symbol(Key, Value, {SymTabs}) ->
-    {CurrentSymTab, Rest} = peek_symtab({SymTabs}),
-    CurrentSymTab1 = dict:store(Key, Value, CurrentSymTab),
-    {[CurrentSymTab1|Rest]}.
 
 analyze_program({Meta, _File, Topdecs}, Env) ->
     process(Meta),
@@ -87,7 +68,7 @@ analyze_program({Meta, _File, Topdecs}, Env) ->
 analyze_scalardec(Node = {Meta, _Type, Name}, Env0) ->
     process(Meta),
     must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
 must_not_exist_in_same_scope(Name, Node, Env) ->
@@ -101,14 +82,14 @@ must_not_exist_in_same_scope(Name, Node, Env) ->
 analyze_arraydec(Node = {Meta, _Type, Name, _Size}, Env0) ->
     process(Meta),
     must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
 analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
     function_must_not_exist(Name, Node, Env0),
-    Env1 = add_symbol(Name, Node, Env0),
-    Env2 = enter_scope(Env1),
+    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    Env2 = analyzer_env:enter_scope(Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
@@ -119,13 +100,13 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
 
     Env1 = case lookup(Name, Node, Env0) of
         not_found ->
-            add_symbol(Name, Node, Env0);
+            analyzer_env:add_symbol(Name, Node, Env0);
         Val ->
             case get_tag(Val) of
                 fundec ->
                     case check_formals(Node, Val) of
                         true ->
-                            add_symbol(Name, Node, Env0);
+                            analyzer_env:add_symbol(Name, Node, Env0);
                         false ->
                             throw(Conflicts)
                     end;
@@ -134,7 +115,7 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             end
     end,
 
-    Env2 = enter_scope(Env1),
+    Env2 = analyzer_env:enter_scope(Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
     _Env5 = analyze(Stmts, Env4),
@@ -170,7 +151,7 @@ same_tag_and_type(_, _) -> false.
 analyze_formal_arraydec(Node = {Meta, _Type, Name}, Env0) ->
     process(Meta),
     must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
 analyze_if({Meta, Cond, Then, Else}, Env) ->

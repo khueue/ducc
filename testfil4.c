@@ -26,7 +26,7 @@ int foo6(int a, int b);
 
 // ERROR: Different return type. 
 int  foo7(int a, int b);
-char foo7(int a, int b) {}
+//char foo7(int a, int b) {}
 
 // Match. (XXX magically works in analyze_fundec, not properly handled)
 int foo8(int a) {}
