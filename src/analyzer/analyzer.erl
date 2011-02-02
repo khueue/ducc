@@ -153,8 +153,8 @@ check_formals(Node1, Node2) ->
     Node2Formals = element(4, Node2),
     io:format('~p~n', [Node1Formals]),
     io:format('~p~n', [Node2Formals]),
-    same_type(Node1, Node2) andalso
     same_arity(Node1Formals, Node2Formals) andalso
+    same_type(Node1, Node2) andalso
     identical_types(Node1Formals, Node2Formals).
 
 same_type(Node1, Node2) ->
