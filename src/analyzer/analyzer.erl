@@ -98,19 +98,11 @@ must_not_exist_in_same_scope(Name, Node, Env) ->
             throw({get_line(Node), 'already defined'})
     end.
 
-analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
+analyze_arraydec(Node = {Meta, _Type, Name, _Size}, Env0) ->
     process(Meta),
-    {CurrentSymTab, _Rest} = peek_symtab(Env0),
-    Defined = dict:is_key(Name, CurrentSymTab),
-    Env1 = case Defined of
-        true  -> throw({get_line(Node), 'already defined'});
-        false -> Env0
-    end,
-    Env2 = case erlang:is_integer(Size) andalso Size >= 0 of
-        true  -> add_symbol(Name, Node, Env1);
-        false -> throw({get_line(Node), 'invalid size'})
-    end,
-    Env2.
+    must_not_exist_in_same_scope(Name, Node, Env0),
+    Env1 = add_symbol(Name, Node, Env0),
+    Env1.
 
 analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
@@ -175,9 +167,11 @@ identical_types([F1|Formals1], [F2|Formals2]) ->
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
 same_tag_and_type(_, _) -> false.
 
-analyze_formal_arraydec({Meta, _Type, _Name}, Env) ->
+analyze_formal_arraydec(Node = {Meta, _Type, Name}, Env0) ->
     process(Meta),
-    Env.
+    must_not_exist_in_same_scope(Name, Node, Env0),
+    Env1 = add_symbol(Name, Node, Env0),
+    Env1.
 
 analyze_if({Meta, Cond, Then, Else}, Env) ->
     process(Meta),
