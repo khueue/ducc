@@ -24,7 +24,7 @@ int foo5(int a, int b);
 int foo6(int a, int b);
 //int foo6(int a, int b, int c) {}
 
-// ERROR: Different return type. (XXX Currently unhandled.)
+// ERROR: Different return type. 
 int  foo7(int a, int b);
 char foo7(int a, int b) {}
 
