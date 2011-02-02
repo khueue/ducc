@@ -64,6 +64,10 @@ peek_symtab({[]}) ->
 peek_symtab({[SymTab|SymTabs]}) ->
     {SymTab, SymTabs}.
 
+enter_scope(Env) ->
+    NewScope = dict:new(),
+    push_symtab(NewScope, Env).
+
 process(X) ->
     io:format('~p~n', [X]).
 
@@ -105,7 +109,7 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
     function_must_not_exist(Name, Node, Env0),
     Env1 = add_symbol(Name, Node, Env0),
-    Env2 = push_symtab(dict:new(), Env1),
+    Env2 = enter_scope(Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
@@ -131,7 +135,7 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             end
     end,
 
-    Env2 = push_symtab(dict:new(), Env1),
+    Env2 = enter_scope(Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
     _Env5 = analyze(Stmts, Env4),
