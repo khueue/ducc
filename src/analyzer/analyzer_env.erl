@@ -1,5 +1,5 @@
 -module(analyzer_env).
--export([new/0, enter_scope/1, add_symbol/3]).
+-export([new/0, enter_scope/1, add_symbol/3, print_symtabs/1]).
 
 new() ->
     Env = {[]},
@@ -21,3 +21,9 @@ stack_peek([]) ->
     throw(peek_empty_stack);
 stack_peek([Top|Stack]) ->
     {Top, Stack}.
+
+print_symtabs({[S]}) ->
+    io:format('Global: ~p~n', [dict:to_list(S)]);
+print_symtabs({[S|Ss]}) ->
+    io:format('Local: ~p~n', [dict:to_list(S)]),
+    print_symtabs({Ss}).

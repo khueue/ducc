@@ -202,15 +202,9 @@ analyze_return({Meta, Expr}, Env) ->
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
     function_must_exist(Name, Node, Env1),
-    print_symtabs(Env1), % temporary
+    analyzer_env:print_symtabs(Env1), % temporary
     process(Meta),
     Env1.
-
-print_symtabs({[S]}) ->
-    io:format('Global: ~p~n', [dict:to_list(S)]);
-print_symtabs({[S|Ss]}) ->
-    io:format('Local: ~p~n', [dict:to_list(S)]),
-    print_symtabs({Ss}).
 
 function_must_exist(Name, Node, Env) ->
     NotFound = {get_line(Node), 'function not found'},
