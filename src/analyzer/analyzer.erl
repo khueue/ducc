@@ -116,7 +116,7 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     end,
 
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
-    Env2 = analyzer_env:enter_scope(Env1),
+    Env2 = analyzer_env:enter_scope(Name, Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
@@ -142,7 +142,7 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             end
     end,
 
-    Env2 = analyzer_env:enter_scope(Env1),
+    Env2 = analyzer_env:enter_scope(Name, Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
     _Env5 = analyze(Stmts, Env4),
@@ -200,10 +200,10 @@ analyze_return({Meta, Expr}, Env) ->
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
+    process(Meta),
     Env1 = analyze(Actuals, Env0),
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
     analyzer_env:print_symtabs(Env1), % temporary
-    process(Meta),
     Env1.
 
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
