@@ -279,9 +279,18 @@ analyze_binop({Meta, Lhs, _Op, Rhs}, Env) ->
     Env2 = analyze(Rhs, Env1),
     Env2.
 
-analyze_ident({Meta, _Name}, Env) ->
+analyze_ident(Node = {Meta, Name}, Env) ->
     process(Meta),
+    must_be_defined(Name, Node, Env),
     Env.
+
+must_be_defined(Name, Node, Env) ->
+    case lookup(Name, Node, Env) of
+        not_found ->
+            throw({get_line(Node), 'not defined'});
+        _SymbolInfo ->
+            ok
+    end.
 
 analyze_intconst({Meta, _Value}, Env) ->
     process(Meta),
