@@ -201,23 +201,10 @@ analyze_return({Meta, Expr}, Env) ->
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
-    function_must_exist(Name, Node, Env1),
+    must_be_tag(Name, Node, Env1, [fundec,fundef]),
     analyzer_env:print_symtabs(Env1), % temporary
     process(Meta),
     Env1.
-
-function_must_exist(Name, Node, Env) ->
-    NotFound = {get_line(Node), 'function not found'},
-    case analyzer_env:lookup(Name, Node, Env) of
-        not_found ->
-            throw(NotFound);
-        SymbolInfo ->
-            case get_tag(SymbolInfo) of
-                fundec -> ok;
-                fundef -> ok;
-                _Other -> throw(NotFound)
-            end
-    end.
 
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
