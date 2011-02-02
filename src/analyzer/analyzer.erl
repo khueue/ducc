@@ -236,10 +236,23 @@ lookup(Name, Node, {[SymTab|SymTabs]}) ->
 lookup_first_scope(Name, Node, {[SymTab|_SymTabs]}) ->
     lookup(Name, Node, {[SymTab]}).
 
-analyze_arrelem({Meta, _Name, Index}, Env) ->
+analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
+    must_be_array(Name, Node, Env),
     Env1 = analyze(Index, Env),
     Env1.
+
+must_be_array(Name, Node, Env) ->
+    case lookup(Name, Node, Env) of
+        not_found ->
+            throw({get_line(Node), 'not defined'});
+        Val ->
+            case get_type(Val) of
+                arrelem -> ok;
+                formal_arraydec -> ok;
+                _Other -> throw({get_line(Node), 'not array'})
+            end
+    end.
 
 analyze_binop({Meta, Lhs, _Op, Rhs}, Env) ->
     process(Meta),
