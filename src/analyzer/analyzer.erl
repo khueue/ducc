@@ -214,6 +214,7 @@ analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
     must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
+    % xxx convertible_to_int(Index, Env)
     Env1.
 
 must_be_tag(Name, Node, Env, Tags) ->
@@ -228,6 +229,13 @@ must_be_tag(Name, Node, Env, Tags) ->
             end
     end.
 
+% just for fun right now xxx
+analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
+    process(Meta),
+    Env1 = analyze(Lhs, Env0),
+    Env2 = analyze(Rhs, Env1),
+    must_be_lval(Lhs), % actually caught as syntax error
+    Env2;
 analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
@@ -245,6 +253,11 @@ analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
         _Other -> ok
     end,
     Env2.
+
+must_be_lval({{_,ident},_Name}) -> ok;
+must_be_lval({{_,arrelem},_Name,_Index}) -> ok;
+must_be_lval(Node) ->
+    throw({get_line(Node), 'not an l-value'}).
 
 analyze_ident(Node = {Meta, Name}, Env) ->
     process(Meta),
@@ -295,3 +308,17 @@ biggest_type(int, char)  -> int;
 biggest_type(char, int)  -> int;
 biggest_type(char, char) -> char;
 biggest_type(_, _)       -> throw(incompatible).
+
+% crap:
+%% [scalardec], [char,int]
+%convertible_to_int(Node = {{_,ident},Name,Type}, Env) ->
+%    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+%    lists:member(get_tag(SymbolInfo), [scalardec]),%%
+%    lists:member(get_type(SymbolInfo), [char,int]);%%
+%convertible_to_int(Node = {{_,arrelem},Name,Index}, Env) ->
+%    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+%    lists:member(get_tag(SymbolInfo), Tags),
+%    lists:member(get_type(SymbolInfo), Types);
+
+% convertible_to_int: intconst, charconst, arrelem(int), arrelem(char),
+% scalardec(int)
