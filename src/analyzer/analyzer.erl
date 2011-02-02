@@ -72,7 +72,7 @@ analyze_scalardec(Node = {Meta, _Type, Name}, Env0) ->
     Env1.
 
 must_not_exist_in_same_scope(Name, Node, Env) ->
-    case lookup_first_scope(Name, Node, Env) of
+    case analyzer_env:lookup_first_scope(Name, Node, Env) of
         not_found ->
             ok;
         _SymbolInfo ->
@@ -91,7 +91,7 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     Redefinition = {get_line(Node), 'already defined'},
     Conflicts = {get_line(Node), 'conflicting types'},
 
-    case lookup(Name, Node, Env0) of
+    case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             ok;
         Val ->
@@ -125,7 +125,7 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Redefinition = {get_line(Node), 'already defined'},
     Conflicts    = {get_line(Node), 'conflicting types'},
 
-    Env1 = case lookup(Name, Node, Env0) of
+    Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             analyzer_env:add_symbol(Name, Node, Env0);
         Val ->
@@ -202,19 +202,13 @@ analyze_return({Meta, Expr}, Env) ->
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
     function_must_exist(Name, Node, Env1),
-    print_symtabs(Env1), % temporary
+    analyzer_env:print_symtabs(Env1), % temporary
     process(Meta),
     Env1.
 
-print_symtabs({[S]}) ->
-    io:format('Global: ~p~n', [dict:to_list(S)]);
-print_symtabs({[S|Ss]}) ->
-    io:format('Local: ~p~n', [dict:to_list(S)]),
-    print_symtabs({Ss}).
-
 function_must_exist(Name, Node, Env) ->
     NotFound = {get_line(Node), 'function not found'},
-    case lookup(Name, Node, Env) of
+    case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw(NotFound);
         SymbolInfo ->
@@ -225,17 +219,6 @@ function_must_exist(Name, Node, Env) ->
             end
     end.
 
-lookup(_Name, _Node, {[]}) ->
-    not_found;
-lookup(Name, Node, {[SymTab|SymTabs]}) ->
-    case dict:find(Name, SymTab) of
-        {ok, Val} -> Val;
-        error     -> lookup(Name, Node, {SymTabs})
-    end.
-
-lookup_first_scope(Name, Node, {[SymTab|_SymTabs]}) ->
-    lookup(Name, Node, {[SymTab]}).
-
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
     must_be_array(Name, Node, Env),
@@ -243,7 +226,7 @@ analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     Env1.
 
 must_be_array(Name, Node, Env) ->
-    case lookup(Name, Node, Env) of
+    case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw({get_line(Node), 'not defined'});
         Val ->
@@ -266,7 +249,7 @@ analyze_ident(Node = {Meta, Name}, Env) ->
     Env.
 
 must_be_defined(Name, Node, Env) ->
-    case lookup(Name, Node, Env) of
+    case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw({get_line(Node), 'not defined'});
         _SymbolInfo ->
