@@ -228,8 +228,20 @@ must_be_tag(Name, Node, Env, Tags) ->
             end
     end.
 
-analyze_binop({Meta, Lhs, _Op, Rhs}, Env) ->
+analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env) ->
     process(Meta),
+    Types = ['&&', '||', '!',
+             '<', '>', '<=', '>=', '==', '!=',
+             '/', '*', '+', '-'],
+    case lists:member(Op, Types) of
+        true ->
+            case eval_type(Node) of
+                Type ->
+                    io:format('eval_type: ~p~n', [Type]),
+                    ok
+            end;
+        _Other -> ok
+    end,
     Env1 = analyze(Lhs, Env),
     Env2 = analyze(Rhs, Env1),
     Env2.
@@ -260,9 +272,22 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
     Env1.
 
-%eval_type({{_,binop},Lhs,_Op,Rhs}) ->
-%    LhsType = eval_type(Lhs),
-%    RhsType = eval_type(Rhs),
-%    biggest_type(LhsType, RhsType);
-%eval_type({{_,unop},_Op,Rhs}) ->
-%    eval_type(Rhs).
+eval_type({{_, binop}, Lhs, _Op, Rhs}) ->
+    LhsType = eval_type(Lhs),
+    RhsType = eval_type(Rhs),
+    biggest_type(LhsType, RhsType);
+eval_type({{_, unop}, _Op, Rhs}) ->
+    eval_type(Rhs);
+eval_type({{_, ident}, _Value}) ->
+    intconst; % XXX
+eval_type({{_, intconst}, _Value}) ->
+    intconst;
+eval_type({{_, charconst}, _Value}) ->
+    intconst; % XXX
+eval_type({{_, arrelem}, _Value, _Index}) ->
+    intconst; % XXX
+eval_type({{_, funcall}, _Value, _Actuals}) ->
+    intconst. % XXX
+
+biggest_type(intconst, _Type2) -> intconst;
+biggest_type(_Type1, intconst) -> intconst.
