@@ -5,6 +5,7 @@
 {3,scalardec}
 {5,fundef}
 {6,binop}
+eval_type: intconst
 {6,intconst}
 {6,funcall}
 {6,intconst}

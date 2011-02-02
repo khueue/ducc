@@ -2,6 +2,7 @@
 {4,fundef}
 {5,arraydec}
 {6,binop}
+eval_type: intconst
 {6,ident}
 {6,intconst}
 ok

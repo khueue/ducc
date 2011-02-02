@@ -4,26 +4,25 @@
 {4,scalardec}
 {5,return}
 {5,binop}
+eval_type: intconst
 {5,ident}
 {5,ident}
-{'EXIT',
-    {function_clause,
-        [{analyzer_driver,format_error,
-             ['<stdin>',
-              {'EXIT',
-                  {undef,
-                      [{analyzer_env,scope_name,[]},
-                       {analyzer,analyze_return,2},
-                       {analyzer,analyze,2},
-                       {analyzer,analyze_fundef,2},
-                       {analyzer,analyze,2},
-                       {analyzer,analyze,1},
-                       {analyzer_driver,analyze,2},
-                       {erl_eval,do_apply,5}]}}]},
-         {analyzer_driver,analyze,2},
-         {erl_eval,do_apply,5},
-         {erl_eval,expr,5},
-         {erl_eval,local_func,5},
-         {erl_eval,expr,5},
-         {erl_eval,expr,5},
-         {escript,eval_exprs,5}]}}
+{8,fundef}
+{9,funcall}
+{9,intconst}
+{9,intconst}
+{9,intconst}
+main: []
+global: [{"main",
+          {{8,fundef},
+           int,"main",[],[],
+           [{{9,funcall},
+             "d",
+             [{{9,intconst},1},{{9,intconst},2},{{9,intconst},3}]}]}},
+         {"d",
+          {{4,fundef},
+           int,"d",
+           [{{4,scalardec},int,"a"},{{4,scalardec},int,"b"}],
+           [],
+           [{{5,return},{{5,binop},{{5,ident},"b"},'-',{{5,ident},"a"}}}]}}]
+ok

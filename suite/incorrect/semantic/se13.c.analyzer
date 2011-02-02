@@ -4,6 +4,7 @@
 {4,ident}
 {7,fundef}
 {8,binop}
+eval_type: intconst
 {8,intconst}
 {8,funcall}
 {8,intconst}
