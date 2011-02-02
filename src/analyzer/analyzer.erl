@@ -144,7 +144,7 @@ check_formals(Node1, Node2) ->
     io:format('~p~n', [Node2Formals]),
     identical_types(Node1Formals, Node2Formals).
 
-% XXX arity can probably be rewritten using a list comprehension or such
+% XXX can probably be rewritten using a list comprehension or such
 identical_types([], []) -> true;
 identical_types([F1|Formals1], [F2|Formals2]) ->
     same_arity([F1|Formals1], [F2|Formals2]) andalso
@@ -152,7 +152,7 @@ identical_types([F1|Formals1], [F2|Formals2]) ->
     identical_types(Formals1, Formals2).
 
 same_arity(Formals1, Formals2) ->
-    length(Formals1) =:= length(Formals2).
+    erlang:length(Formals1) =:= erlang:length(Formals2).
 
 % XXX pure (un)luck that this works with both scalar and formal_array
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
@@ -212,7 +212,9 @@ function_must_not_exist(Name, Node, Env) ->
         function_must_exist(Name, Node, Env),
         throw(AlreadyDefined)
     catch
-        _ -> ok
+        _Catched ->
+            io:format('~p~n', [_Catched]),
+            ok
     end.
 
 lookup(_Name, _Node, {[]}) ->
