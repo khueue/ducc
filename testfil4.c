@@ -28,10 +28,10 @@ int foo6(int a, int b);
 int  foo7(int a, int b);
 //char foo7(int a, int b) {}
 
-// Match. (XXX magically works in analyze_fundec, not properly handled)
+// Match. 
 int foo8(int a) {}
 int foo8(int a);
 
-// ERROR: Different arity. (XXX unhandled in analyze_fundec)
+// ERROR: Different arity. 
 int foo9(int a, int b) {}
 int foo9(int b);
