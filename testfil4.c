@@ -14,13 +14,13 @@ int foo3(int aa, int bb) {}
 
 // ERROR: Conflicting types.
 int foo4(int a, int b);
-int foo4(int a, char b) {}
+//int foo4(int a, char b) {}
 
 // ERROR: Conflicting types.
 int foo5(int a, int b);
 int foo5(int a, int b[]) {}
 
-// ERROR: Different arity. (Currently unhandled. Crashes.)
+// ERROR: Different arity. 
 int foo6(int a, int b);
 int foo6(int a, int b, int c) {}
 

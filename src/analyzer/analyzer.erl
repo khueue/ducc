@@ -120,7 +120,7 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
         Val ->
             case get_tag(Val) of
                 fundec ->
-                    case check_formals(Formals, Val) of
+                    case check_formals(Node, Val) of
                         true ->
                             add_symbol(Name, Node, Env0);
                         false ->
@@ -137,21 +137,24 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     _Env5 = analyze(Stmts, Env4),
     Env1. % Updates to the environment are local to the function!
 
-check_formals(FundefFormals, Fundec) ->
-    FundecFormals = element(4, Fundec),
-    %io:format('~p~n', [FundecFormals]),
-    %io:format('~p~n', [FundefFormals]),
-    %FundefFormals =:= FundecFormals. % xxx what if meta or var names differ?
-    identical_types(FundefFormals, FundecFormals).
+check_formals(Node1, Node2) ->
+    Node1Formals = element(4, Node1),
+    Node2Formals = element(4, Node2),
+    io:format('~p~n', [Node1Formals]),
+    io:format('~p~n', [Node2Formals]),
+    identical_types(Node1Formals, Node2Formals).
 
-% xxx cannot handle different arity (make another check for that)
-% can probably be rewritten using a list comprehension or such
+% XXX arity can probably be rewritten using a list comprehension or such
 identical_types([], []) -> true;
 identical_types([F1|Formals1], [F2|Formals2]) ->
+    same_arity([F1|Formals1], [F2|Formals2]) andalso
     same_tag_and_type(F1, F2) andalso
     identical_types(Formals1, Formals2).
 
-% xxx pure (un)luck that this works with both scalar and formal_array
+same_arity(Formals1, Formals2) ->
+    length(Formals1) =:= length(Formals2).
+
+% XXX pure (un)luck that this works with both scalar and formal_array
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
 same_tag_and_type(_, _) -> false.
 
