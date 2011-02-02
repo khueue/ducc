@@ -37,11 +37,13 @@ compile:
 gen_tests: all
 	src/gen_lexer_tests.rb suite/**/*.c
 	src/gen_parser_tests.rb suite/**/*.c
+	# analyzer generator, sometime
 
 tests: all
 	@- echo '--- Running tests ...'
 	lexer_test
 	parser_test
+	analyzer_test
 
 pack:
 	tar -czvf $(PROJECT_NAME)-`date +"%Y-%m-%d"`.tar.gz \
