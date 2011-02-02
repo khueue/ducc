@@ -221,19 +221,19 @@ function_must_exist(Name, Node, Env) ->
 
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
-    must_be_array(Name, Node, Env),
+    must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
     Env1.
 
-must_be_array(Name, Node, Env) ->
+must_be_tag(Name, Node, Env, Tags) ->
     case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw({get_line(Node), 'not defined'});
-        Val ->
-            case get_type(Val) of
-                arrelem -> ok;
-                formal_arraydec -> ok;
-                _Other -> throw({get_line(Node), 'not array'})
+        SymbolInfo ->
+            Tag = get_tag(SymbolInfo),
+            case lists:member(Tag, Tags) of
+                true  -> ok;
+                false -> throw({get_line(Node), 'not proper type'})
             end
     end.
 
