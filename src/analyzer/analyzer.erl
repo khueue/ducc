@@ -19,7 +19,7 @@ analyze(ParseTree) ->
     Env = analyzer_env:new(),
     try analyze(ParseTree, Env)
     catch
-        Details = {_Line, _Message} ->
+        Details ->
             throw({analyzer_exception, Details})
     end,
     ok.
@@ -199,7 +199,7 @@ analyze_return(Node = {Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    Type = get_type(FunInfo),
+    _Type = get_type(FunInfo),
     % convertible types etc
     Env1.
 
@@ -235,7 +235,7 @@ analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env) ->
              '/', '*', '+', '-'],
     case lists:member(Op, Types) of
         true ->
-            case eval_type(Node) of
+            case eval_type(Node, Env) of
                 Type ->
                     io:format('eval_type: ~p~n', [Type]),
                     ok
@@ -272,22 +272,25 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
     Env1.
 
-eval_type({{_, binop}, Lhs, _Op, Rhs}) ->
-    LhsType = eval_type(Lhs),
-    RhsType = eval_type(Rhs),
-    biggest_type(LhsType, RhsType);
-eval_type({{_, unop}, _Op, Rhs}) ->
-    eval_type(Rhs);
-eval_type({{_, ident}, _Value}) ->
-    intconst; % XXX
-eval_type({{_, intconst}, _Value}) ->
-    intconst;
-eval_type({{_, charconst}, _Value}) ->
-    intconst; % XXX
-eval_type({{_, arrelem}, _Value, _Index}) ->
-    intconst; % XXX
-eval_type({{_, funcall}, _Value, _Actuals}) ->
-    intconst. % XXX
+eval_type({{_, binop}, Lhs, _Op, Rhs}, Env) ->
+    biggest_type(eval_type(Lhs, Env), eval_type(Rhs, Env));
+eval_type({{_, unop}, _Op, Rhs}, Env) ->
+    eval_type(Rhs, Env);
+eval_type(Node = {{_, ident}, Name}, Env) ->
+    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+    get_type(SymbolInfo);
+eval_type({{_, intconst}, _Name}, _Env) ->
+    int;
+eval_type({{_, charconst}, _Name}, _Env) ->
+    char;
+eval_type(Node = {{_, arrelem}, Name, _Index}, Env) ->
+    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+    get_type(SymbolInfo);
+eval_type(Node = {{_, funcall}, Name, _Actuals}, Env) ->
+    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+    get_type(SymbolInfo).
 
-biggest_type(intconst, _Type2) -> intconst;
-biggest_type(_Type1, intconst) -> intconst.
+biggest_type(int, char)  -> int;
+biggest_type(char, int)  -> int;
+biggest_type(char, char) -> char;
+biggest_type(_, _)       -> throw(incompatible).

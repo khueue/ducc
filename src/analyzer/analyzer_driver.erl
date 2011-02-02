@@ -14,4 +14,8 @@ analyze(Stream, ParseTree) ->
 format_error(Stream, {analyzer_exception, {Line, Message}}) ->
     io_lib:format(
         '~s:~p: semantic error, ~s~n',
-        [Stream, Line, Message]).
+        [Stream, Line, Message]);
+format_error(Stream, UnknownError) ->
+    io_lib:format(
+        '~s: unknown semantic error, ~p~n',
+        [Stream, UnknownError]).
