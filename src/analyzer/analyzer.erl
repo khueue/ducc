@@ -81,15 +81,19 @@ analyze_program({Meta, _File, Topdecs}, Env) ->
     Env1 = analyze(Topdecs, Env),
     Env1.
 
-analyze_scalardec(Node = {Meta, _Type, Name}, Env) ->
+analyze_scalardec(Node = {Meta, _Type, Name}, Env0) ->
     process(Meta),
-    {CurrentSymTab, _Others} = peek_symtab(Env),
-    Defined = dict:is_key(Name, CurrentSymTab),
-    Env1 = case Defined of
-        true  -> throw({get_line(Node), 'already defined'});
-        false -> add_symbol(Name, Node, Env)
-    end,
+    must_not_exist_in_same_scope(Name, Node, Env0),
+    Env1 = add_symbol(Name, Node, Env0),
     Env1.
+
+must_not_exist_in_same_scope(Name, Node, Env) ->
+    case lookup_first_scope(Name, Node, Env) of
+        not_found ->
+            ok;
+        _SymbolInfo ->
+            throw({get_line(Node), 'already defined'})
+    end.
 
 analyze_arraydec(Node = {Meta, _Type, Name, Size}, Env0) ->
     process(Meta),
@@ -152,13 +156,15 @@ check_formals(Node1, Node2) ->
 same_arity(Formals1, Formals2) ->
     erlang:length(Formals1) =:= erlang:length(Formals2).
 
-% XXX can probably be rewritten using a list comprehension or such
 identical_types([], []) -> true;
 identical_types([F1|Formals1], [F2|Formals2]) ->
     same_tag_and_type(F1, F2) andalso
     identical_types(Formals1, Formals2).
 
-% XXX pure (un)luck that this works with both scalar and formal_array
+% BUG: We are lucky enough to have the same structure for all possible
+% formals (scalardec and formal_arraydec), but this simple solution would
+% not necessarily work if other types (pointers, fixed size array, ...)
+% are introduced.
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
 same_tag_and_type(_, _) -> false.
 
@@ -230,6 +236,9 @@ lookup(Name, Node, {[SymTab|SymTabs]}) ->
         {ok, Val} -> Val;
         error     -> lookup(Name, Node, {SymTabs})
     end.
+
+lookup_first_scope(Name, Node, {[SymTab|_SymTabs]}) ->
+    lookup(Name, Node, {[SymTab]}).
 
 analyze_arrelem({Meta, _Name, Index}, Env) ->
     process(Meta),
