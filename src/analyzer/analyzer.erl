@@ -207,14 +207,16 @@ function_must_exist(Name, Node, Env) ->
     end.
 
 function_must_not_exist(Name, Node, Env) ->
-    AlreadyDefined = {get_line(Node), 'function already defined'},
-    try
-        function_must_exist(Name, Node, Env),
-        throw(AlreadyDefined)
-    catch
-        _Catched ->
-            io:format('~p~n', [_Catched]),
-            ok
+    NotFound = {get_line(Node), 'function already defined'},
+    case lookup(Name, Node, Env) of
+        not_found ->
+            ok;
+        SymbolInfo ->
+            case get_tag(SymbolInfo) of
+                fundec -> throw(NotFound);
+                fundef -> throw(NotFound);
+                _Other -> ok
+            end
     end.
 
 lookup(_Name, _Node, {[]}) ->
