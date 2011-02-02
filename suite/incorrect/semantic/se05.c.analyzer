@@ -1,0 +1,4 @@
+{3,program}
+{3,scalardec}
+{5,fundef}
+<stdin>:5: semantic error, already defined

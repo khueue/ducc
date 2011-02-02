@@ -1,0 +1,6 @@
+{4,program}
+{4,scalardec}
+{5,fundef}
+{6,funcall}
+{6,intconst}
+<stdin>:6: semantic error, not proper type

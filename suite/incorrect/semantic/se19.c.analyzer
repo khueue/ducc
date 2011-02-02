@@ -1,0 +1,10 @@
+{3,program}
+{3,arraydec}
+{4,fundef}
+{5,'if'}
+{5,binop}
+{5,ident}
+{5,intconst}
+Unhandled: nil
+Unhandled: nil
+ok

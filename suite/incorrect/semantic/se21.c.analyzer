@@ -1,0 +1,27 @@
+{3,program}
+{3,fundef}
+{3,scalardec}
+{4,arraydec}
+{5,return}
+{5,ident}
+{'EXIT',
+    {function_clause,
+        [{analyzer_driver,format_error,
+             ['<stdin>',
+              {'EXIT',
+                  {undef,
+                      [{analyzer_env,scope_name,[]},
+                       {analyzer,analyze_return,2},
+                       {analyzer,analyze,2},
+                       {analyzer,analyze_fundef,2},
+                       {analyzer,analyze,2},
+                       {analyzer,analyze,1},
+                       {analyzer_driver,analyze,2},
+                       {erl_eval,do_apply,5}]}}]},
+         {analyzer_driver,analyze,2},
+         {erl_eval,do_apply,5},
+         {erl_eval,expr,5},
+         {erl_eval,local_func,5},
+         {erl_eval,expr,5},
+         {erl_eval,expr,5},
+         {escript,eval_exprs,5}]}}

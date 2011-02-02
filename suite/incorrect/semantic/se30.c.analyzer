@@ -1,0 +1,8 @@
+{2,program}
+{2,fundef}
+{3,scalardec}
+{4,arraydec}
+{6,binop}
+{6,ident}
+{6,ident}
+ok

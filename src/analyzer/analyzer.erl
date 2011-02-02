@@ -194,9 +194,13 @@ analyze_while({Meta, Cond, Stmt}, Env) ->
     Env2 = analyze(Stmt, Env1),
     Env2.
 
-analyze_return({Meta, Expr}, Env) ->
+analyze_return(Node = {Meta, Expr}, Env) ->
     process(Meta),
     Env1 = analyze(Expr, Env),
+    ScopeName = analyzer_env:scope_name(Env1),
+    FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
+    Type = get_type(FunInfo),
+    % convertible types etc
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
@@ -255,3 +259,10 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
     process(Meta),
     Env1 = analyze(Rhs, Env),
     Env1.
+
+%eval_type({{_,binop},Lhs,_Op,Rhs}) ->
+%    LhsType = eval_type(Lhs),
+%    RhsType = eval_type(Rhs),
+%    biggest_type(LhsType, RhsType);
+%eval_type({{_,unop},_Op,Rhs}) ->
+%    eval_type(Rhs).

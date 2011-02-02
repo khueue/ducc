@@ -1,0 +1,18 @@
+{3,program}
+{3,fundec}
+{3,scalardec}
+{5,fundef}
+{6,binop}
+{6,intconst}
+{6,funcall}
+{6,intconst}
+main: []
+global: [{"main",
+          {{5,fundef},
+           int,"main",[],[],
+           [{{6,binop},
+             {{6,intconst},1},
+             '+',
+             {{6,funcall},"foo",[{{6,intconst},0}]}}]}},
+         {"foo",{{3,fundec},void,"foo",[{{3,scalardec},int,"n"}]}}]
+ok
