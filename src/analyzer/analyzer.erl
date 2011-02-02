@@ -207,14 +207,14 @@ function_must_exist(Name, Node, Env) ->
     end.
 
 function_must_not_exist(Name, Node, Env) ->
-    NotFound = {get_line(Node), 'function already defined'},
+    Found = {get_line(Node), 'function already defined'},
     case lookup(Name, Node, Env) of
         not_found ->
             ok;
         SymbolInfo ->
             case get_tag(SymbolInfo) of
-                fundec -> throw(NotFound);
-                fundef -> throw(NotFound);
+                fundec -> throw(Found);
+                fundef -> throw(Found);
                 _Other -> ok
             end
     end.
