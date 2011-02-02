@@ -106,7 +106,34 @@ analyze_arraydec(Node = {Meta, _Type, Name, _Size}, Env0) ->
 
 analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     process(Meta),
-    function_must_not_exist(Name, Node, Env0),
+
+    Redefinition = {get_line(Node), 'already defined'},
+    Conflicts = {get_line(Node), 'conflicting types'},
+
+    case lookup(Name, Node, Env0) of
+        not_found ->
+            ok;
+        Val ->
+            case get_tag(Val) of
+                fundec ->
+                    case check_formals(Node, Val) of
+                        true ->
+                            ok;
+                        false ->
+                            throw(Conflicts)
+                    end;
+                fundef ->
+                    case check_formals(Node, Val) of
+                        true ->
+                            ok;
+                        false ->
+                            throw(Conflicts)
+                    end;
+                _Other ->
+                    throw(Redefinition)
+            end
+    end,
+
     Env1 = add_symbol(Name, Node, Env0),
     Env2 = enter_scope(Env1),
     _Env3 = analyze(Formals, Env2),
