@@ -300,8 +300,8 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
 % make sure all exprs are covered xxxx
 eval_type(nil, _Env) -> % return ;
     {returnxxxxx, void};
-eval_type(_Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
-    {_, Type} = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env)),
+eval_type(Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
+    Type = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env), Node),
     {binop, Type};
 eval_type(_Node = {{_, unop}, _Op, Rhs}, Env) ->
     {_, Type} = eval_type(Rhs, Env),
@@ -330,15 +330,22 @@ eval_type(_Node = {{_, arraydec}, Type, _Name, _Size}, _Env) ->
 eval_type(_Node = {{_, formal_arraydec}, Type, _Name}, _Env) ->
     {formal_arraydec, Type}.
 
-widest_type(_, {arraydec,_})        -> throw({444, incompatible});
-widest_type({arraydec,_}, _)        -> throw({444, incompatible});
-widest_type(_, {formal_arraydec,_})        -> throw({444, incompatible});
-widest_type({formal_arraydec,_}, _)        -> throw({444, incompatible});
-widest_type(W = {_,int}, {_,int})   -> W;
-widest_type(W = {_,int}, {_,char})  -> W;
-widest_type(W = {_,char}, {_,char}) -> W;
-widest_type({_,char}, W = {_,int})  -> W;
-widest_type(_, _)                   -> throw({444, incompatible}).
+widest_type(Type1, Type2, Node) ->
+    try widest_type(Type1, Type2)
+    catch
+        incompatible ->
+            throw({get_line(Node), 'incompatible types'})
+    end.
+
+widest_type({_,_}, {arraydec,_})        -> throw(incompatible);
+widest_type({arraydec,_}, {_,_})        -> throw(incompatible);
+widest_type({_,_}, {formal_arraydec,_}) -> throw(incompatible);
+widest_type({formal_arraydec,_}, {_,_}) -> throw(incompatible);
+widest_type({_,int}, {_,int})           -> int;
+widest_type({_,int}, {_,char})          -> int;
+widest_type({_,char}, {_,char})         -> char;
+widest_type({_,char}, {_,int})          -> int;
+widest_type({_,_}, {_,_})               -> throw(incompatible).
 
 convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     io:format('exp ~p~n', [ExpectedTuple]),
