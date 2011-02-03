@@ -4,5 +4,4 @@
 {6,binop}
 {6,ident}
 {6,intconst}
-eval_type: int
-ok
+<stdin>:444: semantic error, incompatible

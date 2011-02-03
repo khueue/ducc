@@ -5,6 +5,4 @@
 {6,binop}
 {6,ident}
 {6,ident}
-{7,return}
-{7,intconst}
-<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
+<stdin>:6: semantic error, not an l-value

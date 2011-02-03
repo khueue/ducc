@@ -5,7 +5,4 @@
 {5,binop}
 {5,ident}
 {5,intconst}
-eval_type: int
-Unhandled: nil
-Unhandled: nil
-ok
+<stdin>:444: semantic error, incompatible

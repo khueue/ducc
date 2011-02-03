@@ -2,5 +2,6 @@
 {3,fundef}
 {3,scalardec}
 {4,return}
-Unhandled: nil
-<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
+exp {fundef,int}
+act {returnxxxxx,void}
+<stdin>:666: semantic error, incomp xxx

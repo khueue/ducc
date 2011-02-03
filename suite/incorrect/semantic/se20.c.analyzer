@@ -5,4 +5,4 @@
 {7,binop}
 {7,ident}
 {7,ident}
-ok
+<stdin>:7: semantic error, not an l-value

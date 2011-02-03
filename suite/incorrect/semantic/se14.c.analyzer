@@ -5,7 +5,8 @@
 {4,binop}
 {4,ident}
 {4,intconst}
-eval_type: int
+exp {fundef,int}
+act {binop,int}
 {8,fundef}
 {8,scalardec}
 {9,scalardec}
@@ -14,7 +15,8 @@ eval_type: int
 {11,binop}
 {11,ident}
 {11,intconst}
-eval_type: int
+exp {scalardec,int}
+act {binop,int}
 {12,funcall}
 {12,ident}
 <stdin>:12: semantic error, not proper type

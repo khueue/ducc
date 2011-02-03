@@ -21,4 +21,4 @@ global: [{"main",
            [{{3,scalardec},int,"n"}],
            [],
            [{{4,ident},"n"}]}}]
-<stdin>: unknown semantic error, {analyzer_exception,incompatible}
+<stdin>:444: semantic error, incompatible
