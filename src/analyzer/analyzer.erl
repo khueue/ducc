@@ -156,10 +156,10 @@ check_formals(Node1, Node2) ->
     io:format('~p~n', [Node1Formals]),
     io:format('~p~n', [Node2Formals]),
     same_arity(Node1Formals, Node2Formals) andalso
-    same_type(Node1, Node2) andalso
+    same_return_type(Node1, Node2) andalso
     identical_types(Node1Formals, Node2Formals).
 
-same_type(Node1, Node2) ->
+same_return_type(Node1, Node2) ->
     get_type(Node1) =:= get_type(Node2).
 
 same_arity(Formals1, Formals2) ->
@@ -208,9 +208,24 @@ analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     process(Meta),
     Env1 = analyze(Actuals, Env0),
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
-    %%%% check actuals against formals
+    Function = analyzer_env:lookup(Name, Node, Env1),
+    case check_actuals(Function, Node, Env1) of
+        false -> throw({get_line(Node), 'incompatible arguments'});
+        _     -> ok
+    end,
     analyzer_env:print_symtabs(Env1), % temporary
     Env1.
+
+check_actuals(Function, Funcall, Env) ->
+    Formals = erlang:element(4, Function),
+    Actuals = erlang:element(3, Funcall),
+    same_arity(Formals, Actuals) andalso
+    convertible_types(Formals, Actuals, Env).
+
+convertible_types([], [], _Env) -> true;
+convertible_types([F|Formals], [A|Actuals], Env) ->
+    convertible_to(eval_type(F, Env), eval_type(A, Env)),
+    convertible_types(Formals, Actuals, Env).
 
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
@@ -308,7 +323,13 @@ eval_type(Node = {{_, funcall}, Name, _Actuals}, Env) ->
 eval_type(_Node = {{_, fundec}, Type, _Name, _Formals}, _Env) ->
     {fundec, Type};
 eval_type(_Node = {{_, fundef}, Type, _Name, _Formals, _Locals, _Stmts}, _Env) ->
-    {fundef, Type}.
+    {fundef, Type};
+eval_type(_Node = {{_, scalardec}, Type, _Name}, _Env) ->
+    {scalardec, Type};
+eval_type(_Node = {{_, arraydec}, Type, _Name, _Size}, _Env) ->
+    {arraydec, Type};
+eval_type(_Node = {{_, formal_arraydec}, Type, _Name}, _Env) ->
+    {formal_arraydec, Type}.
 
 widest_type(_, {arraydec,_})        -> throw({444, incompatible});
 widest_type({arraydec,_}, _)        -> throw({444, incompatible});
@@ -329,10 +350,10 @@ convertible_to(ExpectedTuple, ActualTuple) ->
             throw({666, 'incomp xxx'})
     end.
 
+first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
 first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
 first_accepts_second({arraydec,_}, _)    -> throw(incompatible);
 first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);
-first_accepts_second({formal_arraydec,_}, _)    -> throw(incompatible);
 first_accepts_second({_,void}, {_,void}) -> ok;
 first_accepts_second({_,int}, {_,int})   -> ok;
 first_accepts_second({_,int}, {_,char})  -> ok;
