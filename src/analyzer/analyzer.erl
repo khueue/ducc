@@ -309,7 +309,6 @@ eval_type(_Node = {{_, fundec}, Type, _Name, _Formals}, _Env) ->
     {fundec, Type};
 eval_type(_Node = {{_, fundef}, Type, _Name, _Formals, _Locals, _Stmts}, _Env) ->
     {fundef, Type}.
-%% formal array
 
 widest_type(_, {arraydec,_})        -> throw({444, incompatible});
 widest_type({arraydec,_}, _)        -> throw({444, incompatible});
@@ -340,6 +339,3 @@ first_accepts_second({_,int}, {_,char})  -> ok;
 first_accepts_second({_,char}, {_,char}) -> ok;
 first_accepts_second({_,char}, {_,int})  -> ok;
 first_accepts_second(_, _)               -> throw(incompatible).
-
-% convertible_to_int: intconst, charconst, arrelem(int), arrelem(char),
-% scalardec(int)
