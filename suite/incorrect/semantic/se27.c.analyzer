@@ -1,14 +1,1 @@
-{3,program}
-{3,fundef}
-{3,scalardec}
-{4,'if'}
-{4,binop}
-{4,intconst}
-{4,intconst}
-{4,return}
-{4,binop}
-{4,intconst}
-{4,ident}
-exp {fundef,void}
-act {binop,int}
 <stdin>:4: semantic error, inconvertible types

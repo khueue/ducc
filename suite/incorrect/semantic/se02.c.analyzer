@@ -1,8 +1,1 @@
-{3,program}
-{3,scalardec}
-{4,fundef}
-{5,binop}
-{5,ident}
-{5,funcall}
-{5,ident}
 <stdin>:5: semantic error, not defined

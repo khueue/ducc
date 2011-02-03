@@ -1,8 +1,1 @@
-{3,program}
-{3,fundef}
-{3,formal_arraydec}
-{4,arraydec}
-{6,binop}
-{6,ident}
-{6,ident}
 <stdin>:6: semantic error, not an l-value

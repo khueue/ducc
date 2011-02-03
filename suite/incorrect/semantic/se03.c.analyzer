@@ -1,5 +1,1 @@
-{2,program}
-{2,fundef}
-{3,funcall}
-{3,intconst}
 <stdin>:3: semantic error, not defined

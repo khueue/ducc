@@ -1,7 +1,1 @@
-{3,program}
-{3,fundef}
-{3,scalardec}
-{4,return}
-exp {fundef,int}
-act {return,void}
 <stdin>:4: semantic error, inconvertible types

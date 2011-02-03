@@ -1,18 +1,1 @@
-{3,program}
-{3,fundef}
-{3,formal_arraydec}
-{4,binop}
-{4,arrelem}
-{4,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{4,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{7,fundef}
-{8,arraydec}
-{9,funcall}
-{9,ident}
-exp {formal_arraydec,int}
-act {arraydec,char}
 <stdin>:9: semantic error, inconvertible types

@@ -1,7 +1,1 @@
-{4,program}
-{4,fundef}
-{5,arraydec}
-{6,binop}
-{6,ident}
-{6,intconst}
 <stdin>:6: semantic error, incompatible types

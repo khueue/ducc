@@ -1,17 +1,1 @@
-{3,program}
-{3,fundef}
-{3,scalardec}
-{4,arraydec}
-{5,'if'}
-{5,binop}
-{5,ident}
-{5,intconst}
-{5,return}
-{5,intconst}
-exp {fundef,int}
-act {intconst,int}
-{6,return}
-{6,ident}
-exp {fundef,int}
-act {arraydec,char}
 <stdin>:6: semantic error, inconvertible types
