@@ -17,5 +17,5 @@ format_error(Stream, {analyzer_exception, {Line, Message}}) ->
         [Stream, Line, Message]);
 format_error(Stream, UnknownError) ->
     io_lib:format(
-        '~s: unknown semantic error, ~p~n',
+        '~s: unknown semantic error, ~n~p~n',
         [Stream, UnknownError]).

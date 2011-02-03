@@ -24,16 +24,18 @@ analyze(ParseTree) ->
     end,
     ok.
 
+analyze(Node, Env) when erlang:is_tuple(Node) ->
+    Tag = get_tag(Node),
+    Env1 = analyze_node(Tag, Node, Env),
+    Env1;
+analyze(nil, Env) ->
+    Env;
 analyze([], Env) ->
     Env;
 analyze([X|Xs], Env) ->
     Env1 = analyze(X, Env),
     Env2 = analyze(Xs, Env1),
     Env2;
-analyze(Node, Env) when erlang:is_tuple(Node) ->
-    Tag = get_tag(Node),
-    Env1 = analyze_node(Tag, Node, Env),
-    Env1;
 analyze(Unhandled, Env) ->
     io:format('Unhandled: ~p~n', [Unhandled]),
     Env.
@@ -199,13 +201,7 @@ analyze_return(Node = {Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    FunType = get_type(FunInfo),
-    ExprType = eval_type(Expr, Env),
-    % XXX convertible types etc
-    case ExprType =:= FunType of
-        true  -> ok;
-        false -> throw(xxx_fix)
-    end,
+    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1)),
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
@@ -239,26 +235,17 @@ analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
-    must_be_lval(Lhs, Env0),
+    must_be_lval(Lhs, Env2),
+    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2)),
     Env2;
-analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
+analyze_binop(Node = {Meta, Lhs, _Op, Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
-    Types = ['&&', '||', '!',
-             '<', '>', '<=', '>=', '==', '!=',
-             '/', '*', '+', '-'],
-    case lists:member(Op, Types) of
-        true ->
-            case eval_type(Node, Env2) of
-                Type ->
-                    io:format('eval_type: ~p~n', [Type]),
-                    ok
-            end;
-        _Other -> ok
-    end,
+    _TypeTuple = eval_type(Node, Env2),
     Env2.
 
+%%% xxxxxxx
 must_be_lval(Node = {{_,ident},Name}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
     case get_tag(SymbolInfo) of
@@ -296,42 +283,61 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
     Env1.
 
+% make sure all exprs are covered xxxx
 eval_type(nil, _Env) -> % return ;
-    void;
-eval_type({{_, binop}, Lhs, _Op, Rhs}, Env) ->
-    biggest_type(eval_type(Lhs, Env), eval_type(Rhs, Env));
-eval_type({{_, unop}, _Op, Rhs}, Env) ->
-    eval_type(Rhs, Env);
+    {returnxxxxx, void};
+eval_type(_Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
+    {_, Type} = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env)),
+    {binop, Type};
+eval_type(_Node = {{_, unop}, _Op, Rhs}, Env) ->
+    {_, Type} = eval_type(Rhs, Env),
+    {unop, Type};
 eval_type(Node = {{_, ident}, Name}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    get_type(SymbolInfo);
-eval_type({{_, intconst}, _Name}, _Env) ->
-    int;
-eval_type({{_, charconst}, _Name}, _Env) ->
-    char;
+    {get_tag(SymbolInfo), get_type(SymbolInfo)};
+eval_type(_Node = {{_, intconst}, _Name}, _Env) ->
+    {intconst, int};
+eval_type(_Node = {{_, charconst}, _Name}, _Env) ->
+    {charconst, char};
 eval_type(Node = {{_, arrelem}, Name, _Index}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    get_type(SymbolInfo);
+    {arrelem, get_type(SymbolInfo)};
 eval_type(Node = {{_, funcall}, Name, _Actuals}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    get_type(SymbolInfo).
+    {funcall, get_type(SymbolInfo)};
+eval_type(_Node = {{_, fundec}, Type, _Name, _Formals}, _Env) ->
+    {fundec, Type};
+eval_type(_Node = {{_, fundef}, Type, _Name, _Formals, _Locals, _Stmts}, _Env) ->
+    {fundef, Type}.
+%% formal array
 
-biggest_type(int, int)   -> int;
-biggest_type(int, char)  -> int;
-biggest_type(char, int)  -> int;
-biggest_type(char, char) -> char;
-biggest_type(_, _)       -> throw(incompatible).
+widest_type(_, {arraydec,_})        -> throw({444, incompatible});
+widest_type({arraydec,_}, _)        -> throw({444, incompatible});
+widest_type(_, {formal_arraydec,_})        -> throw({444, incompatible});
+widest_type({formal_arraydec,_}, _)        -> throw({444, incompatible});
+widest_type(W = {_,int}, {_,int})   -> W;
+widest_type(W = {_,int}, {_,char})  -> W;
+widest_type(W = {_,char}, {_,char}) -> W;
+widest_type({_,char}, W = {_,int})  -> W;
+widest_type(_, _)                   -> throw({444, incompatible}).
 
-% crap:
-%% [scalardec], [char,int]
-%convertible_to_int(Node = {{_,ident},Name,Type}, Env) ->
-%    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-%    lists:member(get_tag(SymbolInfo), [scalardec]),%%
-%    lists:member(get_type(SymbolInfo), [char,int]);%%
-%convertible_to_int(Node = {{_,arrelem},Name,Index}, Env) ->
-%    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-%    lists:member(get_tag(SymbolInfo), Tags),
-%    lists:member(get_type(SymbolInfo), Types);
+convertible_to(ExpectedTuple, ActualTuple) ->
+    io:format('exp ~p~n', [ExpectedTuple]),
+    io:format('act ~p~n', [ActualTuple]),
+    try first_accepts_second(ExpectedTuple, ActualTuple)
+    catch
+        incompatible ->
+            throw({666, 'incomp xxx'})
+    end.
+
+first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
+first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);
+first_accepts_second({_,void}, {_,void}) -> ok;
+first_accepts_second({_,int}, {_,int})   -> ok;
+first_accepts_second({_,int}, {_,char})  -> ok;
+first_accepts_second({_,char}, {_,char}) -> ok;
+first_accepts_second({_,char}, {_,int})  -> ok;
+first_accepts_second(_, _)               -> throw(incompatible).
 
 % convertible_to_int: intconst, charconst, arrelem(int), arrelem(char),
 % scalardec(int)
