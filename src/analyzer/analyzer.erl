@@ -199,8 +199,13 @@ analyze_return(Node = {Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    _Type = get_type(FunInfo),
-    % convertible types etc
+    FunType = get_type(FunInfo),
+    ExprType = eval_type(Expr, Env),
+    % XXX convertible types etc
+    case ExprType =:= FunType of
+        true  -> ok;
+        false -> throw(xxx_fix)
+    end,
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
@@ -234,7 +239,7 @@ analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
-    must_be_lval(Lhs), % actually caught as syntax error
+    must_be_lval(Lhs, Env0), 
     Env2;
 analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
     process(Meta),
@@ -254,9 +259,14 @@ analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
     end,
     Env2.
 
-must_be_lval({{_,ident},_Name}) -> ok;
-must_be_lval({{_,arrelem},_Name,_Index}) -> ok;
-must_be_lval(Node) ->
+must_be_lval(Node = {{_,ident},Name}, Env) ->
+    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
+    case get_tag(SymbolInfo) of
+        fundef -> throw({get_line(Node), 'not an l-value'});
+        _      -> ok
+    end;
+must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
+must_be_lval(Node, _Env) ->
     throw({get_line(Node), 'not an l-value'}).
 
 analyze_ident(Node = {Meta, Name}, Env) ->
@@ -285,6 +295,8 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
     Env1.
 
+eval_type(nil, _Env) -> % return ;
+    void;
 eval_type({{_, binop}, Lhs, _Op, Rhs}, Env) ->
     biggest_type(eval_type(Lhs, Env), eval_type(Rhs, Env));
 eval_type({{_, unop}, _Op, Rhs}, Env) ->
