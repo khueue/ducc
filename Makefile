@@ -16,7 +16,7 @@ all: setup clean compile
 
 setup:
 	mkdir -p $(DIR_EBIN)
-	@- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
+	- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
 		report/**/*.md $(SCRIPTS)
 
 clean:
@@ -27,20 +27,20 @@ clean:
 
 compile:
 	clear
-	@- echo '--- Generating lexer and parser ...'
+	@ echo '--- Generating lexer and parser ...'
 	$(ERL) -eval 'io:format("~p~n",[leex:file("$(DIR_LEXER)/$(LEXER_NAME)")]), halt().'
 	$(ERL) -eval 'io:format("~p~n",[yecc:file("$(DIR_PARSER)/$(PARSER_NAME)")]), halt().'
-	@- echo '--- Compiling ...'
+	@ echo '--- Compiling ...'
 	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 gen_tests: all
-	#src/gen_lexer_tests.rb suite/**/*.c
-	#src/gen_parser_tests.rb suite/**/*.c
+	src/gen_lexer_tests.rb suite/**/*.c
+	src/gen_parser_tests.rb suite/**/*.c
 	src/gen_analyzer_tests.rb suite/incorrect/semantic/*.c # xxx
 
 tests: all
-	@- echo '--- Running tests ...'
+	@ echo '--- Running tests ...'
 	lexer_test
 	parser_test
 	analyzer_test
