@@ -239,7 +239,7 @@ analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
-    must_be_lval(Lhs, Env0), 
+    must_be_lval(Lhs, Env0),
     Env2;
 analyze_binop(Node = {Meta, Lhs, Op, Rhs}, Env0) ->
     process(Meta),
@@ -263,6 +263,7 @@ must_be_lval(Node = {{_,ident},Name}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
     case get_tag(SymbolInfo) of
         fundef -> throw({get_line(Node), 'not an l-value'});
+        fundec -> throw({get_line(Node), 'not an l-value'});
         _      -> ok
     end;
 must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
