@@ -15,12 +15,16 @@ get_type(Node) ->
 get_meta(Node) ->
     erlang:element(1, Node).
 
+exception(Node, Format, Args) ->
+    Message = io_lib:format(Format, Args),
+    {analyzer_exception, {get_line(Node), Message}}.
+
 analyze(ParseTree) ->
     Env = analyzer_env:new(),
     try analyze(ParseTree, Env)
     catch
-        Details ->
-            throw({analyzer_exception, Details})
+        Exception ->
+            throw(Exception)
     end,
     ParseTree.
 
@@ -74,7 +78,7 @@ must_not_exist_in_same_scope(Name, Node, Env) ->
         not_found ->
             ok;
         _SymbolInfo ->
-            throw({get_line(Node), 'already defined'})
+            throw(exception(Node, 'already defined', []))
     end.
 
 analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
@@ -83,9 +87,8 @@ analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
     Env1.
 
 analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
-    Redefinition = {get_line(Node), 'already defined'},
-    Conflicts = {get_line(Node), 'conflicting types'},
-
+    Redefinition = exception(Node, 'already defined', []),
+    Conflict     = exception(Node, 'conflicting types', []),
     case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             ok;
@@ -96,29 +99,27 @@ analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
                         true ->
                             ok;
                         false ->
-                            throw(Conflicts)
+                            throw(Conflict)
                     end;
                 fundef ->
                     case check_formals(Node, Val) of
                         true ->
                             ok;
                         false ->
-                            throw(Conflicts)
+                            throw(Conflict)
                     end;
                 _Other ->
                     throw(Redefinition)
             end
     end,
-
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env2 = analyzer_env:enter_scope(Name, Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
 analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
-    Redefinition = {get_line(Node), 'already defined'},
-    Conflicts    = {get_line(Node), 'conflicting types'},
-
+    Redefinition = exception(Node, 'already defined', []),
+    Conflict     = exception(Node, 'conflicting types', []),
     Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             analyzer_env:add_symbol(Name, Node, Env0);
@@ -129,13 +130,12 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
                         true ->
                             analyzer_env:add_symbol(Name, Node, Env0);
                         false ->
-                            throw(Conflicts)
+                            throw(Conflict)
                     end;
                 _Other ->
                     throw(Redefinition)
             end
     end,
-
     Env2 = analyzer_env:enter_scope(Name, Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
@@ -156,7 +156,7 @@ same_arity(Formals1, Formals2, Node) ->
     try same_arity(Formals1, Formals2)
     catch
         different_arity ->
-            throw({get_line(Node), 'wrong number of arguments'})
+            throw(exception(Node, 'wrong number of arguments', []))
     end.
 
 same_arity(Formals1, Formals2) ->
@@ -205,7 +205,7 @@ analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
     Function = analyzer_env:lookup(Name, Node, Env1),
     case check_actuals(Function, Node, Env1) of
-        false -> throw({get_line(Node), 'incompatible arguments'});
+        false -> throw(exception(Node, 'incompatible arguments', []));
         _     -> ok
     end,
     Env1.
@@ -230,12 +230,12 @@ analyze_arrelem(Node = {_Meta, Name, Index}, Env) ->
 must_be_tag(Name, Node, Env, Tags) ->
     case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
-            throw({get_line(Node), 'not defined'});
+            throw(exception(Node, 'not defined', []));
         SymbolInfo ->
             Tag = get_tag(SymbolInfo),
             case lists:member(Tag, Tags) of
                 true  -> ok;
-                false -> throw({get_line(Node), 'not proper type'})
+                false -> throw(exception(Node, 'not proper type', []))
             end
     end.
 
@@ -257,11 +257,11 @@ must_be_lval(Node = {{_,ident},Name}, Env) ->
     SymbolInfo = analyzer_env:lookup(Name, Node, Env),
     case get_tag(SymbolInfo) of
         scalardec -> ok;
-        _         -> throw({get_line(Node), 'not an l-value'})
+        _         -> throw(exception(Node, 'not an l-value', []))
     end;
 must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
 must_be_lval(Node, _Env) ->
-    throw({get_line(Node), 'not an l-value'}).
+    throw(exception(Node, 'not an l-value', [])).
 
 analyze_ident(Node = {_Meta, Name}, Env) ->
     must_be_defined(Name, Node, Env),
@@ -270,7 +270,7 @@ analyze_ident(Node = {_Meta, Name}, Env) ->
 must_be_defined(Name, Node, Env) ->
     case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
-            throw({get_line(Node), 'not defined'});
+            throw(exception(Node, 'not defined', []));
         _SymbolInfo ->
             ok
     end.
@@ -322,7 +322,7 @@ widest_type(Type1, Type2, Node) ->
     try widest_type(Type1, Type2)
     catch
         incompatible ->
-            throw({get_line(Node), 'incompatible types'})
+            throw(exception(Node, 'incompatible types', []))
     end.
 
 widest_type({_,_}, {arraydec,_})        -> throw(incompatible);
@@ -339,7 +339,7 @@ convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     try first_accepts_second(ExpectedTuple, ActualTuple)
     catch
         incompatible ->
-            throw({get_line(Actual), 'inconvertible types'})
+            throw(exception(Actual, 'inconvertible types', []))
     end.
 
 first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
