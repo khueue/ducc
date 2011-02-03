@@ -213,7 +213,6 @@ analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
         false -> throw({get_line(Node), 'incompatible arguments'});
         _     -> ok
     end,
-    %analyzer_env:print_symtabs(Env1), % temporary
     Env1.
 
 check_actuals(Function, Funcall, Env) ->
@@ -231,7 +230,7 @@ analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
     must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
-    % xxx convertible_to_int(Index, Env)
+    convertible_to({dontcare,int}, eval_type(Index, Env1)),
     Env1.
 
 must_be_tag(Name, Node, Env, Tags) ->
