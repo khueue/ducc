@@ -6,13 +6,6 @@
 {6,intconst}
 {6,funcall}
 {6,intconst}
-main: []
-global: [{"main",
-          {{5,fundef},
-           int,"main",[],[],
-           [{{6,binop},
-             {{6,intconst},1},
-             '+',
-             {{6,funcall},"foo",[{{6,intconst},0}]}}]}},
-         {"foo",{{3,fundec},void,"foo",[{{3,scalardec},int,"n"}]}}]
+exp {scalardec,int}
+act {intconst,int}
 <stdin>:444: semantic error, incompatible

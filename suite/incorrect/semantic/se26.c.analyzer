@@ -11,19 +11,6 @@ act {intconst,int}
 {8,arraydec}
 {9,funcall}
 {9,ident}
-main: [{"a",{{8,arraydec},char,"a",10}}]
-global: [{"main",
-          {{7,fundef},
-           int,"main",[],
-           [{{8,arraydec},char,"a",10}],
-           [{{9,funcall},"f",[{{9,ident},"a"}]}]}},
-         {"f",
-          {{3,fundef},
-           void,"f",
-           [{{3,formal_arraydec},int,"b"}],
-           [],
-           [{{4,binop},
-             {{4,arrelem},"b",{{4,intconst},0}},
-             '=',
-             {{4,intconst},0}}]}}]
-ok
+exp {formal_arraydec,int}
+act {arraydec,char}
+<stdin>:666: semantic error, incomp xxx

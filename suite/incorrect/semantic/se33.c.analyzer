@@ -9,18 +9,4 @@
 {6,funcall}
 {6,intconst}
 {6,intconst}
-main: []
-global: [{"main",
-          {{5,fundef},
-           int,"main",[],[],
-           [{{6,binop},
-             {{6,intconst},1},
-             '+',
-             {{6,funcall},"q",[{{6,intconst},1},{{6,intconst},3}]}}]}},
-         {"q",
-          {{3,fundec},
-           int,"q",
-           [{{3,scalardec},int,"a"},
-            {{3,scalardec},int,"b"},
-            {{3,scalardec},int,"c"}]}}]
-ok
+<stdin>:6: semantic error, incompatible arguments

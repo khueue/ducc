@@ -213,7 +213,7 @@ analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
         false -> throw({get_line(Node), 'incompatible arguments'});
         _     -> ok
     end,
-    analyzer_env:print_symtabs(Env1), % temporary
+    %analyzer_env:print_symtabs(Env1), % temporary
     Env1.
 
 check_actuals(Function, Funcall, Env) ->
@@ -351,6 +351,7 @@ convertible_to(ExpectedTuple, ActualTuple) ->
     end.
 
 first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
+first_accepts_second({formal_arraydec, Type}, {formal_arraydec, Type}) -> ok;
 first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
 first_accepts_second({arraydec,_}, _)    -> throw(incompatible);
 first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);

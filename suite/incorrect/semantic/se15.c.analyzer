@@ -23,27 +23,4 @@ act {binop,int}
 {8,funcall}
 {8,intconst}
 {8,intconst}
-main: []
-global: [{"main",
-          {{7,fundef},
-           int,"main",[],[],
-           [{{8,binop},
-             {{8,intconst},1},
-             '+',
-             {{8,funcall},"q",[{{8,intconst},1},{{8,intconst},3}]}}]}},
-         {"q",
-          {{3,fundef},
-           int,"q",
-           [{{3,scalardec},int,"a"},
-            {{3,scalardec},int,"b"},
-            {{3,scalardec},int,"c"}],
-           [],
-           [{{4,return},
-             {{4,binop},
-              {{4,binop},
-               {{4,binop},{{4,ident},"a"},'*',{{4,ident},"a"}},
-               '+',
-               {{4,binop},{{4,ident},"b"},'*',{{4,ident},"b"}}},
-              '+',
-              {{4,binop},{{4,ident},"c"},'*',{{4,ident},"c"}}}}]}}]
-ok
+<stdin>:8: semantic error, incompatible arguments
