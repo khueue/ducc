@@ -4,28 +4,11 @@
 {4,arraydec}
 {5,'if'}
 {5,binop}
-eval_type: intconst
 {5,ident}
 {5,intconst}
+eval_type: int
 {5,return}
 {5,intconst}
 {6,return}
 {6,ident}
-{9,fundef}
-{10,funcall}
-{10,intconst}
-main: []
-global: [{"main",
-          {{9,fundef},
-           int,"main",[],[],
-           [{{10,funcall},"a",[{{10,intconst},5}]}]}},
-         {"a",
-          {{3,fundef},
-           int,"a",
-           [{{3,scalardec},int,"n"}],
-           [{{4,arraydec},char,"x",1}],
-           [{{5,'if'},
-             {{5,binop},{{5,ident},"n"},'!=',{{5,intconst},0}},
-             {{5,return},{{5,intconst},2}},
-             {{6,return},{{6,ident},"x"}}}]}}]
-ok
+<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}

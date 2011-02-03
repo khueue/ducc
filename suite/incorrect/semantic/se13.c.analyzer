@@ -4,7 +4,6 @@
 {4,ident}
 {7,fundef}
 {8,binop}
-eval_type: intconst
 {8,intconst}
 {8,funcall}
 {8,intconst}
@@ -22,4 +21,4 @@ global: [{"main",
            [{{3,scalardec},int,"n"}],
            [],
            [{{4,ident},"n"}]}}]
-ok
+<stdin>: unknown semantic error, {analyzer_exception,incompatible}

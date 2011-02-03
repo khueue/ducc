@@ -4,7 +4,6 @@
 {5,binop}
 {5,ident}
 {5,binop}
-eval_type: intconst
 {5,ident}
 {5,ident}
 <stdin>:5: semantic error, not defined

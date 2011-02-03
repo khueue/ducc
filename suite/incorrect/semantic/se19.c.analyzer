@@ -3,9 +3,9 @@
 {4,fundef}
 {5,'if'}
 {5,binop}
-eval_type: intconst
 {5,ident}
 {5,intconst}
+eval_type: int
 Unhandled: nil
 Unhandled: nil
 ok

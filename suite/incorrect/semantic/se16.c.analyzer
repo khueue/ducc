@@ -4,9 +4,9 @@
 {4,scalardec}
 {5,return}
 {5,binop}
-eval_type: intconst
 {5,ident}
 {5,ident}
+eval_type: int
 {8,fundef}
 {9,funcall}
 {9,intconst}

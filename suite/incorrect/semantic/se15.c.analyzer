@@ -5,24 +5,23 @@
 {3,scalardec}
 {4,return}
 {4,binop}
-eval_type: intconst
 {4,binop}
-eval_type: intconst
 {4,binop}
-eval_type: intconst
 {4,ident}
 {4,ident}
+eval_type: int
 {4,binop}
-eval_type: intconst
 {4,ident}
 {4,ident}
+eval_type: int
+eval_type: int
 {4,binop}
-eval_type: intconst
 {4,ident}
 {4,ident}
+eval_type: int
+eval_type: int
 {7,fundef}
 {8,binop}
-eval_type: intconst
 {8,intconst}
 {8,funcall}
 {8,intconst}
@@ -50,4 +49,5 @@ global: [{"main",
                {{4,binop},{{4,ident},"b"},'*',{{4,ident},"b"}}},
               '+',
               {{4,binop},{{4,ident},"c"},'*',{{4,ident},"c"}}}}]}}]
+eval_type: int
 ok

@@ -3,8 +3,8 @@
 {3,scalardec}
 {4,return}
 {4,binop}
-eval_type: intconst
 {4,intconst}
 {4,ident}
+eval_type: int
 {7,fundef}
 <stdin>:7: semantic error, already defined

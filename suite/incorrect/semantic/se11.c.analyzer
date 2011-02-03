@@ -3,15 +3,4 @@
 {4,binop}
 {4,ident}
 {4,intconst}
-{5,return}
-{5,intconst}
-{7,fundef}
-{8,funcall}
-main: []
-global: [{"main",{{7,fundef},int,"main",[],[],[{{8,funcall},"a",[]}]}},
-         {"a",
-          {{3,fundef},
-           int,"a",[],[],
-           [{{4,binop},{{4,ident},"a"},'=',{{4,intconst},1}},
-            {{5,return},{{5,intconst},0}}]}}]
-ok
+<stdin>:4: semantic error, not an l-value

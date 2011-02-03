@@ -3,21 +3,7 @@
 {3,scalardec}
 {4,return}
 {4,binop}
-eval_type: intconst
 {4,intconst}
 {4,ident}
-{7,fundef}
-{8,funcall}
-{8,intconst}
-main: []
-global: [{"main",
-          {{7,fundef},
-           int,"main",[],[],
-           [{{8,funcall},"a",[{{8,intconst},2}]}]}},
-         {"a",
-          {{3,fundef},
-           void,"a",
-           [{{3,scalardec},int,"n"}],
-           [],
-           [{{4,return},{{4,binop},{{4,intconst},2},'*',{{4,ident},"n"}}}]}}]
-ok
+eval_type: int
+<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}

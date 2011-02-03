@@ -4,18 +4,4 @@
 {4,arraydec}
 {5,return}
 {5,ident}
-{7,fundef}
-{8,funcall}
-{8,intconst}
-main: []
-global: [{"main",
-          {{7,fundef},
-           int,"main",[],[],
-           [{{8,funcall},"a",[{{8,intconst},2}]}]}},
-         {"a",
-          {{3,fundef},
-           int,"a",
-           [{{3,scalardec},int,"n"}],
-           [{{4,arraydec},char,"bv",10}],
-           [{{5,return},{{5,ident},"bv"}}]}}]
-ok
+<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}

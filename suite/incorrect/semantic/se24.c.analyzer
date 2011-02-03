@@ -7,4 +7,4 @@
 {6,ident}
 {7,return}
 {7,intconst}
-ok
+<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
