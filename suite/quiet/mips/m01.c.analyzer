@@ -1,0 +1,33 @@
+{1,program}
+{1,scalardec}
+{3,scalardec}
+{5,scalardec}
+{7,fundef}
+{8,binop}
+{8,ident}
+{8,binop}
+{8,binop}
+{8,ident}
+{8,ident}
+{8,ident}
+exp {scalardec,int}
+act {binop,int}
+{11,fundef}
+{11,scalardec}
+{12,binop}
+{12,ident}
+{12,ident}
+exp {scalardec,char}
+act {scalardec,int}
+{15,fundef}
+{16,binop}
+{16,ident}
+{16,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{17,funcall}
+{18,funcall}
+{18,ident}
+exp {scalardec,int}
+act {scalardec,int}
+ok

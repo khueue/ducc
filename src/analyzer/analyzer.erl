@@ -230,7 +230,7 @@ analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
     must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
-    convertible_to({dontcare,int}, eval_type(Index, Env1), Index),
+    convertible_to({dontcare,int}, eval_type(Index, Env1), Node),
     Env1.
 
 must_be_tag(Name, Node, Env, Tags) ->
@@ -246,12 +246,12 @@ must_be_tag(Name, Node, Env, Tags) ->
     end.
 
 % just for fun right now xxx
-analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
+analyze_binop(Node = {Meta, Lhs, '=', Rhs}, Env0) ->
     process(Meta),
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
     must_be_lval(Lhs, Env2),
-    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Rhs),
+    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Node),
     Env2;
 analyze_binop(Node = {Meta, Lhs, _Op, Rhs}, Env0) ->
     process(Meta),

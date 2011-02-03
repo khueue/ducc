@@ -1,0 +1,59 @@
+{3,program}
+{3,fundec}
+{3,scalardec}
+{4,fundec}
+{4,formal_arraydec}
+{6,arraydec}
+{8,fundef}
+{9,scalardec}
+{10,binop}
+{10,ident}
+{10,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{11,binop}
+{11,arrelem}
+{11,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{11,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{13,while}
+{13,ident}
+{14,binop}
+{14,arrelem}
+{14,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{14,binop}
+{14,binop}
+{14,intconst}
+{14,ident}
+{14,intconst}
+exp {arrelem,char}
+act {binop,int}
+{15,funcall}
+{15,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{16,binop}
+{16,ident}
+{16,binop}
+{16,ident}
+{16,intconst}
+exp {scalardec,int}
+act {binop,int}
+{19,binop}
+{19,arrelem}
+{19,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{19,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{20,funcall}
+{20,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+ok

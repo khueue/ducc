@@ -1,0 +1,202 @@
+{4,program}
+{4,fundec}
+{4,scalardec}
+{6,fundef}
+{6,scalardec}
+{6,scalardec}
+{6,scalardec}
+{6,scalardec}
+{6,scalardec}
+{7,funcall}
+{7,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{8,funcall}
+{8,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{9,funcall}
+{9,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{10,funcall}
+{10,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{11,funcall}
+{11,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{14,fundef}
+{14,scalardec}
+{15,return}
+{15,binop}
+{15,ident}
+{15,intconst}
+exp {fundef,int}
+act {binop,int}
+{18,fundef}
+{18,scalardec}
+{19,'if'}
+{19,binop}
+{19,ident}
+{19,intconst}
+{19,return}
+{19,intconst}
+exp {fundef,char}
+act {intconst,int}
+{20,return}
+{20,binop}
+{20,intconst}
+{20,funcall}
+{20,binop}
+{20,ident}
+{20,intconst}
+exp {scalardec,char}
+act {binop,int}
+exp {fundef,char}
+act {binop,int}
+{23,fundef}
+{24,scalardec}
+{25,funcall}
+{25,intconst}
+{25,intconst}
+{25,intconst}
+{25,intconst}
+{25,intconst}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+{26,binop}
+{26,ident}
+{26,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{27,funcall}
+{27,binop}
+{27,ident}
+{27,intconst}
+{27,binop}
+{27,ident}
+{27,intconst}
+{27,binop}
+{27,ident}
+{27,intconst}
+{27,binop}
+{27,binop}
+{27,ident}
+{27,ident}
+{27,intconst}
+{27,binop}
+{27,binop}
+{27,ident}
+{27,intconst}
+{27,intconst}
+exp {scalardec,int}
+act {binop,int}
+exp {scalardec,int}
+act {binop,int}
+exp {scalardec,int}
+act {binop,int}
+exp {scalardec,int}
+act {binop,int}
+exp {scalardec,int}
+act {binop,int}
+{29,funcall}
+{29,intconst}
+{29,funcall}
+{29,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{29,funcall}
+{29,funcall}
+{29,intconst}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {funcall,int}
+{29,funcall}
+{29,funcall}
+{29,funcall}
+{29,intconst}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {funcall,int}
+exp {scalardec,int}
+act {funcall,int}
+{29,funcall}
+{29,intconst}
+exp {scalardec,char}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {funcall,int}
+exp {scalardec,int}
+act {funcall,int}
+exp {scalardec,int}
+act {funcall,int}
+exp {scalardec,int}
+act {funcall,char}
+{30,funcall}
+{30,binop}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,binop}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,binop}
+{30,binop}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,binop}
+{30,funcall}
+{30,intconst}
+exp {scalardec,char}
+act {intconst,int}
+{30,intconst}
+exp {scalardec,int}
+act {binop,char}
+exp {scalardec,int}
+act {binop,char}
+exp {scalardec,int}
+act {binop,char}
+exp {scalardec,int}
+act {funcall,char}
+exp {scalardec,int}
+act {binop,int}
+ok

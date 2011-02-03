@@ -1,0 +1,153 @@
+{6,program}
+{6,fundec}
+{6,scalardec}
+{7,fundec}
+{7,formal_arraydec}
+{9,fundef}
+{10,scalardec}
+{11,arraydec}
+{12,arraydec}
+{12,arraydec}
+{13,arraydec}
+{13,arraydec}
+{15,binop}
+{15,arrelem}
+{15,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{15,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{15,binop}
+{15,arrelem}
+{15,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{15,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{16,binop}
+{16,arrelem}
+{16,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{16,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{16,binop}
+{16,arrelem}
+{16,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{16,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{17,binop}
+{17,arrelem}
+{17,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{17,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{17,binop}
+{17,arrelem}
+{17,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{17,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{18,binop}
+{18,arrelem}
+{18,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{18,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{18,binop}
+{18,arrelem}
+{18,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{18,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{19,binop}
+{19,arrelem}
+{19,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{19,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{19,binop}
+{19,arrelem}
+{19,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{19,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{21,binop}
+{21,ident}
+{21,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{22,while}
+{22,binop}
+{22,ident}
+{22,intconst}
+{23,funcall}
+{23,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{24,funcall}
+{24,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{25,'if'}
+{25,binop}
+{25,binop}
+{25,binop}
+{25,ident}
+{25,intconst}
+{25,intconst}
+{25,ident}
+{25,funcall}
+{25,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{26,'if'}
+{26,binop}
+{26,binop}
+{26,binop}
+{26,ident}
+{26,intconst}
+{26,intconst}
+{26,ident}
+{27,funcall}
+{27,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{29,'if'}
+{29,binop}
+{29,ident}
+{29,intconst}
+{29,funcall}
+{29,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{30,funcall}
+{30,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{31,binop}
+{31,ident}
+{31,binop}
+{31,ident}
+{31,intconst}
+exp {scalardec,int}
+act {binop,int}
+ok

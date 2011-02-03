@@ -7,4 +7,6 @@
 {8,intconst}
 {8,funcall}
 {8,intconst}
+exp {scalardec,int}
+act {intconst,int}
 <stdin>:8: semantic error, incompatible types

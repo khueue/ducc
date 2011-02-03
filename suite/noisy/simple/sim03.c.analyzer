@@ -1,0 +1,37 @@
+{1,program}
+{1,fundec}
+{1,scalardec}
+{6,arraydec}
+{8,fundef}
+{9,arraydec}
+{10,binop}
+{10,arrelem}
+{10,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{10,intconst}
+exp {arrelem,int}
+act {intconst,int}
+{11,binop}
+{11,arrelem}
+{11,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{11,intconst}
+exp {arrelem,int}
+act {intconst,int}
+{12,funcall}
+{12,arrelem}
+{12,intconst}
+exp {dontcare,int}
+act {intconst,int}
+exp {scalardec,int}
+act {arrelem,int}
+{13,funcall}
+{13,arrelem}
+{13,intconst}
+exp {dontcare,int}
+act {intconst,int}
+exp {scalardec,int}
+act {arrelem,int}
+ok

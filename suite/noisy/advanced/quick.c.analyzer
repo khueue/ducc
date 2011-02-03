@@ -1,0 +1,260 @@
+{7,program}
+{7,fundec}
+{7,formal_arraydec}
+{9,arraydec}
+{10,scalardec}
+{13,fundef}
+{13,formal_arraydec}
+{13,scalardec}
+{13,scalardec}
+{14,scalardec}
+{15,scalardec}
+{16,scalardec}
+{17,scalardec}
+{20,binop}
+{20,ident}
+{20,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{21,binop}
+{21,ident}
+{21,ident}
+exp {scalardec,int}
+act {scalardec,int}
+{22,binop}
+{22,ident}
+{22,arrelem}
+{22,binop}
+{22,binop}
+{22,ident}
+{22,ident}
+{22,intconst}
+exp {dontcare,int}
+act {binop,int}
+exp {scalardec,char}
+act {arrelem,char}
+{24,while}
+{24,binop}
+{24,ident}
+{24,ident}
+{25,while}
+{25,binop}
+{25,arrelem}
+{25,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{25,ident}
+{25,binop}
+{25,ident}
+{25,binop}
+{25,ident}
+{25,intconst}
+exp {scalardec,int}
+act {binop,int}
+{26,while}
+{26,binop}
+{26,ident}
+{26,arrelem}
+{26,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{26,binop}
+{26,ident}
+{26,binop}
+{26,ident}
+{26,intconst}
+exp {scalardec,int}
+act {binop,int}
+{27,'if'}
+{27,binop}
+{27,ident}
+{27,ident}
+{28,binop}
+{28,ident}
+{28,arrelem}
+{28,ident}
+exp {dontcare,int}
+act {scalardec,int}
+exp {scalardec,char}
+act {arrelem,char}
+{29,binop}
+{29,arrelem}
+{29,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{29,arrelem}
+{29,ident}
+exp {dontcare,int}
+act {scalardec,int}
+exp {arrelem,char}
+act {arrelem,char}
+{30,binop}
+{30,arrelem}
+{30,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{30,ident}
+exp {arrelem,char}
+act {scalardec,char}
+{31,binop}
+{31,ident}
+{31,binop}
+{31,ident}
+{31,intconst}
+exp {scalardec,int}
+act {binop,int}
+{32,binop}
+{32,ident}
+{32,binop}
+{32,ident}
+{32,intconst}
+exp {scalardec,int}
+act {binop,int}
+{36,funcall}
+{36,ident}
+exp {formal_arraydec,char}
+act {formal_arraydec,char}
+{37,funcall}
+{37,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{38,'if'}
+{38,binop}
+{38,ident}
+{38,ident}
+{38,funcall}
+{38,ident}
+{38,ident}
+{38,ident}
+exp {formal_arraydec,char}
+act {formal_arraydec,char}
+exp {scalardec,int}
+act {scalardec,int}
+exp {scalardec,int}
+act {scalardec,int}
+{39,'if'}
+{39,binop}
+{39,ident}
+{39,ident}
+{39,funcall}
+{39,ident}
+{39,ident}
+{39,ident}
+exp {formal_arraydec,char}
+act {formal_arraydec,char}
+exp {scalardec,int}
+act {scalardec,int}
+exp {scalardec,int}
+act {scalardec,int}
+{43,fundef}
+{45,arraydec}
+{46,scalardec}
+{47,scalardec}
+{48,scalardec}
+{50,binop}
+{50,arrelem}
+{50,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{50,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{51,binop}
+{51,arrelem}
+{51,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{51,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{53,binop}
+{53,ident}
+{53,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{55,binop}
+{55,arrelem}
+{55,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{55,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{57,binop}
+{57,ident}
+{57,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{60,binop}
+{60,ident}
+{60,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{61,while}
+{61,binop}
+{61,ident}
+{61,ident}
+{62,binop}
+{62,ident}
+{62,binop}
+{62,ident}
+{62,binop}
+{62,binop}
+{62,ident}
+{62,intconst}
+{62,intconst}
+exp {scalardec,char}
+act {binop,int}
+{63,binop}
+{63,arrelem}
+{63,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{63,binop}
+{63,charconst}
+{63,ident}
+exp {arrelem,char}
+act {binop,char}
+{64,binop}
+{64,ident}
+{64,binop}
+{64,ident}
+{64,intconst}
+exp {scalardec,int}
+act {binop,int}
+{65,binop}
+{65,ident}
+{65,binop}
+{65,ident}
+{65,intconst}
+exp {scalardec,int}
+act {binop,int}
+{69,funcall}
+{69,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{70,funcall}
+{70,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{71,funcall}
+{71,ident}
+{71,intconst}
+{71,binop}
+{71,ident}
+{71,intconst}
+exp {formal_arraydec,char}
+act {arraydec,char}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {binop,int}
+{72,funcall}
+{72,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{73,funcall}
+{73,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+ok

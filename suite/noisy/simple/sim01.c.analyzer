@@ -1,0 +1,9 @@
+{1,program}
+{1,fundec}
+{1,scalardec}
+{6,fundef}
+{7,funcall}
+{7,intconst}
+exp {scalardec,int}
+act {intconst,int}
+ok

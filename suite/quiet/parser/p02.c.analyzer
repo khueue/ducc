@@ -1,0 +1,28 @@
+{2,program}
+{2,fundef}
+{3,scalardec}
+{5,while}
+{5,binop}
+{5,ident}
+{5,intconst}
+{5,binop}
+{5,ident}
+{5,binop}
+{5,ident}
+{5,intconst}
+exp {scalardec,int}
+act {binop,int}
+{7,while}
+{7,binop}
+{7,ident}
+{7,intconst}
+{7,'if'}
+{7,intconst}
+{7,binop}
+{7,ident}
+{7,binop}
+{7,ident}
+{7,intconst}
+exp {scalardec,int}
+act {binop,int}
+ok

@@ -1,0 +1,18 @@
+{1,program}
+{1,fundef}
+{1,formal_arraydec}
+{5,fundef}
+{6,arraydec}
+{8,binop}
+{8,arrelem}
+{8,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{8,intconst}
+exp {arrelem,int}
+act {intconst,int}
+{9,funcall}
+{9,ident}
+exp {formal_arraydec,int}
+act {arraydec,int}
+ok

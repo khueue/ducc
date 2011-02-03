@@ -1,0 +1,28 @@
+{1,program}
+{1,fundef}
+{1,scalardec}
+{2,'if'}
+{2,binop}
+{2,ident}
+{2,intconst}
+{3,return}
+{3,binop}
+{3,intconst}
+{3,funcall}
+{3,binop}
+{3,ident}
+{3,intconst}
+exp {scalardec,int}
+act {binop,int}
+exp {fundef,int}
+act {binop,int}
+{4,return}
+{4,intconst}
+exp {fundef,int}
+act {intconst,int}
+{7,fundef}
+{8,funcall}
+{8,intconst}
+exp {scalardec,int}
+act {intconst,int}
+ok

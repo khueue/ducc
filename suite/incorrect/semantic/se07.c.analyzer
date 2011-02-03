@@ -5,4 +5,6 @@
 {4,binop}
 {4,intconst}
 {4,ident}
+exp {fundef,void}
+act {binop,int}
 <stdin>:4: semantic error, inconvertible types

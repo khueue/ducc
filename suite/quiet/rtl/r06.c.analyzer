@@ -1,0 +1,45 @@
+{1,program}
+{1,scalardec}
+{3,fundef}
+{5,'if'}
+{5,ident}
+{6,binop}
+{6,ident}
+{6,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{9,'if'}
+{9,ident}
+{10,binop}
+{10,ident}
+{10,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{11,binop}
+{11,ident}
+{11,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{14,while}
+{14,ident}
+{14,binop}
+{14,ident}
+{14,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{16,while}
+{16,unop}
+{16,ident}
+{17,binop}
+{17,ident}
+{17,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{18,while}
+{18,ident}
+{19,binop}
+{19,ident}
+{19,intconst}
+exp {scalardec,int}
+act {intconst,int}
+ok

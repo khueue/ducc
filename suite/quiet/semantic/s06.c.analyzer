@@ -1,0 +1,15 @@
+{1,program}
+{1,fundef}
+{2,scalardec}
+{3,scalardec}
+{5,binop}
+{5,ident}
+{5,ident}
+exp {scalardec,char}
+act {scalardec,int}
+{6,binop}
+{6,ident}
+{6,ident}
+exp {scalardec,int}
+act {scalardec,char}
+ok

@@ -20,7 +20,7 @@ include Leex nor escript).
 
 ## Introduction
 
-In this report, we will briefly discuss how we implemented an analyzer 
+In this report, we will briefly discuss how we implemented an analyzer
 (semantics checker) for the uC language (a subset of C) in Erlang.
 
 ## Environment
@@ -31,7 +31,6 @@ XXX
 
 XXX
 
-
 ## Rules
 
 XXX
@@ -41,17 +40,16 @@ XXX
 ### Multi-Step Compilation
 
 The analyzer (and all the successive steps) has been implemented to read from
-standard input and output to standard output. 
-As such it's possible to, for example, pipe the result from the lexer to the 
+standard input and output to standard output.
+As such it's possible to, for example, pipe the result from the lexer to the
 parser, and from the parser to the analyzer:
 
     cat suite/quiet/semantic/s01.c | lexer | parser | analyzer
 
-If the source file doesn't contain any semantic errors, the analyzer will 
+If the source file doesn't contain any semantic errors, the analyzer will
 (hopefully) output the abstract syntax tree to standard output.
-If the source file contains at least one semantic error, the analyzer will 
+If the source file contains at least one semantic error, the analyzer will
 (hopefully) output the first error to standard output.
-
 
 ### Single-Step Compilation
 
@@ -63,7 +61,7 @@ successive steps on it, and prints the result to standard output:
 
 ### Error Handling
 
-When a script (such as `lexer`, `parser`, or `analyzer`) receives invalid 
+When a script (such as `lexer`, `parser`, or `analyzer`) receives invalid
 input, an error message is printed and execution stops.
 
 A lexical error exhibited by the lexer looks like this:

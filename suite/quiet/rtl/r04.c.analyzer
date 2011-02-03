@@ -1,0 +1,31 @@
+{1,program}
+{1,fundef}
+{1,formal_arraydec}
+{2,binop}
+{2,arrelem}
+{2,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{2,binop}
+{2,arrelem}
+{2,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{2,intconst}
+exp {arrelem,char}
+act {binop,int}
+{5,arraydec}
+{8,fundef}
+{10,binop}
+{10,arrelem}
+{10,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{10,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{11,funcall}
+{11,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+ok

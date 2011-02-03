@@ -1,0 +1,176 @@
+{22,program}
+{22,scalardec}
+{23,arraydec}
+{25,fundec}
+{25,scalardec}
+{27,fundef}
+{27,formal_arraydec}
+{28,scalardec}
+{29,binop}
+{29,ident}
+{29,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{30,while}
+{30,binop}
+{30,ident}
+{30,ident}
+{31,funcall}
+{31,arrelem}
+{31,ident}
+exp {dontcare,int}
+act {scalardec,int}
+exp {scalardec,int}
+act {arrelem,int}
+{32,binop}
+{32,ident}
+{32,binop}
+{32,ident}
+{32,intconst}
+exp {scalardec,int}
+act {binop,int}
+{36,fundef}
+{36,scalardec}
+{36,scalardec}
+{37,scalardec}
+{38,scalardec}
+{40,binop}
+{40,ident}
+{40,binop}
+{40,ident}
+{40,intconst}
+exp {scalardec,int}
+act {binop,int}
+{41,while}
+{41,binop}
+{41,ident}
+{41,intconst}
+{42,binop}
+{42,ident}
+{42,arrelem}
+{42,ident}
+exp {dontcare,int}
+act {scalardec,int}
+exp {scalardec,int}
+act {arrelem,int}
+{43,'if'}
+{43,binop}
+{43,ident}
+{43,ident}
+{43,return}
+{43,intconst}
+exp {fundef,int}
+act {intconst,int}
+{44,'if'}
+{44,binop}
+{44,binop}
+{44,ident}
+{44,ident}
+{44,binop}
+{44,binop}
+{44,ident}
+{44,ident}
+{44,binop}
+{44,ident}
+{44,ident}
+{45,return}
+{45,intconst}
+exp {fundef,int}
+act {intconst,int}
+{46,'if'}
+{46,binop}
+{46,binop}
+{46,ident}
+{46,ident}
+{46,binop}
+{46,ident}
+{46,ident}
+{47,return}
+{47,intconst}
+exp {fundef,int}
+act {intconst,int}
+{48,binop}
+{48,ident}
+{48,binop}
+{48,ident}
+{48,intconst}
+exp {scalardec,int}
+act {binop,int}
+{50,return}
+{50,intconst}
+exp {fundef,int}
+act {intconst,int}
+{53,fundef}
+{53,scalardec}
+{53,scalardec}
+{54,'if'}
+{54,binop}
+{54,ident}
+{54,ident}
+{55,return}
+{55,intconst}
+exp {fundef,int}
+act {intconst,int}
+{56,while}
+{56,binop}
+{56,ident}
+{56,ident}
+{57,binop}
+{57,arrelem}
+{57,ident}
+exp {dontcare,int}
+act {scalardec,int}
+{57,ident}
+exp {arrelem,int}
+act {scalardec,int}
+{58,'if'}
+{58,binop}
+{58,funcall}
+{58,ident}
+{58,ident}
+exp {scalardec,int}
+act {scalardec,int}
+exp {scalardec,int}
+act {scalardec,int}
+{58,funcall}
+{58,binop}
+{58,ident}
+{58,intconst}
+{58,intconst}
+exp {scalardec,int}
+act {binop,int}
+exp {scalardec,int}
+act {intconst,int}
+{59,return}
+{59,intconst}
+exp {fundef,int}
+act {intconst,int}
+{60,binop}
+{60,ident}
+{60,binop}
+{60,ident}
+{60,intconst}
+exp {scalardec,int}
+act {binop,int}
+{62,return}
+{62,intconst}
+exp {fundef,int}
+act {intconst,int}
+{65,fundef}
+{66,binop}
+{66,ident}
+{66,intconst}
+exp {scalardec,int}
+act {intconst,int}
+{67,funcall}
+{67,intconst}
+{67,intconst}
+exp {scalardec,int}
+act {intconst,int}
+exp {scalardec,int}
+act {intconst,int}
+{68,funcall}
+{68,ident}
+exp {formal_arraydec,int}
+act {arraydec,int}
+ok

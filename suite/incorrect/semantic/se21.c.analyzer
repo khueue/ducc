@@ -4,4 +4,6 @@
 {4,arraydec}
 {5,return}
 {5,ident}
+exp {fundef,int}
+act {arraydec,char}
 <stdin>:5: semantic error, inconvertible types

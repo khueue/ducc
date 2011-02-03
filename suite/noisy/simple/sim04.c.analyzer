@@ -1,0 +1,151 @@
+{1,program}
+{1,fundec}
+{1,formal_arraydec}
+{11,arraydec}
+{13,fundef}
+{14,arraydec}
+{16,binop}
+{16,arrelem}
+{16,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{16,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{17,binop}
+{17,arrelem}
+{17,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{17,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{18,binop}
+{18,arrelem}
+{18,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{18,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{19,binop}
+{19,arrelem}
+{19,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{19,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{20,binop}
+{20,arrelem}
+{20,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{20,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{21,binop}
+{21,arrelem}
+{21,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{21,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{22,binop}
+{22,arrelem}
+{22,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{22,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{24,binop}
+{24,arrelem}
+{24,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{24,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{25,binop}
+{25,arrelem}
+{25,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{25,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{26,binop}
+{26,arrelem}
+{26,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{26,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{27,binop}
+{27,arrelem}
+{27,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{27,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{28,binop}
+{28,arrelem}
+{28,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{28,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{29,binop}
+{29,arrelem}
+{29,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{29,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{30,binop}
+{30,arrelem}
+{30,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{30,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{31,binop}
+{31,arrelem}
+{31,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{31,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{32,binop}
+{32,arrelem}
+{32,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{32,charconst}
+exp {arrelem,char}
+act {charconst,char}
+{33,binop}
+{33,arrelem}
+{33,intconst}
+exp {dontcare,int}
+act {intconst,int}
+{33,intconst}
+exp {arrelem,char}
+act {intconst,int}
+{35,funcall}
+{35,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+{36,funcall}
+{36,ident}
+exp {formal_arraydec,char}
+act {arraydec,char}
+ok
