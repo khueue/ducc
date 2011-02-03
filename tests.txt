@@ -4,15 +4,7 @@
      4	int main(void) {	
      5		a = a + b;	// Variable 'b' not defined
      6	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{4,fundef}
-     4	{5,binop}
-     5	{5,ident}
-     6	{5,binop}
-     7	{5,ident}
-     8	{5,ident}
-     9	<stdin>:5: semantic error, not defined
+     1	<stdin>:5: semantic error, not defined
 
 
 
@@ -22,14 +14,7 @@
      4	int main(void) {
      5	  a = foo(a);	// Function 'foo' not defined
      6	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{4,fundef}
-     4	{5,binop}
-     5	{5,ident}
-     6	{5,funcall}
-     7	{5,ident}
-     8	<stdin>:5: semantic error, not defined
+     1	<stdin>:5: semantic error, not defined
 
 
 
@@ -37,11 +22,7 @@
      2	int main(void) {
      3	  output(0);	// Procedure 'output' not defined
      4	}
-     1	{2,program}
-     2	{2,fundef}
-     3	{3,funcall}
-     4	{3,intconst}
-     5	<stdin>:3: semantic error, not defined
+     1	<stdin>:3: semantic error, not defined
 
 
 
@@ -53,10 +34,7 @@
      6	int main(void) {
      7	  a = 0;
      8	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{5,scalardec}
-     4	<stdin>:5: semantic error, already defined
+     1	<stdin>:5: semantic error, already defined
 
 
 
@@ -71,10 +49,7 @@
      9	int main(void) {
     10	  42;
     11	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{5,fundef}
-     4	<stdin>:5: semantic error, already defined
+     1	<stdin>:5: semantic error, already defined
 
 
 
@@ -91,17 +66,7 @@
     11	int main(void) {
     12	  a(2);
     13	}
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,return}
-     5	{4,binop}
-     6	{4,intconst}
-     7	{4,ident}
-     8	exp {fundef,int}
-     9	act {binop,int}
-    10	{7,fundef}
-    11	<stdin>:7: semantic error, already defined
+     1	<stdin>:7: semantic error, already defined
 
 
 
@@ -115,16 +80,7 @@
      8	  a(2);
      9	}
     10	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,return}
-     5	{4,binop}
-     6	{4,intconst}
-     7	{4,ident}
-     8	exp {fundef,void}
-     9	act {binop,int}
-    10	<stdin>:4: semantic error, inconvertible types
+     1	<stdin>:4: semantic error, inconvertible types
 
 
 
@@ -136,13 +92,7 @@
      6	int main(void) {
      7	 a(2);
      8	}
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,return}
-     5	exp {fundef,int}
-     6	act {return,void}
-     7	<stdin>:4: semantic error, inconvertible types
+     1	<stdin>:4: semantic error, inconvertible types
 
 
 
@@ -159,23 +109,7 @@
     11	}
     12	
     13	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,arraydec}
-     5	{5,'if'}
-     6	{5,binop}
-     7	{5,ident}
-     8	{5,intconst}
-     9	{5,return}
-    10	{5,intconst}
-    11	exp {fundef,int}
-    12	act {intconst,int}
-    13	{6,return}
-    14	{6,ident}
-    15	exp {fundef,int}
-    16	act {arraydec,char}
-    17	<stdin>:6: semantic error, inconvertible types
+     1	<stdin>:6: semantic error, inconvertible types
 
 
 
@@ -186,16 +120,7 @@
      5	  n = 42;
      6	  n[2]; // Index an integer
      7	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{4,fundef}
-     4	{5,binop}
-     5	{5,ident}
-     6	{5,intconst}
-     7	exp {scalardec,int}
-     8	act {intconst,int}
-     9	{6,arrelem}
-    10	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, not proper type
 
 
 
@@ -209,12 +134,7 @@
      8	 a();
      9	}
     10	
-     1	{3,program}
-     2	{3,fundef}
-     3	{4,binop}
-     4	{4,ident}
-     5	{4,intconst}
-     6	<stdin>:4: semantic error, not an l-value
+     1	<stdin>:4: semantic error, not an l-value
 
 
 
@@ -226,12 +146,7 @@
      6	  a(2); // 'a' is not a function
      7	}
      8	
-     1	{4,program}
-     2	{4,scalardec}
-     3	{5,fundef}
-     4	{6,funcall}
-     5	{6,intconst}
-     6	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, not proper type
 
 
 
@@ -244,18 +159,7 @@
      7	int main(void) {
      8	  1 + foo(0);	// 'foo' does not return a value
      9	}
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,ident}
-     5	{7,fundef}
-     6	{8,binop}
-     7	{8,intconst}
-     8	{8,funcall}
-     9	{8,intconst}
-    10	exp {scalardec,int}
-    11	act {intconst,int}
-    12	<stdin>:8: semantic error, incompatible types
+     1	<stdin>:8: semantic error, incompatible types
 
 
 
@@ -280,28 +184,7 @@
     19	  p(n);
     20	}
     21	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,return}
-     5	{4,binop}
-     6	{4,ident}
-     7	{4,intconst}
-     8	exp {fundef,int}
-     9	act {binop,int}
-    10	{8,fundef}
-    11	{8,scalardec}
-    12	{9,scalardec}
-    13	{11,binop}
-    14	{11,ident}
-    15	{11,binop}
-    16	{11,ident}
-    17	{11,intconst}
-    18	exp {scalardec,int}
-    19	act {binop,int}
-    20	{12,funcall}
-    21	{12,ident}
-    22	<stdin>:12: semantic error, not proper type
+     1	<stdin>:12: semantic error, not proper type
 
 
 
@@ -314,32 +197,7 @@
      7	int main(void) {
      8	  1 + q(1, 3);	// Too few arguments to function 'q'
      9	}
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{3,scalardec}
-     5	{3,scalardec}
-     6	{4,return}
-     7	{4,binop}
-     8	{4,binop}
-     9	{4,binop}
-    10	{4,ident}
-    11	{4,ident}
-    12	{4,binop}
-    13	{4,ident}
-    14	{4,ident}
-    15	{4,binop}
-    16	{4,ident}
-    17	{4,ident}
-    18	exp {fundef,int}
-    19	act {binop,int}
-    20	{7,fundef}
-    21	{8,binop}
-    22	{8,intconst}
-    23	{8,funcall}
-    24	{8,intconst}
-    25	{8,intconst}
-    26	<stdin>:8: semantic error, incompatible arguments
+     1	<stdin>:8: semantic error, wrong number of arguments
 
 
 
@@ -353,22 +211,7 @@
      8	int main (void){	
      9	  d(1, 2, 3);	// Too many arguments to function 'd'
     10	}
-     1	{4,program}
-     2	{4,fundef}
-     3	{4,scalardec}
-     4	{4,scalardec}
-     5	{5,return}
-     6	{5,binop}
-     7	{5,ident}
-     8	{5,ident}
-     9	exp {fundef,int}
-    10	act {binop,int}
-    11	{8,fundef}
-    12	{9,funcall}
-    13	{9,intconst}
-    14	{9,intconst}
-    15	{9,intconst}
-    16	<stdin>:9: semantic error, incompatible arguments
+     1	<stdin>:9: semantic error, wrong number of arguments
 
 
 
@@ -381,13 +224,7 @@
      7	  
      8	}
      9	
-     1	{4,program}
-     2	{4,fundef}
-     3	{5,arraydec}
-     4	{6,binop}
-     5	{6,ident}
-     6	{6,intconst}
-     7	<stdin>:6: semantic error, incompatible types
+     1	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -398,13 +235,7 @@
      5	int main (void) {
      6	  a = 42;	  // assign int to array of char
      7	}
-     1	{3,program}
-     2	{3,arraydec}
-     3	{5,fundef}
-     4	{6,binop}
-     5	{6,ident}
-     6	{6,intconst}
-     7	<stdin>:6: semantic error, not an l-value
+     1	<stdin>:6: semantic error, not an l-value
 
 
 
@@ -415,14 +246,7 @@
      5	  if (a==42) ;
      6	   // Array of char in expression
      7	}
-     1	{3,program}
-     2	{3,arraydec}
-     3	{4,fundef}
-     4	{5,'if'}
-     5	{5,binop}
-     6	{5,ident}
-     7	{5,intconst}
-     8	<stdin>:5: semantic error, incompatible types
+     1	<stdin>:5: semantic error, incompatible types
 
 
 
@@ -435,14 +259,7 @@
      7	  a=b;
      8	}
      9	
-     1	{4,program}
-     2	{4,fundef}
-     3	{5,arraydec}
-     4	{6,arraydec}
-     5	{7,binop}
-     6	{7,ident}
-     7	{7,ident}
-     8	<stdin>:7: semantic error, not an l-value
+     1	<stdin>:7: semantic error, not an l-value
 
 
 
@@ -455,15 +272,7 @@
      7	int main (void) {
      8	  a(2);
      9	}
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,arraydec}
-     5	{5,return}
-     6	{5,ident}
-     7	exp {fundef,int}
-     8	act {arraydec,char}
-     9	<stdin>:5: semantic error, inconvertible types
+     1	<stdin>:5: semantic error, inconvertible types
 
 
 
@@ -475,13 +284,7 @@
      6	  a+1;	// Attempt to apply arithmetic to array reference
      7	        // This is legal in C, but not in uC
      8	}
-     1	{3,program}
-     2	{3,arraydec}
-     3	{5,fundef}
-     4	{6,binop}
-     5	{6,ident}
-     6	{6,intconst}
-     7	<stdin>:6: semantic error, incompatible types
+     1	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -496,12 +299,7 @@
      9	int main (void) {
     10	  first(42);		
     11	}
-     1	{5,program}
-     2	{5,fundef}
-     3	{5,scalardec}
-     4	{6,return}
-     5	{6,arrelem}
-     6	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, not proper type
 
 
 
@@ -514,14 +312,7 @@
      7	  return 1;
      8	}
      9	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,formal_arraydec}
-     4	{4,arraydec}
-     5	{6,binop}
-     6	{6,ident}
-     7	{6,ident}
-     8	<stdin>:6: semantic error, not an l-value
+     1	<stdin>:6: semantic error, not an l-value
 
 
 
@@ -546,24 +337,7 @@
      9	  f(a);
     10	}
     11	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,formal_arraydec}
-     4	{4,binop}
-     5	{4,arrelem}
-     6	{4,intconst}
-     7	exp {dontcare,int}
-     8	act {intconst,int}
-     9	{4,intconst}
-    10	exp {arrelem,int}
-    11	act {intconst,int}
-    12	{7,fundef}
-    13	{8,arraydec}
-    14	{9,funcall}
-    15	{9,ident}
-    16	exp {formal_arraydec,int}
-    17	act {arraydec,char}
-    18	<stdin>:9: semantic error, inconvertible types
+     1	<stdin>:9: semantic error, inconvertible types
 
 
 
@@ -578,20 +352,7 @@
      9	  a(2);
     10	}
     11	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,'if'}
-     5	{4,binop}
-     6	{4,intconst}
-     7	{4,intconst}
-     8	{4,return}
-     9	{4,binop}
-    10	{4,intconst}
-    11	{4,ident}
-    12	exp {fundef,void}
-    13	act {binop,int}
-    14	<stdin>:4: semantic error, inconvertible types
+     1	<stdin>:4: semantic error, inconvertible types
 
 
 
@@ -606,21 +367,7 @@
      9	  a(2);
     10	}
     11	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,'if'}
-     5	{4,binop}
-     6	{4,intconst}
-     7	{4,intconst}
-     8	{4,intconst}
-     9	{5,return}
-    10	{5,binop}
-    11	{5,intconst}
-    12	{5,ident}
-    13	exp {fundef,void}
-    14	act {binop,int}
-    15	<stdin>:5: semantic error, inconvertible types
+     1	<stdin>:5: semantic error, inconvertible types
 
 
 
@@ -635,11 +382,7 @@
      9	  a(2);
     10	}
     11	
-     1	{3,program}
-     2	{3,fundef}
-     3	{3,scalardec}
-     4	{4,scalardec}
-     5	<stdin>:4: semantic error, already defined
+     1	<stdin>:4: semantic error, already defined
 
 
 
@@ -650,16 +393,7 @@
      5	  
      6	  a=b;
      7	}
-     1	{2,program}
-     2	{2,fundef}
-     3	{3,scalardec}
-     4	{4,arraydec}
-     5	{6,binop}
-     6	{6,ident}
-     7	{6,ident}
-     8	exp {scalardec,int}
-     9	act {arraydec,int}
-    10	<stdin>:6: semantic error, inconvertible types
+     1	<stdin>:6: semantic error, inconvertible types
 
 
 
@@ -673,10 +407,7 @@
      8	int main(void) {
      9	  42;
     10	}
-     1	{3,program}
-     2	{3,scalardec}
-     3	{5,fundec}
-     4	<stdin>:5: semantic error, already defined
+     1	<stdin>:5: semantic error, already defined
 
 
 
@@ -687,17 +418,7 @@
      5	int main(void) {
      6	  1 + foo(0);	// 'foo' does not return a value
      7	}
-     1	{3,program}
-     2	{3,fundec}
-     3	{3,scalardec}
-     4	{5,fundef}
-     5	{6,binop}
-     6	{6,intconst}
-     7	{6,funcall}
-     8	{6,intconst}
-     9	exp {scalardec,int}
-    10	act {intconst,int}
-    11	<stdin>:6: semantic error, incompatible types
+     1	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -708,18 +429,7 @@
      5	int main(void) {
      6	  1 + q(1, 3);	// Too few arguments to function 'q'
      7	}
-     1	{3,program}
-     2	{3,fundec}
-     3	{3,scalardec}
-     4	{3,scalardec}
-     5	{3,scalardec}
-     6	{5,fundef}
-     7	{6,binop}
-     8	{6,intconst}
-     9	{6,funcall}
-    10	{6,intconst}
-    11	{6,intconst}
-    12	<stdin>:6: semantic error, incompatible arguments
+     1	<stdin>:6: semantic error, wrong number of arguments
 
 
 
@@ -730,16 +440,7 @@
      5	int main (void){	
      6	  d(1, 2, 3);	// Too many arguments to function 'd'
      7	}
-     1	{3,program}
-     2	{3,fundec}
-     3	{3,scalardec}
-     4	{3,scalardec}
-     5	{5,fundef}
-     6	{6,funcall}
-     7	{6,intconst}
-     8	{6,intconst}
-     9	{6,intconst}
-    10	<stdin>:6: semantic error, incompatible arguments
+     1	<stdin>:6: semantic error, wrong number of arguments
 
 
 

@@ -1,16 +1,1 @@
-{4,program}
-{4,fundef}
-{4,scalardec}
-{4,scalardec}
-{5,return}
-{5,binop}
-{5,ident}
-{5,ident}
-exp {fundef,int}
-act {binop,int}
-{8,fundef}
-{9,funcall}
-{9,intconst}
-{9,intconst}
-{9,intconst}
-<stdin>:9: semantic error, incompatible arguments
+<stdin>:9: semantic error, wrong number of arguments

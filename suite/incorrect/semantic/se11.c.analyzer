@@ -1,6 +1,1 @@
-{3,program}
-{3,fundef}
-{4,binop}
-{4,ident}
-{4,intconst}
 <stdin>:4: semantic error, not an l-value
