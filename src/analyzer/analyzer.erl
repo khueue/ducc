@@ -59,16 +59,12 @@ analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env);
 analyze_node(Tag, _, Env) ->
     io:format('Unhandled tag: ~p~n', [Tag]),
     Env.
-process(X) ->
-    io:format('~p~n', [X]).
 
-analyze_program({Meta, _File, Topdecs}, Env) ->
-    process(Meta),
+analyze_program({_Meta, _File, Topdecs}, Env) ->
     Env1 = analyze(Topdecs, Env),
     Env1.
 
-analyze_scalardec(Node = {Meta, _Type, Name}, Env0) ->
-    process(Meta),
+analyze_scalardec(Node = {_Meta, _Type, Name}, Env0) ->
     must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
@@ -81,15 +77,12 @@ must_not_exist_in_same_scope(Name, Node, Env) ->
             throw({get_line(Node), 'already defined'})
     end.
 
-analyze_arraydec(Node = {Meta, _Type, Name, _Size}, Env0) ->
-    process(Meta),
+analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
     must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
-analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
-    process(Meta),
-
+analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
     Redefinition = {get_line(Node), 'already defined'},
     Conflicts = {get_line(Node), 'conflicting types'},
 
@@ -122,8 +115,7 @@ analyze_fundec(Node = {Meta, _Type, Name, Formals}, Env0) ->
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
-analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
-    process(Meta),
+analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Redefinition = {get_line(Node), 'already defined'},
     Conflicts    = {get_line(Node), 'conflicting types'},
 
@@ -153,17 +145,25 @@ analyze_fundef(Node = {Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
 check_formals(Node1, Node2) ->
     Node1Formals = element(4, Node1),
     Node2Formals = element(4, Node2),
-    io:format('~p~n', [Node1Formals]),
-    io:format('~p~n', [Node2Formals]),
-    same_arity(Node1Formals, Node2Formals) andalso
+    same_arity(Node1Formals, Node2Formals, Node1),
     same_return_type(Node1, Node2) andalso
     identical_types(Node1Formals, Node2Formals).
 
 same_return_type(Node1, Node2) ->
     get_type(Node1) =:= get_type(Node2).
 
+same_arity(Formals1, Formals2, Node) ->
+    try same_arity(Formals1, Formals2)
+    catch
+        different_arity ->
+            throw({get_line(Node), 'wrong number of arguments'})
+    end.
+
 same_arity(Formals1, Formals2) ->
-    erlang:length(Formals1) =:= erlang:length(Formals2).
+    case erlang:length(Formals1) =:= erlang:length(Formals2) of
+        true  -> ok;
+        false -> throw(different_arity)
+    end.
 
 identical_types([], []) -> true;
 identical_types([F1|Formals1], [F2|Formals2]) ->
@@ -177,35 +177,30 @@ identical_types([F1|Formals1], [F2|Formals2]) ->
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
 same_tag_and_type(_, _) -> false.
 
-analyze_formal_arraydec(Node = {Meta, _Type, Name}, Env0) ->
-    process(Meta),
+analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
-analyze_if({Meta, Cond, Then, Else}, Env) ->
-    process(Meta),
+analyze_if({_Meta, Cond, Then, Else}, Env) ->
     Env1 = analyze(Cond, Env),
     Env2 = analyze(Then, Env1),
     Env3 = analyze(Else, Env2),
     Env3.
 
-analyze_while({Meta, Cond, Stmt}, Env) ->
-    process(Meta),
+analyze_while({_Meta, Cond, Stmt}, Env) ->
     Env1 = analyze(Cond, Env),
     Env2 = analyze(Stmt, Env1),
     Env2.
 
-analyze_return(Node = {Meta, Expr}, Env) ->
-    process(Meta),
+analyze_return(Node = {_Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
     convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1), Node),
     Env1.
 
-analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
-    process(Meta),
+analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
     Function = analyzer_env:lookup(Name, Node, Env1),
@@ -218,7 +213,7 @@ analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
 check_actuals(Function, Funcall, Env) ->
     Formals = erlang:element(4, Function),
     Actuals = erlang:element(3, Funcall),
-    same_arity(Formals, Actuals) andalso
+    same_arity(Formals, Actuals, Funcall),
     convertible_types(Formals, Actuals, Env).
 
 convertible_types([], [], _Env) -> true;
@@ -226,8 +221,7 @@ convertible_types([F|Formals], [A|Actuals], Env) ->
     convertible_to(eval_type(F, Env), eval_type(A, Env), A),
     convertible_types(Formals, Actuals, Env).
 
-analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
-    process(Meta),
+analyze_arrelem(Node = {_Meta, Name, Index}, Env) ->
     must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
     convertible_to({dontcare,int}, eval_type(Index, Env1), Node),
@@ -246,15 +240,13 @@ must_be_tag(Name, Node, Env, Tags) ->
     end.
 
 % just for fun right now xxx
-analyze_binop(Node = {Meta, Lhs, '=', Rhs}, Env0) ->
-    process(Meta),
+analyze_binop(Node = {_Meta, Lhs, '=', Rhs}, Env0) ->
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
     must_be_lval(Lhs, Env2),
     convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Node),
     Env2;
-analyze_binop(Node = {Meta, Lhs, _Op, Rhs}, Env0) ->
-    process(Meta),
+analyze_binop(Node = {_Meta, Lhs, _Op, Rhs}, Env0) ->
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
     _TypeTuple = eval_type(Node, Env2),
@@ -271,8 +263,7 @@ must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
 must_be_lval(Node, _Env) ->
     throw({get_line(Node), 'not an l-value'}).
 
-analyze_ident(Node = {Meta, Name}, Env) ->
-    process(Meta),
+analyze_ident(Node = {_Meta, Name}, Env) ->
     must_be_defined(Name, Node, Env),
     Env.
 
@@ -284,16 +275,13 @@ must_be_defined(Name, Node, Env) ->
             ok
     end.
 
-analyze_intconst({Meta, _Value}, Env) ->
-    process(Meta),
+analyze_intconst({_Meta, _Value}, Env) ->
     Env.
 
-analyze_charconst({Meta, _Char}, Env) ->
-    process(Meta),
+analyze_charconst({_Meta, _Char}, Env) ->
     Env.
 
-analyze_unop({Meta, _Op, Rhs}, Env) ->
-    process(Meta),
+analyze_unop({_Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
     Env1.
 
@@ -348,8 +336,6 @@ widest_type({_,char}, {_,int})          -> int;
 widest_type({_,_}, {_,_})               -> throw(incompatible).
 
 convertible_to(ExpectedTuple, ActualTuple, Actual) ->
-    io:format('exp ~p~n', [ExpectedTuple]),
-    io:format('act ~p~n', [ActualTuple]),
     try first_accepts_second(ExpectedTuple, ActualTuple)
     catch
         incompatible ->
