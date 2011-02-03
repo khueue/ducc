@@ -1,8 +1,8 @@
-int foo(void)
+void foo(void)
 {
     int array;
     ;
-    return array;
+    return;
 }
 
 int foo2(int array)

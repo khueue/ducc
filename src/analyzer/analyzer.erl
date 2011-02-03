@@ -201,7 +201,7 @@ analyze_return(Node = {Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1)),
+    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1), Expr),
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
@@ -223,14 +223,14 @@ check_actuals(Function, Funcall, Env) ->
 
 convertible_types([], [], _Env) -> true;
 convertible_types([F|Formals], [A|Actuals], Env) ->
-    convertible_to(eval_type(F, Env), eval_type(A, Env)),
+    convertible_to(eval_type(F, Env), eval_type(A, Env), A),
     convertible_types(Formals, Actuals, Env).
 
 analyze_arrelem(Node = {Meta, Name, Index}, Env) ->
     process(Meta),
     must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
-    convertible_to({dontcare,int}, eval_type(Index, Env1)),
+    convertible_to({dontcare,int}, eval_type(Index, Env1), Index),
     Env1.
 
 must_be_tag(Name, Node, Env, Tags) ->
@@ -251,7 +251,7 @@ analyze_binop(_Node = {Meta, Lhs, '=', Rhs}, Env0) ->
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
     must_be_lval(Lhs, Env2),
-    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2)),
+    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Rhs),
     Env2;
 analyze_binop(Node = {Meta, Lhs, _Op, Rhs}, Env0) ->
     process(Meta),
@@ -340,13 +340,13 @@ widest_type(W = {_,char}, {_,char}) -> W;
 widest_type({_,char}, W = {_,int})  -> W;
 widest_type(_, _)                   -> throw({444, incompatible}).
 
-convertible_to(ExpectedTuple, ActualTuple) ->
+convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     io:format('exp ~p~n', [ExpectedTuple]),
     io:format('act ~p~n', [ActualTuple]),
     try first_accepts_second(ExpectedTuple, ActualTuple)
     catch
         incompatible ->
-            throw({666, 'incomp xxx'})
+            throw({get_line(Actual), 'inconvertible types'})
     end.
 
 first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
