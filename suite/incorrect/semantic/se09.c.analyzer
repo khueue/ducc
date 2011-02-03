@@ -8,10 +8,6 @@
 {5,intconst}
 {5,return}
 {5,intconst}
-exp {fundef,int}
-act {intconst,int}
 {6,return}
 {6,ident}
-exp {fundef,int}
-act {arraydec,char}
-<stdin>:666: semantic error, incomp xxx
+<stdin>:6: semantic error, inconvertible types

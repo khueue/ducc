@@ -4,7 +4,5 @@
 {5,binop}
 {5,ident}
 {5,intconst}
-exp {scalardec,int}
-act {intconst,int}
 {6,arrelem}
 <stdin>:6: semantic error, not proper type

@@ -10,6 +10,4 @@
 {5,binop}
 {5,intconst}
 {5,ident}
-exp {fundef,void}
-act {binop,int}
-<stdin>:666: semantic error, incomp xxx
+<stdin>:5: semantic error, inconvertible types

@@ -6,6 +6,4 @@
 {6,intconst}
 {6,funcall}
 {6,intconst}
-exp {scalardec,int}
-act {intconst,int}
-<stdin>:444: semantic error, incompatible
+<stdin>:6: semantic error, incompatible types

@@ -4,4 +4,4 @@
 {6,binop}
 {6,ident}
 {6,intconst}
-<stdin>:444: semantic error, incompatible
+<stdin>:6: semantic error, incompatible types

@@ -5,8 +5,6 @@
 {4,binop}
 {4,ident}
 {4,intconst}
-exp {fundef,int}
-act {binop,int}
 {8,fundef}
 {8,scalardec}
 {9,scalardec}
@@ -15,8 +13,6 @@ act {binop,int}
 {11,binop}
 {11,ident}
 {11,intconst}
-exp {scalardec,int}
-act {binop,int}
 {12,funcall}
 {12,ident}
 <stdin>:12: semantic error, not proper type

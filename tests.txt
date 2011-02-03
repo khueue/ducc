@@ -16,7 +16,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	int a;
@@ -34,7 +33,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	int main(void) {
      3	  output(0);	// Procedure 'output' not defined
@@ -44,7 +42,6 @@
      3	{3,funcall}
      4	{3,intconst}
      5	<stdin>:3: semantic error, not defined
-
 
 
 
@@ -63,7 +60,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	int a;
@@ -79,7 +75,6 @@
      2	{3,scalardec}
      3	{5,fundef}
      4	<stdin>:5: semantic error, already defined
-
 
 
 
@@ -103,11 +98,8 @@
      5	{4,binop}
      6	{4,intconst}
      7	{4,ident}
-     8	exp {fundef,int}
-     9	act {binop,int}
-    10	{7,fundef}
-    11	<stdin>:7: semantic error, already defined
-
+     8	{7,fundef}
+     9	<stdin>:7: semantic error, already defined
 
 
 
@@ -128,10 +120,7 @@
      5	{4,binop}
      6	{4,intconst}
      7	{4,ident}
-     8	exp {fundef,void}
-     9	act {binop,int}
-    10	<stdin>:666: semantic error, incomp xxx
-
+     8	<stdin>:4: semantic error, inconvertible types
 
 
 
@@ -147,10 +136,15 @@
      2	{3,fundef}
      3	{3,scalardec}
      4	{4,return}
-     5	exp {fundef,int}
-     6	act {returnxxxxx,void}
-     7	<stdin>:666: semantic error, incomp xxx
-
+     5	<stdin>: unknown semantic error, 
+     6	{'EXIT',{badarg,[{analyzer,get_meta,1},
+     7	                 {analyzer,get_line,1},
+     8	                 {analyzer,convertible_to,3},
+     9	                 {analyzer,analyze_return,2},
+    10	                 {analyzer,analyze,2},
+    11	                 {analyzer,analyze_fundef,2},
+    12	                 {analyzer,analyze,2},
+    13	                 {analyzer,analyze,1}]}}
 
 
 
@@ -177,14 +171,9 @@
      8	{5,intconst}
      9	{5,return}
     10	{5,intconst}
-    11	exp {fundef,int}
-    12	act {intconst,int}
-    13	{6,return}
-    14	{6,ident}
-    15	exp {fundef,int}
-    16	act {arraydec,char}
-    17	<stdin>:666: semantic error, incomp xxx
-
+    11	{6,return}
+    12	{6,ident}
+    13	<stdin>:6: semantic error, inconvertible types
 
 
 
@@ -201,11 +190,8 @@
      4	{5,binop}
      5	{5,ident}
      6	{5,intconst}
-     7	exp {scalardec,int}
-     8	act {intconst,int}
-     9	{6,arrelem}
-    10	<stdin>:6: semantic error, not proper type
-
+     7	{6,arrelem}
+     8	<stdin>:6: semantic error, not proper type
 
 
 
@@ -228,7 +214,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	
@@ -243,7 +228,6 @@
      4	{6,funcall}
      5	{6,intconst}
      6	<stdin>:6: semantic error, not proper type
-
 
 
 
@@ -265,22 +249,7 @@
      7	{8,intconst}
      8	{8,funcall}
      9	{8,intconst}
-    10	main: []
-    11	global: [{"main",
-    12	          {{7,fundef},
-    13	           int,"main",[],[],
-    14	           [{{8,binop},
-    15	             {{8,intconst},1},
-    16	             '+',
-    17	             {{8,funcall},"foo",[{{8,intconst},0}]}}]}},
-    18	         {"foo",
-    19	          {{3,fundef},
-    20	           void,"foo",
-    21	           [{{3,scalardec},int,"n"}],
-    22	           [],
-    23	           [{{4,ident},"n"}]}}]
-    24	<stdin>:444: semantic error, incompatible
-
+    10	<stdin>:8: semantic error, incompatible types
 
 
 
@@ -312,22 +281,17 @@
      5	{4,binop}
      6	{4,ident}
      7	{4,intconst}
-     8	exp {fundef,int}
-     9	act {binop,int}
-    10	{8,fundef}
-    11	{8,scalardec}
-    12	{9,scalardec}
+     8	{8,fundef}
+     9	{8,scalardec}
+    10	{9,scalardec}
+    11	{11,binop}
+    12	{11,ident}
     13	{11,binop}
     14	{11,ident}
-    15	{11,binop}
-    16	{11,ident}
-    17	{11,intconst}
-    18	exp {scalardec,int}
-    19	act {binop,int}
-    20	{12,funcall}
-    21	{12,ident}
-    22	<stdin>:12: semantic error, not proper type
-
+    15	{11,intconst}
+    16	{12,funcall}
+    17	{12,ident}
+    18	<stdin>:12: semantic error, not proper type
 
 
 
@@ -357,39 +321,13 @@
     15	{4,binop}
     16	{4,ident}
     17	{4,ident}
-    18	exp {fundef,int}
-    19	act {binop,int}
-    20	{7,fundef}
-    21	{8,binop}
+    18	{7,fundef}
+    19	{8,binop}
+    20	{8,intconst}
+    21	{8,funcall}
     22	{8,intconst}
-    23	{8,funcall}
-    24	{8,intconst}
-    25	{8,intconst}
-    26	main: []
-    27	global: [{"main",
-    28	          {{7,fundef},
-    29	           int,"main",[],[],
-    30	           [{{8,binop},
-    31	             {{8,intconst},1},
-    32	             '+',
-    33	             {{8,funcall},"q",[{{8,intconst},1},{{8,intconst},3}]}}]}},
-    34	         {"q",
-    35	          {{3,fundef},
-    36	           int,"q",
-    37	           [{{3,scalardec},int,"a"},
-    38	            {{3,scalardec},int,"b"},
-    39	            {{3,scalardec},int,"c"}],
-    40	           [],
-    41	           [{{4,return},
-    42	             {{4,binop},
-    43	              {{4,binop},
-    44	               {{4,binop},{{4,ident},"a"},'*',{{4,ident},"a"}},
-    45	               '+',
-    46	               {{4,binop},{{4,ident},"b"},'*',{{4,ident},"b"}}},
-    47	              '+',
-    48	              {{4,binop},{{4,ident},"c"},'*',{{4,ident},"c"}}}}]}}]
-    49	ok
-
+    23	{8,intconst}
+    24	<stdin>:8: semantic error, incompatible arguments
 
 
 
@@ -411,28 +349,12 @@
      6	{5,binop}
      7	{5,ident}
      8	{5,ident}
-     9	exp {fundef,int}
-    10	act {binop,int}
-    11	{8,fundef}
-    12	{9,funcall}
+     9	{8,fundef}
+    10	{9,funcall}
+    11	{9,intconst}
+    12	{9,intconst}
     13	{9,intconst}
-    14	{9,intconst}
-    15	{9,intconst}
-    16	main: []
-    17	global: [{"main",
-    18	          {{8,fundef},
-    19	           int,"main",[],[],
-    20	           [{{9,funcall},
-    21	             "d",
-    22	             [{{9,intconst},1},{{9,intconst},2},{{9,intconst},3}]}]}},
-    23	         {"d",
-    24	          {{4,fundef},
-    25	           int,"d",
-    26	           [{{4,scalardec},int,"a"},{{4,scalardec},int,"b"}],
-    27	           [],
-    28	           [{{5,return},{{5,binop},{{5,ident},"b"},'-',{{5,ident},"a"}}}]}}]
-    29	ok
-
+    14	<stdin>:9: semantic error, incompatible arguments
 
 
 
@@ -451,8 +373,7 @@
      4	{6,binop}
      5	{6,ident}
      6	{6,intconst}
-     7	<stdin>:444: semantic error, incompatible
-
+     7	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -473,7 +394,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	char a[10];
@@ -488,8 +408,7 @@
      5	{5,binop}
      6	{5,ident}
      7	{5,intconst}
-     8	<stdin>:444: semantic error, incompatible
-
+     8	<stdin>:5: semantic error, incompatible types
 
 
 
@@ -513,7 +432,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	int a(int n) {
@@ -529,10 +447,7 @@
      4	{4,arraydec}
      5	{5,return}
      6	{5,ident}
-     7	exp {fundef,int}
-     8	act {arraydec,char}
-     9	<stdin>:666: semantic error, incomp xxx
-
+     7	<stdin>:5: semantic error, inconvertible types
 
 
 
@@ -550,8 +465,7 @@
      4	{6,binop}
      5	{6,ident}
      6	{6,intconst}
-     7	<stdin>:444: semantic error, incompatible
-
+     7	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -575,7 +489,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	char first(int a[]) {
@@ -596,7 +509,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	int main (void) {
@@ -604,7 +516,6 @@
      5	}
      6	
      1	<stdin>:4: syntax error: '='
-
 
 
 
@@ -626,29 +537,11 @@
      5	{4,arrelem}
      6	{4,intconst}
      7	{4,intconst}
-     8	exp {arrelem,int}
-     9	act {intconst,int}
-    10	{7,fundef}
-    11	{8,arraydec}
-    12	{9,funcall}
-    13	{9,ident}
-    14	main: [{"a",{{8,arraydec},char,"a",10}}]
-    15	global: [{"main",
-    16	          {{7,fundef},
-    17	           int,"main",[],
-    18	           [{{8,arraydec},char,"a",10}],
-    19	           [{{9,funcall},"f",[{{9,ident},"a"}]}]}},
-    20	         {"f",
-    21	          {{3,fundef},
-    22	           void,"f",
-    23	           [{{3,formal_arraydec},int,"b"}],
-    24	           [],
-    25	           [{{4,binop},
-    26	             {{4,arrelem},"b",{{4,intconst},0}},
-    27	             '=',
-    28	             {{4,intconst},0}}]}}]
-    29	ok
-
+     8	{7,fundef}
+     9	{8,arraydec}
+    10	{9,funcall}
+    11	{9,ident}
+    12	<stdin>:9: semantic error, inconvertible types
 
 
 
@@ -674,10 +567,7 @@
      9	{4,binop}
     10	{4,intconst}
     11	{4,ident}
-    12	exp {fundef,void}
-    13	act {binop,int}
-    14	<stdin>:666: semantic error, incomp xxx
-
+    12	<stdin>:4: semantic error, inconvertible types
 
 
 
@@ -704,10 +594,7 @@
     10	{5,binop}
     11	{5,intconst}
     12	{5,ident}
-    13	exp {fundef,void}
-    14	act {binop,int}
-    15	<stdin>:666: semantic error, incomp xxx
-
+    13	<stdin>:5: semantic error, inconvertible types
 
 
 
@@ -730,7 +617,6 @@
 
 
 
-
      1	
      2	int main (void) {
      3	  int a;
@@ -745,10 +631,7 @@
      5	{6,binop}
      6	{6,ident}
      7	{6,ident}
-     8	exp {scalardec,int}
-     9	act {arraydec,int}
-    10	<stdin>:666: semantic error, incomp xxx
-
+     8	<stdin>:6: semantic error, inconvertible types
 
 
 
@@ -769,7 +652,6 @@
 
 
 
-
      1	/* Test file for semantic errors. Contains exactly one error. */
      2	
      3	void foo(int n);
@@ -785,17 +667,7 @@
      6	{6,intconst}
      7	{6,funcall}
      8	{6,intconst}
-     9	main: []
-    10	global: [{"main",
-    11	          {{5,fundef},
-    12	           int,"main",[],[],
-    13	           [{{6,binop},
-    14	             {{6,intconst},1},
-    15	             '+',
-    16	             {{6,funcall},"foo",[{{6,intconst},0}]}}]}},
-    17	         {"foo",{{3,fundec},void,"foo",[{{3,scalardec},int,"n"}]}}]
-    18	<stdin>:444: semantic error, incompatible
-
+     9	<stdin>:6: semantic error, incompatible types
 
 
 
@@ -817,22 +689,7 @@
      9	{6,funcall}
     10	{6,intconst}
     11	{6,intconst}
-    12	main: []
-    13	global: [{"main",
-    14	          {{5,fundef},
-    15	           int,"main",[],[],
-    16	           [{{6,binop},
-    17	             {{6,intconst},1},
-    18	             '+',
-    19	             {{6,funcall},"q",[{{6,intconst},1},{{6,intconst},3}]}}]}},
-    20	         {"q",
-    21	          {{3,fundec},
-    22	           int,"q",
-    23	           [{{3,scalardec},int,"a"},
-    24	            {{3,scalardec},int,"b"},
-    25	            {{3,scalardec},int,"c"}]}}]
-    26	ok
-
+    12	<stdin>:6: semantic error, incompatible arguments
 
 
 
@@ -852,19 +709,7 @@
      7	{6,intconst}
      8	{6,intconst}
      9	{6,intconst}
-    10	main: []
-    11	global: [{"main",
-    12	          {{5,fundef},
-    13	           int,"main",[],[],
-    14	           [{{6,funcall},
-    15	             "d",
-    16	             [{{6,intconst},1},{{6,intconst},2},{{6,intconst},3}]}]}},
-    17	         {"d",
-    18	          {{3,fundec},
-    19	           int,"d",
-    20	           [{{3,scalardec},int,"a"},{{3,scalardec},int,"b"}]}}]
-    21	ok
-
+    10	<stdin>:6: semantic error, incompatible arguments
 
 
 

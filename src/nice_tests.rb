@@ -20,7 +20,7 @@ end
 system "rm tests.txt"
 
 files.each do |file|
-  echo = "echo \"\n\n\n\""
+  echo = "echo \"\n\n\""
   cmd = "cat -n #{file} >> tests.txt"
   puts cmd
   system cmd

@@ -2,6 +2,12 @@
 {3,fundef}
 {3,scalardec}
 {4,return}
-exp {fundef,int}
-act {returnxxxxx,void}
-<stdin>:666: semantic error, incomp xxx
+<stdin>: unknown semantic error, 
+{'EXIT',{badarg,[{analyzer,get_meta,1},
+                 {analyzer,get_line,1},
+                 {analyzer,convertible_to,3},
+                 {analyzer,analyze_return,2},
+                 {analyzer,analyze,2},
+                 {analyzer,analyze_fundef,2},
+                 {analyzer,analyze,2},
+                 {analyzer,analyze,1}]}}

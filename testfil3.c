@@ -1,3 +1,9 @@
+int foo(void)
+{
+    return;
+}
+
+/*
 void foo(void)
 {
     int array;
@@ -11,3 +17,4 @@ int foo2(int array)
     a[foo()];
     return 2-array;
 }
+*/

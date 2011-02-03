@@ -15,8 +15,6 @@
 {4,binop}
 {4,ident}
 {4,ident}
-exp {fundef,int}
-act {binop,int}
 {7,fundef}
 {8,binop}
 {8,intconst}

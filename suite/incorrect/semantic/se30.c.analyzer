@@ -5,6 +5,4 @@
 {6,binop}
 {6,ident}
 {6,ident}
-exp {scalardec,int}
-act {arraydec,int}
-<stdin>:666: semantic error, incomp xxx
+<stdin>:6: semantic error, inconvertible types

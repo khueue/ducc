@@ -201,7 +201,7 @@ analyze_return(Node = {Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
     ScopeName = analyzer_env:scope_name(Env1),
     FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1), Expr),
+    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1), Node),
     Env1.
 
 analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
@@ -299,7 +299,7 @@ analyze_unop({Meta, _Op, Rhs}, Env) ->
 
 % make sure all exprs are covered xxxx
 eval_type(nil, _Env) -> % return ;
-    {returnxxxxx, void};
+    {return, void};
 eval_type(Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
     Type = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env), Node),
     {binop, Type};
