@@ -22,7 +22,7 @@ analyze(ParseTree) ->
         Details ->
             throw({analyzer_exception, Details})
     end,
-    ok.
+    ParseTree.
 
 analyze(Node, Env) when erlang:is_tuple(Node) ->
     Tag = get_tag(Node),
