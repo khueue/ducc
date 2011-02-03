@@ -4,8 +4,8 @@
 analyze(Stream, ParseTree) ->
     Result = (catch analyzer:analyze(ParseTree)),
     case Result of
-        ok ->
-            ok;
+        ParseTree ->
+            {ok, ParseTree};
         Error ->
             Message = format_error(Stream, Error),
             throw({analyzer_exception, Message})
