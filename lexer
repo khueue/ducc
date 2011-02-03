@@ -21,4 +21,4 @@ main(_) ->
     usage().
 
 process(Stream, String) ->
-    _Tokens = lexer_driver:tokenize(Stream, String).
+    lexer_driver:tokenize(Stream, String).

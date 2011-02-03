@@ -24,4 +24,4 @@ main(_) ->
 
 process(Stream, String) ->
     Tokens = tool_chain:term_from_string(String),
-    _ParseTree = parser_driver:parse(Stream, Tokens).
+    parser_driver:parse(Stream, Tokens).

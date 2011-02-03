@@ -24,4 +24,4 @@ main(_) ->
 
 process(Stream, String) ->
     ParseTree = tool_chain:term_from_string(String),
-    _ParseTree1 = analyzer_driver:analyze(Stream, ParseTree).
+    analyzer_driver:analyze(Stream, ParseTree).
