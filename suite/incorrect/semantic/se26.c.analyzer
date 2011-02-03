@@ -5,6 +5,8 @@
 {4,arrelem}
 {4,intconst}
 {4,intconst}
+exp {arrelem,int}
+act {intconst,int}
 {7,fundef}
 {8,arraydec}
 {9,funcall}

@@ -5,11 +5,11 @@
 {4,binop}
 {4,intconst}
 {4,intconst}
-eval_type: int
 {4,intconst}
 {5,return}
 {5,binop}
 {5,intconst}
 {5,ident}
-eval_type: int
-<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
+exp {fundef,void}
+act {binop,int}
+<stdin>:666: semantic error, incomp xxx

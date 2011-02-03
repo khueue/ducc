@@ -6,9 +6,12 @@
 {5,binop}
 {5,ident}
 {5,intconst}
-eval_type: int
 {5,return}
 {5,intconst}
+exp {fundef,int}
+act {intconst,int}
 {6,return}
 {6,ident}
-<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
+exp {fundef,int}
+act {arraydec,char}
+<stdin>:666: semantic error, incomp xxx

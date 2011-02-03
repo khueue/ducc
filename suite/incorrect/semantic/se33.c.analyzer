@@ -23,5 +23,4 @@ global: [{"main",
            [{{3,scalardec},int,"a"},
             {{3,scalardec},int,"b"},
             {{3,scalardec},int,"c"}]}}]
-eval_type: int
 ok

@@ -6,7 +6,8 @@
 {5,binop}
 {5,ident}
 {5,ident}
-eval_type: int
+exp {fundef,int}
+act {binop,int}
 {8,fundef}
 {9,funcall}
 {9,intconst}

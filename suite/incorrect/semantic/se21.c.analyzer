@@ -4,4 +4,6 @@
 {4,arraydec}
 {5,return}
 {5,ident}
-<stdin>: unknown semantic error, {analyzer_exception,xxx_fix}
+exp {fundef,int}
+act {arraydec,char}
+<stdin>:666: semantic error, incomp xxx

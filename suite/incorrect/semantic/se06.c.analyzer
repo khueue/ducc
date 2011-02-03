@@ -5,6 +5,7 @@
 {4,binop}
 {4,intconst}
 {4,ident}
-eval_type: int
+exp {fundef,int}
+act {binop,int}
 {7,fundef}
 <stdin>:7: semantic error, already defined

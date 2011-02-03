@@ -5,7 +5,7 @@ int foo(void)
     return array;
 }
 
-void foo2(int array)
+int foo2(int array)
 {
-    return array;
+    return 2-array;
 }

@@ -208,6 +208,7 @@ analyze_funcall(Node = {Meta, Name, Actuals}, Env0) ->
     process(Meta),
     Env1 = analyze(Actuals, Env0),
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
+    %%%% check actuals against formals
     analyzer_env:print_symtabs(Env1), % temporary
     Env1.
 
@@ -330,7 +331,9 @@ convertible_to(ExpectedTuple, ActualTuple) ->
     end.
 
 first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
+first_accepts_second({arraydec,_}, _)    -> throw(incompatible);
 first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);
+first_accepts_second({formal_arraydec,_}, _)    -> throw(incompatible);
 first_accepts_second({_,void}, {_,void}) -> ok;
 first_accepts_second({_,int}, {_,int})   -> ok;
 first_accepts_second({_,int}, {_,char})  -> ok;

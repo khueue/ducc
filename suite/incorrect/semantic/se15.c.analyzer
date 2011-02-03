@@ -9,17 +9,14 @@
 {4,binop}
 {4,ident}
 {4,ident}
-eval_type: int
 {4,binop}
 {4,ident}
 {4,ident}
-eval_type: int
-eval_type: int
 {4,binop}
 {4,ident}
 {4,ident}
-eval_type: int
-eval_type: int
+exp {fundef,int}
+act {binop,int}
 {7,fundef}
 {8,binop}
 {8,intconst}
@@ -49,5 +46,4 @@ global: [{"main",
                {{4,binop},{{4,ident},"b"},'*',{{4,ident},"b"}}},
               '+',
               {{4,binop},{{4,ident},"c"},'*',{{4,ident},"c"}}}}]}}]
-eval_type: int
 ok
