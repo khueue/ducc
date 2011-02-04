@@ -12,4 +12,4 @@ int main(void) {
 
   /*
 	It is not legal to end the code like this, 
-	without a comment terminator
+	without a comment terminator.
