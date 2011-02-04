@@ -182,15 +182,17 @@ analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
-analyze_if({_Meta, Cond, Then, Else}, Env) ->
+analyze_if(Node = {_Meta, Cond, Then, Else}, Env) ->
     Env1 = analyze(Cond, Env),
     Env2 = analyze(Then, Env1),
     Env3 = analyze(Else, Env2),
+    convertible_to({if_cond, int}, eval_type(Cond, Env3), Node),
     Env3.
 
-analyze_while({_Meta, Cond, Stmt}, Env) ->
+analyze_while(Node = {_Meta, Cond, Stmt}, Env) ->
     Env1 = analyze(Cond, Env),
     Env2 = analyze(Stmt, Env1),
+    convertible_to({while_cond, int}, eval_type(Cond, Env2), Node),
     Env2.
 
 analyze_return(Node = {_Meta, Expr}, Env) ->

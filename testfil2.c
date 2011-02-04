@@ -1,7 +1,7 @@
 int 
 main(void)
 {
-    int a;
-    a = 1 + 2;
-    return a;
+    int array[5];
+    while (array)
+        return 42;
 }
