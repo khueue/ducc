@@ -35,7 +35,7 @@ analyzes its children in a left-to-right order.
 Erlang provides a module `dict`, which implements a key-value dictionary. We
 use `dict` to implement the symbol tables in our environment.
 
-`dict` documentation: <http://www.erlang.org/doc/man/dict.html>
+Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 ## Analyzer Environment
 
