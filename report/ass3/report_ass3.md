@@ -26,58 +26,92 @@ working analyzer (semantics checker) for the uC language (a subset of C).
 ## Tools Used
 
 Erlang provides a module `dict`, which implements a key-value dictionary. We
-use `dict` to implement the symbol table in our environment.
+use `dict` to implement the symbol tables in our environment.
 
 `dict` documentation: <http://www.erlang.org/doc/man/dict.html>
 
-## Environment
+## Analyzer Environment
 
 The environment is implemented in `src/analyzer/analyzer_env.erl`.
 
-The environment is represented as a list of symbol tables wrapped in a tuple:
+The environment is represented as a stack of symbol tables wrapped in a tuple:
 
-    {SymTabs}
+    {Scope}
 
-The head of `SymTabs` is the current scope.
-
-Each symbol table in `SymTabs` have the form:
+The head of the `Scope` stack (which is just a list) is the current scope.
+Each scope has the form:
 
     {ScopeName, SymTab}
 
-`ScopeName` is either the name of a function represented as a string or by
-the atom `global`. `SymTab` is a dictionary as returned by `dict:new()`.
+`ScopeName` is either the name of a function represented as a string,
+or the atom `global` if the analyzer happens to be looking at the top-level.
+`SymTab` is a dictionary as returned by `dict:new()`.
 
-E.g. the environment may look like:
+For example, if the analyzer is currently investigating the function `main`,
+the environment will look like this:
 
     {[{"main", SymTab1}, {global, SymTab0}]}
 
-XXX more implementation notes?
+The scope stack will never grow beyond two elements because the only
+scope-introducing construct in uC is the function. Nevertheless, a stack
+is a natural and convenient representation of scopes.
 
-When storing an identifier in the symbol table, we supply the entire AST 
-node as the associated value.
+### Symbol Tables
+
+Each symbol table is represented by an Erlang dictionary. When we encounter
+a new declaration, its identifier is used as the key, and its entire AST node
+is used as the associated value. This provides us with all the information we
+need (and more), and we do not need to devise new data types.
 
 ### Delimited Scopes
 
-Updates to the environment are local to the function. For example, analyzing 
-a function definition will create a new scope when entering the function. 
-When leaving the function, we restore the environment by returning the 
-previous environment.
+When the analyzer encounters a function definition (which is the only
+scope-introducing construct in uC), a new scope is created
+and pushed onto the environment stack. When the analysis of the function
+completes, that scope is discarded. This is achieved by simply by passing
+on the environment that was used before the scope was created (leaving the
+actual destruction to the garbage collector).
 
-See e.g. `analyze_fundef/2` in `src/analyzer/analyzer.erl`.
-
-## Representation of Types
-
-As previously mentioned, we store AST nodes as the value associated with the 
-key in the symbol table.
-
-XXX
+For more information, see for example `analyze_fundef/2`
+in `src/analyzer/analyzer.erl`.
 
 ## Typing Rules for Expressions
 
 Typing rules for expressions are enforced by the `eval_type/2` (and
 `widest_type/3`) function.
 
-XXX
+The function `eval_type(Node, Env)` tries to evaluate `Node` to a type tuple
+represented as `{Tag, Type}`, using `Env` for lookups. It recurses down on
+operations such as `binop` or `unop`, and directly evaluates other nodes
+such as `ident` or `arrelem`. For binary operations, the resulting type is
+the "widest" type of its operands, as defined by `widest_type/2`. This
+function issues an error if the two types are incompatible:
+
+    widest_type({_,_}, {arraydec,_})        -> throw(incompatible);
+    widest_type({arraydec,_}, {_,_})        -> throw(incompatible);
+    widest_type({_,_}, {formal_arraydec,_}) -> throw(incompatible);
+    widest_type({formal_arraydec,_}, {_,_}) -> throw(incompatible);
+    widest_type({_,int}, {_,int})           -> int;
+    widest_type({_,int}, {_,char})          -> int;
+    widest_type({_,char}, {_,char})         -> char;
+    widest_type({_,char}, {_,int})          -> int;
+    widest_type({_,_}, {_,_})               -> throw(incompatible).
+
+For issues assignments xxx
+
+    first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
+    first_accepts_second({formal_arraydec, Type}, {formal_arraydec, Type}) -> ok;
+    first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
+    first_accepts_second({arraydec,_}, _)    -> throw(incompatible);
+    first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);
+    first_accepts_second({_,void}, {_,void}) -> ok;
+    first_accepts_second({_,int}, {_,int})   -> ok;
+    first_accepts_second({_,int}, {_,char})  -> ok;
+    first_accepts_second({_,char}, {_,char}) -> ok;
+    first_accepts_second({_,char}, {_,int})  -> ok;
+    first_accepts_second(_, _)               -> throw(incompatible).
+
+XXXXXXXX dfs
 
 ## Running the Analyzer
 
