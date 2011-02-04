@@ -47,9 +47,8 @@ Each symbol table in `SymTabs` have the form:
 
     {ScopeName, SymTab}
 
-`ScopeName` is the name of the scope. `ScopeName` is either the name of a 
-function represented as a string or by the atom `global`. 
-`SymTab` is a dictionary as returned by `dict:new()`.
+`ScopeName` is either the name of a function represented as a string or by 
+the atom `global`. `SymTab` is a dictionary as returned by `dict:new()`.
 
 E.g. the environment may look like:
 
@@ -69,7 +68,10 @@ XXX
 XXX
 
 
-## Rules
+## Typing Rules for Expressions
+
+Typing rules for expressions are enforced by the `eval_type/2` (and 
+`widest_type/3`) function.
 
 XXX
 
