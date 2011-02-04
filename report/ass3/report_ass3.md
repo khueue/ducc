@@ -61,7 +61,8 @@ is a natural and convenient representation of scopes.
 Each symbol table is represented by an Erlang dictionary. When we encounter
 a new declaration, its identifier is used as the key, and its entire AST node
 is used as the associated value. This provides us with all the information we
-need (and more), and we do not need to devise new data types.
+need (and more), and we do not need to devise new data types. On the
+downside, this probably involves more copying than necessary.
 
 ### Delimited Scopes
 
