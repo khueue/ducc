@@ -60,11 +60,6 @@ Rules.
 
 Erlang code.
 
-is_reserved('char')   -> true;
-is_reserved('else')   -> true;
-is_reserved('if')     -> true;
-is_reserved('int')    -> true;
-is_reserved('return') -> true;
-is_reserved('void')   -> true;
-is_reserved('while')  -> true;
-is_reserved(_) -> false.
+is_reserved(Word) ->
+    Reserved = ['char','else','if','int','return','void','while'],
+    lists:member(Word, Reserved).
