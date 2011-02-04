@@ -12,28 +12,67 @@ Project Repository at GitHub:
 <https://github.com/khueue/ducc/tree/ass3-analyzer>
 
 The source and executables are also available on the IT department server:
-/home/emhe9781/src/ducc-XXX.tar.gz
+/home/emhe9781/src/ducc-2011-02-04.tar.gz
 
 (Note that the source won't compile and the executables won't run on the IT
 department servers since they have an old release of OTP which doesn't
 include Leex nor escript).
 
+
 ## Introduction
 
-In this report, we will briefly discuss how we implemented an analyzer
-(semantics checker) for the uC language (a subset of C) in Erlang.
+In this report, we will briefly discuss our attempt to implement a (hopefully)
+working analyzer (semantics checker) for the uC language (a subset of C).
+
+
+## Tools Used
+
+Erlang provides a module `dict`, which implements a key-value dictionary. We 
+use `dict` to implement the symbol table in our environment. 
+
+`dict` documentation: <http://www.erlang.org/doc/man/dict.html>
+
 
 ## Environment
 
-XXX
+The environment is implemented in `src/analyzer/analyzer_env.erl`.
+
+The environment is represented as a list of symbol tables wrapped in a tuple:
+
+    {SymTabs}
+
+The head of `SymTabs` is the current scope.
+
+Each symbol table in `SymTabs` have the form:
+
+    {ScopeName, SymTab}
+
+`ScopeName` is the name of the scope. `ScopeName` is either the name of a 
+function represented as a string or by the atom `global`. 
+`SymTab` is a dictionary as returned by `dict:new()`.
+
+E.g. the environment may look like:
+
+    {[{"main", SymTab1}, {global, SymTab0}]}
+
+XXX more implementation notes?
+
+XXX what information we associate with identifiers in the environment
 
 ### Delimited Scopes
 
 XXX
 
+
+## Representation of Types
+
+XXX
+
+
 ## Rules
 
 XXX
+
 
 ## Running the Analyzer
 
@@ -46,10 +85,10 @@ parser, and from the parser to the analyzer:
 
     cat suite/quiet/semantic/s01.c | lexer | parser | analyzer
 
-If the source file doesn't contain any semantic errors, the analyzer will
-(hopefully) output the abstract syntax tree to standard output.
+If the source file is semantically correct, the analyzer will output 
+output the abstract syntax tree to standard output.
 If the source file contains at least one semantic error, the analyzer will
-(hopefully) output the first error to standard output.
+output the first error to standard output.
 
 ### Single-Step Compilation
 
@@ -79,6 +118,7 @@ A semantic error exhibited by the analyzer looks like this:
 If an unreadable file is given to `ducc`, the error looks like this:
 
     Error reading file: some_unreadable_file
+
 
 ## Questions and Issues
 
