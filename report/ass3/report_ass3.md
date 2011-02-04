@@ -18,20 +18,17 @@ The source and executables are also available on the IT department server:
 department servers since they have an old release of OTP which doesn't
 include Leex nor escript).
 
-
 ## Introduction
 
 In this report, we will briefly discuss our attempt to implement a (hopefully)
 working analyzer (semantics checker) for the uC language (a subset of C).
 
-
 ## Tools Used
 
-Erlang provides a module `dict`, which implements a key-value dictionary. We 
-use `dict` to implement the symbol table in our environment. 
+Erlang provides a module `dict`, which implements a key-value dictionary. We
+use `dict` to implement the symbol table in our environment.
 
 `dict` documentation: <http://www.erlang.org/doc/man/dict.html>
-
 
 ## Environment
 
@@ -47,7 +44,7 @@ Each symbol table in `SymTabs` have the form:
 
     {ScopeName, SymTab}
 
-`ScopeName` is either the name of a function represented as a string or by 
+`ScopeName` is either the name of a function represented as a string or by
 the atom `global`. `SymTab` is a dictionary as returned by `dict:new()`.
 
 E.g. the environment may look like:
@@ -62,19 +59,16 @@ XXX what information we associate with identifiers in the environment
 
 XXX
 
-
 ## Representation of Types
 
 XXX
 
-
 ## Typing Rules for Expressions
 
-Typing rules for expressions are enforced by the `eval_type/2` (and 
+Typing rules for expressions are enforced by the `eval_type/2` (and
 `widest_type/3`) function.
 
 XXX
-
 
 ## Running the Analyzer
 
@@ -87,7 +81,7 @@ parser, and from the parser to the analyzer:
 
     cat suite/quiet/semantic/s01.c | lexer | parser | analyzer
 
-If the source file is semantically correct, the analyzer will output 
+If the source file is semantically correct, the analyzer will output
 output the abstract syntax tree to standard output.
 If the source file contains at least one semantic error, the analyzer will
 output the first error to standard output.
@@ -120,7 +114,6 @@ A semantic error exhibited by the analyzer looks like this:
 If an unreadable file is given to `ducc`, the error looks like this:
 
     Error reading file: some_unreadable_file
-
 
 ## Questions and Issues
 
