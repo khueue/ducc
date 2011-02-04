@@ -1,10 +1,5 @@
-{1,program}
-{1,fundef}
-{1,formal_arraydec}
-{4,arraydec}
-{6,fundef}
-{7,funcall}
-{7,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundef},void,"f",[{{1,formal_arraydec},int,"x"}],[],[]},
+  {{4,arraydec},int,"a",10},
+  {{6,fundef},int,"main",[],[],[{{7,funcall},"f",[{{7,ident},"a"}]}]}]}.

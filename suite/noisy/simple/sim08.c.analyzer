@@ -1,202 +1,90 @@
-{4,program}
-{4,fundec}
-{4,scalardec}
-{6,fundef}
-{6,scalardec}
-{6,scalardec}
-{6,scalardec}
-{6,scalardec}
-{6,scalardec}
-{7,funcall}
-{7,ident}
-exp {scalardec,int}
-act {scalardec,int}
-{8,funcall}
-{8,ident}
-exp {scalardec,int}
-act {scalardec,int}
-{9,funcall}
-{9,ident}
-exp {scalardec,int}
-act {scalardec,int}
-{10,funcall}
-{10,ident}
-exp {scalardec,int}
-act {scalardec,int}
-{11,funcall}
-{11,ident}
-exp {scalardec,int}
-act {scalardec,int}
-{14,fundef}
-{14,scalardec}
-{15,return}
-{15,binop}
-{15,ident}
-{15,intconst}
-exp {fundef,int}
-act {binop,int}
-{18,fundef}
-{18,scalardec}
-{19,'if'}
-{19,binop}
-{19,ident}
-{19,intconst}
-{19,return}
-{19,intconst}
-exp {fundef,char}
-act {intconst,int}
-{20,return}
-{20,binop}
-{20,intconst}
-{20,funcall}
-{20,binop}
-{20,ident}
-{20,intconst}
-exp {scalardec,char}
-act {binop,int}
-exp {fundef,char}
-act {binop,int}
-{23,fundef}
-{24,scalardec}
-{25,funcall}
-{25,intconst}
-{25,intconst}
-{25,intconst}
-{25,intconst}
-{25,intconst}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {intconst,int}
-{26,binop}
-{26,ident}
-{26,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{27,funcall}
-{27,binop}
-{27,ident}
-{27,intconst}
-{27,binop}
-{27,ident}
-{27,intconst}
-{27,binop}
-{27,ident}
-{27,intconst}
-{27,binop}
-{27,binop}
-{27,ident}
-{27,ident}
-{27,intconst}
-{27,binop}
-{27,binop}
-{27,ident}
-{27,intconst}
-{27,intconst}
-exp {scalardec,int}
-act {binop,int}
-exp {scalardec,int}
-act {binop,int}
-exp {scalardec,int}
-act {binop,int}
-exp {scalardec,int}
-act {binop,int}
-exp {scalardec,int}
-act {binop,int}
-{29,funcall}
-{29,intconst}
-{29,funcall}
-{29,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{29,funcall}
-{29,funcall}
-{29,intconst}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {funcall,int}
-{29,funcall}
-{29,funcall}
-{29,funcall}
-{29,intconst}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {funcall,int}
-exp {scalardec,int}
-act {funcall,int}
-{29,funcall}
-{29,intconst}
-exp {scalardec,char}
-act {intconst,int}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {funcall,int}
-exp {scalardec,int}
-act {funcall,int}
-exp {scalardec,int}
-act {funcall,int}
-exp {scalardec,int}
-act {funcall,char}
-{30,funcall}
-{30,binop}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,binop}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,binop}
-{30,binop}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,binop}
-{30,funcall}
-{30,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{30,intconst}
-exp {scalardec,int}
-act {binop,char}
-exp {scalardec,int}
-act {binop,char}
-exp {scalardec,int}
-act {binop,char}
-exp {scalardec,int}
-act {funcall,char}
-exp {scalardec,int}
-act {binop,int}
-ok
+{{4,program},
+ '<stdin>',
+ [{{4,fundec},void,"putint",[{{4,scalardec},int,"i"}]},
+  {{6,fundef},
+   void,"foo",
+   [{{6,scalardec},int,"v1"},
+    {{6,scalardec},int,"v2"},
+    {{6,scalardec},int,"v3"},
+    {{6,scalardec},int,"v4"},
+    {{6,scalardec},int,"v5"}],
+   [],
+   [{{7,funcall},"putint",[{{7,ident},"v1"}]},
+    {{8,funcall},"putint",[{{8,ident},"v2"}]},
+    {{9,funcall},"putint",[{{9,ident},"v3"}]},
+    {{10,funcall},"putint",[{{10,ident},"v4"}]},
+    {{11,funcall},"putint",[{{11,ident},"v5"}]}]},
+  {{14,fundef},
+   int,"f",
+   [{{14,scalardec},int,"x"}],
+   [],
+   [{{15,return},{{15,binop},{{15,ident},"x"},'+',{{15,intconst},1}}}]},
+  {{18,fundef},
+   char,"g",
+   [{{18,scalardec},char,"x"}],
+   [],
+   [{{19,'if'},
+     {{19,binop},{{19,ident},"x"},'==',{{19,intconst},0}},
+     {{19,return},{{19,intconst},1}},
+     {{20,return},
+      {{20,binop},
+       {{20,intconst},2},
+       '*',
+       {{20,funcall},
+        "g",
+        [{{20,binop},{{20,ident},"x"},'-',{{20,intconst},1}}]}}}}]},
+  {{23,fundef},
+   int,"main",[],
+   [{{24,scalardec},int,"x"}],
+   [{{25,funcall},
+     "foo",
+     [{{25,intconst},0},
+      {{25,intconst},1},
+      {{25,intconst},2},
+      {{25,intconst},3},
+      {{25,intconst},4}]},
+    {{26,binop},{{26,ident},"x"},'=',{{26,intconst},5}},
+    {{27,funcall},
+     "foo",
+     [{{27,binop},{{27,ident},"x"},'+',{{27,intconst},0}},
+      {{27,binop},{{27,ident},"x"},'+',{{27,intconst},1}},
+      {{27,binop},{{27,ident},"x"},'+',{{27,intconst},2}},
+      {{27,binop},
+       {{27,binop},{{27,ident},"x"},'+',{{27,ident},"x"}},
+       '-',
+       {{27,intconst},2}},
+      {{27,binop},
+       {{27,binop},{{27,ident},"x"},'*',{{27,intconst},2}},
+       '-',
+       {{27,intconst},1}}]},
+    {{29,funcall},
+     "foo",
+     [{{29,intconst},0},
+      {{29,funcall},"f",[{{29,intconst},0}]},
+      {{29,funcall},"f",[{{29,funcall},"f",[{{29,intconst},0}]}]},
+      {{29,funcall},
+       "f",
+       [{{29,funcall},"f",[{{29,funcall},"f",[{{29,intconst},0}]}]}]},
+      {{29,funcall},"g",[{{29,intconst},2}]}]},
+    {{30,funcall},
+     "foo",
+     [{{30,binop},
+       {{30,funcall},"g",[{{30,intconst},2}]},
+       '+',
+       {{30,funcall},"g",[{{30,intconst},0}]}},
+      {{30,binop},
+       {{30,funcall},"g",[{{30,intconst},2}]},
+       '+',
+       {{30,funcall},"g",[{{30,intconst},1}]}},
+      {{30,binop},
+       {{30,binop},
+        {{30,funcall},"g",[{{30,intconst},0}]},
+        '+',
+        {{30,funcall},"g",[{{30,intconst},1}]}},
+       '+',
+       {{30,funcall},"g",[{{30,intconst},2}]}},
+      {{30,funcall},"g",[{{30,intconst},3}]},
+      {{30,binop},
+       {{30,funcall},"g",[{{30,intconst},4}]},
+       '-',
+       {{30,intconst},7}}]}]}]}.

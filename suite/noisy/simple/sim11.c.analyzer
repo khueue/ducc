@@ -1,68 +1,30 @@
-{3,program}
-{3,fundec}
-{3,scalardec}
-{4,fundec}
-{4,formal_arraydec}
-{6,fundef}
-{6,scalardec}
-{6,formal_arraydec}
-{7,binop}
-{7,arrelem}
-{7,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{7,ident}
-exp {arrelem,char}
-act {scalardec,int}
-{10,fundef}
-{11,arraydec}
-{12,scalardec}
-{13,binop}
-{13,ident}
-{13,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{14,binop}
-{14,arrelem}
-{14,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{14,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{16,while}
-{16,ident}
-{17,funcall}
-{17,binop}
-{17,binop}
-{17,intconst}
-{17,ident}
-{17,intconst}
-{17,ident}
-exp {scalardec,int}
-act {binop,int}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{18,funcall}
-{18,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{19,binop}
-{19,ident}
-{19,binop}
-{19,ident}
-{19,intconst}
-exp {scalardec,int}
-act {binop,int}
-{22,funcall}
-{22,charconst}
-{22,ident}
-exp {scalardec,int}
-act {charconst,char}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{23,funcall}
-{23,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-ok
+{{3,program},
+ '<stdin>',
+ [{{3,fundec},void,"putint",[{{3,scalardec},int,"i"}]},
+  {{4,fundec},void,"putstring",[{{4,formal_arraydec},char,"s"}]},
+  {{6,fundef},
+   void,"f",
+   [{{6,scalardec},int,"i"},{{6,formal_arraydec},char,"v"}],
+   [],
+   [{{7,binop},{{7,arrelem},"v",{{7,intconst},0}},'=',{{7,ident},"i"}}]},
+  {{10,fundef},
+   int,"main",[],
+   [{{11,arraydec},char,"t",2},{{12,scalardec},int,"b"}],
+   [{{13,binop},{{13,ident},"b"},'=',{{13,intconst},10}},
+    {{14,binop},{{14,arrelem},"t",{{14,intconst},1}},'=',{{14,intconst},0}},
+    {{16,while},
+     {{16,ident},"b"},
+     [{{17,funcall},
+       "f",
+       [{{17,binop},
+         {{17,binop},{{17,intconst},48},'+',{{17,ident},"b"}},
+         '-',
+         {{17,intconst},1}},
+        {{17,ident},"t"}]},
+      {{18,funcall},"putstring",[{{18,ident},"t"}]},
+      {{19,binop},
+       {{19,ident},"b"},
+       '=',
+       {{19,binop},{{19,ident},"b"},'-',{{19,intconst},1}}}]},
+    {{22,funcall},"f",[{{22,charconst},'\\n'},{{22,ident},"t"}]},
+    {{23,funcall},"putstring",[{{23,ident},"t"}]}]}]}.

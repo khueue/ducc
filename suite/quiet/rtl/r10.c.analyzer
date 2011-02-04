@@ -1,82 +1,34 @@
-{1,program}
-{1,scalardec}
-{2,scalardec}
-{3,arraydec}
-{4,arraydec}
-{6,fundef}
-{6,scalardec}
-{6,scalardec}
-{6,formal_arraydec}
-{6,formal_arraydec}
-{7,binop}
-{7,arrelem}
-{7,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{7,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{8,binop}
-{8,arrelem}
-{8,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{8,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{12,fundef}
-{13,scalardec}
-{14,scalardec}
-{15,arraydec}
-{16,arraydec}
-{18,funcall}
-{18,ident}
-{18,ident}
-{18,ident}
-{18,ident}
-exp {scalardec,int}
-act {scalardec,int}
-exp {scalardec,char}
-act {scalardec,char}
-exp {formal_arraydec,int}
-act {arraydec,int}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{20,binop}
-{20,arrelem}
-{20,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{20,binop}
-{20,arrelem}
-{20,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{20,intconst}
-exp {arrelem,int}
-act {binop,int}
-{21,binop}
-{21,arrelem}
-{21,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{21,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{23,binop}
-{23,arrelem}
-{23,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{23,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{24,binop}
-{24,arrelem}
-{24,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{24,intconst}
-exp {arrelem,char}
-act {intconst,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,scalardec},int,"a"},
+  {{2,scalardec},char,"b"},
+  {{3,arraydec},int,"c",10},
+  {{4,arraydec},char,"d",10},
+  {{6,fundef},
+   void,"f",
+   [{{6,scalardec},int,"e"},
+    {{6,scalardec},char,"g"},
+    {{6,formal_arraydec},int,"h"},
+    {{6,formal_arraydec},char,"i"}],
+   [],
+   [{{7,binop},{{7,arrelem},"h",{{7,intconst},2}},'=',{{7,intconst},3}},
+    {{8,binop},{{8,arrelem},"i",{{8,intconst},3}},'=',{{8,intconst},7}}]},
+  {{12,fundef},
+   int,"main",[],
+   [{{13,scalardec},int,"j"},
+    {{14,scalardec},char,"k"},
+    {{15,arraydec},int,"l",10},
+    {{16,arraydec},char,"m",10}],
+   [{{18,funcall},
+     "f",
+     [{{18,ident},"a"},{{18,ident},"k"},{{18,ident},"l"},{{18,ident},"d"}]},
+    {{20,binop},
+     {{20,arrelem},"c",{{20,intconst},4}},
+     '=',
+     {{20,binop},{{20,arrelem},"c",{{20,intconst},4}},'+',{{20,intconst},11}}},
+    {{21,binop},{{21,arrelem},"d",{{21,intconst},5}},'=',{{21,intconst},13}},
+    {{23,binop},{{23,arrelem},"l",{{23,intconst},6}},'=',{{23,intconst},17}},
+    {{24,binop},
+     {{24,arrelem},"m",{{24,intconst},7}},
+     '=',
+     {{24,intconst},19}}]}]}.

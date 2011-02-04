@@ -1,19 +1,10 @@
-{1,program}
-{1,fundef}
-{2,scalardec}
-{3,scalardec}
-{4,binop}
-{4,ident}
-{4,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{5,binop}
-{5,ident}
-{5,binop}
-{5,ident}
-{5,intconst}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {binop,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundef},
+   int,"main",[],
+   [{{2,scalardec},int,"x"},{{3,scalardec},int,"y"}],
+   [{{4,binop},{{4,ident},"x"},'=',{{4,intconst},42}},
+    {{5,binop},
+     {{5,ident},"x"},
+     '=',
+     {{5,binop},{{5,ident},"y"},'=',{{5,intconst},4711}}}]}]}.

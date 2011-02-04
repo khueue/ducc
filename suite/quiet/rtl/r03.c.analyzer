@@ -1,18 +1,8 @@
-{1,program}
-{1,fundef}
-{1,formal_arraydec}
-{5,fundef}
-{6,arraydec}
-{8,binop}
-{8,arrelem}
-{8,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{8,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{9,funcall}
-{9,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundef},void,"f",[{{1,formal_arraydec},int,"x"}],[],[]},
+  {{5,fundef},
+   int,"main",[],
+   [{{6,arraydec},int,"a",7}],
+   [{{8,binop},{{8,arrelem},"a",{{8,intconst},0}},'=',{{8,intconst},5}},
+    {{9,funcall},"f",[{{9,ident},"a"}]}]}]}.

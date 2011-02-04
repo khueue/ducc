@@ -1,75 +1,48 @@
-{5,program}
-{5,scalardec}
-{6,scalardec}
-{8,fundef}
-{9,scalardec}
-{10,scalardec}
-{12,binop}
-{12,ident}
-{12,binop}
-{12,binop}
-{12,binop}
-{12,ident}
-{12,ident}
-{12,ident}
-{12,ident}
-exp {scalardec,int}
-act {binop,int}
-{14,binop}
-{14,ident}
-{14,binop}
-{14,ident}
-{14,intconst}
-exp {scalardec,int}
-act {intconst,int}
-exp {scalardec,int}
-act {binop,int}
-{16,binop}
-{16,binop}
-{16,ident}
-{16,ident}
-{16,intconst}
-{18,binop}
-{18,ident}
-{18,binop}
-{18,ident}
-{18,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{20,while}
-{20,ident}
-{20,binop}
-{20,ident}
-{20,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{22,'if'}
-{22,intconst}
-{22,binop}
-{22,ident}
-{22,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{22,binop}
-{22,ident}
-{22,intconst}
-exp {scalardec,char}
-act {intconst,int}
-{24,binop}
-{24,ident}
-{24,binop}
-{24,ident}
-{24,ident}
-exp {scalardec,char}
-act {binop,int}
-{26,binop}
-{26,ident}
-{26,binop}
-{26,binop}
-{26,intconst}
-{26,ident}
-{26,intconst}
-exp {scalardec,char}
-act {binop,int}
-{28,intconst}
-ok
+{{5,program},
+ '<stdin>',
+ [{{5,scalardec},int,"x"},
+  {{6,scalardec},char,"y"},
+  {{8,fundef},
+   int,"main",[],
+   [{{9,scalardec},int,"z"},{{10,scalardec},char,"w"}],
+   [{{12,binop},
+     {{12,ident},"x"},
+     '=',
+     {{12,binop},
+      {{12,binop},
+       {{12,binop},{{12,ident},"x"},'+',{{12,ident},"y"}},
+       '+',
+       {{12,ident},"z"}},
+      '+',
+      {{12,ident},"w"}}},
+    {{14,binop},
+     {{14,ident},"x"},
+     '=',
+     {{14,binop},{{14,ident},"z"},'=',{{14,intconst},42}}},
+    {{16,binop},
+     {{16,binop},{{16,ident},"x"},'==',{{16,ident},"z"}},
+     '==',
+     {{16,intconst},42}},
+    {{18,binop},
+     {{18,ident},"x"},
+     '==',
+     {{18,binop},{{18,ident},"z"},'=',{{18,intconst},99}}},
+    {{20,while},
+     {{20,ident},"x"},
+     {{20,binop},{{20,ident},"x"},'=',{{20,intconst},0}}},
+    {{22,'if'},
+     {{22,intconst},123},
+     {{22,binop},{{22,ident},"y"},'=',{{22,intconst},4}},
+     {{22,binop},{{22,ident},"y"},'=',{{22,intconst},7}}},
+    {{24,binop},
+     {{24,ident},"w"},
+     '=',
+     {{24,binop},{{24,ident},"x"},'>',{{24,ident},"y"}}},
+    {{26,binop},
+     {{26,ident},"y"},
+     '=',
+     {{26,binop},
+      {{26,binop},{{26,intconst},0},'<',{{26,ident},"x"}},
+      '<',
+      {{26,intconst},10}}},
+    {{28,intconst},42}]}]}.

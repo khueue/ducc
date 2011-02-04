@@ -1,42 +1,29 @@
-{1,program}
-{1,scalardec}
-{2,scalardec}
-{3,arraydec}
-{4,arraydec}
-{6,fundef}
-{6,scalardec}
-{6,scalardec}
-{6,formal_arraydec}
-{6,formal_arraydec}
-{10,fundef}
-{11,scalardec}
-{12,scalardec}
-{13,arraydec}
-{14,arraydec}
-{16,funcall}
-{16,ident}
-{16,ident}
-{16,ident}
-{16,ident}
-exp {scalardec,int}
-act {scalardec,int}
-exp {scalardec,char}
-act {scalardec,char}
-exp {formal_arraydec,int}
-act {arraydec,int}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{18,binop}
-{18,arrelem}
-{18,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{18,binop}
-{18,arrelem}
-{18,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{18,intconst}
-exp {arrelem,int}
-act {binop,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,scalardec},int,"a"},
+  {{2,scalardec},char,"b"},
+  {{3,arraydec},int,"c",10},
+  {{4,arraydec},char,"d",10},
+  {{6,fundef},
+   void,"f",
+   [{{6,scalardec},int,"e"},
+    {{6,scalardec},char,"g"},
+    {{6,formal_arraydec},int,"h"},
+    {{6,formal_arraydec},char,"i"}],
+   [],[]},
+  {{10,fundef},
+   int,"main",[],
+   [{{11,scalardec},int,"j"},
+    {{12,scalardec},char,"k"},
+    {{13,arraydec},int,"l",10},
+    {{14,arraydec},char,"m",10}],
+   [{{16,funcall},
+     "f",
+     [{{16,ident},"a"},{{16,ident},"k"},{{16,ident},"l"},{{16,ident},"d"}]},
+    {{18,binop},
+     {{18,arrelem},"c",{{18,intconst},5}},
+     '=',
+     {{18,binop},
+      {{18,arrelem},"l",{{18,intconst},7}},
+      '+',
+      {{18,intconst},1}}}]}]}.

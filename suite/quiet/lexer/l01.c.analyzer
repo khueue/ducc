@@ -1,3 +1,1 @@
-{1,program}
-{1,fundef}
-ok
+{{1,program},'<stdin>',[{{1,fundef},int,"main",[],[],[nil]}]}.

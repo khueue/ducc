@@ -1,53 +1,32 @@
-{1,program}
-{1,fundef}
-{1,scalardec}
-{1,scalardec}
-{2,return}
-{2,binop}
-{2,ident}
-{2,ident}
-exp {fundef,int}
-act {binop,int}
-{6,fundef}
-{7,scalardec}
-{8,binop}
-{8,intconst}
-{8,unop}
-{8,intconst}
-{9,binop}
-{9,intconst}
-{9,intconst}
-{10,binop}
-{10,binop}
-{10,intconst}
-{10,intconst}
-{10,intconst}
-{11,funcall}
-{11,binop}
-{11,intconst}
-{11,intconst}
-{11,binop}
-{11,intconst}
-{11,intconst}
-exp {scalardec,int}
-act {binop,int}
-exp {scalardec,int}
-act {binop,int}
-{12,binop}
-{12,binop}
-{12,intconst}
-{12,intconst}
-{12,intconst}
-{13,binop}
-{13,ident}
-{13,binop}
-{13,intconst}
-{13,intconst}
-exp {scalardec,int}
-act {binop,int}
-{14,binop}
-{14,binop}
-{14,intconst}
-{14,intconst}
-{14,intconst}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundef},
+   int,"f",
+   [{{1,scalardec},int,"x"},{{1,scalardec},int,"y"}],
+   [],
+   [{{2,return},{{2,binop},{{2,ident},"x"},'+',{{2,ident},"y"}}}]},
+  {{6,fundef},
+   int,"main",[],
+   [{{7,scalardec},int,"i"}],
+   [{{8,binop},{{8,intconst},1},'!=',{{8,unop},'!',{{8,intconst},3}}},
+    {{9,binop},{{9,intconst},4},'&&',{{9,intconst},6}},
+    {{10,binop},
+     {{10,binop},{{10,intconst},7},'*',{{10,intconst},8}},
+     '+',
+     {{10,intconst},10}},
+    {{11,funcall},
+     "f",
+     [{{11,binop},{{11,intconst},11},'-',{{11,intconst},12}},
+      {{11,binop},{{11,intconst},12},'/',{{11,intconst},16}}]},
+    {{12,binop},
+     {{12,binop},{{12,intconst},17},'<=',{{12,intconst},18}},
+     '<',
+     {{12,intconst},20}},
+    {{13,binop},
+     {{13,ident},"i"},
+     '=',
+     {{13,binop},{{13,intconst},21},'==',{{13,intconst},22}}},
+    {{14,binop},
+     {{14,binop},{{14,intconst},25},'>=',{{14,intconst},27}},
+     '>',
+     {{14,intconst},28}}]}]}.

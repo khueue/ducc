@@ -1,37 +1,11 @@
-{1,program}
-{1,fundec}
-{1,scalardec}
-{6,arraydec}
-{8,fundef}
-{9,arraydec}
-{10,binop}
-{10,arrelem}
-{10,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{10,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{11,binop}
-{11,arrelem}
-{11,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{11,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{12,funcall}
-{12,arrelem}
-{12,intconst}
-exp {dontcare,int}
-act {intconst,int}
-exp {scalardec,int}
-act {arrelem,int}
-{13,funcall}
-{13,arrelem}
-{13,intconst}
-exp {dontcare,int}
-act {intconst,int}
-exp {scalardec,int}
-act {arrelem,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundec},void,"putint",[{{1,scalardec},int,"x"}]},
+  {{6,arraydec},int,"a",10},
+  {{8,fundef},
+   int,"main",[],
+   [{{9,arraydec},int,"b",10}],
+   [{{10,binop},{{10,arrelem},"a",{{10,intconst},7}},'=',{{10,intconst},123}},
+    {{11,binop},{{11,arrelem},"b",{{11,intconst},5}},'=',{{11,intconst},456}},
+    {{12,funcall},"putint",[{{12,arrelem},"a",{{12,intconst},7}}]},
+    {{13,funcall},"putint",[{{13,arrelem},"b",{{13,intconst},5}}]}]}]}.

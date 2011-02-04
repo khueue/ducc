@@ -1,59 +1,29 @@
-{3,program}
-{3,fundec}
-{3,scalardec}
-{4,fundec}
-{4,formal_arraydec}
-{6,arraydec}
-{8,fundef}
-{9,scalardec}
-{10,binop}
-{10,ident}
-{10,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{11,binop}
-{11,arrelem}
-{11,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{11,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{13,while}
-{13,ident}
-{14,binop}
-{14,arrelem}
-{14,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{14,binop}
-{14,binop}
-{14,intconst}
-{14,ident}
-{14,intconst}
-exp {arrelem,char}
-act {binop,int}
-{15,funcall}
-{15,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{16,binop}
-{16,ident}
-{16,binop}
-{16,ident}
-{16,intconst}
-exp {scalardec,int}
-act {binop,int}
-{19,binop}
-{19,arrelem}
-{19,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{19,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{20,funcall}
-{20,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-ok
+{{3,program},
+ '<stdin>',
+ [{{3,fundec},void,"putint",[{{3,scalardec},int,"i"}]},
+  {{4,fundec},void,"putstring",[{{4,formal_arraydec},char,"s"}]},
+  {{6,arraydec},char,"t",2},
+  {{8,fundef},
+   int,"main",[],
+   [{{9,scalardec},int,"b"}],
+   [{{10,binop},{{10,ident},"b"},'=',{{10,intconst},10}},
+    {{11,binop},{{11,arrelem},"t",{{11,intconst},1}},'=',{{11,intconst},0}},
+    {{13,while},
+     {{13,ident},"b"},
+     [{{14,binop},
+       {{14,arrelem},"t",{{14,intconst},0}},
+       '=',
+       {{14,binop},
+        {{14,binop},{{14,intconst},48},'+',{{14,ident},"b"}},
+        '-',
+        {{14,intconst},1}}},
+      {{15,funcall},"putstring",[{{15,ident},"t"}]},
+      {{16,binop},
+       {{16,ident},"b"},
+       '=',
+       {{16,binop},{{16,ident},"b"},'-',{{16,intconst},1}}}]},
+    {{19,binop},
+     {{19,arrelem},"t",{{19,intconst},0}},
+     '=',
+     {{19,charconst},'\\n'}},
+    {{20,funcall},"putstring",[{{20,ident},"t"}]}]}]}.

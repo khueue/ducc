@@ -1,182 +1,69 @@
-{9,program}
-{9,fundec}
-{9,scalardec}
-{10,fundec}
-{10,formal_arraydec}
-{12,fundef}
-{12,formal_arraydec}
-{13,funcall}
-{13,arrelem}
-{13,intconst}
-exp {dontcare,int}
-act {intconst,int}
-exp {scalardec,int}
-act {arrelem,int}
-{16,fundef}
-{16,formal_arraydec}
-{17,funcall}
-{17,ident}
-exp {formal_arraydec,int}
-act {formal_arraydec,int}
-{20,fundef}
-{20,formal_arraydec}
-{21,funcall}
-{21,ident}
-exp {formal_arraydec,char}
-act {formal_arraydec,char}
-{24,fundef}
-{24,formal_arraydec}
-{25,funcall}
-{25,ident}
-exp {formal_arraydec,char}
-act {formal_arraydec,char}
-{28,arraydec}
-{29,arraydec}
-{31,fundef}
-{32,arraydec}
-{33,arraydec}
-{35,binop}
-{35,arrelem}
-{35,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{35,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{36,binop}
-{36,arrelem}
-{36,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{36,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{38,funcall}
-{38,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-{39,funcall}
-{39,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-{41,binop}
-{41,arrelem}
-{41,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{41,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{42,binop}
-{42,arrelem}
-{42,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{42,intconst}
-exp {arrelem,int}
-act {intconst,int}
-{44,funcall}
-{44,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-{45,funcall}
-{45,ident}
-exp {formal_arraydec,int}
-act {arraydec,int}
-{47,binop}
-{47,arrelem}
-{47,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{47,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{48,binop}
-{48,arrelem}
-{48,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{48,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{49,binop}
-{49,arrelem}
-{49,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{49,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{51,binop}
-{51,arrelem}
-{51,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{51,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{52,binop}
-{52,arrelem}
-{52,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{52,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{54,funcall}
-{54,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{55,funcall}
-{55,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{57,binop}
-{57,arrelem}
-{57,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{57,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{58,binop}
-{58,arrelem}
-{58,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{58,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{60,binop}
-{60,arrelem}
-{60,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{60,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{61,binop}
-{61,arrelem}
-{61,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{61,charconst}
-exp {arrelem,char}
-act {charconst,char}
-{62,binop}
-{62,arrelem}
-{62,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{62,intconst}
-exp {arrelem,char}
-act {intconst,int}
-{64,funcall}
-{64,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-{65,funcall}
-{65,ident}
-exp {formal_arraydec,char}
-act {arraydec,char}
-ok
+{{9,program},
+ '<stdin>',
+ [{{9,fundec},void,"putint",[{{9,scalardec},int,"i"}]},
+  {{10,fundec},void,"putstring",[{{10,formal_arraydec},char,"s"}]},
+  {{12,fundef},
+   void,"f",
+   [{{12,formal_arraydec},int,"a"}],
+   [],
+   [{{13,funcall},"putint",[{{13,arrelem},"a",{{13,intconst},3}}]}]},
+  {{16,fundef},
+   void,"g",
+   [{{16,formal_arraydec},int,"b"}],
+   [],
+   [{{17,funcall},"f",[{{17,ident},"b"}]}]},
+  {{20,fundef},
+   void,"fc",
+   [{{20,formal_arraydec},char,"a"}],
+   [],
+   [{{21,funcall},"putstring",[{{21,ident},"a"}]}]},
+  {{24,fundef},
+   void,"gc",
+   [{{24,formal_arraydec},char,"b"}],
+   [],
+   [{{25,funcall},"fc",[{{25,ident},"b"}]}]},
+  {{28,arraydec},int,"x",10},
+  {{29,arraydec},char,"xc",10},
+  {{31,fundef},
+   int,"main",[],
+   [{{32,arraydec},int,"y",10},{{33,arraydec},char,"yc",10}],
+   [{{35,binop},{{35,arrelem},"x",{{35,intconst},3}},'=',{{35,intconst},12}},
+    {{36,binop},{{36,arrelem},"y",{{36,intconst},3}},'=',{{36,intconst},34}},
+    {{38,funcall},"f",[{{38,ident},"x"}]},
+    {{39,funcall},"f",[{{39,ident},"y"}]},
+    {{41,binop},{{41,arrelem},"x",{{41,intconst},3}},'=',{{41,intconst},56}},
+    {{42,binop},{{42,arrelem},"y",{{42,intconst},3}},'=',{{42,intconst},78}},
+    {{44,funcall},"g",[{{44,ident},"x"}]},
+    {{45,funcall},"g",[{{45,ident},"y"}]},
+    {{47,binop},
+     {{47,arrelem},"xc",{{47,intconst},0}},
+     '=',
+     {{47,charconst},'\\n'}},
+    {{48,binop},
+     {{48,arrelem},"xc",{{48,intconst},1}},
+     '=',
+     {{48,charconst},'A'}},
+    {{49,binop},{{49,arrelem},"xc",{{49,intconst},2}},'=',{{49,intconst},0}},
+    {{51,binop},
+     {{51,arrelem},"yc",{{51,intconst},0}},
+     '=',
+     {{51,charconst},'B'}},
+    {{52,binop},{{52,arrelem},"yc",{{52,intconst},1}},'=',{{52,intconst},0}},
+    {{54,funcall},"fc",[{{54,ident},"xc"}]},
+    {{55,funcall},"fc",[{{55,ident},"yc"}]},
+    {{57,binop},
+     {{57,arrelem},"xc",{{57,intconst},0}},
+     '=',
+     {{57,charconst},'C'}},
+    {{58,binop},{{58,arrelem},"xc",{{58,intconst},1}},'=',{{58,intconst},0}},
+    {{60,binop},
+     {{60,arrelem},"yc",{{60,intconst},0}},
+     '=',
+     {{60,charconst},'D'}},
+    {{61,binop},
+     {{61,arrelem},"yc",{{61,intconst},1}},
+     '=',
+     {{61,charconst},'\\n'}},
+    {{62,binop},{{62,arrelem},"yc",{{62,intconst},2}},'=',{{62,intconst},0}},
+    {{64,funcall},"gc",[{{64,ident},"xc"}]},
+    {{65,funcall},"gc",[{{65,ident},"yc"}]}]}]}.

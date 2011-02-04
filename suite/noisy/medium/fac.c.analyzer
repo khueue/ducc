@@ -1,40 +1,23 @@
-{6,program}
-{6,fundec}
-{6,scalardec}
-{7,fundec}
-{9,fundef}
-{9,scalardec}
-{10,'if'}
-{10,binop}
-{10,ident}
-{10,intconst}
-{10,return}
-{10,intconst}
-exp {fundef,int}
-act {intconst,int}
-{11,return}
-{11,binop}
-{11,ident}
-{11,funcall}
-{11,binop}
-{11,ident}
-{11,intconst}
-exp {scalardec,int}
-act {binop,int}
-exp {fundef,int}
-act {binop,int}
-{14,scalardec}
-{15,fundef}
-{16,binop}
-{16,ident}
-{16,funcall}
-exp {scalardec,int}
-act {funcall,int}
-{17,funcall}
-{17,funcall}
-{17,ident}
-exp {scalardec,int}
-act {scalardec,int}
-exp {scalardec,int}
-act {funcall,int}
-ok
+{{6,program},
+ '<stdin>',
+ [{{6,fundec},void,"putint",[{{6,scalardec},int,"i"}]},
+  {{7,fundec},int,"getint",[]},
+  {{9,fundef},
+   int,"fac",
+   [{{9,scalardec},int,"n"}],
+   [],
+   [{{10,'if'},
+     {{10,binop},{{10,ident},"n"},'==',{{10,intconst},0}},
+     {{10,return},{{10,intconst},1}},
+     {{11,return},
+      {{11,binop},
+       {{11,ident},"n"},
+       '*',
+       {{11,funcall},
+        "fac",
+        [{{11,binop},{{11,ident},"n"},'-',{{11,intconst},1}}]}}}}]},
+  {{14,scalardec},int,"a"},
+  {{15,fundef},
+   int,"main",[],[],
+   [{{16,binop},{{16,ident},"a"},'=',{{16,funcall},"getint",[]}},
+    {{17,funcall},"putint",[{{17,funcall},"fac",[{{17,ident},"a"}]}]}]}]}.

@@ -1,15 +1,9 @@
-{1,program}
-{1,fundef}
-{3,arraydec}
-{4,scalardec}
-{5,binop}
-{5,arrelem}
-{5,intconst}
-exp {dontcare,int}
-act {intconst,int}
-{5,binop}
-{5,charconst}
-{5,ident}
-exp {arrelem,char}
-act {binop,char}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,fundef},
+   int,"main",[],
+   [{{3,arraydec},char,"s",27},{{4,scalardec},char,"t"}],
+   [{{5,binop},
+     {{5,arrelem},"s",{{5,intconst},0}},
+     '=',
+     {{5,binop},{{5,charconst},a},'+',{{5,ident},"t"}}}]}]}.

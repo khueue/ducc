@@ -1,33 +1,24 @@
-{1,program}
-{1,scalardec}
-{3,scalardec}
-{5,scalardec}
-{7,fundef}
-{8,binop}
-{8,ident}
-{8,binop}
-{8,binop}
-{8,ident}
-{8,ident}
-{8,ident}
-exp {scalardec,int}
-act {binop,int}
-{11,fundef}
-{11,scalardec}
-{12,binop}
-{12,ident}
-{12,ident}
-exp {scalardec,char}
-act {scalardec,int}
-{15,fundef}
-{16,binop}
-{16,ident}
-{16,intconst}
-exp {scalardec,int}
-act {intconst,int}
-{17,funcall}
-{18,funcall}
-{18,ident}
-exp {scalardec,int}
-act {scalardec,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,scalardec},int,"b"},
+  {{3,scalardec},char,"addi"},
+  {{5,scalardec},int,"la"},
+  {{7,fundef},
+   void,"jal",[],[],
+   [{{8,binop},
+     {{8,ident},"b"},
+     '=',
+     {{8,binop},
+      {{8,binop},{{8,ident},"b"},'*',{{8,ident},"addi"}},
+      '+',
+      {{8,ident},"la"}}}]},
+  {{11,fundef},
+   int,"mov",
+   [{{11,scalardec},int,"lb"}],
+   [],
+   [{{12,binop},{{12,ident},"addi"},'=',{{12,ident},"lb"}}]},
+  {{15,fundef},
+   int,"main",[],[],
+   [{{16,binop},{{16,ident},"la"},'=',{{16,intconst},8}},
+    {{17,funcall},"jal",[]},
+    {{18,funcall},"mov",[{{18,ident},"la"}]}]}]}.

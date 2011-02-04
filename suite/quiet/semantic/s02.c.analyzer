@@ -1,14 +1,7 @@
-{1,program}
-{1,scalardec}
-{2,fundef}
-{2,scalardec}
-{5,fundef}
-{6,binop}
-{6,ident}
-{6,funcall}
-{6,ident}
-exp {scalardec,int}
-act {scalardec,int}
-exp {scalardec,int}
-act {funcall,int}
-ok
+{{1,program},
+ '<stdin>',
+ [{{1,scalardec},int,"a"},
+  {{2,fundef},int,"foo",[{{2,scalardec},int,"x"}],[],[nil]},
+  {{5,fundef},
+   int,"main",[],[],
+   [{{6,binop},{{6,ident},"a"},'=',{{6,funcall},"foo",[{{6,ident},"a"}]}}]}]}.
