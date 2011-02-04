@@ -53,13 +53,22 @@ E.g. the environment may look like:
 
 XXX more implementation notes?
 
-XXX what information we associate with identifiers in the environment
+When storing an identifier in the symbol table, we supply the entire AST 
+node as the associated value.
 
 ### Delimited Scopes
 
-XXX
+Updates to the environment are local to the function. For example, analyzing 
+a function definition will create a new scope when entering the function. 
+When leaving the function, we restore the environment by returning the 
+previous environment.
+
+See e.g. `analyze_fundef/2` in `src/analyzer/analyzer.erl`.
 
 ## Representation of Types
+
+As previously mentioned, we store AST nodes as the value associated with the 
+key in the symbol table.
 
 XXX
 
