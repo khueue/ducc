@@ -46,7 +46,9 @@ Rules.
 {LineComment}(.*) :
     skip_token.
 
-{MultiCommentStart}(/*)({NormalChar}|{SafeStar}|{SafeSlash})*(\**){MultiCommentEnd} :
+%%%%{MultiCommentStart}((/)*([^*/]|[^*]/|\*[^/])*(\*)*){MultiCommentEnd} :
+
+{MultiCommentStart}([^*]*(\*)+[^*/])*[^*]*(\*)+/ :
     skip_token.
 
 {Logical}|{Comparator}|{Symbol} :
