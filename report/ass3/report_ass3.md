@@ -97,19 +97,22 @@ function issues an error if the two types are incompatible:
     widest_type({_,char}, {_,int})          -> int;
     widest_type({_,_}, {_,_})               -> throw(incompatible).
 
-For issues assignments xxx
+For rules concerning assignments, argument passing and checking return
+values, the function `convertible_to(TargetType, ActualType, ...)` is used.
+It issues an error if the `ActualType` cannot be implicitly converted to
+`TargetType`, handled by its helper function:
 
     first_accepts_second({formal_arraydec, Type}, {arraydec, Type}) -> ok;
     first_accepts_second({formal_arraydec, Type}, {formal_arraydec, Type}) -> ok;
-    first_accepts_second(_, {arraydec,_})    -> throw(incompatible);
-    first_accepts_second({arraydec,_}, _)    -> throw(incompatible);
+    first_accepts_second(_, {arraydec,_})           -> throw(incompatible);
+    first_accepts_second({arraydec,_}, _)           -> throw(incompatible);
     first_accepts_second(_, {formal_arraydec,_})    -> throw(incompatible);
-    first_accepts_second({_,void}, {_,void}) -> ok;
-    first_accepts_second({_,int}, {_,int})   -> ok;
-    first_accepts_second({_,int}, {_,char})  -> ok;
-    first_accepts_second({_,char}, {_,char}) -> ok;
-    first_accepts_second({_,char}, {_,int})  -> ok;
-    first_accepts_second(_, _)               -> throw(incompatible).
+    first_accepts_second({_,void}, {_,void})        -> ok;
+    first_accepts_second({_,int}, {_,int})          -> ok;
+    first_accepts_second({_,int}, {_,char})         -> ok;
+    first_accepts_second({_,char}, {_,char})        -> ok;
+    first_accepts_second({_,char}, {_,int})         -> ok;
+    first_accepts_second(_, _)                      -> throw(incompatible).
 
 XXXXXXXX dfs
 
@@ -117,17 +120,17 @@ XXXXXXXX dfs
 
 ### Multi-Step Compilation
 
-The analyzer (and all the successive steps) has been implemented to read from
+The analyzer (as all previous steps) has been implemented to read from
 standard input and output to standard output.
 As such it's possible to, for example, pipe the result from the lexer to the
 parser, and from the parser to the analyzer:
 
     cat suite/quiet/semantic/s01.c | lexer | parser | analyzer
 
-If the source file is semantically correct, the analyzer will output
-output the abstract syntax tree to standard output.
+If the source file is semantically correct, the analyzer will simply echo
+the abstract syntax tree, as given by the parser, to standard output.
 If the source file contains at least one semantic error, the analyzer will
-output the first error to standard output.
+output the first error to standard output and stop evaluation.
 
 ### Single-Step Compilation
 
@@ -139,24 +142,12 @@ successive steps on it, and prints the result to standard output:
 
 ### Error Handling
 
-When a script (such as `lexer`, `parser`, or `analyzer`) receives invalid
+When a script (such as `analyzer`) receives invalid
 input, an error message is printed and execution stops.
-
-A lexical error exhibited by the lexer looks like this:
-
-    Lexical error on line 13, illegal: "%"
-
-A syntax error exhibited by the parser looks like this:
-
-    Syntax error on line 5, before: "')'"
 
 A semantic error exhibited by the analyzer looks like this:
 
-    XXX
-
-If an unreadable file is given to `ducc`, the error looks like this:
-
-    Error reading file: some_unreadable_file
+    <stdin>:6: semantic error, inconvertible types
 
 ## Questions and Issues
 
