@@ -41,11 +41,11 @@ Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 The environment is implemented in `src/analyzer/analyzer_env.erl`.
 
-The environment is represented as a stack of symbol tables wrapped in a tuple:
+The environment is represented as a stack of scopes wrapped in a tuple:
 
-    {Scope}
+    {Scopes}
 
-The head of the `Scope` stack (which is just a list) is the current scope.
+The head of the `Scopes` stack (which is just a list) is the current scope.
 Each scope has the form:
 
     {ScopeName, SymTab}
@@ -76,7 +76,7 @@ downside, this probably involves more copying than necessary.
 When the analyzer encounters a function definition (which is the only
 scope-introducing construct in uC), a new scope is created
 and pushed onto the environment stack. When the analysis of the function
-completes, that scope is discarded. This is achieved by simply by passing
+completes, that scope is discarded. This is achieved by simply passing
 on the environment that was used before the scope was created (leaving the
 actual destruction to the garbage collector).
 
@@ -105,7 +105,7 @@ function issues an error if the two types are incompatible:
     widest_type({_,char}, {_,int})          -> int;
     widest_type({_,_}, {_,_})               -> throw(incompatible).
 
-For rules concerning assignments, argument passing and checking return
+For rules concerning assignments, argument passing and return
 values, the function `convertible_to(TargetType, ActualType, ...)` is used.
 It issues an error if the `ActualType` cannot be implicitly converted to
 `TargetType`, handled by its helper function:
