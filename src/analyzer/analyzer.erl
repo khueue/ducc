@@ -21,28 +21,21 @@ exception(Node, Format, Args) ->
 
 analyze(ParseTree) ->
     Env = analyzer_env:new(),
-    try analyze(ParseTree, Env)
-    catch
-        Exception ->
-            throw(Exception)
-    end,
+    analyze(ParseTree, Env),
     ParseTree.
 
-analyze(Node, Env) when erlang:is_tuple(Node) ->
+analyze(Node, Env0) when erlang:is_tuple(Node) ->
     Tag = get_tag(Node),
-    Env1 = analyze_node(Tag, Node, Env),
+    Env1 = analyze_node(Tag, Node, Env0),
     Env1;
-analyze(nil, Env) ->
-    Env;
-analyze([], Env) ->
-    Env;
-analyze([X|Xs], Env) ->
-    Env1 = analyze(X, Env),
-    Env2 = analyze(Xs, Env1),
-    Env2;
-analyze(Unhandled, Env) ->
-    io:format('Unhandled: ~p~n', [Unhandled]),
-    Env.
+analyze(nil, Env0) ->
+    Env0;
+analyze([], Env0) ->
+    Env0;
+analyze([Node|Nodes], Env0) ->
+    Env1 = analyze(Node, Env0),
+    Env2 = analyze(Nodes, Env1),
+    Env2.
 
 analyze_node(program, Node, Env)         -> analyze_program(Node, Env);
 analyze_node(scalardec, Node, Env)       -> analyze_scalardec(Node, Env);
@@ -59,10 +52,7 @@ analyze_node(binop, Node, Env)           -> analyze_binop(Node, Env);
 analyze_node(ident, Node, Env)           -> analyze_ident(Node, Env);
 analyze_node(intconst, Node, Env)        -> analyze_intconst(Node, Env);
 analyze_node(charconst, Node, Env)       -> analyze_charconst(Node, Env);
-analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env);
-analyze_node(Tag, _, Env) ->
-    io:format('Unhandled tag: ~p~n', [Tag]),
-    Env.
+analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env).
 
 analyze_program({_Meta, _File, Topdecs}, Env) ->
     Env1 = analyze(Topdecs, Env),
@@ -84,54 +74,43 @@ must_not_exist_in_same_scope(Name, Node, Env) ->
 analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
     must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    % Parser makes sure that Size is a natural number.
     Env1.
 
 analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
     Redefinition = exception(Node, 'already defined', []),
-    Conflict     = exception(Node, 'conflicting types', []),
-    case analyzer_env:lookup(Name, Node, Env0) of
+    Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
-            ok;
-        Val ->
-            case get_tag(Val) of
+            analyzer_env:add_symbol(Name, Node, Env0);
+        FoundNode ->
+            case get_tag(FoundNode) of
                 fundec ->
-                    case check_formals(Node, Val) of
-                        true ->
-                            ok;
-                        false ->
-                            throw(Conflict)
-                    end;
+                    same_return_type(Node, FoundNode),
+                    same_formals(Node, FoundNode),
+                    Env0;
                 fundef ->
-                    case check_formals(Node, Val) of
-                        true ->
-                            ok;
-                        false ->
-                            throw(Conflict)
-                    end;
+                    same_return_type(Node, FoundNode),
+                    same_formals(Node, FoundNode),
+                    Env0;
                 _Other ->
                     throw(Redefinition)
             end
     end,
-    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env2 = analyzer_env:enter_scope(Name, Env1),
     _Env3 = analyze(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
 analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Redefinition = exception(Node, 'already defined', []),
-    Conflict     = exception(Node, 'conflicting types', []),
     Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             analyzer_env:add_symbol(Name, Node, Env0);
-        Val ->
-            case get_tag(Val) of
+        FoundNode ->
+            case get_tag(FoundNode) of
                 fundec ->
-                    case check_formals(Node, Val) of
-                        true ->
-                            analyzer_env:add_symbol(Name, Node, Env0);
-                        false ->
-                            throw(Conflict)
-                    end;
+                    same_return_type(Node, FoundNode),
+                    same_formals(Node, FoundNode),
+                    analyzer_env:add_symbol(Name, Node, Env0);
                 _Other ->
                     throw(Redefinition)
             end
@@ -142,40 +121,46 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     _Env5 = analyze(Stmts, Env4),
     Env1. % Updates to the environment are local to the function!
 
-check_formals(Node1, Node2) ->
-    Node1Formals = element(4, Node1),
-    Node2Formals = element(4, Node2),
-    same_arity(Node1Formals, Node2Formals, Node1),
-    same_return_type(Node1, Node2) andalso
-    identical_types(Node1Formals, Node2Formals).
+same_formals(Node, FoundNode) ->
+    NodeFormals = element(4, Node),
+    FoundNodeFormals = element(4, FoundNode),
+    same_arity(NodeFormals, FoundNodeFormals, Node),
+    identical_types(NodeFormals, FoundNodeFormals, Node).
 
-same_return_type(Node1, Node2) ->
-    get_type(Node1) =:= get_type(Node2).
+same_return_type(Node, FoundNode) ->
+    case get_type(Node) =:= get_type(FoundNode) of
+        true ->
+            ok;
+        false ->
+            throw(exception(Node, 'wrong return type', []))
+    end.
 
-same_arity(Formals1, Formals2, Node) ->
-    try same_arity(Formals1, Formals2)
+same_arity(Formals, FoundFormals, Node) ->
+    try same_arity(Formals, FoundFormals)
     catch
         different_arity ->
             throw(exception(Node, 'wrong number of arguments', []))
     end.
 
-same_arity(Formals1, Formals2) ->
-    case erlang:length(Formals1) =:= erlang:length(Formals2) of
+same_arity(Formals, FoundFormals) ->
+    case erlang:length(Formals) =:= erlang:length(FoundFormals) of
         true  -> ok;
         false -> throw(different_arity)
     end.
 
-identical_types([], []) -> true;
-identical_types([F1|Formals1], [F2|Formals2]) ->
-    same_tag_and_type(F1, F2) andalso
-    identical_types(Formals1, Formals2).
+identical_types([], [], _CurrentNode) -> ok;
+identical_types([F1|Formals1], [F2|Formals2], CurrentNode) ->
+    same_tag_and_type(F1, F2, CurrentNode),
+    identical_types(Formals1, Formals2, CurrentNode).
 
 % BUG: We are lucky enough to have the same structure for all possible
 % formals (scalardec and formal_arraydec), but this simple solution would
 % not necessarily work if other types (pointers, fixed size array, ...)
 % are introduced.
-same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}) -> true;
-same_tag_and_type(_, _) -> false.
+same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}, _CurrentNode) ->
+    ok;
+same_tag_and_type(_, _, CurrentNode) ->
+    throw(exception(CurrentNode, 'parameters must match exactly', [])).
 
 analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     must_not_exist_in_same_scope(Name, Node, Env0),
@@ -197,19 +182,16 @@ analyze_while(Node = {_Meta, Cond, Stmt}, Env) ->
 
 analyze_return(Node = {_Meta, Expr}, Env) ->
     Env1 = analyze(Expr, Env),
-    ScopeName = analyzer_env:scope_name(Env1),
-    FunInfo = analyzer_env:lookup(ScopeName, Node, Env1),
-    convertible_to(eval_type(FunInfo, Env1), eval_type(Expr, Env1), Node),
+    FunName = analyzer_env:scope_name(Env1),
+    FunNode = analyzer_env:lookup(FunName, Node, Env1),
+    convertible_to(eval_type(FunNode, Env1), eval_type(Expr, Env1), Node),
     Env1.
 
 analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
     must_be_tag(Name, Node, Env1, [fundec,fundef]),
-    Function = analyzer_env:lookup(Name, Node, Env1),
-    case check_actuals(Function, Node, Env1) of
-        false -> throw(exception(Node, 'incompatible arguments', []));
-        _     -> ok
-    end,
+    FoundNode = analyzer_env:lookup(Name, Node, Env1),
+    check_actuals(FoundNode, Node, Env1),
     Env1.
 
 check_actuals(Function, Funcall, Env) ->
@@ -218,7 +200,7 @@ check_actuals(Function, Funcall, Env) ->
     same_arity(Formals, Actuals, Funcall),
     convertible_types(Formals, Actuals, Env).
 
-convertible_types([], [], _Env) -> true;
+convertible_types([], [], _Env) -> ok;
 convertible_types([F|Formals], [A|Actuals], Env) ->
     convertible_to(eval_type(F, Env), eval_type(A, Env), A),
     convertible_types(Formals, Actuals, Env).
@@ -233,33 +215,31 @@ must_be_tag(Name, Node, Env, Tags) ->
     case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw(exception(Node, 'not defined', []));
-        SymbolInfo ->
-            Tag = get_tag(SymbolInfo),
+        FoundNode ->
+            Tag = get_tag(FoundNode),
             case lists:member(Tag, Tags) of
                 true  -> ok;
                 false -> throw(exception(Node, 'not proper type', []))
             end
     end.
 
-% just for fun right now xxx
-analyze_binop(Node = {_Meta, Lhs, '=', Rhs}, Env0) ->
+analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
-    must_be_lval(Lhs, Env2),
-    convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Node),
-    Env2;
-analyze_binop(Node = {_Meta, Lhs, _Op, Rhs}, Env0) ->
-    Env1 = analyze(Lhs, Env0),
-    Env2 = analyze(Rhs, Env1),
-    _TypeTuple = eval_type(Node, Env2),
+    case Op of
+        '=' ->
+            must_be_lval(Lhs, Env2),
+            convertible_to(eval_type(Lhs, Env2), eval_type(Rhs, Env2), Node);
+        _Other ->
+            eval_type(Node, Env2)
+    end,
     Env2.
 
-%%% xxxxxxx
 must_be_lval(Node = {{_,ident},Name}, Env) ->
-    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    case get_tag(SymbolInfo) of
+    FoundNode = analyzer_env:lookup(Name, Node, Env),
+    case get_tag(FoundNode) of
         scalardec -> ok;
-        _         -> throw(exception(Node, 'not an l-value', []))
+        _Other    -> throw(exception(Node, 'not an l-value', []))
     end;
 must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
 must_be_lval(Node, _Env) ->
@@ -273,7 +253,7 @@ must_be_defined(Name, Node, Env) ->
     case analyzer_env:lookup(Name, Node, Env) of
         not_found ->
             throw(exception(Node, 'not defined', []));
-        _SymbolInfo ->
+        _FoundNode ->
             ok
     end.
 
@@ -283,13 +263,14 @@ analyze_intconst({_Meta, _Value}, Env) ->
 analyze_charconst({_Meta, _Char}, Env) ->
     Env.
 
-analyze_unop({_Meta, _Op, Rhs}, Env) ->
+analyze_unop(Node = {_Meta, _Op, Rhs}, Env) ->
     Env1 = analyze(Rhs, Env),
+    convertible_to({dontcare,int}, eval_type(Rhs, Env1), Node),
     Env1.
 
 % make sure all exprs are covered xxxx
-eval_type(nil, _Env) -> % return ;
-    {return, void};
+eval_type(nil, _Env) ->
+    {return_expr, void};
 eval_type(Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
     Type = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env), Node),
     {binop, Type};
@@ -297,18 +278,18 @@ eval_type(_Node = {{_, unop}, _Op, Rhs}, Env) ->
     {_, Type} = eval_type(Rhs, Env),
     {unop, Type};
 eval_type(Node = {{_, ident}, Name}, Env) ->
-    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    {get_tag(SymbolInfo), get_type(SymbolInfo)};
+    FoundNode = analyzer_env:lookup(Name, Node, Env),
+    {get_tag(FoundNode), get_type(FoundNode)};
 eval_type(_Node = {{_, intconst}, _Name}, _Env) ->
     {intconst, int};
 eval_type(_Node = {{_, charconst}, _Name}, _Env) ->
     {charconst, char};
 eval_type(Node = {{_, arrelem}, Name, _Index}, Env) ->
-    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    {arrelem, get_type(SymbolInfo)};
+    FoundNode = analyzer_env:lookup(Name, Node, Env),
+    {arrelem, get_type(FoundNode)};
 eval_type(Node = {{_, funcall}, Name, _Actuals}, Env) ->
-    SymbolInfo = analyzer_env:lookup(Name, Node, Env),
-    {funcall, get_type(SymbolInfo)};
+    FoundNode = analyzer_env:lookup(Name, Node, Env),
+    {funcall, get_type(FoundNode)};
 eval_type(_Node = {{_, fundec}, Type, _Name, _Formals}, _Env) ->
     {fundec, Type};
 eval_type(_Node = {{_, fundef}, Type, _Name, _Formals, _Locals, _Stmts}, _Env) ->
