@@ -9,14 +9,13 @@ Logical             = (&&|(\|\|)|!)
 Comparator          = (<|>|<=|>=|==|!=)
 Symbol              = []()[}{/;,*+=-]
 
-LineComment         = (//)
+LineCom             = (//)
 
-MultiCommentStart   = (/\*)
-MultiCommentEnd     = (\*/)
-% Allowed inside multi-line comments:
-NormalChar          = [^*/]
-SafeStar            = (\*[^/])
-SafeSlash           = ([^*]/)
+BegCom              = (/\*)
+EndCom              = (\*/)
+NotStar             = [^*]
+NeitherStarSlash    = [^*/]
+Star                = (\*)
 
 Rules.
 
@@ -43,12 +42,13 @@ Rules.
     {token,
         {charconst,TokenLine,list_to_atom(Chars)}}.
 
-{LineComment}(.*) :
+{LineCom}(.*) :
     skip_token.
 
-%%%%{MultiCommentStart}((/)*([^*/]|[^*]/|\*[^/])*(\*)*){MultiCommentEnd} :
+% Old, does not accept "/* * / */":
+% {BegCom}{Slash}*({NeitherStarSlash}|{NotStar}{Slash}|{Star}{NotSlash})*{Star}*{EndCom} :
 
-{MultiCommentStart}([^*]*(\*)+[^*/])*[^*]*(\*)+/ :
+{BegCom}({NotStar}*{Star}+{NeitherStarSlash})*{NotStar}*{Star}*{EndCom} :
     skip_token.
 
 {Logical}|{Comparator}|{Symbol} :
