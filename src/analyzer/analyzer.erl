@@ -28,7 +28,7 @@ analyze(Node, Env0) when erlang:is_tuple(Node) ->
     Tag = get_tag(Node),
     Env1 = analyze_node(Tag, Node, Env0),
     Env1;
-analyze(nil, Env0) ->
+analyze(nil, Env0) -> % Empty statement and empty return.
     Env0;
 analyze([], Env0) ->
     Env0;
