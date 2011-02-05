@@ -19,7 +19,7 @@ Star                = (\*)
 
 Rules.
 
-% Integer.
+% Natural number.
 {Digit}+ :
     token({intconst, TokenLine, list_to_integer(TokenChars)}).
 

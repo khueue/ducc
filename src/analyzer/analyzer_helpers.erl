@@ -5,8 +5,7 @@
          get_type/1,
          convertible_types/3,
          convertible_to/3,
-         eval_type/2
-         ]).
+         eval_type/2]).
 
 exception(Node, Format, Args) ->
     Message = io_lib:format(Format, Args),
@@ -39,7 +38,7 @@ convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     end.
 
 eval_type(nil, _Env) ->
-    {return_expr, void};
+    {empty_return_expr, void};
 eval_type(Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
     Type = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env), Node),
     {binop, Type};
