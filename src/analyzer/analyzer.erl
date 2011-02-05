@@ -2,6 +2,7 @@
 -export([analyze/1]).
 
 -define(HELPER, analyzer_helpers).
+-define(RULE, analyzer_rules).
 
 analyze(ParseTree) ->
     Env = analyzer_env:new(),
@@ -43,20 +44,12 @@ analyze_program({_Meta, _File, Topdecs}, Env) ->
     Env1.
 
 analyze_scalardec(Node = {_Meta, _Type, Name}, Env0) ->
-    must_not_exist_in_same_scope(Name, Node, Env0),
+    ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
-must_not_exist_in_same_scope(Name, Node, Env) ->
-    case analyzer_env:lookup_first_scope(Name, Node, Env) of
-        not_found ->
-            ok;
-        _SymbolInfo ->
-            throw(?HELPER:exception(Node, 'already defined', []))
-    end.
-
 analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
-    must_not_exist_in_same_scope(Name, Node, Env0),
+    ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     % Parser makes sure that Size is a natural number.
     Env1.
@@ -69,12 +62,12 @@ analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
         FoundNode ->
             case ?HELPER:get_tag(FoundNode) of
                 fundec ->
-                    same_return_type(Node, FoundNode),
-                    same_formals(Node, FoundNode),
+                    ?RULE:same_return_type(Node, FoundNode),
+                    ?RULE:same_formals(Node, FoundNode),
                     Env0;
                 fundef ->
-                    same_return_type(Node, FoundNode),
-                    same_formals(Node, FoundNode),
+                    ?RULE:same_return_type(Node, FoundNode),
+                    ?RULE:same_formals(Node, FoundNode),
                     Env0;
                 _Other ->
                     throw(Redefinition)
@@ -92,8 +85,8 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
         FoundNode ->
             case ?HELPER:get_tag(FoundNode) of
                 fundec ->
-                    same_return_type(Node, FoundNode),
-                    same_formals(Node, FoundNode),
+                    ?RULE:same_return_type(Node, FoundNode),
+                    ?RULE:same_formals(Node, FoundNode),
                     analyzer_env:add_symbol(Name, Node, Env0);
                 _Other ->
                     throw(Redefinition)
@@ -105,49 +98,8 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     _Env5 = analyze(Stmts, Env4),
     Env1. % Updates to the environment are local to the function!
 
-same_formals(Node, FoundNode) ->
-    NodeFormals = element(4, Node),
-    FoundNodeFormals = element(4, FoundNode),
-    same_arity(NodeFormals, FoundNodeFormals, Node),
-    identical_types(NodeFormals, FoundNodeFormals, Node).
-
-same_return_type(Node, FoundNode) ->
-    case ?HELPER:get_type(Node) =:= ?HELPER:get_type(FoundNode) of
-        true ->
-            ok;
-        false ->
-            throw(?HELPER:exception(Node, 'wrong return type', []))
-    end.
-
-same_arity(Formals, FoundFormals, Node) ->
-    try same_arity(Formals, FoundFormals)
-    catch
-        different_arity ->
-            throw(?HELPER:exception(Node, 'wrong number of arguments', []))
-    end.
-
-same_arity(Formals, FoundFormals) ->
-    case erlang:length(Formals) =:= erlang:length(FoundFormals) of
-        true  -> ok;
-        false -> throw(different_arity)
-    end.
-
-identical_types([], [], _CurrentNode) -> ok;
-identical_types([F1|Formals1], [F2|Formals2], CurrentNode) ->
-    same_tag_and_type(F1, F2, CurrentNode),
-    identical_types(Formals1, Formals2, CurrentNode).
-
-% BUG: We are lucky enough to have the same structure for all possible
-% formals (scalardec and formal_arraydec), but this simple solution would
-% not necessarily work if other types (pointers, fixed size array, ...)
-% are introduced.
-same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}, _CurrentNode) ->
-    ok;
-same_tag_and_type(_, _, CurrentNode) ->
-    throw(?HELPER:exception(CurrentNode, 'parameters must match exactly', [])).
-
 analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
-    must_not_exist_in_same_scope(Name, Node, Env0),
+    ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
@@ -175,41 +127,23 @@ analyze_return(Node = {_Meta, Expr}, Env) ->
 
 analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
     Env1 = analyze(Actuals, Env0),
-    must_be_tag(Name, Node, Env1, [fundec,fundef]),
+    ?RULE:must_be_tag(Name, Node, Env1, [fundec,fundef]),
     FoundNode = analyzer_env:lookup(Name, Node, Env1),
-    check_actuals(FoundNode, Node, Env1),
+    ?RULE:check_actuals(FoundNode, Node, Env1),
     Env1.
 
-check_actuals(Function, Funcall, Env) ->
-    Formals = erlang:element(4, Function),
-    Actuals = erlang:element(3, Funcall),
-    same_arity(Formals, Actuals, Funcall),
-    ?HELPER:convertible_types(Formals, Actuals, Env).
-
 analyze_arrelem(Node = {_Meta, Name, Index}, Env) ->
-    must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
+    ?RULE:must_be_tag(Name, Node, Env, [arraydec,formal_arraydec]),
     Env1 = analyze(Index, Env),
     ?HELPER:convertible_to({dontcare,int}, ?HELPER:eval_type(Index, Env1), Node),
     Env1.
-
-must_be_tag(Name, Node, Env, Tags) ->
-    case analyzer_env:lookup(Name, Node, Env) of
-        not_found ->
-            throw(?HELPER:exception(Node, 'not defined', []));
-        FoundNode ->
-            Tag = ?HELPER:get_tag(FoundNode),
-            case lists:member(Tag, Tags) of
-                true  -> ok;
-                false -> throw(?HELPER:exception(Node, 'not proper type', []))
-            end
-    end.
 
 analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
     Env1 = analyze(Lhs, Env0),
     Env2 = analyze(Rhs, Env1),
     case Op of
         '=' ->
-            must_be_lval(Lhs, Env2),
+            ?RULE:must_be_lval(Lhs, Env2),
             ?HELPER:convertible_to(?HELPER:eval_type(Lhs, Env2),
                                    ?HELPER:eval_type(Rhs, Env2), Node);
         _Other ->
@@ -217,27 +151,9 @@ analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
     end,
     Env2.
 
-must_be_lval(Node = {{_,ident},Name}, Env) ->
-    FoundNode = analyzer_env:lookup(Name, Node, Env),
-    case ?HELPER:get_tag(FoundNode) of
-        scalardec -> ok;
-        _Other    -> throw(?HELPER:exception(Node, 'not an l-value', []))
-    end;
-must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
-must_be_lval(Node, _Env) ->
-    throw(?HELPER:exception(Node, 'not an l-value', [])).
-
 analyze_ident(Node = {_Meta, Name}, Env) ->
-    must_be_defined(Name, Node, Env),
+    ?RULE:must_be_defined(Name, Node, Env),
     Env.
-
-must_be_defined(Name, Node, Env) ->
-    case analyzer_env:lookup(Name, Node, Env) of
-        not_found ->
-            throw(?HELPER:exception(Node, 'not defined', []));
-        _FoundNode ->
-            ok
-    end.
 
 analyze_intconst({_Meta, _Value}, Env) ->
     Env.
