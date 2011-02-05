@@ -268,9 +268,8 @@ analyze_unop(Node = {_Meta, _Op, Rhs}, Env) ->
     convertible_to({dontcare,int}, eval_type(Rhs, Env1), Node),
     Env1.
 
-% make sure all exprs are covered xxxx
 eval_type(nil, _Env) ->
-    {return_expr, void};
+    {empty_return_expr, void};
 eval_type(Node = {{_, binop}, Lhs, _Op, Rhs}, Env) ->
     Type = widest_type(eval_type(Lhs, Env), eval_type(Rhs, Env), Node),
     {binop, Type};
