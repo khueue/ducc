@@ -42,7 +42,7 @@ Rules.
 % Old multi-line comment, does not accept "/* * / */":
 % {BegCom}{Slash}*({NeitherStarSlash}|{NotStar}{Slash}|{Star}{NotSlash})*{Star}*{EndCom} :
 
-{BegCom}({NotStar}*{Star}+{NeitherStarSlash})*{NotStar}*{Star}*{EndCom} :
+{BegCom}({NotStar}|{Star}+{NeitherStarSlash})*{Star}*{EndCom} :
     skip_token.
 
 {Logical}|{Comparator}|{Symbol} :
