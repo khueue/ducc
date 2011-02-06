@@ -35,6 +35,8 @@ convertible_types([F|Formals], [A|Actuals], Env) ->
     convertible_to(eval_type(F, Env), eval_type(A, Env), A),
     convertible_types(Formals, Actuals, Env).
 
+convertible_to(Type, ActualTuple, Actual) when erlang:is_atom(Type) ->
+    convertible_to({dontcare,Type}, ActualTuple, Actual);
 convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     try first_accepts_second(ExpectedTuple, ActualTuple)
     catch

@@ -91,26 +91,28 @@ analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     Env1 = analyzer_env:add_symbol(Name, Node, Env0),
     Env1.
 
-analyze_if(Node = {_Meta, Cond, Then, Else}, Env) ->
-    Env1 = analyze(Cond, Env),
+analyze_if(Node = {_Meta, Cond, Then, Else}, Env0) ->
+    Env1 = analyze(Cond, Env0),
     Env2 = analyze(Then, Env1),
     Env3 = analyze(Else, Env2),
-    ?HELPER:convertible_to({if_cond, int}, ?HELPER:eval_type(Cond, Env3), Node),
+    CondType = ?HELPER:eval_type(Cond, Env3),
+    ?HELPER:convertible_to(int, CondType, Node),
     Env3.
 
 analyze_while(Node = {_Meta, Cond, Stmt}, Env0) ->
     Env1 = analyze(Cond, Env0),
     Env2 = analyze(Stmt, Env1),
-    ?HELPER:convertible_to({while_cond, int}, ?HELPER:eval_type(Cond, Env2),
-                           Node),
+    CondType = ?HELPER:eval_type(Cond, Env2),
+    ?HELPER:convertible_to(int, CondType, Node),
     Env2.
 
 analyze_return(Node = {_Meta, Expr}, Env0) ->
     Env1 = analyze(Expr, Env0),
     FunName = analyzer_env:scope_name(Env1),
     FunNode = analyzer_env:lookup(FunName, Node, Env1),
-    ?HELPER:convertible_to(?HELPER:eval_type(FunNode, Env1),
-                           ?HELPER:eval_type(Expr, Env1), Node),
+    ReturnType = ?HELPER:eval_type(FunNode, Env1),
+    ExprType = ?HELPER:eval_type(Expr, Env1),
+    ?HELPER:convertible_to(ReturnType, ExprType, Node),
     Env1.
 
 analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
@@ -128,7 +130,8 @@ analyze_arrelem(Node = {_Meta, Name, Index}, Env0) ->
     FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env0, ElseUndec),
     ?RULE:must_be_tag_member(FoundNode, [arraydec,formal_arraydec], ElseBadType),
     Env1 = analyze(Index, Env0),
-    ?HELPER:convertible_to({dontcare,int}, ?HELPER:eval_type(Index, Env1), Node),
+    IndexType = ?HELPER:eval_type(Index, Env1),
+    ?HELPER:convertible_to(int, IndexType, Node),
     Env1.
 
 analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
@@ -137,11 +140,10 @@ analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
     case Op of
         '=' ->
             ?RULE:must_be_lval(Lhs, Env2),
-            ?HELPER:convertible_to(
-                ?HELPER:eval_type(Lhs, Env2),
-                ?HELPER:eval_type(Rhs, Env2),
-                Node);
-        _Other ->
+            LhsType = ?HELPER:eval_type(Lhs, Env2),
+            RhsType = ?HELPER:eval_type(Rhs, Env2),
+            ?HELPER:convertible_to(LhsType, RhsType, Node);
+        _OtherBinop ->
             ?HELPER:eval_type(Node, Env2)
     end,
     Env2.
@@ -159,5 +161,6 @@ analyze_charconst({_Meta, _Char}, Env0) ->
 
 analyze_unop(Node = {_Meta, _Op, Rhs}, Env0) ->
     Env1 = analyze(Rhs, Env0),
-    ?HELPER:convertible_to({dontcare,int}, ?HELPER:eval_type(Rhs, Env1), Node),
+    RhsType = ?HELPER:eval_type(Rhs, Env1),
+    ?HELPER:convertible_to(int, RhsType, Node),
     Env1.
