@@ -3,7 +3,7 @@
     new/0,
     enter_scope/2,
     scope_name/1,
-    add_symbol/3,
+    set_symbol/3,
     lookup/3,
     lookup_or_throw/4,
     lookup_current_scope/3,
@@ -25,6 +25,9 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
+lookup_current_scope(Name, Node, {[SymTab|_]}) ->
+    lookup(Name, Node, {[SymTab]}).
+
 lookup(_Name, _Node, {[]}) ->
     not_found;
 lookup(Name, Node, {[{_Scope,SymTab}|SymTabs]}) ->
@@ -33,10 +36,7 @@ lookup(Name, Node, {[{_Scope,SymTab}|SymTabs]}) ->
         error     -> lookup(Name, Node, {SymTabs})
     end.
 
-lookup_current_scope(Name, Node, {[SymTab|_]}) ->
-    lookup(Name, Node, {[SymTab]}).
-
-add_symbol(Key, Value, _Env = {SymTabs}) ->
+set_symbol(Key, Value, {SymTabs}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
     {stack_push({Scope,Updated}, Rest)}.
@@ -49,6 +49,7 @@ stack_peek([]) ->
 stack_peek([Top|Stack]) ->
     {Top, Stack}.
 
+% For debugging.
 print_symtabs({[{Scope,S}]}) ->
     io:format('~s: ~p~n', [Scope,dict:to_list(S)]);
 print_symtabs({[{Scope,S}|Ss]}) ->

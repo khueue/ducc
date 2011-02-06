@@ -45,19 +45,19 @@ analyze_program({_Meta, _File, Topdecs}, Env0) ->
 
 analyze_scalardec(Node = {_Meta, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env1.
 
 analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     % Parser makes sure that Size is a natural number.
     Env1.
 
 analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
     Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
-            analyzer_env:add_symbol(Name, Node, Env0);
+            analyzer_env:set_symbol(Name, Node, Env0);
         FoundNode ->
             ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
             ?RULE:must_be_tag_member(FoundNode, [fundec,fundef], ElseRedef),
@@ -79,7 +79,7 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode)
     end,
-    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env2 = analyzer_env:enter_scope(Name, Env1),
     Env3 = analyze(Formals, Env2),
     Env4 = analyze(Locals, Env3),
@@ -88,7 +88,7 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
 
 analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:add_symbol(Name, Node, Env0),
+    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env1.
 
 analyze_if(Node = {_Meta, Cond, Then, Else}, Env0) ->
