@@ -39,7 +39,7 @@ convertible_to(ExpectedTuple, ActualTuple, Actual) ->
     try first_accepts_second(ExpectedTuple, ActualTuple)
     catch
         incompatible ->
-            throw(exception(Actual, 'inconvertible types', []))
+            throw(exception(Actual, "inconvertible types", []))
     end.
 
 eval_type(nil, _Env) ->
@@ -78,7 +78,7 @@ widest_type(Type1, Type2, Node) ->
     try widest_type(Type1, Type2)
     catch
         incompatible ->
-            throw(exception(Node, 'incompatible types', []))
+            throw(exception(Node, "incompatible types", []))
     end.
 
 widest_type({_,_}, {arraydec,_})        -> throw(incompatible);
@@ -93,12 +93,12 @@ widest_type({_,_}, {_,_})               -> throw(incompatible).
 
 first_accepts_second({formal_arraydec, Type}, {arraydec, Type})        -> ok;
 first_accepts_second({formal_arraydec, Type}, {formal_arraydec, Type}) -> ok;
-first_accepts_second(_, {arraydec,_}) -> throw(incompatible);
-first_accepts_second({arraydec,_}, _) -> throw(incompatible);
+first_accepts_second(_, {arraydec,_})        -> throw(incompatible);
+first_accepts_second({arraydec,_}, _)        -> throw(incompatible);
 first_accepts_second(_, {formal_arraydec,_}) -> throw(incompatible);
-first_accepts_second({_,void}, {_,void}) -> ok;
-first_accepts_second({_,int}, {_,int})   -> ok;
-first_accepts_second({_,int}, {_,char})  -> ok;
-first_accepts_second({_,char}, {_,char}) -> ok;
-first_accepts_second({_,char}, {_,int})  -> ok;
-first_accepts_second(_, _) -> throw(incompatible).
+first_accepts_second({_,void}, {_,void})     -> ok;
+first_accepts_second({_,int}, {_,int})       -> ok;
+first_accepts_second({_,int}, {_,char})      -> ok;
+first_accepts_second({_,char}, {_,char})     -> ok;
+first_accepts_second({_,char}, {_,int})      -> ok;
+first_accepts_second(_, _)                   -> throw(incompatible).

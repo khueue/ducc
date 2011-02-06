@@ -23,11 +23,11 @@ must_be_lval(Node = {{_,ident},Name}, Env) ->
     FoundNode = analyzer_env:lookup(Name, Node, Env),
     case ?HELPER:get_tag(FoundNode) of
         scalardec -> ok;
-        _Other    -> throw(?HELPER:exception(Node, 'not an l-value', []))
+        _Other    -> throw(?HELPER:exception(Node, "not an l-value", []))
     end;
 must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
 must_be_lval(Node, _Env) ->
-    throw(?HELPER:exception(Node, 'not an l-value', [])).
+    throw(?HELPER:exception(Node, "not an l-value", [])).
 
 must_be_tag_member(Node, Tags, Exception) ->
     case ?HELPER:tag_member(Node, Tags) of
@@ -38,14 +38,14 @@ must_be_tag_member(Node, Tags, Exception) ->
 must_not_exist_in_same_scope(Name, Node, Env) ->
     case analyzer_env:lookup_current_scope(Name, Node, Env) of
         not_found   -> ok;
-        _SymbolInfo -> throw(?HELPER:exception(Node, 'already defined', []))
+        _SymbolInfo -> throw(?HELPER:exception(Node, "already defined", []))
     end.
 
 same_arity(Formals, FoundFormals, Node) ->
     try same_arity(Formals, FoundFormals)
     catch
         different_arity ->
-            throw(?HELPER:exception(Node, 'wrong number of arguments', []))
+            throw(?HELPER:exception(Node, "wrong number of arguments", []))
     end.
 
 same_arity(Formals, FoundFormals) ->
@@ -65,7 +65,7 @@ same_return_type(Node, FoundNode) ->
         true ->
             ok;
         false ->
-            throw(?HELPER:exception(Node, 'wrong return type', []))
+            throw(?HELPER:exception(Node, "wrong return type", []))
     end.
 
 % BUG: We are lucky enough to have the same structure for all possible
@@ -75,4 +75,4 @@ same_return_type(Node, FoundNode) ->
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}, _CurrentNode) ->
     ok;
 same_tag_and_type(_, _, CurrentNode) ->
-    throw(?HELPER:exception(CurrentNode, 'parameters must match exactly', [])).
+    throw(?HELPER:exception(CurrentNode, "parameters must match exactly", [])).
