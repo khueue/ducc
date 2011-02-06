@@ -1,8 +1,7 @@
 -module(analyzer_rules).
 -export([check_actuals/3,
-         must_be_defined/3,
          must_be_lval/2,
-         must_be_tag/4,
+         must_be_tag_member/3,
          must_not_exist_in_same_scope/3,
          same_formals/2,
          same_return_type/2]).
@@ -20,14 +19,6 @@ identical_types([F1|Formals1], [F2|Formals2], CurrentNode) ->
     same_tag_and_type(F1, F2, CurrentNode),
     identical_types(Formals1, Formals2, CurrentNode).
 
-must_be_defined(Name, Node, Env) ->
-    case analyzer_env:lookup(Name, Node, Env) of
-        not_found ->
-            throw(?HELPER:exception(Node, 'not defined', []));
-        _FoundNode ->
-            ok
-    end.
-
 must_be_lval(Node = {{_,ident},Name}, Env) ->
     FoundNode = analyzer_env:lookup(Name, Node, Env),
     case ?HELPER:get_tag(FoundNode) of
@@ -38,24 +29,16 @@ must_be_lval({{_,arrelem},_Name,_Index}, _Env) -> ok;
 must_be_lval(Node, _Env) ->
     throw(?HELPER:exception(Node, 'not an l-value', [])).
 
-must_be_tag(Name, Node, Env, Tags) ->
-    case analyzer_env:lookup(Name, Node, Env) of
-        not_found ->
-            throw(?HELPER:exception(Node, 'not defined', []));
-        FoundNode ->
-            Tag = ?HELPER:get_tag(FoundNode),
-            case lists:member(Tag, Tags) of
-                true  -> ok;
-                false -> throw(?HELPER:exception(Node, 'not proper type', []))
-            end
+must_be_tag_member(Node, Tags, Exception) ->
+    case ?HELPER:tag_member(Node, Tags) of
+        true  -> ok;
+        false -> throw(Exception)
     end.
 
 must_not_exist_in_same_scope(Name, Node, Env) ->
     case analyzer_env:lookup_first_scope(Name, Node, Env) of
-        not_found ->
-            ok;
-        _SymbolInfo ->
-            throw(?HELPER:exception(Node, 'already defined', []))
+        not_found   -> ok;
+        _SymbolInfo -> throw(?HELPER:exception(Node, 'already defined', []))
     end.
 
 same_arity(Formals, FoundFormals, Node) ->

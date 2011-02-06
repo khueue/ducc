@@ -4,7 +4,7 @@
      4	int main(void) {	
      5		a = a + b;	// Variable 'b' not defined
      6	}
-     1	<stdin>:5: semantic error, not defined
+     1	<stdin>:5: semantic error, 'b' is undeclared
 
 
 
@@ -14,7 +14,7 @@
      4	int main(void) {
      5	  a = foo(a);	// Function 'foo' not defined
      6	}
-     1	<stdin>:5: semantic error, not defined
+     1	<stdin>:5: semantic error, 'foo' is undeclared
 
 
 
@@ -22,7 +22,7 @@
      2	int main(void) {
      3	  output(0);	// Procedure 'output' not defined
      4	}
-     1	<stdin>:3: semantic error, not defined
+     1	<stdin>:3: semantic error, 'output' is undeclared
 
 
 
@@ -120,7 +120,7 @@
      5	  n = 42;
      6	  n[2]; // Index an integer
      7	}
-     1	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, 'n' is not an array
 
 
 
@@ -146,7 +146,7 @@
      6	  a(2); // 'a' is not a function
      7	}
      8	
-     1	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, 'a' is not a function
 
 
 
@@ -184,7 +184,7 @@
     19	  p(n);
     20	}
     21	
-     1	<stdin>:12: semantic error, not proper type
+     1	<stdin>:12: semantic error, 'f' is not a function
 
 
 
@@ -299,7 +299,7 @@
      9	int main (void) {
     10	  first(42);		
     11	}
-     1	<stdin>:6: semantic error, not proper type
+     1	<stdin>:6: semantic error, 'b' is not an array
 
 
 

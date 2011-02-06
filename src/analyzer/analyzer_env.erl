@@ -5,6 +5,7 @@
     scope_name/1,
     add_symbol/3,
     lookup/3,
+    lookup_or_throw/4,
     lookup_first_scope/3,
     print_symtabs/1]).
 
@@ -17,6 +18,12 @@ enter_scope(Scope, _Env = {SymTabs}) ->
 
 scope_name({[{Scope,_}|_]}) ->
     Scope.
+
+lookup_or_throw(Name, Node, Env, Exception) ->
+    case lookup(Name, Node, Env) of
+        not_found -> throw(Exception);
+        FoundNode -> FoundNode
+    end.
 
 lookup(_Name, _Node, {[]}) ->
     not_found;

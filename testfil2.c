@@ -1,11 +1,12 @@
 char foo(char ee, int e)
 {
-    int array[4];
+    int array;
     if (10)
     {
-        return !array[2] || array[1] + 2 - !array;
+        return !array[2] || array[1] - array[-1] + 2;
     }
 }
+
 /*
 char foo(char e, int eouo);
 

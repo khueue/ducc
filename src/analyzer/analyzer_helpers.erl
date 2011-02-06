@@ -3,6 +3,7 @@
          get_meta/1,
          get_tag/1,
          get_type/1,
+         tag_member/2,
          convertible_types/3,
          convertible_to/3,
          eval_type/2]).
@@ -24,6 +25,10 @@ get_tag(Node) ->
 
 get_type(Node) ->
     erlang:element(2, Node).
+
+tag_member(Node, Tags) ->
+    Tag = get_tag(Node),
+    lists:member(Tag, Tags).
 
 convertible_types([], [], _Env) -> ok;
 convertible_types([F|Formals], [A|Actuals], Env) ->

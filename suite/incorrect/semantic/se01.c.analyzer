@@ -1,1 +1,1 @@
-<stdin>:5: semantic error, not defined
+<stdin>:5: semantic error, 'b' is undeclared
