@@ -59,7 +59,7 @@ analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
         not_found ->
             analyzer_env:add_symbol(Name, Node, Env0);
         FoundNode ->
-            ElseRedef = ?HELPER:exception(Node, 'already defined', []),
+            ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
             ?RULE:must_be_tag_member(FoundNode, [fundec,fundef], ElseRedef),
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode),
@@ -74,7 +74,7 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
         not_found ->
             ok;
         FoundNode ->
-            ElseRedef = ?HELPER:exception(Node, 'already defined', []),
+            ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
             ?RULE:must_be_tag_member(FoundNode, [fundec], ElseRedef),
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode)

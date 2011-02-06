@@ -6,7 +6,7 @@
     add_symbol/3,
     lookup/3,
     lookup_or_throw/4,
-    lookup_first_scope/3,
+    lookup_current_scope/3,
     print_symtabs/1]).
 
 new() ->
@@ -33,7 +33,7 @@ lookup(Name, Node, {[{_Scope,SymTab}|SymTabs]}) ->
         error     -> lookup(Name, Node, {SymTabs})
     end.
 
-lookup_first_scope(Name, Node, {[SymTab|_]}) ->
+lookup_current_scope(Name, Node, {[SymTab|_]}) ->
     lookup(Name, Node, {[SymTab]}).
 
 add_symbol(Key, Value, _Env = {SymTabs}) ->

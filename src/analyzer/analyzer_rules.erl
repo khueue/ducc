@@ -36,7 +36,7 @@ must_be_tag_member(Node, Tags, Exception) ->
     end.
 
 must_not_exist_in_same_scope(Name, Node, Env) ->
-    case analyzer_env:lookup_first_scope(Name, Node, Env) of
+    case analyzer_env:lookup_current_scope(Name, Node, Env) of
         not_found   -> ok;
         _SymbolInfo -> throw(?HELPER:exception(Node, 'already defined', []))
     end.
@@ -49,7 +49,7 @@ same_arity(Formals, FoundFormals, Node) ->
     end.
 
 same_arity(Formals, FoundFormals) ->
-    case erlang:length(Formals) =:= erlang:length(FoundFormals) of
+    case erlang:length(Formals) == erlang:length(FoundFormals) of
         true  -> ok;
         false -> throw(different_arity)
     end.
@@ -61,7 +61,7 @@ same_formals(Node, FoundNode) ->
     identical_types(NodeFormals, FoundNodeFormals, Node).
 
 same_return_type(Node, FoundNode) ->
-    case ?HELPER:get_type(Node) =:= ?HELPER:get_type(FoundNode) of
+    case ?HELPER:get_type(Node) == ?HELPER:get_type(FoundNode) of
         true ->
             ok;
         false ->
