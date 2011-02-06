@@ -39,8 +39,8 @@ analyze_node(intconst, Node, Env)        -> analyze_intconst(Node, Env);
 analyze_node(charconst, Node, Env)       -> analyze_charconst(Node, Env);
 analyze_node(unop, Node, Env)            -> analyze_unop(Node, Env).
 
-analyze_program({_Meta, _File, Topdecs}, Env) ->
-    Env1 = analyze(Topdecs, Env),
+analyze_program({_Meta, _File, Topdecs}, Env0) ->
+    Env1 = analyze(Topdecs, Env0),
     Env1.
 
 analyze_scalardec(Node = {_Meta, _Type, Name}, Env0) ->
@@ -98,15 +98,15 @@ analyze_if(Node = {_Meta, Cond, Then, Else}, Env) ->
     ?HELPER:convertible_to({if_cond, int}, ?HELPER:eval_type(Cond, Env3), Node),
     Env3.
 
-analyze_while(Node = {_Meta, Cond, Stmt}, Env) ->
-    Env1 = analyze(Cond, Env),
+analyze_while(Node = {_Meta, Cond, Stmt}, Env0) ->
+    Env1 = analyze(Cond, Env0),
     Env2 = analyze(Stmt, Env1),
     ?HELPER:convertible_to({while_cond, int}, ?HELPER:eval_type(Cond, Env2),
                            Node),
     Env2.
 
-analyze_return(Node = {_Meta, Expr}, Env) ->
-    Env1 = analyze(Expr, Env),
+analyze_return(Node = {_Meta, Expr}, Env0) ->
+    Env1 = analyze(Expr, Env0),
     FunName = analyzer_env:scope_name(Env1),
     FunNode = analyzer_env:lookup(FunName, Node, Env1),
     ?HELPER:convertible_to(?HELPER:eval_type(FunNode, Env1),
