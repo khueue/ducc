@@ -55,11 +55,11 @@ analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
     Env1.
 
 analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
+    ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
     Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             analyzer_env:set_symbol(Name, Node, Env0);
         FoundNode ->
-            ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
             ?RULE:must_be_tag_member(FoundNode, [fundec,fundef], ElseRedef),
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode),
@@ -70,11 +70,11 @@ analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
     Env1. % Updates to the environment are local to the function!
 
 analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
+    ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
     case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
             ok;
         FoundNode ->
-            ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
             ?RULE:must_be_tag_member(FoundNode, [fundec], ElseRedef),
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode)
