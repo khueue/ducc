@@ -37,7 +37,7 @@ compile:
 gen_tests: all
 	ruby src/gen_lexer_tests.rb suite/**/*.c
 	ruby src/gen_parser_tests.rb suite/**/*.c
-	ruby src/gen_analyzer_tests.rb suite/incorrect/semantic/*.c # xxx
+	ruby src/gen_analyzer_tests.rb suite/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'
