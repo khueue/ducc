@@ -39,11 +39,13 @@ Rules.
 {LineCom}(.*) :
     skip_token.
 
-% Old multi-line comment, does not accept "/* * / */":
-% {BegCom}{Slash}*({NeitherStarSlash}|{NotStar}{Slash}|{Star}{NotSlash})*{Star}*{EndCom} :
-
+% Multi-line comment.
 {BegCom}({NotStar}|{Star}+{NeitherStarSlash})*{Star}*{EndCom} :
     skip_token.
+
+% Unterminated multi-line comment.
+{BegCom}({NotStar}|{Star}+{NeitherStarSlash})*{Star}* :
+    {error, "unterminated comment"}.
 
 {Logical}|{Comparator}|{Symbol} :
     token({list_to_atom(TokenChars), TokenLine}).
