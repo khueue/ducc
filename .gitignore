@@ -1,6 +1,7 @@
 # Backup files and such.
 ._*
 *~
+*.swp
 .DS_Store
 
 src/lexer/lexer.erl
