@@ -37,26 +37,32 @@ Rules.
     token({charconst, TokenLine, list_to_atom(Chars)}).
 
 {LineCom}(.*) :
-    skip_token.
+    skip().
 
 % Multi-line comment.
 {BegCom}({NotStar}|{Star}+{NeitherStarSlash})*{Star}*{EndCom} :
-    skip_token.
+    skip().
 
 % Unterminated multi-line comment.
 {BegCom}({NotStar}|{Star}+{NeitherStarSlash})*{Star}* :
-    {error, "unterminated comment"}.
+    error_token("unterminated comment").
 
 {Logical}|{Comparator}|{Symbol} :
     token({list_to_atom(TokenChars), TokenLine}).
 
 {WhiteSpace}+ :
-    skip_token.
+    skip().
 
 Erlang code.
 
 token(Token) ->
     {token, Token}.
+
+error_token(Message) ->
+    {error, Message}.
+
+skip() ->
+    skip_token.
 
 is_reserved(Word) ->
     Reserved = ['char','else','if','int','return','void','while'],
