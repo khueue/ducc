@@ -35,9 +35,9 @@ compile:
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 gen_tests: all
-	src/gen_lexer_tests.rb suite/**/*.c
-	src/gen_parser_tests.rb suite/**/*.c
-	src/gen_analyzer_tests.rb suite/incorrect/semantic/*.c # xxx
+	ruby src/gen_lexer_tests.rb suite/**/*.c
+	ruby src/gen_parser_tests.rb suite/**/*.c
+	ruby src/gen_analyzer_tests.rb suite/incorrect/semantic/*.c # xxx
 
 tests: all
 	@ echo '--- Running tests ...'
@@ -45,7 +45,7 @@ tests: all
 	parser_test
 	analyzer_test
 
-pack:
+pack: all
 	tar -czvf $(PROJECT_NAME)-`date +"%Y-%m-%d"`.tar.gz \
 		$(DIR_EBIN) $(DIR_SRC) report suite \
 		$(SCRIPTS) Makefile *.md
