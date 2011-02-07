@@ -4,8 +4,8 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Hand in correction for Assignment 1
+ * Construct translator
 
- * Traverse testfiles
+ * Introduce step-hooks in ducc to speed up tests
 
  * Include .c source in AST?
