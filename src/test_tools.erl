@@ -2,7 +2,7 @@
 -include_lib("eunit/include/eunit.hrl").
 -export([
     test_tuple/1,
-    run_all_tests/3,
+    run_all_tests/2,
     run_tests/3,
     expected_output/2,
     command/2]).
@@ -10,9 +10,9 @@
 test_tuple(TestFun) ->
     {timeout, 1200, [{?LINE, TestFun}]}.
 
-run_all_tests(Tests, Program, ToolChain) ->
+run_all_tests(Tests, Program) ->
     ExpectFun  = fun(File) -> expected_output(File, Program) end,
-    CommandFun = fun(File) -> command(File, ToolChain) end,
+    CommandFun = fun(File) -> command(File, Program) end,
     run_tests(Tests, ExpectFun, CommandFun).
 
 run_tests([], _, _) ->
@@ -26,14 +26,18 @@ run_test(File, ExpectedFun, CommandFun) ->
     Command  = CommandFun(File),
     ?assertCmdOutput(Expected, Command).
 
-command(File, Programs) ->
-    Cat = "cat " ++ File,
-    pipes([Cat|Programs]).
-
-pipes([Program]) ->
-    Program;
-pipes([Program|Programs]) ->
-    Program ++ " | " ++ pipes(Programs).
+command(File, Program) ->
+    Ducc = "ducc ",
+    case Program of
+        "lexer" ->
+            Ducc ++ "-l " ++ File;
+        "parser" ->
+            Ducc ++ "-p " ++ File;
+        "analyzer" ->
+            Ducc ++ "-a " ++ File;
+        _Default ->
+            Ducc ++ File
+    end.
 
 expected_output(File, Suffix) ->
     OutputFile = output_file(File, Suffix),

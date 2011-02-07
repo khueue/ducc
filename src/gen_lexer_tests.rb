@@ -8,8 +8,8 @@ if ARGV.empty?
   exit
 end
 
+command = 'ducc -l'
 program = 'lexer'
-pipes = [program].join(' | ')
 
 files = []
 
@@ -19,7 +19,7 @@ end
 
 files.each do |file|
   file_out = "#{file}.#{program}"
-  cmd = "cat #{file} | #{pipes} > #{file_out}"
+  cmd = "#{command} #{file} > #{file_out}"
   puts cmd
   system cmd
 end

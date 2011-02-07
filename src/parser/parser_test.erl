@@ -4,8 +4,7 @@
 parser_test_() ->
     Tests = all_tests(),
     Program = "parser",
-    ToolChain = ["lexer","parser"],
-    Fun = fun() -> test_tools:run_all_tests(Tests, Program, ToolChain) end,
+    Fun = fun() -> test_tools:run_all_tests(Tests, Program) end,
     test_tools:test_tuple(Fun).
 
 all_tests() ->

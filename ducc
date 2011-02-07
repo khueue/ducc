@@ -10,12 +10,21 @@ usage() ->
 
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
+main(["-l", File]) ->
+    String = read_string(File),
+    compile(lexer, File, String);
+main(["-p", File]) ->
+    String = read_string(File),
+    compile(parser, File, String);
+main(["-a", File]) ->
+    String = read_string(File),
+    compile(analyzer, File, String);
 main([]) ->
     String = read_string(standard_io),
-    compile('<stdin>', String);
+    compile(default, '<stdin>', String);
 main([File]) ->
     String = read_string(File),
-    compile(File, String);
+    compile(default, File, String);
 main(_) ->
     usage().
 
@@ -30,8 +39,8 @@ read_string(Stream) ->
             tool_chain:die(Message)
     end.
 
-compile(Stream, String) ->
-    Result = (catch process(Stream, String)),
+compile(Program, Stream, String) ->
+    Result = (catch process(Program, Stream, String)),
     case Result of
         {ok, ParseTree} ->
             tool_chain:term_to_output(ParseTree);
@@ -47,7 +56,19 @@ compile(Stream, String) ->
             tool_chain:die('~p~n', [UnknownError])
     end.
 
-process(Stream, String) ->
-    {ok, Tokens} = lexer_driver:tokenize(Stream, String),
-    {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-    {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree).
+process(Program, Stream, String) ->
+    case Program of
+        lexer ->
+            {ok, _Tokens} = lexer_driver:tokenize(Stream, String);
+        parser ->
+            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+            {ok, _ParseTree} = parser_driver:parse(Stream, Tokens);
+        analyzer ->
+            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+            {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree);
+        _Default ->
+            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+            {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree)
+    end.
