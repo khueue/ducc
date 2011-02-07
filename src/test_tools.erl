@@ -15,7 +15,7 @@ run_all_tests(Tests, Program, ToolChain) ->
     CommandFun = fun(File) -> command(File, ToolChain) end,
     run_tests(Tests, ExpectFun, CommandFun).
 
-run_tests([dummy], _, _) ->
+run_tests([], _, _) ->
     ok;
 run_tests([File|Files], ExpectedFun, CommandFun) ->
     run_test(File, ExpectedFun, CommandFun),
