@@ -1,1 +1,1 @@
-<stdin>:6: syntax error: '}'
+suite/incorrect/parser/pe03.c:6: syntax error: '}'

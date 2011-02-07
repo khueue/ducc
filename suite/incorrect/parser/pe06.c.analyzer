@@ -1,1 +1,1 @@
-<stdin>:3: syntax error: "b"
+suite/incorrect/parser/pe06.c:3: syntax error: "b"

@@ -1,1 +1,1 @@
-<stdin>:6: semantic error, not an l-value
+suite/incorrect/semantic/se24.c:6: semantic error, not an l-value

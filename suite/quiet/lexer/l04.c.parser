@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/quiet/lexer/l04.c",
  [{{1,fundef},
    int,"main",[],
    [{{2,scalardec},int,"i"},{{3,scalardec},char,"j"}],

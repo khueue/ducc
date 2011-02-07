@@ -1,1 +1,1 @@
-<stdin>:7: semantic error, not an l-value
+suite/incorrect/semantic/se20.c:7: semantic error, not an l-value

@@ -1,4 +1,4 @@
 {{3,program},
- '<stdin>',
+ "suite/incorrect/semantic/se08.c",
  [{{3,fundef},int,"a",[{{3,scalardec},int,"n"}],[],[{{4,return},nil}]},
   {{6,fundef},int,"main",[],[],[{{7,funcall},"a",[{{7,intconst},2}]}]}]}.

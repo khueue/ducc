@@ -1,5 +1,5 @@
 {{5,program},
- '<stdin>',
+ "suite/quiet/semantic/s01.c",
  [{{5,scalardec},int,"x"},
   {{6,scalardec},char,"y"},
   {{8,fundef},

@@ -1,5 +1,5 @@
 {{7,program},
- '<stdin>',
+ "suite/noisy/advanced/quick.c",
  [{{7,fundec},void,"putstring",[{{7,formal_arraydec},char,"s"}]},
   {{9,arraydec},char,"eol",2},
   {{10,scalardec},int,"n"},

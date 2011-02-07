@@ -1,5 +1,5 @@
 {{3,program},
- '<stdin>',
+ "suite/incorrect/semantic/se21.c",
  [{{3,fundef},
    int,"a",
    [{{3,scalardec},int,"n"}],

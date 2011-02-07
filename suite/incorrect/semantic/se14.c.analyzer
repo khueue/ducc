@@ -1,1 +1,1 @@
-<stdin>:12: semantic error, 'f' is not a function
+suite/incorrect/semantic/se14.c:12: semantic error, 'f' is not a function

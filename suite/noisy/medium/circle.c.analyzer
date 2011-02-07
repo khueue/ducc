@@ -1,5 +1,5 @@
 {{30,program},
- '<stdin>',
+ "suite/noisy/medium/circle.c",
  [{{30,fundec},void,"putstring",[{{30,formal_arraydec},char,"s"}]},
   {{32,fundef},
    void,"drawpos",

@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/quiet/mips/m02.c",
  [{{1,fundef},
    int,"f",
    [{{1,scalardec},int,"x"}],

@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/quiet/rtl/r06.c",
  [{{1,scalardec},int,"x"},
   {{3,fundef},
    int,"main",[],[],

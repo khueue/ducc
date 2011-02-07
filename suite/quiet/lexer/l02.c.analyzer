@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/quiet/lexer/l02.c",
  [{{1,scalardec},int,"foo"},
   {{3,scalardec},char,"bar"},
   {{5,scalardec},int,"BarBara"},

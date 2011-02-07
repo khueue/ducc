@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/quiet/parser/p04.c",
  [{{1,scalardec},int,"x"},
   {{3,fundef},void,"foo",[{{3,scalardec},int,"x"}],[],[nil]},
   {{7,fundef},

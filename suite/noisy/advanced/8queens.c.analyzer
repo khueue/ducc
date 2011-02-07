@@ -1,5 +1,5 @@
 {{22,program},
- '<stdin>',
+ "suite/noisy/advanced/8queens.c",
  [{{22,scalardec},int,"n"},
   {{23,arraydec},int,"board",8},
   {{25,fundec},void,"putint",[{{25,scalardec},int,"x"}]},

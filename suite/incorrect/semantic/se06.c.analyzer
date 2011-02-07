@@ -1,1 +1,1 @@
-<stdin>:7: semantic error, function 'a' already defined
+suite/incorrect/semantic/se06.c:7: semantic error, function 'a' already defined

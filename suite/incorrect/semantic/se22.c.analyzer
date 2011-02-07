@@ -1,1 +1,1 @@
-<stdin>:6: semantic error, incompatible types
+suite/incorrect/semantic/se22.c:6: semantic error, incompatible types

@@ -1,5 +1,5 @@
 {{1,program},
- '<stdin>',
+ "suite/noisy/simple/sim03.c",
  [{{1,fundec},void,"putint",[{{1,scalardec},int,"x"}]},
   {{6,arraydec},int,"a",10},
   {{8,fundef},

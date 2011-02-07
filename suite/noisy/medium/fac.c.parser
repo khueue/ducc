@@ -1,5 +1,5 @@
 {{6,program},
- '<stdin>',
+ "suite/noisy/medium/fac.c",
  [{{6,fundec},void,"putint",[{{6,scalardec},int,"i"}]},
   {{7,fundec},int,"getint",[]},
   {{9,fundef},

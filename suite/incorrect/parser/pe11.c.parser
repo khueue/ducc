@@ -1,1 +1,1 @@
-<stdin>:3: syntax error: "foo"
+suite/incorrect/parser/pe11.c:3: syntax error: "foo"
