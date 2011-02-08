@@ -1,10 +1,11 @@
 Nonterminals
 program topdecs topdec fundec fundef vardec scalardec arraydec typename
 funtypeandname funbody formals formals_list formaldec farraydec locals
-stmts stmt condition expr op_unary actuals expr_list else_part
-rval lval or and comp ineq primary term factor function_call array_element
+stmts stmt condition expr op_unary actuals actuals_list else_part
+expr_rval expr_lval expr_or expr_and expr_comp expr_ineq expr_primary
+expr_term expr_factor function_call array_element
 op_ineq op_primary op_term op_factor
-flow_stmt return_stmt while_stmt if_stmt.
+stmt_flow stmt_return stmt_while stmt_if.
 
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
@@ -14,127 +15,127 @@ Terminals '&&' '||' '!'
 
 Rootsymbol program.
 
-program          -> topdecs : make_program('$1').
+program        -> topdecs : make_program('$1').
 
-topdecs          -> '$empty' : [].
-topdecs          -> topdec topdecs : ['$1'|'$2'].
+topdecs        -> '$empty' : [].
+topdecs        -> topdec topdecs : ['$1'|'$2'].
 
-topdec           -> vardec ';' : '$1'.
-topdec           -> fundec ';' : '$1'.
-topdec           -> fundef : '$1'.
+topdec         -> vardec ';' : '$1'.
+topdec         -> fundec ';' : '$1'.
+topdec         -> fundef : '$1'.
 
-fundec           -> funtypeandname '(' formals ')' : make_fundec('$1', '$3').
+fundec         -> funtypeandname '(' formals ')' : make_fundec('$1', '$3').
 
-fundef           -> funtypeandname '(' formals ')' funbody : make_fundef('$1', '$3', '$5').
+fundef         -> funtypeandname '(' formals ')' funbody : make_fundef('$1', '$3', '$5').
 
-funtypeandname   -> typename 'ident' : make_funtypeandname('$1', '$2').
-funtypeandname   -> 'void' 'ident' : make_funtypeandname('$1', '$2').
+funtypeandname -> typename 'ident' : make_funtypeandname('$1', '$2').
+funtypeandname -> 'void' 'ident' : make_funtypeandname('$1', '$2').
 
-vardec           -> scalardec : '$1'.
-vardec           -> arraydec : '$1'.
+vardec         -> scalardec : '$1'.
+vardec         -> arraydec : '$1'.
 
-scalardec        -> typename 'ident' : make_scalardec('$1', '$2').
+scalardec      -> typename 'ident' : make_scalardec('$1', '$2').
 
-arraydec         -> typename 'ident' '[' 'intconst' ']' : make_arraydec('$1', '$2', '$4').
+arraydec       -> typename 'ident' '[' 'intconst' ']' : make_arraydec('$1', '$2', '$4').
 
-typename         -> 'int' : '$1'.
-typename         -> 'char' : '$1'.
+typename       -> 'int' : '$1'.
+typename       -> 'char' : '$1'.
 
-funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
+funbody        -> '{' locals stmts '}' : make_funbody('$2', '$3').
 
-formals          -> 'void' : [].
-formals          -> formals_list : '$1'.
+formals        -> 'void' : [].
+formals        -> formals_list : '$1'.
 
-formals_list     -> formaldec : ['$1'].
-formals_list     -> formaldec ',' formals_list : ['$1'|'$3'].
+formals_list   -> formaldec : ['$1'].
+formals_list   -> formaldec ',' formals_list : ['$1'|'$3'].
 
-formaldec        -> scalardec : '$1'.
-formaldec        -> farraydec : '$1'.
+formaldec      -> scalardec : '$1'.
+formaldec      -> farraydec : '$1'.
 
-farraydec        -> typename 'ident' '[' ']' : make_farraydec('$1', '$2').
+farraydec      -> typename 'ident' '[' ']' : make_farraydec('$1', '$2').
 
-locals           -> '$empty' : [].
-locals           -> vardec ';' locals : ['$1'|'$3'].
+locals         -> '$empty' : [].
+locals         -> vardec ';' locals : ['$1'|'$3'].
 
-stmts            -> '$empty' : make_stmts([]).
-stmts            -> stmt stmts : make_stmts(['$1'|'$2']).
+stmts          -> '$empty' : make_stmts([]).
+stmts          -> stmt stmts : make_stmts(['$1'|'$2']).
 
-stmt             -> expr ';'      : '$1'.
-stmt             -> flow_stmt     : '$1'.
-stmt             -> '{' stmts '}' : '$2'.
-stmt             -> ';'           : nil.
+stmt           -> expr ';' : '$1'.
+stmt           -> stmt_flow : '$1'.
+stmt           -> '{' stmts '}' : '$2'.
+stmt           -> ';' : nil.
 
-flow_stmt        -> return_stmt ';' : '$1'.
-flow_stmt        -> while_stmt      : '$1'.
-flow_stmt        -> if_stmt         : '$1'.
+stmt_flow      -> stmt_return ';' : '$1'.
+stmt_flow      -> stmt_while : '$1'.
+stmt_flow      -> stmt_if : '$1'.
 
-return_stmt      -> 'return' expr : make_return('$1', '$2').
-return_stmt      -> 'return' : make_return('$1').
+stmt_return    -> 'return' expr : make_return('$1', '$2').
+stmt_return    -> 'return' : make_return('$1').
 
-while_stmt       -> 'while' condition stmt : make_while('$1', '$2', '$3').
+stmt_while     -> 'while' condition stmt : make_while('$1', '$2', '$3').
 
-if_stmt          -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
+stmt_if        -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
 
-else_part        -> '$empty' : nil.
-else_part        -> 'else' stmt : '$2'.
+else_part      -> '$empty' : nil.
+else_part      -> 'else' stmt : '$2'.
 
-condition        -> '(' expr ')' : '$2'.
+condition      -> '(' expr ')' : '$2'.
 
-expr             -> rval : '$1'.
+expr           -> expr_rval : '$1'.
 
-array_element    -> 'ident' '[' expr ']' : make_array_element('$1', '$3').
+expr_rval      -> expr_lval '=' expr_rval : make_binop('$1', '$2', '$3').
+expr_rval      -> expr_or : '$1'.
 
-function_call    -> 'ident' '(' actuals ')' : make_function_call('$1', '$3').
+expr_lval      -> 'ident' : make_ident('$1').
+expr_lval      -> array_element : '$1'.
 
-rval             -> lval '=' rval : make_binop('$1', '$2', '$3').
-rval             -> or : '$1'.
+expr_or        -> expr_or '||' expr_and : make_binop('$1', '$2', '$3').
+expr_or        -> expr_and : '$1'.
 
-lval             -> 'ident' : make_ident('$1').
-lval             -> array_element : '$1'.
+expr_and       -> expr_and '&&' expr_comp : make_binop('$1', '$2', '$3').
+expr_and       -> expr_comp : '$1'.
 
-or               -> or '||' and : make_binop('$1', '$2', '$3').
-or               -> and : '$1'.
+expr_comp      -> expr_comp op_ineq expr_ineq : make_binop('$1', '$2', '$3').
+expr_comp      -> expr_ineq : '$1'.
+op_ineq        -> '==' : '$1'.
+op_ineq        -> '!=' : '$1'.
 
-and              -> and '&&' comp : make_binop('$1', '$2', '$3').
-and              -> comp : '$1'.
+expr_ineq      -> expr_ineq op_primary expr_primary : make_binop('$1', '$2', '$3').
+expr_ineq      -> expr_primary : '$1'.
+op_primary     -> '<'  : '$1'.
+op_primary     -> '>'  : '$1'.
+op_primary     -> '<=' : '$1'.
+op_primary     -> '>=' : '$1'.
 
-comp             -> comp op_ineq ineq : make_binop('$1', '$2', '$3').
-comp             -> ineq : '$1'.
-op_ineq          -> '==' : '$1'.
-op_ineq          -> '!=' : '$1'.
+expr_primary   -> expr_primary op_term expr_term : make_binop('$1', '$2', '$3').
+expr_primary   -> expr_term : '$1'.
+op_term        -> '+' : '$1'.
+op_term        -> '-' : '$1'.
 
-ineq             -> ineq op_primary primary : make_binop('$1', '$2', '$3').
-ineq             -> primary : '$1'.
-op_primary       -> '<'  : '$1'.
-op_primary       -> '>'  : '$1'.
-op_primary       -> '<=' : '$1'.
-op_primary       -> '>=' : '$1'.
+expr_term      -> expr_term op_factor expr_factor : make_binop('$1', '$2', '$3').
+expr_term      -> expr_factor : '$1'.
+op_factor      -> '*' : '$1'.
+op_factor      -> '/' : '$1'.
 
-primary          -> primary op_term term : make_binop('$1', '$2', '$3').
-primary          -> term : '$1'.
-op_term          -> '+' : '$1'.
-op_term          -> '-' : '$1'.
+expr_factor    -> 'ident' : make_ident('$1').
+expr_factor    -> 'intconst' : make_intconst('$1').
+expr_factor    -> 'charconst' : make_charconst('$1').
+expr_factor    -> array_element : '$1'.
+expr_factor    -> function_call : '$1'.
+expr_factor    -> '(' expr ')' : '$2'.
+expr_factor    -> op_unary expr_factor : make_unop('$1', '$2').
+op_unary       -> '-' : '$1'.
+op_unary       -> '!' : '$1'.
 
-term             -> term op_factor factor : make_binop('$1', '$2', '$3').
-term             -> factor : '$1'.
-op_factor        -> '*' : '$1'.
-op_factor        -> '/' : '$1'.
+array_element  -> 'ident' '[' expr ']' : make_array_element('$1', '$3').
 
-factor           -> 'ident' : make_ident('$1').
-factor           -> 'intconst' : make_intconst('$1').
-factor           -> 'charconst' : make_charconst('$1').
-factor           -> array_element : '$1'.
-factor           -> function_call : '$1'.
-factor           -> '(' expr ')' : '$2'.
-factor           -> op_unary factor : make_unop('$1', '$2').
-op_unary         -> '-' : '$1'.
-op_unary         -> '!' : '$1'.
+function_call  -> 'ident' '(' actuals ')' : make_function_call('$1', '$3').
 
-actuals          -> '$empty' : [].
-actuals          -> expr_list : '$1'.
+actuals        -> '$empty' : [].
+actuals        -> actuals_list : '$1'.
 
-expr_list        -> expr : ['$1'].
-expr_list        -> expr ',' expr_list : ['$1'|'$3'].
+actuals_list   -> expr : ['$1'].
+actuals_list   -> expr ',' actuals_list : ['$1'|'$3'].
 
 Erlang code.
 
@@ -151,7 +152,7 @@ line(_Meta  = {Line,_}) when is_integer(Line) ->
     Line;
 line(_Token = {_,Line}) when is_integer(Line) ->
     Line;
-line(_Token = {Type,Line,_}) when not(is_tuple(Type)) ->
+line(_Token = {Type,Line,_}) when not is_tuple(Type) ->
     Line;
 line(Tuple) ->
     First = erlang:element(1, Tuple),
