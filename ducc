@@ -5,8 +5,8 @@ version() ->
     '0.0.1'.
 
 usage() ->
-    io:format('Usage: ducc [file]~n'),
-    io:format('(Uses stdin if no file given.)~n').
+    io:fwrite('ducc ~s~n', [version()]),
+    io:format('usage: ducc [-alpv] [file]~n').
 
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
@@ -29,7 +29,7 @@ main(_) ->
     usage().
 
 read_string(standard_io) ->
-    tool_chain:term_from_input();
+    tool_chain:string_from_input();
 read_string(Stream) ->
     Result = (catch tool_chain:string_from_file(Stream)),
     case Result of
