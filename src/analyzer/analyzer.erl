@@ -111,9 +111,6 @@ analyze_stmts([Stmt|Stmts], Env0) ->
     Env1 = analyze_stmt(Stmt, Env0),
     analyze_stmts(Stmts, Env1).
 
-% Empty else-statement.
-analyze_stmt(nil, Env0) ->
-    Env0;
 analyze_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     analyze_stmts(Stmts, Env0);
 analyze_stmt(Stmt, Env0) ->
@@ -149,10 +146,15 @@ analyze_while(Node = {_, Cond, Stmt}, Env0) ->
 analyze_if(Node = {_, Cond, Then, Else}, Env0) ->
     Env1 = analyze_expr(Cond, Env0),
     Env2 = analyze_stmt(Then, Env1),
-    Env3 = analyze_stmt(Else, Env2),
+    Env3 = analyze_else_stmt(Else, Env2),
     CondType = ?HELPER:eval_type(Cond, Env3),
     ?HELPER:convertible_to(int, CondType, Node),
     Env3.
+
+analyze_else_stmt(nil, Env0) ->
+    Env0;
+analyze_else_stmt(Stmt, Env0) ->
+    analyze_stmt(Stmt, Env0).
 
 analyze_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
