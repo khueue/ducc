@@ -2,7 +2,7 @@
  "suite/quiet/semantic/s04.c",
  [{{1,fundef},
    int,"foo",
-   [{{1,formal_arraydec},char,"x"}],
+   [{{1,farraydec},char,"x"}],
    [],
    [{{2,return},{{2,arrelem},"x",{{2,intconst},0}}}]},
   {{5,fundef},

@@ -1,9 +1,10 @@
 Nonterminals
-program topdec_list topdec fundec fundef vardec scalardec arraydec typename
-funtypeandname funbody formals formal_list formaldec formal_arraydec locals
+program topdecs topdec fundec fundef vardec scalardec arraydec typename
+funtypeandname funbody formals formals_list formaldec farraydec locals
 stmts stmt condition expr op_unary actuals expr_list else_part
 rval lval or and comp ineq primary term factor function_call array_element
-op_ineq op_primary op_term op_factor.
+op_ineq op_primary op_term op_factor
+flow_stmt return_stmt while_stmt if_stmt.
 
 Terminals '&&' '||' '!'
 '<' '>' '<=' '>=' '==' '!='
@@ -13,10 +14,10 @@ Terminals '&&' '||' '!'
 
 Rootsymbol program.
 
-program          -> topdec_list : make_program('$1').
+program          -> topdecs : make_program('$1').
 
-topdec_list      -> '$empty' : [].
-topdec_list      -> topdec topdec_list : ['$1'|'$2'].
+topdecs          -> '$empty' : [].
+topdecs          -> topdec topdecs : ['$1'|'$2'].
 
 topdec           -> vardec ';' : '$1'.
 topdec           -> fundec ';' : '$1'.
@@ -27,7 +28,7 @@ fundec           -> funtypeandname '(' formals ')' : make_fundec('$1', '$3').
 fundef           -> funtypeandname '(' formals ')' funbody : make_fundef('$1', '$3', '$5').
 
 funtypeandname   -> typename 'ident' : make_funtypeandname('$1', '$2').
-funtypeandname   ->   'void' 'ident' : make_funtypeandname('$1', '$2').
+funtypeandname   -> 'void' 'ident' : make_funtypeandname('$1', '$2').
 
 vardec           -> scalardec : '$1'.
 vardec           -> arraydec : '$1'.
@@ -42,15 +43,15 @@ typename         -> 'char' : '$1'.
 funbody          -> '{' locals stmts '}' : make_funbody('$2', '$3').
 
 formals          -> 'void' : [].
-formals          -> formal_list : '$1'.
+formals          -> formals_list : '$1'.
 
-formal_list      -> formaldec : ['$1'].
-formal_list      -> formaldec ',' formal_list : ['$1'|'$3'].
+formals_list     -> formaldec : ['$1'].
+formals_list     -> formaldec ',' formals_list : ['$1'|'$3'].
 
 formaldec        -> scalardec : '$1'.
-formaldec        -> formal_arraydec : '$1'.
+formaldec        -> farraydec : '$1'.
 
-formal_arraydec  -> typename 'ident' '[' ']' : make_formal_arraydec('$1', '$2').
+farraydec        -> typename 'ident' '[' ']' : make_farraydec('$1', '$2').
 
 locals           -> '$empty' : [].
 locals           -> vardec ';' locals : ['$1'|'$3'].
@@ -58,13 +59,21 @@ locals           -> vardec ';' locals : ['$1'|'$3'].
 stmts            -> '$empty' : make_stmts([]).
 stmts            -> stmt stmts : make_stmts(['$1'|'$2']).
 
-stmt             -> expr ';' : '$1'.
-stmt             -> 'return' expr ';' : make_return('$1', '$2').
-stmt             -> 'return' ';' : make_empty_return('$1').
-stmt             -> 'while' condition stmt : make_while('$1', '$2', '$3').
-stmt             -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
+stmt             -> expr ';'      : '$1'.
+stmt             -> flow_stmt     : '$1'.
 stmt             -> '{' stmts '}' : '$2'.
-stmt             -> ';' : nil.
+stmt             -> ';'           : nil.
+
+flow_stmt        -> return_stmt ';' : '$1'.
+flow_stmt        -> while_stmt      : '$1'.
+flow_stmt        -> if_stmt         : '$1'.
+
+return_stmt      -> 'return' expr : make_return('$1', '$2').
+return_stmt      -> 'return' : make_return('$1').
+
+while_stmt       -> 'while' condition stmt : make_while('$1', '$2', '$3').
+
+if_stmt          -> 'if' condition stmt else_part : make_if('$1', '$2', '$3', '$4').
 
 else_part        -> '$empty' : nil.
 else_part        -> 'else' stmt : '$2'.
@@ -185,8 +194,8 @@ make_arraydec(Type, Ident, Size) ->
 make_funbody(Locals, Stmts) ->
     {Locals, Stmts}.
 
-make_formal_arraydec(Type, Ident) ->
-    {meta(line(Type), formal_arraydec), type(Type), value(Ident)}.
+make_farraydec(Type, Ident) ->
+    {meta(line(Type), farraydec), type(Type), value(Ident)}.
 
 make_if(Keyword, Cond, Then, Else) ->
     {meta(line(Keyword), 'if'), Cond, Then, Else}.
@@ -194,9 +203,8 @@ make_if(Keyword, Cond, Then, Else) ->
 make_while(Keyword, Cond, Stmt) ->
     {meta(line(Keyword), while), Cond, Stmt}.
 
-make_empty_return(Keyword) ->
+make_return(Keyword) ->
     {meta(line(Keyword), return), nil}.
-
 make_return(Keyword, Expr) ->
     {meta(line(Keyword), return), Expr}.
 

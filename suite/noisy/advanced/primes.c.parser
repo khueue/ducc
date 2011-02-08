@@ -1,7 +1,7 @@
 {{3,program},
  "suite/noisy/advanced/primes.c",
  [{{3,fundec},void,"putint",[{{3,scalardec},int,"i"}]},
-  {{4,fundec},void,"putstring",[{{4,formal_arraydec},char,"s"}]},
+  {{4,fundec},void,"putstring",[{{4,farraydec},char,"s"}]},
   {{6,arraydec},char,"notprime",1001},
   {{7,scalardec},int,"max"},
   {{9,fundef},

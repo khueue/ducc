@@ -1,6 +1,6 @@
 {{1,program},
  "suite/quiet/rtl/r03.c",
- [{{1,fundef},void,"f",[{{1,formal_arraydec},int,"x"}],[],[]},
+ [{{1,fundef},void,"f",[{{1,farraydec},int,"x"}],[],[]},
   {{5,fundef},
    int,"main",[],
    [{{6,arraydec},int,"a",7}],

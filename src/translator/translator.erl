@@ -54,11 +54,11 @@ translate_formals([Formal|Formals], Env0) ->
 translate_formal(Formal, Env0) ->
     Tag = ?HELPER:get_tag(Formal),
     case Tag of
-        scalardec       -> translate_scalardec(Formal, Env0);
-        formal_arraydec -> translate_formal_arraydec(Formal, Env0)
+        scalardec -> translate_scalardec(Formal, Env0);
+        farraydec -> translate_farraydec(Formal, Env0)
     end.
 
-translate_formal_arraydec({_Meta, Type, Name}, Env0) ->
+translate_farraydec({_Meta, Type, Name}, Env0) ->
     Env0.
 
 translate_locals([], Env0) -> [];

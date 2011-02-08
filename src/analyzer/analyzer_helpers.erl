@@ -73,8 +73,8 @@ eval_type(_Node = {{_, scalardec}, Type, _Name}, _Env) ->
     {scalardec, Type};
 eval_type(_Node = {{_, arraydec}, Type, _Name, _Size}, _Env) ->
     {arraydec, Type};
-eval_type(_Node = {{_, formal_arraydec}, Type, _Name}, _Env) ->
-    {formal_arraydec, Type}.
+eval_type(_Node = {{_, farraydec}, Type, _Name}, _Env) ->
+    {farraydec, Type}.
 
 widest_type(Type1, Type2, Node) ->
     try widest_type(Type1, Type2)
@@ -85,19 +85,19 @@ widest_type(Type1, Type2, Node) ->
 
 widest_type({_,_}, {arraydec,_})        -> throw(incompatible);
 widest_type({arraydec,_}, {_,_})        -> throw(incompatible);
-widest_type({_,_}, {formal_arraydec,_}) -> throw(incompatible);
-widest_type({formal_arraydec,_}, {_,_}) -> throw(incompatible);
+widest_type({_,_}, {farraydec,_}) -> throw(incompatible);
+widest_type({farraydec,_}, {_,_}) -> throw(incompatible);
 widest_type({_,int}, {_,int})           -> int;
 widest_type({_,int}, {_,char})          -> int;
 widest_type({_,char}, {_,char})         -> char;
 widest_type({_,char}, {_,int})          -> int;
 widest_type({_,_}, {_,_})               -> throw(incompatible).
 
-first_accepts_second({formal_arraydec, Type}, {arraydec, Type})        -> ok;
-first_accepts_second({formal_arraydec, Type}, {formal_arraydec, Type}) -> ok;
+first_accepts_second({farraydec, Type}, {arraydec, Type})        -> ok;
+first_accepts_second({farraydec, Type}, {farraydec, Type}) -> ok;
 first_accepts_second(_, {arraydec,_})        -> throw(incompatible);
 first_accepts_second({arraydec,_}, _)        -> throw(incompatible);
-first_accepts_second(_, {formal_arraydec,_}) -> throw(incompatible);
+first_accepts_second(_, {farraydec,_}) -> throw(incompatible);
 first_accepts_second({_,void}, {_,void})     -> ok;
 first_accepts_second({_,int}, {_,int})       -> ok;
 first_accepts_second({_,int}, {_,char})      -> ok;

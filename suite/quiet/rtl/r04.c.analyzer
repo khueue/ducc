@@ -2,7 +2,7 @@
  "suite/quiet/rtl/r04.c",
  [{{1,fundef},
    void,"f",
-   [{{1,formal_arraydec},char,"x"}],
+   [{{1,farraydec},char,"x"}],
    [],
    [{{2,binop},
      {{2,arrelem},"x",{{2,intconst},1}},

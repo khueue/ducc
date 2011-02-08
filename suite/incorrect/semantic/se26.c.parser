@@ -2,7 +2,7 @@
  "suite/incorrect/semantic/se26.c",
  [{{3,fundef},
    void,"f",
-   [{{3,formal_arraydec},int,"b"}],
+   [{{3,farraydec},int,"b"}],
    [],
    [{{4,binop},{{4,arrelem},"b",{{4,intconst},0}},'=',{{4,intconst},0}}]},
   {{7,fundef},

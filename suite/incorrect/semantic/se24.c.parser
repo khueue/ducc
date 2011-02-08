@@ -2,7 +2,7 @@
  "suite/incorrect/semantic/se24.c",
  [{{3,fundef},
    char,"first",
-   [{{3,formal_arraydec},int,"a"}],
+   [{{3,farraydec},int,"a"}],
    [{{4,arraydec},int,"b",10}],
    [{{6,binop},{{6,ident},"b"},'=',{{6,ident},"a"}},
     {{7,return},{{7,intconst},1}}]}]}.

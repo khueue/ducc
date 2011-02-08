@@ -1,7 +1,7 @@
 {{4,program},
  "suite/noisy/simple/sim05.c",
  [{{4,fundec},void,"putint",[{{4,scalardec},int,"i"}]},
-  {{5,fundec},void,"putstring",[{{5,formal_arraydec},char,"s"}]},
+  {{5,fundec},void,"putstring",[{{5,farraydec},char,"s"}]},
   {{7,fundef},
    int,"main",[],
    [{{8,arraydec},char,"cr",1},

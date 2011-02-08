@@ -84,10 +84,10 @@ analyze_formal(Formal, Env0) ->
     Tag = ?HELPER:get_tag(Formal),
     case Tag of
         scalardec       -> analyze_scalardec(Formal, Env0);
-        formal_arraydec -> analyze_formal_arraydec(Formal, Env0)
+        farraydec -> analyze_farraydec(Formal, Env0)
     end.
 
-analyze_formal_arraydec(Node = {_, _Type, Name}, Env0) ->
+analyze_farraydec(Node = {_, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = ?ENV:set_symbol(Name, Node, Env0),
     Env1.
@@ -221,7 +221,7 @@ analyze_arrelem(Node = {_, Name, Index}, Env0) ->
     ElseUndec   = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     ElseBadType = ?HELPER:exception(Node, "'~s' is not an array", [Name]),
     FoundNode = ?ENV:lookup_or_throw(Name, Node, Env0, ElseUndec),
-    ?RULE:must_be_tag_member(FoundNode, [arraydec,formal_arraydec], ElseBadType),
+    ?RULE:must_be_tag_member(FoundNode, [arraydec,farraydec], ElseBadType),
     Env1 = analyze_expr(Index, Env0),
     IndexType = ?HELPER:eval_type(Index, Env1),
     ?HELPER:convertible_to(int, IndexType, Node),

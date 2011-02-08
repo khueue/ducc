@@ -5,7 +5,7 @@
   {{25,fundec},void,"putint",[{{25,scalardec},int,"x"}]},
   {{27,fundef},
    void,"printboard",
-   [{{27,formal_arraydec},int,"board"}],
+   [{{27,farraydec},int,"board"}],
    [{{28,scalardec},int,"i"}],
    [{{29,binop},{{29,ident},"i"},'=',{{29,intconst},0}},
     {{30,while},

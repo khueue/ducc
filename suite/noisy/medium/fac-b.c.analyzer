@@ -1,7 +1,7 @@
 {{5,program},
  "suite/noisy/medium/fac-b.c",
  [{{5,fundec},void,"putint",[{{5,scalardec},int,"i"}]},
-  {{6,fundec},void,"putstring",[{{6,formal_arraydec},char,"s"}]},
+  {{6,fundec},void,"putstring",[{{6,farraydec},char,"s"}]},
   {{8,fundef},
    int,"fac",
    [{{8,scalardec},int,"n"}],

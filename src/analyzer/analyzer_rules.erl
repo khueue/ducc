@@ -69,7 +69,7 @@ same_return_type(Node, FoundNode) ->
     end.
 
 % BUG: We are lucky enough to have the same structure for all possible
-% formals (scalardec and formal_arraydec), but this simple solution would
+% formals (scalardec and farraydec), but this simple solution would
 % not necessarily work if other types (pointers, fixed size array, ...)
 % are introduced.
 same_tag_and_type({{_,Tag},Type,_}, {{_,Tag},Type,_}, _CurrentNode) ->
