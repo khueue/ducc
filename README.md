@@ -4,7 +4,9 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Implement Translator 
+ * Implement translator
+     * Fix grammar (flow, expr, remove empty stmt)
+     * Rewrite analyzer DFS
  * Include .c source in AST?
 
 ## Before Hand-In
