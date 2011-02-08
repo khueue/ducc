@@ -2,7 +2,7 @@
 %%! -pa ebin -Wall
 
 version() ->
-    '0.0.1'.
+    '0.0.2'.
 
 usage() ->
     io:fwrite('ducc ~s~n', [version()]),
