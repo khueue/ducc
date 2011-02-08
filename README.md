@@ -4,8 +4,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- ### Implement Translator 
+ * Implement Translator 
 
-    * Report
-
- ### Include .c source in AST?
+ * Include .c source in AST?
