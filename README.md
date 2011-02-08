@@ -4,9 +4,8 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Implement translator
-     * Fix grammar (flow, expr, remove empty stmt)
-     * Rewrite analyzer DFS
+ * Implement translator:
+     * Fix grammar? (flow/expr)
      * Translator stubs may need tweaking (translator, ducc, etc.) when we 
        have decided on what the translator returns
  * Include .c source in AST?
