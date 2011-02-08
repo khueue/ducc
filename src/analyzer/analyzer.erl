@@ -3,9 +3,10 @@
 
 -define(HELPER, analyzer_helpers).
 -define(RULE, analyzer_rules).
+-define(ENV, analyzer_env).
 
 analyze(ParseTree) ->
-    Env = analyzer_env:new(),
+    Env = ?ENV:new(),
     analyze(ParseTree, Env),
     ParseTree.
 
@@ -32,33 +33,33 @@ analyze_topdec(Topdec, Env0) ->
 
 analyze_scalardec(Node = {_, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
+    Env1 = ?ENV:set_symbol(Name, Node, Env0),
     Env1.
 
 analyze_arraydec(Node = {_, _Type, Name, _Size}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
+    Env1 = ?ENV:set_symbol(Name, Node, Env0),
     % Parser makes sure that Size is a natural number.
     Env1.
 
 analyze_fundec(Node = {_, _Type, Name, Formals}, Env0) ->
     ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
-    Env1 = case analyzer_env:lookup(Name, Node, Env0) of
+    Env1 = case ?ENV:lookup(Name, Node, Env0) of
         not_found ->
-            analyzer_env:set_symbol(Name, Node, Env0);
+            ?ENV:set_symbol(Name, Node, Env0);
         FoundNode ->
             ?RULE:must_be_tag_member(FoundNode, [fundec,fundef], ElseRedef),
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode),
             Env0
     end,
-    Env2 = analyzer_env:enter_scope(Name, Env1),
+    Env2 = ?ENV:enter_scope(Name, Env1),
     _Env3 = analyze_formals(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
 analyze_fundef(Node = {_, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
-    case analyzer_env:lookup(Name, Node, Env0) of
+    case ?ENV:lookup(Name, Node, Env0) of
         not_found ->
             ok;
         FoundNode ->
@@ -66,8 +67,8 @@ analyze_fundef(Node = {_, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             ?RULE:same_return_type(Node, FoundNode),
             ?RULE:same_formals(Node, FoundNode)
     end,
-    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
-    Env2 = analyzer_env:enter_scope(Name, Env1),
+    Env1 = ?ENV:set_symbol(Name, Node, Env0),
+    Env2 = ?ENV:enter_scope(Name, Env1),
     Env3 = analyze_formals(Formals, Env2),
     Env4 = analyze_locals(Locals, Env3),
     _Env5 = analyze_stmts(Stmts, Env4),
@@ -88,7 +89,7 @@ analyze_formal(Formal, Env0) ->
 
 analyze_formal_arraydec(Node = {_, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
-    Env1 = analyzer_env:set_symbol(Name, Node, Env0),
+    Env1 = ?ENV:set_symbol(Name, Node, Env0),
     Env1.
 
 analyze_locals([], Env0) ->
@@ -126,8 +127,8 @@ analyze_stmt(Stmt, Env0) ->
 
 analyze_return(Node = {_, Expr}, Env0) ->
     Env1 = analyze_return_expr(Expr, Env0),
-    FunName = analyzer_env:scope_name(Env1),
-    FunNode = analyzer_env:lookup(FunName, Node, Env1),
+    FunName = ?ENV:scope_name(Env1),
+    FunNode = ?ENV:lookup(FunName, Node, Env1),
     ReturnType = ?HELPER:eval_type(FunNode, Env1),
     ExprType = ?HELPER:eval_type(Expr, Env1),
     ?HELPER:convertible_to(ReturnType, ExprType, Node),
@@ -169,7 +170,7 @@ analyze_funcall(Node = {_, Name, Actuals}, Env0) ->
     ElseUndec  = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     ElseNotFun = ?HELPER:exception(Node, "'~s' is not a function", [Name]),
     Env1 = analyze_actuals(Actuals, Env0),
-    FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env1, ElseUndec),
+    FoundNode = ?ENV:lookup_or_throw(Name, Node, Env1, ElseUndec),
     ?RULE:must_be_tag_member(FoundNode, [fundec,fundef], ElseNotFun),
     ?RULE:check_actuals(FoundNode, Node, Env1),
     Env1.
@@ -199,7 +200,7 @@ analyze_binop(Node = {_, Lhs, Op, Rhs}, Env0) ->
 
 analyze_ident(Node = {_, Name}, Env0) ->
     ElseUndec = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
-    _FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env0, ElseUndec),
+    _FoundNode = ?ENV:lookup_or_throw(Name, Node, Env0, ElseUndec),
     Env0.
 
 analyze_intconst({_, _Value}, Env0) ->
@@ -217,7 +218,7 @@ analyze_unop(Node = {_, _Op, Rhs}, Env0) ->
 analyze_arrelem(Node = {_, Name, Index}, Env0) ->
     ElseUndec   = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     ElseBadType = ?HELPER:exception(Node, "'~s' is not an array", [Name]),
-    FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env0, ElseUndec),
+    FoundNode = ?ENV:lookup_or_throw(Name, Node, Env0, ElseUndec),
     ?RULE:must_be_tag_member(FoundNode, [arraydec,formal_arraydec], ElseBadType),
     Env1 = analyze_expr(Index, Env0),
     IndexType = ?HELPER:eval_type(Index, Env1),
