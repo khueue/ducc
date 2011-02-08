@@ -1,7 +1,7 @@
 {{1,program},
  "suite/quiet/parser/p04.c",
  [{{1,scalardec},int,"x"},
-  {{3,fundef},void,"foo",[{{3,scalardec},int,"x"}],[],[nil]},
+  {{3,fundef},void,"foo",[{{3,scalardec},int,"x"}],[],[]},
   {{7,fundef},
    int,"main",[],
    [{{8,scalardec},int,"y"}],

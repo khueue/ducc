@@ -1,6 +1,9 @@
 -module(translator).
 -export([translate/1]).
 
+-define(HELPER, analyzer_helpers).
+-define(RULE, analyzer_rules).
+
 translate(ParseTree) ->
     Env = analyzer_env:new(),
     translate(ParseTree, Env),
@@ -19,7 +22,7 @@ translate_topdecs([Topdec|Topdecs], Env0) ->
     translate_topdecs(Topdecs, Env0).
 
 translate_topdec(Topdec, Env0) ->
-    Tag = analyzer_helper:get_tag(Topdec),
+    Tag = ?HELPER:get_tag(Topdec),
     case Tag of
         scalardec -> translate_scalardec(Topdec, Env0);
         arraydec  -> translate_arraydec(Topdec, Env0);
@@ -49,13 +52,13 @@ translate_formals([Formal|Formals], Env0) ->
     translate_formals(Formals, Env0).
 
 translate_formal(Formal, Env0) ->
-    Tag = analyzer_helper:get_tag(Formal),
+    Tag = ?HELPER:get_tag(Formal),
     case Tag of
         scalardec       -> translate_scalardec(Formal, Env0);
         formal_arraydec -> translate_formal_arraydec(Formal, Env0)
     end.
 
-translate_formal_arraydec(FormalArraydec, Env0) ->
+translate_formal_arraydec({_Meta, Type, Name}, Env0) ->
     Env0.
 
 translate_locals([], Env0) -> [];
@@ -64,7 +67,7 @@ translate_locals([Local|Locals], Env0) ->
     translate_locals(Locals, Env0).
 
 translate_local(Local, Env0) ->
-    Tag = analyzer_helper:get_tag(Local),
+    Tag = ?HELPER:get_tag(Local),
     case Tag of
         scalardec -> translate_scalardec(Local, Env0);
         arraydec  -> translate_arraydec(Local, Env0)
@@ -81,7 +84,7 @@ translate_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     translate_stmts(Stmts, Env0),
     Env0;
 translate_stmt(Stmt, Env0) ->
-    Tag = analyzer_helper:get_tag(Stmt),
+    Tag = ?HELPER:get_tag(Stmt),
     case Tag of
         return -> translate_return(Stmt, Env0);
         while  -> translate_while(Stmt, Env0);
@@ -105,7 +108,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
     Env0.
 
 translate_expr(Expr, Env0) ->
-    Tag = analyzer_helper:get_tag(Expr),
+    Tag = ?HELPER:get_tag(Expr),
     case Tag of
         binop     -> translate_binop(Expr, Env0);
         unop      -> translate_unop(Expr, Env0);

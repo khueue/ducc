@@ -55,8 +55,8 @@ formal_arraydec  -> typename 'ident' '[' ']' : make_formal_arraydec('$1', '$2').
 locals           -> '$empty' : [].
 locals           -> vardec ';' locals : ['$1'|'$3'].
 
-stmts            -> '$empty' : [].
-stmts            -> stmt stmts : ['$1'|'$2'].
+stmts            -> '$empty' : make_stmts([]).
+stmts            -> stmt stmts : make_stmts(['$1'|'$2']).
 
 stmt             -> expr ';' : '$1'.
 stmt             -> 'return' expr ';' : make_return('$1', '$2').
@@ -168,6 +168,13 @@ make_fundef(TypeAndName, Formals, Body) ->
 
 make_funtypeandname(Type, Ident) ->
    {meta(line(Type), funtypeandname), type(Type), value(Ident)}.
+
+make_stmts([]) -> [];
+make_stmts([nil|Stmts]) ->
+    % Skip empty statement.
+    Stmts;
+make_stmts(Stmts) ->
+    Stmts.
 
 make_scalardec(Type, Value) ->
     {meta(line(Type), scalardec), type(Type), value(Value)}.

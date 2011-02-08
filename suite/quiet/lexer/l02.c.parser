@@ -8,4 +8,4 @@
   {{11,scalardec},int,"b4rb4r4"},
   {{13,scalardec},
    int,"abcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789"},
-  {{15,fundef},int,"main",[],[],[nil]}]}.
+  {{15,fundef},int,"main",[],[],[]}]}.

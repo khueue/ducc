@@ -1,3 +1,1 @@
-{{14,program},
- "suite/quiet/lexer/l06.c",
- [{{14,fundef},int,"main",[],[],[nil]}]}.
+{{14,program},"suite/quiet/lexer/l06.c",[{{14,fundef},int,"main",[],[],[]}]}.
