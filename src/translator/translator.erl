@@ -21,10 +21,10 @@ translate_topdecs([Topdec|Topdecs], Env0) ->
 translate_topdec(Topdec, Env0) ->
     Tag = analyzer_helper:get_tag(Topdec),
     case Tag of
-        {scalardec} -> translate_scalardec(Topdec, Env0);
-        {arraydec}  -> translate_arraydec(Topdec, Env0);
-        {fundec}    -> translate_fundec(Topdec, Env0);
-        {fundef}    -> translate_fundef(Topdec, Env0)
+        scalardec -> translate_scalardec(Topdec, Env0);
+        arraydec  -> translate_arraydec(Topdec, Env0);
+        fundec    -> translate_fundec(Topdec, Env0);
+        fundef    -> translate_fundef(Topdec, Env0)
     end.
 
 translate_scalardec({_Meta, Type, Name}, Env0) ->
