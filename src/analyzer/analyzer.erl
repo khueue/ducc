@@ -13,10 +13,10 @@ analyze(ParseTree, Env0) ->
     analyze_program(ParseTree, Env0).
 
 analyze_program({_Meta, _File, Topdecs}, Env0) ->
-    Env1 = analyze_topdecs(Topdecs, Env0),
-    Env1.
+    analyze_topdecs(Topdecs, Env0).
 
-analyze_topdecs([], Env) -> Env;
+analyze_topdecs([], Env0) ->
+    Env0;
 analyze_topdecs([Topdec|Topdecs], Env0) ->
     Env1 = analyze_topdec(Topdec, Env0),
     analyze_topdecs(Topdecs, Env1).
@@ -73,7 +73,8 @@ analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     _Env5 = analyze_stmts(Stmts, Env4),
     Env1. % Updates to the environment are local to the function!
 
-analyze_formals([], Env) -> Env;
+analyze_formals([], Env0) ->
+    Env0;
 analyze_formals([Formal|Formals], Env0) ->
     Env1 = analyze_formal(Formal, Env0),
     analyze_formals(Formals, Env1).
@@ -90,7 +91,8 @@ analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
     Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env1.
 
-analyze_locals([], Env) -> Env;
+analyze_locals([], Env0) ->
+    Env0;
 analyze_locals([Local|Locals], Env0) ->
     Env1 = analyze_local(Local, Env0),
     analyze_locals(Locals, Env1).
@@ -102,12 +104,14 @@ analyze_local(Local, Env0) ->
         arraydec  -> analyze_arraydec(Local, Env0)
     end.
 
-analyze_stmts([], Env) -> Env;
+analyze_stmts([], Env0) ->
+    Env0;
 analyze_stmts([Stmt|Stmts], Env0) ->
     Env1 = analyze_stmt(Stmt, Env0),
     analyze_stmts(Stmts, Env1).
 
-analyze_stmt(nil, Env0) -> %% xxx remove
+% Empty else-statement.
+analyze_stmt(nil, Env0) ->
     Env0;
 analyze_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     analyze_stmts(Stmts, Env0);
@@ -170,7 +174,8 @@ analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
     ?RULE:check_actuals(FoundNode, Node, Env1),
     Env1.
 
-analyze_actuals([], Env) -> Env;
+analyze_actuals([], Env0) ->
+    Env0;
 analyze_actuals([Actual|Actuals], Env0) ->
     Env1 = analyze_actual(Actual, Env0),
     analyze_actuals(Actuals, Env1).
