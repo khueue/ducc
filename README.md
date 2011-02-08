@@ -4,8 +4,8 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Construct translator
+ ### Implement Translator 
 
- * Introduce step-hooks in ducc to speed up tests
+    * Report
 
- * Include .c source in AST?
+ ### Include .c source in AST?
