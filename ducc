@@ -6,7 +6,7 @@ version() ->
 
 usage() ->
     io:fwrite('ducc ~s~n', [version()]),
-    io:format('usage: ducc [-alpv] [file]~n').
+    io:format('usage: ducc [-alptv] [file]~n').
 
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
@@ -19,6 +19,9 @@ main(["-p", File]) ->
 main(["-a", File]) ->
     String = read_string(File),
     compile(analyzer, File, String);
+main(["-t", File]) ->
+    String = read_string(File),
+    compile(translator, File, String);
 main([]) ->
     String = read_string(standard_io),
     compile(default, '<stdin>', String);
@@ -50,6 +53,8 @@ compile(Program, Stream, String) ->
             tool_chain:die(Message);
         {analyzer_exception, Message} ->
             tool_chain:die(Message);
+        {translator_exception, Message} ->
+            tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->
@@ -67,8 +72,14 @@ process(Program, Stream, String) ->
             {ok, Tokens} = lexer_driver:tokenize(Stream, String),
             {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
             {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree);
+        translator ->
+            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+            {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
+            {ok, ParseTree2} = translator_driver:translate(Stream, ParseTree1);
         _Default ->
             {ok, Tokens} = lexer_driver:tokenize(Stream, String),
             {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-            {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree)
+            {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
+            {ok, ParseTree2} = translator_driver:translate(Stream, ParseTree1)
     end.
