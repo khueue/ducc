@@ -35,6 +35,8 @@ command(File, Program) ->
             Ducc ++ "-p " ++ File;
         "analyzer" ->
             Ducc ++ "-a " ++ File;
+        "translator" ->
+            Ducc ++ "-t " ++ File;
         _Default ->
             Ducc ++ File
     end.

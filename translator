@@ -1,0 +1,27 @@
+#!/usr/bin/env escript
+%%! -pa ebin -Wall
+
+usage() ->
+    io:format('Usage: translator~n'),
+    io:format('(Uses stdin/stdout.)~n').
+
+main([]) ->
+    Stream = '<stdin>',
+    String = tool_chain:string_from_input(),
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, ParseTree1} ->
+            tool_chain:term_to_output(ParseTree1);
+        {translator_exception, Message} ->
+            tool_chain:die(Message);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String);
+        UnknownError ->
+            tool_chain:die('~p~n', [UnknownError])
+    end;
+main(_) ->
+    usage().
+
+process(Stream, String) ->
+    ParseTree = tool_chain:term_from_string(String),
+    translator_driver:translate(Stream, ParseTree).

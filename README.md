@@ -7,6 +7,8 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
  * Implement translator
      * Fix grammar (flow, expr, remove empty stmt)
      * Rewrite analyzer DFS
+     * Translator stubs may need tweaking (translator, ducc, etc.) when we 
+       have decided on what the translator returns
  * Include .c source in AST?
 
 ## Before Hand-In
