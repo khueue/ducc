@@ -96,9 +96,6 @@ translator:
 
     cat suite/quiet/rtl/r01.c | lexer | parser | analyzer | translator
 
-If the source file is semantically correct, the analyzer will simply echo
-the abstract syntax tree, as given by the parser, to standard output.
-
 If the translator encounters an error, it will print a error message to
 standard output and stop evaluation. Otherwise, if successful, the translator
 will output the RTL code to standard output.
