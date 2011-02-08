@@ -12,7 +12,7 @@ analyze(ParseTree) ->
 analyze(ParseTree, Env0) ->
     analyze_program(ParseTree, Env0).
 
-analyze_program({_Meta, _File, Topdecs}, Env0) ->
+analyze_program({_, _File, Topdecs}, Env0) ->
     analyze_topdecs(Topdecs, Env0).
 
 analyze_topdecs([], Env0) ->
@@ -30,18 +30,18 @@ analyze_topdec(Topdec, Env0) ->
         fundef    -> analyze_fundef(Topdec, Env0)
     end.
 
-analyze_scalardec(Node = {_Meta, _Type, Name}, Env0) ->
+analyze_scalardec(Node = {_, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env1.
 
-analyze_arraydec(Node = {_Meta, _Type, Name, _Size}, Env0) ->
+analyze_arraydec(Node = {_, _Type, Name, _Size}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     % Parser makes sure that Size is a natural number.
     Env1.
 
-analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
+analyze_fundec(Node = {_, _Type, Name, Formals}, Env0) ->
     ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
     Env1 = case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
@@ -56,7 +56,7 @@ analyze_fundec(Node = {_Meta, _Type, Name, Formals}, Env0) ->
     _Env3 = analyze_formals(Formals, Env2),
     Env1. % Updates to the environment are local to the function!
 
-analyze_fundef(Node = {_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
+analyze_fundef(Node = {_, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     ElseRedef = ?HELPER:exception(Node, "function '~s' already defined", [Name]),
     case analyzer_env:lookup(Name, Node, Env0) of
         not_found ->
@@ -86,7 +86,7 @@ analyze_formal(Formal, Env0) ->
         formal_arraydec -> analyze_formal_arraydec(Formal, Env0)
     end.
 
-analyze_formal_arraydec(Node = {_Meta, _Type, Name}, Env0) ->
+analyze_formal_arraydec(Node = {_, _Type, Name}, Env0) ->
     ?RULE:must_not_exist_in_same_scope(Name, Node, Env0),
     Env1 = analyzer_env:set_symbol(Name, Node, Env0),
     Env1.
@@ -124,22 +124,7 @@ analyze_stmt(Stmt, Env0) ->
         _Expr  -> analyze_expr(Stmt, Env0)
     end.
 
-analyze_if(Node = {_Meta, Cond, Then, Else}, Env0) ->
-    Env1 = analyze_expr(Cond, Env0),
-    Env2 = analyze_stmt(Then, Env1),
-    Env3 = analyze_stmt(Else, Env2),
-    CondType = ?HELPER:eval_type(Cond, Env3),
-    ?HELPER:convertible_to(int, CondType, Node),
-    Env3.
-
-analyze_while(Node = {_Meta, Cond, Stmt}, Env0) ->
-    Env1 = analyze_expr(Cond, Env0),
-    Env2 = analyze_stmt(Stmt, Env1),
-    CondType = ?HELPER:eval_type(Cond, Env2),
-    ?HELPER:convertible_to(int, CondType, Node),
-    Env2.
-
-analyze_return(Node = {_Meta, Expr}, Env0) ->
+analyze_return(Node = {_, Expr}, Env0) ->
     Env1 = analyze_return_expr(Expr, Env0),
     FunName = analyzer_env:scope_name(Env1),
     FunNode = analyzer_env:lookup(FunName, Node, Env1),
@@ -153,6 +138,21 @@ analyze_return_expr(nil, Env0) ->
 analyze_return_expr(Expr, Env0) ->
     analyze_expr(Expr, Env0).
 
+analyze_while(Node = {_, Cond, Stmt}, Env0) ->
+    Env1 = analyze_expr(Cond, Env0),
+    Env2 = analyze_stmt(Stmt, Env1),
+    CondType = ?HELPER:eval_type(Cond, Env2),
+    ?HELPER:convertible_to(int, CondType, Node),
+    Env2.
+
+analyze_if(Node = {_, Cond, Then, Else}, Env0) ->
+    Env1 = analyze_expr(Cond, Env0),
+    Env2 = analyze_stmt(Then, Env1),
+    Env3 = analyze_stmt(Else, Env2),
+    CondType = ?HELPER:eval_type(Cond, Env3),
+    ?HELPER:convertible_to(int, CondType, Node),
+    Env3.
+
 analyze_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
     case Tag of
@@ -165,7 +165,7 @@ analyze_expr(Expr, Env0) ->
         arrelem   -> analyze_arrelem(Expr, Env0)
     end.
 
-analyze_funcall(Node = {_Meta, Name, Actuals}, Env0) ->
+analyze_funcall(Node = {_, Name, Actuals}, Env0) ->
     ElseUndec  = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     ElseNotFun = ?HELPER:exception(Node, "'~s' is not a function", [Name]),
     Env1 = analyze_actuals(Actuals, Env0),
@@ -183,7 +183,7 @@ analyze_actuals([Actual|Actuals], Env0) ->
 analyze_actual(Actual, Env0) ->
     analyze_expr(Actual, Env0).
 
-analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
+analyze_binop(Node = {_, Lhs, Op, Rhs}, Env0) ->
     Env1 = analyze_expr(Lhs, Env0),
     Env2 = analyze_expr(Rhs, Env1),
     case Op of
@@ -197,24 +197,24 @@ analyze_binop(Node = {_Meta, Lhs, Op, Rhs}, Env0) ->
     end,
     Env2.
 
-analyze_ident(Node = {_Meta, Name}, Env0) ->
+analyze_ident(Node = {_, Name}, Env0) ->
     ElseUndec = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     _FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env0, ElseUndec),
     Env0.
 
-analyze_intconst({_Meta, _Value}, Env0) ->
+analyze_intconst({_, _Value}, Env0) ->
     Env0.
 
-analyze_charconst({_Meta, _Value}, Env0) ->
+analyze_charconst({_, _Value}, Env0) ->
     Env0.
 
-analyze_unop(Node = {_Meta, _Op, Rhs}, Env0) ->
+analyze_unop(Node = {_, _Op, Rhs}, Env0) ->
     Env1 = analyze_expr(Rhs, Env0),
     RhsType = ?HELPER:eval_type(Rhs, Env1),
     ?HELPER:convertible_to(int, RhsType, Node),
     Env1.
 
-analyze_arrelem(Node = {_Meta, Name, Index}, Env0) ->
+analyze_arrelem(Node = {_, Name, Index}, Env0) ->
     ElseUndec   = ?HELPER:exception(Node, "'~s' is undeclared", [Name]),
     ElseBadType = ?HELPER:exception(Node, "'~s' is not an array", [Name]),
     FoundNode = analyzer_env:lookup_or_throw(Name, Node, Env0, ElseUndec),
