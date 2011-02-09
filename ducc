@@ -6,7 +6,7 @@ version() ->
 
 usage() ->
     io:fwrite('ducc ~s~n', [version()]),
-    io:format('usage: ducc [-alptv] [file]~n').
+    io:format('usage: ducc [-a|-l|-p|-t|-v] [file]~n').
 
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);

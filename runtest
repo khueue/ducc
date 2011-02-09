@@ -1,6 +1,9 @@
 #!/usr/bin/env escript
 %%! -pa ebin -Wall
 
+usage() ->
+    io:format('usage: runtest [-a|-l|-p|-t]~n').
+
 main(["-l"]) ->
     io:format("Testing lexer ...~n"),
     lexer_test:test();
@@ -17,4 +20,6 @@ main([]) ->
     main(["-l"]),
     main(["-p"]),
     main(["-a"]),
-    main(["-t"]).
+    main(["-t"]);
+main(_) ->
+    usage().
