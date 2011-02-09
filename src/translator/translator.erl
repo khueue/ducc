@@ -135,12 +135,12 @@ translate_ident({_Meta, Name}, Env0) ->
     Env0.
 
 translate_intconst({_Meta, Value}, Env0) ->
-    Stuff = ?RTL:make_icon(Value, TempCount),
+    Stuff = ?RTL:make_icon(Value),
     {Env0, Stuff}.
 
 translate_charconst({_Meta, Value}, Env0) ->
     Int = ?RTL:char_to_int(Value),
-    Stuff = ?RTL:make_icon(Int, TempCount),
+    Stuff = ?RTL:make_icon(Int),
     {Env0, Stuff}.
 
 translate_funcall({_Meta, Name, Actuals}, Env0) ->

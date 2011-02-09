@@ -25,4 +25,4 @@ main(_) ->
     usage().
 
 testing(Program) ->
-    io:format("Testing ~s ...~n", [Program]).
+    io:format("--- Testing ~s ...~n", [Program]).
