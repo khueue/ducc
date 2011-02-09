@@ -4,6 +4,7 @@
 -define(HELPER, analyzer_helpers).
 -define(RULE, analyzer_rules).
 -define(ENV, analyzer_env).
+-define(RTL, rtl_constructors).
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
@@ -134,6 +135,7 @@ translate_ident({_Meta, Name}, Env0) ->
     Env0.
 
 translate_intconst({_Meta, Value}, Env0) ->
+    ?RTL:make_icon(Value),
     Env0.
 
 translate_charconst({_Meta, Value}, Env0) ->
