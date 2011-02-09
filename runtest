@@ -5,16 +5,16 @@ usage() ->
     io:format('usage: runtest [-a|-l|-p|-t]~n').
 
 main(["-l"]) ->
-    io:format("Testing lexer ...~n"),
+    testing(lexer),
     lexer_test:test();
 main(["-p"]) ->
-    io:format("Testing parser ...~n"),
+    testing(parser),
     parser_test:test();
 main(["-a"]) ->
-    io:format("Testing analyzer ...~n"),
+    testing(analyzer),
     analyzer_test:test();
 main(["-t"]) ->
-    io:format("Testing translator ...~n"),
+    testing(translator),
     translator_test:test();
 main([]) ->
     main(["-l"]),
@@ -23,3 +23,6 @@ main([]) ->
     main(["-t"]);
 main(_) ->
     usage().
+
+testing(Program) ->
+    io:format("Testing ~s ...~n", [Program]).

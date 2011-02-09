@@ -6,7 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = analyzer ducc lexer parser runtest
+SCRIPTS      = analyzer ducc lexer parser runtest translator
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -17,7 +17,7 @@ all: setup clean compile
 setup:
 	mkdir -p $(DIR_EBIN)
 	- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
-		report/**/*.md $(SCRIPTS)
+		report/**/*.* $(SCRIPTS)
 
 clean:
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
@@ -38,6 +38,7 @@ gen_tests: all
 	ruby src/gen_tests.rb -l suite/**/*.c
 	ruby src/gen_tests.rb -p suite/**/*.c
 	ruby src/gen_tests.rb -a suite/**/*.c
+	ruby src/gen_tests.rb -t suite/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'
