@@ -76,7 +76,7 @@ process(Program, Stream, String) ->
             {ok, Tokens} = lexer_driver:tokenize(Stream, String),
             {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
             {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
-            {ok, _ParseTree2} = translator_driver:translate(Stream, ParseTree1);
+            {ok, _Instrs} = translator_driver:translate(Stream, ParseTree1);
         _Default ->
             {ok, Tokens} = lexer_driver:tokenize(Stream, String),
             {ok, ParseTree} = parser_driver:parse(Stream, Tokens),

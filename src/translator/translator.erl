@@ -6,8 +6,7 @@
 
 translate(ParseTree) ->
     Env = analyzer_env:new(),
-    translate(ParseTree, Env),
-    ParseTree.
+    translate(ParseTree, Env).
 
 translate(ParseTree, Env0) ->
     translate_program(ParseTree, Env0).
