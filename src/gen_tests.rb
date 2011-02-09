@@ -12,16 +12,18 @@ if ARGV.length < 2
     usage()
 end
 
-program = ARGV[0]
-
 command = case ARGV[0]
-    when "lexer"
+    when "-l"
+        program = "lexer"
         "ducc -l"
-    when "parser"
+    when "-p"
+        program = "parser"
         "ducc -p"
-    when "analyzer"
+    when "-a"
+        program = "analyzer"
         "ducc -a"
-    when "translator"
+    when "-t"
+        program = "translator"
         "ducc -t"
     else
         usage()
