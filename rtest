@@ -1,0 +1,24 @@
+#!/usr/bin/env escript
+%%! -pa ebin -Wall
+
+main(["-l"]) ->
+    io:format("Testing lexer ...~n"),
+    lexer_test:test();
+main(["-p"]) ->
+    io:format("Testing parser ...~n"),
+    parser_test:test();
+main(["-a"]) ->
+    io:format("Testing analyzer ...~n"),
+    analyzer_test:test();
+main(["-t"]) ->
+    io:format("Testing translator ...~n"),
+    translator_test:test();
+main([]) ->
+    io:format("Testing lexer ...~n"),
+    lexer_test:test(),
+    io:format("Testing parser ...~n"),
+    parser_test:test(),
+    io:format("Testing analyzer ...~n"),
+    analyzer_test:test(),
+    io:format("Testing translator ...~n"),
+    translator_test:test().
