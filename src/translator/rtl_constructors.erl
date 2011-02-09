@@ -1,8 +1,7 @@
 -module(rtl_constructors).
 -compile(export_all).
 
-make_icon(Value, TempCount) ->
-    Int = char_to_int(Value),
+make_icon(Int, TempCount) ->
     create_instr(TempCount, [icon(Int)]).
 
 create_instr(TempCount, Instructions) ->
