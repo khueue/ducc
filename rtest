@@ -2,31 +2,19 @@
 %%! -pa ebin -Wall
 
 main(["-l"]) ->
-    test_lexer();
-main(["-p"]) ->
-    test_parser();
-main(["-a"]) ->
-    test_analyzer();
-main(["-t"]) ->
-    test_translator();
-main([]) ->
-    test_lexer(),
-    test_parser(),
-    test_analyzer(),
-    test_translator().
-
-test_lexer() ->
     io:format("Testing lexer ...~n"),
-    lexer_test:test().
-
-test_parser() ->
+    lexer_test:test();
+main(["-p"]) ->
     io:format("Testing parser ...~n"),
-    parser_test:test().
-
-test_analyzer() ->
+    parser_test:test();
+main(["-a"]) ->
     io:format("Testing analyzer ...~n"),
-    analyzer_test:test().
-
-test_translator() ->
+    analyzer_test:test();
+main(["-t"]) ->
     io:format("Testing translator ...~n"),
-    translator_test:test().
+    translator_test:test();
+main([]) ->
+    main(["-l"]),
+    main(["-p"]),
+    main(["-a"]),
+    main(["-t"]).
