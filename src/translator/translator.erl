@@ -3,9 +3,10 @@
 
 -define(HELPER, analyzer_helpers).
 -define(RULE, analyzer_rules).
+-define(ENV, analyzer_env).
 
 translate(ParseTree) ->
-    Env = analyzer_env:new(),
+    Env = ?ENV:new(),
     translate(ParseTree, Env).
 
 translate(ParseTree, Env0) ->
