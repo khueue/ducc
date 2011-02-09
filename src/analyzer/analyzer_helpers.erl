@@ -24,6 +24,12 @@ get_tag(Node) ->
     Tag.
 
 get_type(Node) ->
+    Tag = get_tag(Node),
+    Proper = lists:member(Tag, [fundec,fundef,scalardec,arraydec,farraydec]),
+    case Proper of
+        true  -> ok;
+        false -> throw(node_has_no_type)
+    end,
     erlang:element(2, Node).
 
 tag_member(Node, Tags) ->
