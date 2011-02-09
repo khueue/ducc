@@ -1,5 +1,0 @@
-#!/usr/bin/env escript
-%%! -pa ebin -Wall
-
-main([]) ->
-    analyzer_test:test().
