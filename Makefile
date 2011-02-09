@@ -7,6 +7,7 @@ PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
 SCRIPTS      = analyzer ducc lexer parser runtest translator
+# emitter
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -39,6 +40,7 @@ gen_tests: all
 	ruby src/gen_tests.rb -p suite/**/*.c
 	ruby src/gen_tests.rb -a suite/**/*.c
 	ruby src/gen_tests.rb -t suite/**/*.c
+	# ruby src/gen_tests.rb -e suite/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'
