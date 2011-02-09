@@ -83,7 +83,7 @@ analyze_formals([Formal|Formals], Env0) ->
 analyze_formal(Formal, Env0) ->
     Tag = ?HELPER:get_tag(Formal),
     case Tag of
-        scalardec       -> analyze_scalardec(Formal, Env0);
+        scalardec -> analyze_scalardec(Formal, Env0);
         farraydec -> analyze_farraydec(Formal, Env0)
     end.
 
