@@ -21,11 +21,11 @@ Rules.
 
 % Natural number.
 {Digit}+ :
-    token({intconst, TokenLine, list_to_integer(TokenChars)}).
+    token({intconst, TokenLine, erlang:list_to_integer(TokenChars)}).
 
 % Identifier.
 {Letter}({Letter}|{Digit})* :
-    Word = list_to_atom(TokenChars),
+    Word = erlang:list_to_atom(TokenChars),
     case is_reserved(Word) of
         true  -> token({Word, TokenLine});
         false -> token({ident, TokenLine, TokenChars})
@@ -34,7 +34,7 @@ Rules.
 % Character literal.
 '(.|(\\n))' :
     Chars = string:substr(TokenChars, 2, TokenLen-2),
-    token({charconst, TokenLine, list_to_atom(Chars)}).
+    token({charconst, TokenLine, erlang:list_to_atom(Chars)}).
 
 {LineCom}(.*) :
     skip().
@@ -48,7 +48,7 @@ Rules.
     error_token("unterminated comment").
 
 {Logical}|{Comparator}|{Symbol} :
-    token({list_to_atom(TokenChars), TokenLine}).
+    token({erlang:list_to_atom(TokenChars), TokenLine}).
 
 {WhiteSpace}+ :
     skip().
