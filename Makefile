@@ -6,7 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = analyzer ducc lexer parser rtest
+SCRIPTS      = analyzer ducc lexer parser runtest
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -41,7 +41,7 @@ gen_tests: all
 
 tests: all
 	@ echo '--- Running tests ...'
-	rtest
+	runtest
 
 pack: all
 	tar -czvf $(PROJECT_NAME)-`date +"%Y-%m-%d"`.tar.gz \
