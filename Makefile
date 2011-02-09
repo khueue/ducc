@@ -35,9 +35,9 @@ compile:
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 gen_tests: all
-	ruby src/gen_tests.rb lexer suite/**/*.c
-	ruby src/gen_tests.rb parser suite/**/*.c
-	ruby src/gen_tests.rb analyzer suite/**/*.c
+	ruby src/gen_tests.rb -l suite/**/*.c
+	ruby src/gen_tests.rb -p suite/**/*.c
+	ruby src/gen_tests.rb -a suite/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'
