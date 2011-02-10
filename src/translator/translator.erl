@@ -74,76 +74,107 @@ translate_local(Local, Env0) ->
         arraydec  -> translate_arraydec(Local, Env0)
     end.
 
-translate_stmts([], Env0) -> [];
-translate_stmts([Stmt|Stmts], Env0) ->
-    translate_stmt(Stmt, Env0),
-    translate_stmts(Stmts, Env0).
+translate_stmts([], Env0, Ret0) -> [];
+translate_stmts([Stmt|Stmts], Env0, Ret0) ->
+    translate_stmt(Stmt, Env0, Ret0),
+    translate_stmts(Stmts, Env0, Ret0).
 
-translate_stmt(nil, Env0) ->
+translate_stmt(Stmts, Env0, Ret0) when erlang:is_list(Stmts) ->
+    translate_stmts(Stmts, Env0, Ret0),
     Env0;
-translate_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
-    translate_stmts(Stmts, Env0),
-    Env0;
-translate_stmt(Stmt, Env0) ->
+translate_stmt(Stmt, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Stmt),
     case Tag of
-        return -> translate_return(Stmt, Env0);
-        while  -> translate_while(Stmt, Env0);
-        'if'   -> translate_if(Stmt, Env0);
-        _Expr  -> translate_expr(Stmt, Env0)
+        return -> translate_return(Stmt, Env0, Ret0);
+        while  -> translate_while(Stmt, Env0, Ret0);
+        'if'   -> translate_if(Stmt, Env0, Ret0);
+        _Expr  -> translate_expr(Stmt, Env0, Ret0)
     end.
 
-translate_return({_Meta, Expr}, Env0) ->
-    translate_expr(Expr, Env0),
+translate_return({_Meta, Expr}, Env0, Ret0) ->
+    translate_expr(Expr, Env0, Ret0),
     Env0.
 
-translate_while({_Meta, Cond, Stmt}, Env0) ->
-    translate_expr(Cond, Env0),
-    translate_stmt(Stmt, Env0),
+translate_while({_Meta, Cond, Stmt}, Env0, Ret0) ->
+    translate_expr(Cond, Env0, Ret0),
+    translate_stmt(Stmt, Env0, Ret0),
     Env0.
 
-translate_if({_Meta, Cond, Then, Else}, Env0) ->
-    translate_expr(Cond, Env0),
-    translate_stmt(Then, Env0),
-    translate_stmt(Else, Env0),
+translate_if({_Meta, Cond, Then, Else}, Env0, Ret0) ->
+    translate_expr(Cond, Env0, Ret0),
+    translate_stmt(Then, Env0, Ret0),
+    translate_stmt(Else, Env0, Ret0),
     Env0.
 
-translate_expr(Expr, Env0) ->
+translate_expr(Expr, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Expr),
     case Tag of
-        binop     -> translate_binop(Expr, Env0);
-        unop      -> translate_unop(Expr, Env0);
-        ident     -> translate_ident(Expr, Env0);
-        intconst  -> translate_intconst(Expr, Env0);
-        charconst -> translate_charconst(Expr, Env0);
-        funcall   -> translate_funcall(Expr, Env0);
-        arrelem   -> translate_arrelem(Expr, Env0)
+        binop     -> translate_binop(Expr, Env0, Ret0);
+        unop      -> translate_unop(Expr, Env0, Ret0);
+        ident     -> translate_ident(Expr, Env0, Ret0);
+        intconst  -> translate_intconst(Expr, Env0, Ret0);
+        charconst -> translate_charconst(Expr, Env0, Ret0);
+        funcall   -> translate_funcall(Expr, Env0, Ret0);
+        arrelem   -> translate_arrelem(Expr, Env0, Ret0)
     end.
 
-translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
-    translate_expr(Lhs, Env0),
-    translate_expr(Rhs, Env0),
-    % eval binop with returns from above translations
-    Env0.
+translate_binop({_Meta, Lhs, Op, Rhs}, Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = translate_expr(Lhs, Env0, Ret0),
+    {Env2, Instrs2, Ret2} = translate_expr(Rhs, Env1, Ret1),
+    {Env3, Instrs3, Ret3} = translate_eval(Op, Env2, new_temp(Ret2), Ret1, Ret2),
+    {Env3, Instrs1++Instrs2++Instrs3, Ret3}.
 
-translate_unop({_Meta, Op, Rhs}, Env0) ->
+translate_intconst({_Meta, Value}, Env0, Ret0) ->
+    Ret1 = new_temp(Ret0),
+    Instrs =
+    [
+        emit_intconst(Ret1, Value)
+    ],
+    {Env0, Instrs, Ret1}.
+
+translate_eval(Op, Env0, Ret, RetLhs, RetRhs) ->
+    Instrs =
+    [
+        emit_eval(Op, Ret, RetLhs, RetRhs)
+    ],
+    {Env0, Instrs, Ret}.
+
+emit_eval('+', TempRet, TempLhs, TempRhs) ->
+    {eval, TempRet, {add, TempLhs, TempRhs}}.
+
+first_label() ->
+    new_label({label, 99}).
+
+new_label({label, Prev}) ->
+    {label, Prev + 1}.
+
+rv() ->
+    {temp, 0}.
+
+fp() ->
+    {temp, 1}.
+
+first_temp() ->
+    % Skip return and frame temps.
+    new_temp({temp, 1}).
+
+new_temp({temp, Prev}) ->
+    {temp, Prev + 1}.
+
+translate_unop({_Meta, Op, Rhs}, Env0, Ret0) ->
     translate_expr(Rhs, Env0),
     % eval
     Env0.
 
-translate_ident({_Meta, Name}, Env0) ->
+translate_ident({_Meta, Name}, Env0, Ret0) ->
     Env0.
 
-translate_intconst({_Meta, Value}, Env0) ->
-    Stuff = ?RTL:make_icon(Value),
-    {Env0, Stuff}.
-
-translate_charconst({_Meta, Value}, Env0) ->
+translate_charconst({_Meta, Value}, Env0, Ret0) ->
     Int = ?RTL:char_to_int(Value),
     Stuff = ?RTL:make_icon(Int),
     {Env0, Stuff}.
 
-translate_funcall({_Meta, Name, Actuals}, Env0) ->
+translate_funcall({_Meta, Name, Actuals}, Env0, Ret0) ->
     translate_actuals(Actuals, Env0),
     Env0.
 
