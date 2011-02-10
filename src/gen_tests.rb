@@ -1,11 +1,28 @@
 #!/usr/bin/env ruby -w
 # encoding: UTF-8
 
-# Run from project root: [ruby] src/gen_tests.rb program suite/**/*.c
-
 def usage()
-    puts "usage: ruby #{__FILE__} program file"
+    puts "usage: ruby #{__FILE__} -l|-p|-a|-t file [file, ...]"
     exit 0
+end
+
+def run_test(command, file, program)
+    file_out = "#{file}.#{program}"
+    cmd = "#{command} #{file} > #{file_out}"
+    puts cmd
+    system cmd
+end
+
+def collect_output(file, command, program, output_file)
+    echo_newlines = "echo \"\n\n\""
+    echo_headline = "echo \"### #{command} #{file} gives: \n\""
+    cmd = "#{echo_headline} >> #{output_file}"
+    system cmd
+    insert_tab_prefix = "sed -e 's/^/\t/'"
+    cmd = "cat #{file}.#{program} | #{insert_tab_prefix} >> #{output_file}"
+    system cmd
+    cmd = "#{echo_newlines} >> #{output_file}"
+    system cmd
 end
 
 if ARGV.length < 2
@@ -35,9 +52,10 @@ for i in 1...ARGV.length
     files |= Dir[ARGV[i]]
 end
 
+output_file = "tests_output.md"
+system "rm -rf #{output_file}"
+
 files.each do |file|
-    file_out = "#{file}.#{program}"
-    cmd = "#{command} #{file} > #{file_out}"
-    puts cmd
-    system cmd
+    run_test(command, file, program)
+    collect_output(file, command, program, output_file)
 end
