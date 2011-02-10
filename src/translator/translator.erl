@@ -8,70 +8,70 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    translate(ParseTree, Env).
+    translate(ParseTree, Env, first_temp()).
 
-translate(ParseTree, Env0) ->
-    translate_program(ParseTree, Env0).
+translate(ParseTree, Env0, Ret0) ->
+    translate_program(ParseTree, Env0, Ret0).
 
-translate_program({_Meta, _File, Topdecs}, Env0) ->
-    Env1 = translate_topdecs(Topdecs, Env0),
+translate_program({_Meta, _File, Topdecs}, Env0, Ret0) ->
+    Env1 = translate_topdecs(Topdecs, Env0, Ret0),
     Env1.
 
-translate_topdecs([], Env0) -> [];
-translate_topdecs([Topdec|Topdecs], Env0) ->
-    translate_topdec(Topdec, Env0),
-    translate_topdecs(Topdecs, Env0).
+translate_topdecs([], Env0, Ret0) -> [];
+translate_topdecs([Topdec|Topdecs], Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = translate_topdec(Topdec, Env0, Ret0),
+    Instrs1 ++ translate_topdecs(Topdecs, Env1, Ret1).
 
-translate_topdec(Topdec, Env0) ->
+translate_topdec(Topdec, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Topdec),
     case Tag of
-        scalardec -> translate_scalardec(Topdec, Env0);
-        arraydec  -> translate_arraydec(Topdec, Env0);
-        fundec    -> translate_fundec(Topdec, Env0);
-        fundef    -> translate_fundef(Topdec, Env0)
+        scalardec -> translate_scalardec(Topdec, Env0, Ret0);
+        arraydec  -> translate_arraydec(Topdec, Env0, Ret0);
+        fundec    -> translate_fundec(Topdec, Env0, Ret0);
+        fundef    -> translate_fundef(Topdec, Env0, Ret0)
     end.
 
-translate_scalardec({_Meta, Type, Name}, Env0) ->
+translate_scalardec({_Meta, Type, Name}, Env0, Ret0) ->
     Env0.
 
-translate_arraydec({_Meta, Type, Name, Size}, Env0) ->
+translate_arraydec({_Meta, Type, Name, Size}, Env0, Ret0) ->
     Env0.
 
-translate_fundec({_Meta, Type, Name, Formals}, Env0) ->
-    translate_formals(Formals, Env0),
+translate_fundec({_Meta, Type, Name, Formals}, Env0, Ret0) ->
+    translate_formals(Formals, Env0, Ret0),
     Env0.
 
-translate_fundef({_Meta, Type, Name, Formals, Locals, Stmts}, Env0) ->
-    translate_formals(Formals, Env0),
-    translate_locals(Locals, Env0),
-    translate_stmts(Stmts, Env0),
+translate_fundef({_Meta, Type, Name, Formals, Locals, Stmts}, Env0, Ret0) ->
+    translate_formals(Formals, Env0, Ret0),
+    translate_locals(Locals, Env0, Ret0),
+    translate_stmts(Stmts, Env0, Ret0),
     Env0.
 
-translate_formals([], Env0) -> [];
-translate_formals([Formal|Formals], Env0) ->
-    translate_formal(Formal, Env0),
-    translate_formals(Formals, Env0).
+translate_formals([], Env0, Ret0) -> [];
+translate_formals([Formal|Formals], Env0, Ret0) ->
+    translate_formal(Formal, Env0, Ret0),
+    translate_formals(Formals, Env0, Ret0).
 
-translate_formal(Formal, Env0) ->
+translate_formal(Formal, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Formal),
     case Tag of
-        scalardec -> translate_scalardec(Formal, Env0);
-        farraydec -> translate_farraydec(Formal, Env0)
+        scalardec -> translate_scalardec(Formal, Env0, Ret0);
+        farraydec -> translate_farraydec(Formal, Env0, Ret0)
     end.
 
-translate_farraydec({_Meta, Type, Name}, Env0) ->
+translate_farraydec({_Meta, Type, Name}, Env0, Ret0) ->
     Env0.
 
-translate_locals([], Env0) -> [];
-translate_locals([Local|Locals], Env0) ->
-    translate_local(Local, Env0),
-    translate_locals(Locals, Env0).
+translate_locals([], Env0, Ret0) -> [];
+translate_locals([Local|Locals], Env0, Ret0) ->
+    translate_local(Local, Env0, Ret0),
+    translate_locals(Locals, Env0, Ret0).
 
-translate_local(Local, Env0) ->
+translate_local(Local, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Local),
     case Tag of
-        scalardec -> translate_scalardec(Local, Env0);
-        arraydec  -> translate_arraydec(Local, Env0)
+        scalardec -> translate_scalardec(Local, Env0, Ret0);
+        arraydec  -> translate_arraydec(Local, Env0, Ret0)
     end.
 
 translate_stmts([], Env0, Ret0) -> [];
@@ -139,6 +139,9 @@ translate_eval(Op, Env0, Ret, RetLhs, RetRhs) ->
     ],
     {Env0, Instrs, Ret}.
 
+emit_intconst(TempRet, Value) ->
+    {icon, Value}.
+
 emit_eval('+', TempRet, TempLhs, TempRhs) ->
     {eval, TempRet, {add, TempLhs, TempRhs}}.
 
@@ -162,7 +165,7 @@ new_temp({temp, Prev}) ->
     {temp, Prev + 1}.
 
 translate_unop({_Meta, Op, Rhs}, Env0, Ret0) ->
-    translate_expr(Rhs, Env0),
+    translate_expr(Rhs, Env0, Ret0),
     % eval
     Env0.
 
@@ -175,17 +178,17 @@ translate_charconst({_Meta, Value}, Env0, Ret0) ->
     {Env0, Stuff}.
 
 translate_funcall({_Meta, Name, Actuals}, Env0, Ret0) ->
-    translate_actuals(Actuals, Env0),
+    translate_actuals(Actuals, Env0, Ret0),
     Env0.
 
-translate_actuals([], Env0) -> [];
-translate_actuals([Actual|Actuals], Env0) ->
-    translate_actual(Actual, Env0),
-    translate_actuals(Actuals, Env0).
+translate_actuals([], Env0, Ret0) -> [];
+translate_actuals([Actual|Actuals], Env0, Ret0) ->
+    translate_actual(Actual, Env0, Ret0),
+    translate_actuals(Actuals, Env0, Ret0).
 
-translate_actual(Actual, Env0) ->
-    translate_expr(Actual, Env0).
+translate_actual(Actual, Env0, Ret0) ->
+    translate_expr(Actual, Env0, Ret0).
 
-translate_arrelem({_Meta, Name, Index}, Env0) ->
-    translate_expr(Index, Env0),
+translate_arrelem({_Meta, Name, Index}, Env0, Ret0) ->
+    translate_expr(Index, Env0, Ret0),
     Env0.
