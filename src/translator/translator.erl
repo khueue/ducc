@@ -7,10 +7,16 @@
 -define(ENV, analyzer_env).
 -define(RTL, rtl_constructors).
 
+% {local,{temp,123}},    array, {Type, Count, Offset}
+% {local,{temp,123}},   scalar, {Type}
+% {global,{label,321}},  array, {Type, Count}
+% {global,{label,321}}, scalar, {Type}
+
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    {E, Instr, OOO} = translate(ParseTree, Env, fp()), % pass last used, or first free?
-    Instr.
+    % pass last used, or first free temp?
+    {Env1, Instrs, Ret1} = translate(ParseTree, Env, fp()),
+    Instrs.
 
 translate(ParseTree, Env0, Ret0) ->
     translate_program(ParseTree, Env0, Ret0).
