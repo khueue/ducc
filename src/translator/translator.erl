@@ -9,15 +9,14 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    {E, Instr, OOO} = translate(ParseTree, Env, first_temp()),
+    {E, Instr, OOO} = translate(ParseTree, Env, fp()), % xxx
     Instr.
 
 translate(ParseTree, Env0, Ret0) ->
     translate_program(ParseTree, Env0, Ret0).
 
 translate_program({_Meta, _File, Topdecs}, Env0, Ret0) ->
-    Env1 = translate_topdecs(Topdecs, Env0, Ret0),
-    Env1.
+    translate_topdecs(Topdecs, Env0, Ret0).
 
 translate_topdecs([], Env0, Ret0) ->
     {Env0, [], Ret0};
@@ -25,9 +24,6 @@ translate_topdecs([Topdec|Topdecs], Env0, Ret0) ->
     {Env1, Instrs1, Ret1} = translate_topdec(Topdec, Env0, Ret0),
     {Env2, Instrs2, Ret2} = translate_topdecs(Topdecs, Env1, Ret1),
     {Env2, Instrs1++Instrs2, Ret2}.
-
-%translate_topdec(T, E, R) ->
-%    {E+1, [instr], R+1}.
 
 translate_topdec(Topdec, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Topdec),
@@ -166,7 +162,7 @@ translate_expr(Expr, Env0, Ret0) ->
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0, Ret0) ->
     {Env1, Instrs1, Ret1} = translate_expr(Lhs, Env0, Ret0),
     {Env2, Instrs2, Ret2} = translate_expr(Rhs, Env1, Ret1),
-    {Env3, Instrs3, Ret3} = translate_eval(Op, Env2, new_temp(Ret2), Ret1, Ret2),
+    {Env3, Instrs3, Ret3} = translate_eval(Op, Env2, Ret2, Ret1, Ret2),
     {Env3, Instrs1++Instrs2++Instrs3, Ret3}.
 
 translate_intconst({_Meta, Value}, Env0, Ret0) ->
@@ -177,12 +173,13 @@ translate_intconst({_Meta, Value}, Env0, Ret0) ->
     ],
     {Env0, Instrs, Ret1}.
 
-translate_eval(Op, Env0, Ret, RetLhs, RetRhs) ->
+translate_eval(Op, Env0, Ret0, RetLhs, RetRhs) ->
+    Ret1 = new_temp(Ret0),
     Instrs =
     [
-        emit_eval(Op, Ret, RetLhs, RetRhs)
+        emit_eval(Op, Ret1, RetLhs, RetRhs)
     ],
-    {Env0, Instrs, Ret}.
+    {Env0, Instrs, Ret1}.
 
 emit_intconst(TempRet, Value) ->
     {icon, Value}.
