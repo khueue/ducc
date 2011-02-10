@@ -55,6 +55,10 @@ end
 output_file = "tests_output.md"
 system "rm -rf #{output_file}"
 
+echo_title = "echo \"## Testruns\n\n\""
+cmd = "#{echo_title} >> #{output_file}"
+system cmd
+
 files.each do |file|
     run_test(command, file, program)
     collect_output(file, command, program, output_file)
