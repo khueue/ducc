@@ -16,11 +16,15 @@ end
 def collect_output(file, command, program, output_file)
     echo_newlines = "echo \"\n\n\""
     echo_headline = "echo \"### #{command} #{file} gives:\n\""
+
     cmd = "#{echo_headline} >> #{output_file}"
     system cmd
+
     insert_tab_prefix = "sed -e 's/^/\t/'"
+
     cmd = "cat #{file}.#{program} | #{insert_tab_prefix} >> #{output_file}"
     system cmd
+
     cmd = "#{echo_newlines} >> #{output_file}"
     system cmd
 end
@@ -55,7 +59,7 @@ end
 output_file = "tests_output.md"
 system "rm -rf #{output_file}"
 
-echo_title = "echo \"## Testruns\n\n\""
+echo_title = "echo \"# Testruns\n\n\""
 cmd = "#{echo_title} >> #{output_file}"
 system cmd
 

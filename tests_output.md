@@ -1,4 +1,4 @@
-## Testruns
+# Testruns
 
 
 ### ducc -a suite/incorrect/semantic/se01.c gives:
