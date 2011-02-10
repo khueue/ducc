@@ -9,7 +9,7 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    {E, Instr, OOO} = translate(ParseTree, Env, fp()), % xxx
+    {E, Instr, OOO} = translate(ParseTree, Env, fp()), % pass last used, or first free?
     Instr.
 
 translate(ParseTree, Env0, Ret0) ->
