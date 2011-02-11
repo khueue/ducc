@@ -184,8 +184,8 @@ translate_eval(Op, Env0, Ret0, RetLhs, RetRhs) ->
 emit_intconst(TempRet, Value) ->
     {icon, Value}.
 
-emit_eval('+', TempRet, TempLhs, TempRhs) ->
-    {eval, TempRet, {add, TempLhs, TempRhs}}.
+emit_eval(Op, TempRet, TempLhs, TempRhs) ->
+    {eval, TempRet, {Op, TempLhs, TempRhs}}.
 
 emit(X) ->
     {X}.
