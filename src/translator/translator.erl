@@ -24,11 +24,15 @@ translate(ParseTree, Env0, Ret0) ->
 translate_program({_Meta, _File, Topdecs}, Env0, Ret0) ->
     translate_topdecs(Topdecs, Env0, Ret0).
 
-translate_topdecs([], Env0, Ret0) ->
+translate_topdecs(Topdecs, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_topdec(Node, Env, Ret) end,
+    translate_list(Topdecs, Translator, Env0, Ret0).
+
+translate_list([], _Translator, Env0, Ret0) ->
     {Env0, [], Ret0};
-translate_topdecs([Topdec|Topdecs], Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_topdec(Topdec, Env0, Ret0),
-    {Env2, Instrs2, Ret2} = translate_topdecs(Topdecs, Env1, Ret1),
+translate_list([Node|Nodes], Translator, Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = Translator(Node, Env0, Ret0),
+    {Env2, Instrs2, Ret2} = translate_list(Nodes, Translator, Env1, Ret1),
     {Env2, Instrs1++Instrs2, Ret2}.
 
 translate_topdec(Topdec, Env0, Ret0) ->
@@ -63,7 +67,6 @@ translate_fundec({_Meta, Type, Name, Formals}, Env0, Ret0) ->
     {Env1, Instrs1++Instrs2, Ret1}.
 
 translate_fundef({_Meta, Type, Name, Formals, Locals, Stmts}, Env0, Ret0) ->
-    translate_formals(Formals, Env0, Ret0),
     {Env1, Instrs1, Ret1} = translate_formals(Formals, Env0, Ret0),
     {Env2, Instrs2, Ret2} = translate_locals(Locals, Env1, Ret1),
     {Env3, Instrs3, Ret3} = translate_stmts(Stmts, Env2, Ret2),
@@ -73,12 +76,9 @@ translate_fundef({_Meta, Type, Name, Formals, Locals, Stmts}, Env0, Ret0) ->
     ],
     {Env3, Instrs1++Instrs2++Instrs3++Instrs4, Ret3}.
 
-translate_formals([], Env0, Ret0) ->
-    {Env0, [], Ret0};
-translate_formals([Formal|Formals], Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_formal(Formal, Env0, Ret0),
-    {Env2, Instrs2, Ret2} = translate_formals(Formals, Env1, Ret1),
-    {Env2, Instrs1++Instrs2, Ret2}.
+translate_formals(Formals, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_formal(Node, Env, Ret) end,
+    translate_list(Formals, Translator, Env0, Ret0).
 
 translate_formal(Formal, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Formal),
@@ -94,12 +94,9 @@ translate_farraydec({_Meta, Type, Name}, Env0, Ret0) ->
     ],
     {Env0, Instrs, Ret0}.
 
-translate_locals([], Env0, Ret0) ->
-    {Env0, [], Ret0};
-translate_locals([Local|Locals], Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_local(Local, Env0, Ret0),
-    {Env2, Instrs2, Ret2} = translate_locals(Locals, Env1, Ret1),
-    {Env2, Instrs1++Instrs2, Ret2}.
+translate_locals(Locals, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_local(Node, Env, Ret) end,
+    translate_list(Locals, Translator, Env0, Ret0).
 
 translate_local(Local, Env0, Ret0) ->
     Tag = ?HELPER:get_tag(Local),
@@ -108,12 +105,9 @@ translate_local(Local, Env0, Ret0) ->
         arraydec  -> translate_arraydec(Local, Env0, Ret0)
     end.
 
-translate_stmts([], Env0, Ret0) ->
-    {Env0, [], Ret0};
-translate_stmts([Stmt|Stmts], Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_stmt(Stmt, Env0, Ret0),
-    {Env2, Instrs2, Ret2} = translate_stmts(Stmts, Env1, Ret1),
-    {Env2, Instrs1++Instrs2, Ret2}.
+translate_stmts(Stmts, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_stmt(Node, Env, Ret) end,
+    translate_list(Stmts, Translator, Env0, Ret0).
 
 translate_stmt(Stmts, Env0, Ret0) when erlang:is_list(Stmts) ->
     translate_stmts(Stmts, Env0, Ret0);
@@ -247,12 +241,9 @@ translate_funcall({_Meta, Name, Actuals}, Env0, Ret0) ->
     ],
     {Env1, Instrs1++Instrs2, Ret1}.
 
-translate_actuals([], Env0, Ret0) ->
-    {Env0, [], Ret0};
-translate_actuals([Actual|Actuals], Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_actual(Actual, Env0, Ret0),
-    {Env2, Instrs2, Ret2} = translate_actuals(Actuals, Env1, Ret1),
-    {Env2, Instrs1++Instrs2, Ret2}.
+translate_actuals(Actuals, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_actual(Node, Env, Ret) end,
+    translate_list(Actuals, Translator, Env0, Ret0).
 
 translate_actual(Actual, Env0, Ret0) ->
     translate_expr(Actual, Env0, Ret0).
