@@ -15,13 +15,16 @@ scope(Env) ->
     end.
 
 new() ->
-    Env = {[]},
+    LastUsedTemp = {temp, 1},
+    LastUsedLabel = {label, 99},
+    SymTabs = [],
+    Env = {LastUsedTemp, LastUsedLabel, SymTabs},
     enter_scope(global, Env).
 
-enter_scope(Scope, _Env = {SymTabs}) ->
-    {stack_push({Scope,dict:new()}, SymTabs)}.
+enter_scope(Scope, _Env = {T,L,SymTabs}) ->
+    {T, L, stack_push({Scope,dict:new()}, SymTabs)}.
 
-scope_name({[{Scope,_}|_]}) ->
+scope_name({_T, _L, [{Scope,_}|_]}) ->
     Scope.
 
 lookup_or_throw(Name, Node, Env, Exception) ->
@@ -30,21 +33,21 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
-lookup_current_scope(Name, Node, {[SymTab|_]}) ->
-    lookup(Name, Node, {[SymTab]}).
+lookup_current_scope(Name, Node, {T,L,[SymTab|_]}) ->
+    lookup(Name, Node, {T,L,[SymTab]}).
 
-lookup(_Name, _Node, {[]}) ->
+lookup(_Name, _Node, {_T,_L,[]}) ->
     not_found;
-lookup(Name, Node, {[{_Scope,SymTab}|SymTabs]}) ->
+lookup(Name, Node, {T,L,[{_Scope,SymTab}|SymTabs]}) ->
     case dict:find(Name, SymTab) of
         {ok, Val} -> Val;
-        error     -> lookup(Name, Node, {SymTabs})
+        error     -> lookup(Name, Node, {T,L,SymTabs})
     end.
 
-set_symbol(Key, Value, {SymTabs}) ->
+set_symbol(Key, Value, {T,L,SymTabs}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
-    {stack_push({Scope,Updated}, Rest)}.
+    {T,L,stack_push({Scope,Updated}, Rest)}.
 
 stack_push(X, Stack) ->
     [X|Stack].
