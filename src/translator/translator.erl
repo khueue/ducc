@@ -16,7 +16,7 @@ translate(ParseTree) ->
     Env = ?ENV:new(),
     % Pass last used temporary and let functions increment.
     % LastUsedTemp = fp(), % in env xxxxx
-    {Env1, Instrs} = translate(ParseTree, Env),
+    {_Env1, Instrs} = translate(ParseTree, Env),
     Instrs.
 
 translate(ParseTree, Env0) ->
@@ -101,12 +101,12 @@ translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     [
         emit({Location, array, Data})
     ],
-    {Env0, Instrs}.
+    {Env3, Instrs}.
 
 ducc_byte_size(long) -> 4;
 ducc_byte_size(byte) -> 1.
 
-translate_fundec({_Meta, Type, Name, Formals}, Env0) ->
+translate_fundec({_Meta, _Type, _Name, Formals}, Env0) ->
     {Env1, Instrs1} = translate_formals(Formals, Env0),
     Instrs2 =
     [
@@ -114,7 +114,7 @@ translate_fundec({_Meta, Type, Name, Formals}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2}.
 
-translate_fundef({_Meta, Type, Name, Formals, Locals, Stmts}, Env0) ->
+translate_fundef({_Meta, _Type, _Name, Formals, Locals, Stmts}, Env0) ->
     {Env1, Instrs1} = translate_formals(Formals, Env0),
     {Env2, Instrs2} = translate_locals(Locals, Env1),
     {Env3, Instrs3} = translate_stmts(Stmts, Env2),
@@ -135,7 +135,7 @@ translate_formal(Formal, Env0) ->
         farraydec -> translate_farraydec(Formal, Env0)
     end.
 
-translate_farraydec({_Meta, Type, Name}, Env0) ->
+translate_farraydec({_Meta, _Type, _Name}, Env0) ->
     Instrs =
     [
         emit(farraydec)
@@ -231,7 +231,7 @@ translate_eval(Op, Env0, RetLhs, RetRhs) ->
     ],
     {Env1, Instrs}.
 
-translate_unop({_Meta, Op, Rhs}, Env0) ->
+translate_unop({_Meta, _Op, Rhs}, Env0) ->
     {Env1, Instrs1} = translate_expr(Rhs, Env0),
     Instrs2 =
     [
@@ -239,7 +239,7 @@ translate_unop({_Meta, Op, Rhs}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2}.
 
-translate_ident({_Meta, Name}, Env0) ->
+translate_ident({_Meta, _Name}, Env0) ->
     Instrs =
     [
         emit(ident)
@@ -249,7 +249,7 @@ translate_ident({_Meta, Name}, Env0) ->
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
 
-translate_funcall({_Meta, Name, Actuals}, Env0) ->
+translate_funcall({_Meta, _Name, Actuals}, Env0) ->
     {Env1, Instrs1} = translate_actuals(Actuals, Env0),
     Instrs2 =
     [
@@ -264,7 +264,7 @@ translate_actuals(Actuals, Env0) ->
 translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).
 
-translate_arrelem({_Meta, Name, Index}, Env0) ->
+translate_arrelem({_Meta, _Name, Index}, Env0) ->
     {Env1, Instrs1} = translate_expr(Index, Env0),
     Instrs2 =
     [
@@ -272,7 +272,7 @@ translate_arrelem({_Meta, Name, Index}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2}.
 
-emit_intconst(TempRet, Value) ->
+emit_intconst(_TempRet, Value) ->
     {icon, Value}.
 
 emit_eval(Op, TempRet, TempLhs, TempRhs) ->
@@ -280,22 +280,3 @@ emit_eval(Op, TempRet, TempLhs, TempRhs) ->
 
 emit(X) ->
     {X}.
-
-first_label() ->
-    new_label({label, 99}).
-
-new_label({label, Prev}) ->
-    {label, Prev + 1}.
-
-rv() ->
-    {temp, 0}.
-
-fp() ->
-    {temp, 1}.
-
-first_temp() ->
-    % Skip return and frame temps.
-    new_temp({temp, 1}).
-
-new_temp({temp, Prev}) ->
-    {temp, Prev + 1}.
