@@ -46,19 +46,36 @@ translate_topdec(Topdec, Env0) ->
     end.
 
 translate_scalardec({_Meta, Type, Name}, Env0) ->
-    %Location = case scope(Env0) of
-    %    global ->
-    %        {global, {label, new_label()}}
-    %end
-    Env1 = ?ENV:set_symbol(Name, {}, Env0),
-    %  xxx Ret1 = new_temp(Ret0),
+    Location = case ?ENV:scope(Env0) of
+        global ->
+            {Env1, Label} = ?ENV:get_new_label(Env0),
+            {global, Label};
+        local ->
+            {Env1, Temp} = ?ENV:get_new_temp(Env0),
+            {local, Temp}
+    end,
+    Size = type_size(Type),
+    Env2 = ?ENV:set_symbol(Name, {Location, scalar, Size}, Env1),
     Instrs =
     [
-        % xxx emit_scalardec(Type, Name)
+        emit({Location, scalar, Size})
     ],
-    {Env0, Instrs}.
+    {Env2, Instrs}.
 
-translate_arraydec({_Meta, Type, Name, Size}, Env0) ->
+type_size(int)  -> long;
+type_size(char) -> byte.
+
+translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
+    Location = case ?ENV:scope(Env0) of
+        global ->
+            {Env1, Label} = ?ENV:get_new_label(Env0),
+            {global, Label};
+        local ->
+            {Env1, Temp} = ?ENV:get_new_temp(Env0),
+            {local, Temp}
+    end,
+    Size = type_size(Type),
+
     Instrs =
     [
         emit(arraydec)
@@ -128,7 +145,7 @@ translate_stmt(Stmt, Env0) ->
     end.
 
 translate_return({_Meta, Expr}, Env0) ->
-    {Env1, Instrs1, Ret1} = translate_expr(Expr, Env0),
+    {Env1, Instrs1} = translate_expr(Expr, Env0),
     Instrs2 =
     [
         emit(return)
@@ -168,30 +185,30 @@ translate_expr(Expr, Env0) ->
 
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, Instrs1} = translate_expr(Lhs, Env0),
+    LhsTemp = ?ENV:get_current_temp(Env1),
     {Env2, Instrs2} = translate_expr(Rhs, Env1),
-    % xxx {Env3, Instrs3} = translate_eval(Op, Env2, Ret1, Ret2),
-    % xxx {Env2, Instrs1++Instrs2++Instrs3}.
-    % Env3
-    {Env2, Instrs1++Instrs2}.
+    RhsTemp = ?ENV:get_current_temp(Env2),
+    {Env3, Instrs3} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
+    {Env3, Instrs1++Instrs2++Instrs3}.
 
 translate_intconst({_Meta, Value}, Env0) ->
-    % xxx Ret1 = new_temp(Ret0),
+    {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
     Instrs =
     [
-        % xxx emit_intconst(Ret1, Value)
+        emit_intconst(ReturnTemp, Value)
     ],
-    {Env0, Instrs}.
+    {Env1, Instrs}.
 
 translate_eval(Op, Env0, RetLhs, RetRhs) ->
-    % xxx Ret1 = new_temp(Ret0),
+    {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
     Instrs =
     [
-        % xxx emit_eval(Op, Ret1, RetLhs, RetRhs)
+        emit_eval(Op, ReturnTemp, RetLhs, RetRhs)
     ],
-    {Env0, Instrs}.
+    {Env1, Instrs}.
 
 translate_unop({_Meta, Op, Rhs}, Env0) ->
-    {Env1, Instrs1, Ret1} = translate_expr(Rhs, Env0),
+    {Env1, Instrs1} = translate_expr(Rhs, Env0),
     Instrs2 =
     [
         emit(unop)
@@ -209,7 +226,7 @@ translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
 
 translate_funcall({_Meta, Name, Actuals}, Env0) ->
-    {Env1, Instrs1, Ret1} = translate_actuals(Actuals, Env0),
+    {Env1, Instrs1} = translate_actuals(Actuals, Env0),
     Instrs2 =
     [
         emit(funcall)

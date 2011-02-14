@@ -6,7 +6,11 @@
     set_symbol/3,
     lookup/3,
     lookup_or_throw/4,
-    scope/1]).
+    scope/1,
+    get_new_label/1,
+    get_new_temp/1,
+    get_current_label/1,
+    get_current_temp/1]).
 
 scope(Env) ->
     case scope_name(Env) of
@@ -15,8 +19,8 @@ scope(Env) ->
     end.
 
 new() ->
-    LastUsedTemp = {temp, 1},
-    LastUsedLabel = {label, 99},
+    LastUsedTemp = 1,
+    LastUsedLabel = 99,
     SymTabs = [],
     Env = {LastUsedTemp, LastUsedLabel, SymTabs},
     enter_scope(global, Env).
@@ -56,3 +60,26 @@ stack_peek([]) ->
     throw(peek_empty_stack);
 stack_peek([Top|Stack]) ->
     {Top, Stack}.
+
+label(Id) ->
+    {label, Id}.
+
+temp(Id) ->
+    {temp, Id}.
+
+env(TempId, LabelId, SymTabs) ->
+    {TempId, LabelId, SymTabs}.
+
+get_new_label({LastTempId, LastLabelId, SymTabs}) ->
+    NewLabelId = LastLabelId + 1,
+    {env(LastTempId,NewLabelId,SymTabs), label(NewLabelId)}.
+
+get_new_temp({LastTempId, LastLabelId, SymTabs}) ->
+    NewTempId = LastTempId + 1,
+    {env(NewTempId,LastLabelId,SymTabs), temp(NewTempId)}.
+
+get_current_temp({LastTempId, _LastLabelId, _SymTabs}) ->
+    temp(LastTempId).
+
+get_current_label({_LastTempId, LastLabelId, _SymTabs}) ->
+    label(LastLabelId).
