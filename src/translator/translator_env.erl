@@ -18,10 +18,10 @@ scope(Env) ->
         _Fun   -> local
     end.
 
-get_frame_size({_T, _L, FS, _SymTabs}) ->
+get_frame_size({_T,_L,FS,_SymTabs}) ->
     FS.
 
-increment_frame_size({T, L, FS, SymTabs}, Bytes) ->
+increment_frame_size({T,L,FS,SymTabs}, Bytes) ->
     env(T, L, FS+Bytes, SymTabs).
 
 new() ->
@@ -29,13 +29,13 @@ new() ->
     LastUsedTemp = 1,
     LastUsedLabel = 99,
     SymTabs = [],
-    Env = {LastUsedTemp, LastUsedLabel, FrameSize, SymTabs},
+    Env = env(LastUsedTemp, LastUsedLabel, FrameSize, SymTabs),
     enter_scope(global, Env).
 
-enter_scope(Scope, _Env = {T,L,FS,SymTabs}) ->
-    {T, L, FS, stack_push({Scope,dict:new()}, SymTabs)}.
+enter_scope(Scope, {T,L,FS,SymTabs}) ->
+    env(T, L, FS, stack_push({Scope,dict:new()}, SymTabs)).
 
-scope_name({_T, _L, _FS, [{Scope,_}|_]}) ->
+scope_name({_T,_L,_FS,[{Scope,_}|_]}) ->
     Scope.
 
 lookup_or_throw(Name, Node, Env, Exception) ->
@@ -58,7 +58,7 @@ lookup(Name, Node, {T,L,FS,[{_Scope,SymTab}|SymTabs]}) ->
 set_symbol(Key, Value, {T,L,FS,SymTabs}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
-    {T,L,FS,stack_push({Scope,Updated}, Rest)}.
+    env(T,L,FS,stack_push({Scope,Updated}, Rest)).
 
 stack_push(X, Stack) ->
     [X|Stack].
