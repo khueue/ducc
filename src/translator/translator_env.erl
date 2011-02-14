@@ -18,6 +18,12 @@ scope(Env) ->
         _Fun   -> local
     end.
 
+get_frame_size({_T, _L, FS, _SymTabs}) ->
+    FS.
+
+increment_frame_size({T, L, FS, SymTabs}, Bytes) ->
+    env(T, L, FS+Bytes, SymTabs).
+
 new() ->
     FrameSize = 0,
     LastUsedTemp = 1,

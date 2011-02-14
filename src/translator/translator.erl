@@ -46,41 +46,65 @@ translate_topdec(Topdec, Env0) ->
     end.
 
 translate_scalardec({_Meta, Type, Name}, Env0) ->
-    Location = case ?ENV:scope(Env0) of
-        global ->
-            {Env1, Label} = ?ENV:get_new_label(Env0),
-            {global, Label};
-        local ->
-            {Env1, Temp} = ?ENV:get_new_temp(Env0),
-            {local, Temp}
-    end,
-    Size = type_size(Type),
-    Env2 = ?ENV:set_symbol(Name, {Location, scalar, Size}, Env1),
+    {Env1, Location} = assign_scalar_location(Env0),
+    Data = create_scalar_data(Location, Type),
+    Env2 = ?ENV:set_symbol(Name, {Location, scalar, Data}, Env1),
     Instrs =
     [
-        emit({Location, scalar, Size})
+        emit({Location, scalar, Data})
     ],
     {Env2, Instrs}.
+
+assign_scalar_location(Env0) ->
+    case ?ENV:scope(Env0) of
+        global ->
+            {Env1, Label} = ?ENV:get_new_label(Env0),
+            {Env1, {global, Label}};
+        local ->
+            {Env1, Temp} = ?ENV:get_new_temp(Env0),
+            {Env1, {local, Temp}}
+    end.
+
+create_scalar_data({global, {label, _}}, Type) -> {type_size(Type)};
+create_scalar_data({local, {temp, _}}, Type)   -> {type_size(Type)}.
+
+assign_array_location(Env0) ->
+    case ?ENV:scope(Env0) of
+        global ->
+            {Env1, Label} = ?ENV:get_new_label(Env0),
+            {Env1, {global, Label}};
+        local ->
+            {Env0, stack}
+    end.
+
+create_array_data(_Env0, {global, {label, _}}, Type, Count) ->
+    {type_size(Type), Count};
+create_array_data(Env0, {local, stack}, Type, Count) ->
+    FrameSize = ?ENV:get_frame_size(Env0),
+    {type_size(Type), Count, FrameSize}.
 
 type_size(int)  -> long;
 type_size(char) -> byte.
 
 translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
-    Location = case ?ENV:scope(Env0) of
-        global ->
-            {Env1, Label} = ?ENV:get_new_label(Env0),
-            {global, Label};
-        local ->
-            {Env1, Temp} = ?ENV:get_new_temp(Env0),
-            {local, Temp}
+    {Env1, Location} = assign_array_location(Env0),
+    Data = create_array_data(Env1, Location, Type, Count),
+    Env2 = case Data of
+        {Size, Count, _FrameSize} ->
+            Bytes = ducc_byte_size(Size),
+            ?ENV:increment_frame_size(Env1, Bytes*Count);
+        _ ->
+            Env1
     end,
-    Size = type_size(Type),
-    111
+    Env3 = ?ENV:set_symbol(Name, {Location, array, Data}, Env2),
     Instrs =
     [
-        emit(arraydec)
+        emit({Location, array, Data})
     ],
     {Env0, Instrs}.
+
+ducc_byte_size(long) -> 4;
+ducc_byte_size(byte) -> 1.
 
 translate_fundec({_Meta, Type, Name, Formals}, Env0) ->
     {Env1, Instrs1} = translate_formals(Formals, Env0),
