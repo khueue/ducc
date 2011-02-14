@@ -19,16 +19,17 @@ scope(Env) ->
     end.
 
 new() ->
+    FrameSize = 0,
     LastUsedTemp = 1,
     LastUsedLabel = 99,
     SymTabs = [],
-    Env = {LastUsedTemp, LastUsedLabel, SymTabs},
+    Env = {LastUsedTemp, LastUsedLabel, FrameSize, SymTabs},
     enter_scope(global, Env).
 
-enter_scope(Scope, _Env = {T,L,SymTabs}) ->
-    {T, L, stack_push({Scope,dict:new()}, SymTabs)}.
+enter_scope(Scope, _Env = {T,L,FS,SymTabs}) ->
+    {T, L, FS, stack_push({Scope,dict:new()}, SymTabs)}.
 
-scope_name({_T, _L, [{Scope,_}|_]}) ->
+scope_name({_T, _L, _FS, [{Scope,_}|_]}) ->
     Scope.
 
 lookup_or_throw(Name, Node, Env, Exception) ->
@@ -37,21 +38,21 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
-lookup_current_scope(Name, Node, {T,L,[SymTab|_]}) ->
-    lookup(Name, Node, {T,L,[SymTab]}).
+lookup_current_scope(Name, Node, {T,L,FS,[SymTab|_]}) ->
+    lookup(Name, Node, {T,L,FS,[SymTab]}).
 
-lookup(_Name, _Node, {_T,_L,[]}) ->
+lookup(_Name, _Node, {_T,_L,_FS,[]}) ->
     not_found;
-lookup(Name, Node, {T,L,[{_Scope,SymTab}|SymTabs]}) ->
+lookup(Name, Node, {T,L,FS,[{_Scope,SymTab}|SymTabs]}) ->
     case dict:find(Name, SymTab) of
         {ok, Val} -> Val;
-        error     -> lookup(Name, Node, {T,L,SymTabs})
+        error     -> lookup(Name, Node, {T,L,FS,SymTabs})
     end.
 
-set_symbol(Key, Value, {T,L,SymTabs}) ->
+set_symbol(Key, Value, {T,L,FS,SymTabs}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
-    {T,L,stack_push({Scope,Updated}, Rest)}.
+    {T,L,FS,stack_push({Scope,Updated}, Rest)}.
 
 stack_push(X, Stack) ->
     [X|Stack].
@@ -67,19 +68,19 @@ label(Id) ->
 temp(Id) ->
     {temp, Id}.
 
-env(TempId, LabelId, SymTabs) ->
-    {TempId, LabelId, SymTabs}.
+env(TempId, LabelId, FS, SymTabs) ->
+    {TempId, LabelId, FS, SymTabs}.
 
-get_new_label({LastTempId, LastLabelId, SymTabs}) ->
+get_new_label({LastTempId, LastLabelId, FS, SymTabs}) ->
     NewLabelId = LastLabelId + 1,
-    {env(LastTempId,NewLabelId,SymTabs), label(NewLabelId)}.
+    {env(LastTempId,NewLabelId,FS,SymTabs), label(NewLabelId)}.
 
-get_new_temp({LastTempId, LastLabelId, SymTabs}) ->
+get_new_temp({LastTempId, LastLabelId, FS, SymTabs}) ->
     NewTempId = LastTempId + 1,
-    {env(NewTempId,LastLabelId,SymTabs), temp(NewTempId)}.
+    {env(NewTempId,LastLabelId,FS,SymTabs), temp(NewTempId)}.
 
-get_current_temp({LastTempId, _LastLabelId, _SymTabs}) ->
+get_current_temp({LastTempId, _LastLabelId, _FS, _SymTabs}) ->
     temp(LastTempId).
 
-get_current_label({_LastTempId, LastLabelId, _SymTabs}) ->
+get_current_label({_LastTempId, LastLabelId, _FS, _SymTabs}) ->
     label(LastLabelId).
