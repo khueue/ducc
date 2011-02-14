@@ -75,7 +75,7 @@ translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
             {local, Temp}
     end,
     Size = type_size(Type),
-
+    111
     Instrs =
     [
         emit(arraydec)
