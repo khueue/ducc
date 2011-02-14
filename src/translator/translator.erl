@@ -14,8 +14,9 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    % pass last used, or first free temp?
-    {Env1, Instrs, Ret1} = translate(ParseTree, Env, fp()),
+    % Pass last used temporary and let functions increment.
+    LastUsedTemp = fp(),
+    {Env1, Instrs, Ret1} = translate(ParseTree, Env, LastUsedTemp),
     Instrs.
 
 translate(ParseTree, Env0, Ret0) ->
@@ -181,6 +182,47 @@ translate_eval(Op, Env0, Ret0, RetLhs, RetRhs) ->
     ],
     {Env0, Instrs, Ret1}.
 
+translate_unop({_Meta, Op, Rhs}, Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = translate_expr(Rhs, Env0, Ret0),
+    Instrs2 =
+    [
+        emit(unop)
+    ],
+    {Env1, Instrs1++Instrs2, Ret1}.
+
+translate_ident({_Meta, Name}, Env0, Ret0) ->
+    Instrs =
+    [
+        emit(ident)
+    ],
+    {Env0, Instrs, Ret0}.
+
+translate_charconst(Node = {_Meta, _Value}, Env0, Ret0) ->
+    translate_intconst(Node, Env0, Ret0).
+
+translate_funcall({_Meta, Name, Actuals}, Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = translate_actuals(Actuals, Env0, Ret0),
+    Instrs2 =
+    [
+        emit(funcall)
+    ],
+    {Env1, Instrs1++Instrs2, Ret1}.
+
+translate_actuals(Actuals, Env0, Ret0) ->
+    Translator = fun(Node, Env, Ret) -> translate_actual(Node, Env, Ret) end,
+    translate_list(Actuals, Translator, Env0, Ret0).
+
+translate_actual(Actual, Env0, Ret0) ->
+    translate_expr(Actual, Env0, Ret0).
+
+translate_arrelem({_Meta, Name, Index}, Env0, Ret0) ->
+    {Env1, Instrs1, Ret1} = translate_expr(Index, Env0, Ret0),
+    Instrs2 =
+    [
+        emit(arrelem)
+    ],
+    {Env1, Instrs1++Instrs2, Ret1}.
+
 emit_intconst(TempRet, Value) ->
     {icon, Value}.
 
@@ -208,50 +250,3 @@ first_temp() ->
 
 new_temp({temp, Prev}) ->
     {temp, Prev + 1}.
-
-translate_unop({_Meta, Op, Rhs}, Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_expr(Rhs, Env0, Ret0),
-    Instrs2 =
-    [
-        emit(unop)
-    ],
-    {Env1, Instrs1++Instrs2, Ret1}.
-
-translate_ident({_Meta, Name}, Env0, Ret0) ->
-    Instrs =
-    [
-        emit(ident)
-    ],
-    {Env0, Instrs, Ret0}.
-
-translate_charconst({_Meta, Value}, Env0, Ret0) ->
-    Int = ?RTL:char_to_int(Value),
-    Ret1 = new_temp(Ret0),
-    Instrs =
-    [
-        emit_intconst(Ret1, Int)
-    ],
-    {Env0, Instrs, Ret1}.
-
-translate_funcall({_Meta, Name, Actuals}, Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_actuals(Actuals, Env0, Ret0),
-    Instrs2 =
-    [
-        emit(funcall)
-    ],
-    {Env1, Instrs1++Instrs2, Ret1}.
-
-translate_actuals(Actuals, Env0, Ret0) ->
-    Translator = fun(Node, Env, Ret) -> translate_actual(Node, Env, Ret) end,
-    translate_list(Actuals, Translator, Env0, Ret0).
-
-translate_actual(Actual, Env0, Ret0) ->
-    translate_expr(Actual, Env0, Ret0).
-
-translate_arrelem({_Meta, Name, Index}, Env0, Ret0) ->
-    {Env1, Instrs1, Ret1} = translate_expr(Index, Env0, Ret0),
-    Instrs2 =
-    [
-        emit(arrelem)
-    ],
-    {Env1, Instrs1++Instrs2, Ret1}.
