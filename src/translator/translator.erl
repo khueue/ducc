@@ -11,8 +11,6 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    % Pass last used temporary and let functions increment.
-    % LastUsedTemp = fp(), % in env xxxxx
     {_Env1, Instrs} = translate(ParseTree, Env),
     Instrs.
 
