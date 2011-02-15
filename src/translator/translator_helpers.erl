@@ -52,10 +52,10 @@ ducc_byte_size(long) -> 4;
 ducc_byte_size(byte) -> 1.
 
 arg_list([]) -> [];
-arg_list([{Env, _Instrs}|R]) ->
+arg_list([{Env, _Instrs, _Temps}|R]) ->
     RetTemp = ?ENV:get_current_temp(Env),
     [RetTemp|arg_list(R)].
 
 conc_instrs([]) -> [];
-conc_instrs([{_Env, Instrs}|R]) ->
+conc_instrs([{_Env, Instrs, _Temps}|R]) ->
     Instrs ++ conc_instrs(R).

@@ -3,6 +3,7 @@ int bar(int x, int y);
 int foo(void) 
 {
     int a[10];
+    char c;
     if (1)
         bar(42, 666);
     else

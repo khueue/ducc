@@ -25,11 +25,11 @@ translate_topdecs([T|Ts], Env0) ->
     [Topdec|translate_topdecs(Ts, Env1)].
 
 translate_list([], _Translator, Env0) ->
-    {Env0, []};
+    {Env0, [], []};
 translate_list([Node|Nodes], Translator, Env0) ->
-    {Env1, Instrs1} = Translator(Node, Env0),
-    {Env2, Instrs2} = translate_list(Nodes, Translator, Env1),
-    {Env2, Instrs1++Instrs2}.
+    {Env1, Instrs1, Temps1} = Translator(Node, Env0),
+    {Env2, Instrs2, Temps2} = translate_list(Nodes, Translator, Env1),
+    {Env2, Instrs1++Instrs2, Temps1++Temps2}.
 
 translate_topdec(Topdec, Env0) ->
     Tag = ?HELPER:get_tag(Topdec),
@@ -48,7 +48,7 @@ translate_scalardec({_Meta, Type, Name}, Env0) ->
     [
         emit({Location, scalar, Data})
     ],
-    {Env2, Instrs}.
+    {Env2, Instrs, []}.
 
 translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env1, Location} = ?HELPER:assign_array_location(Env0),
@@ -65,7 +65,7 @@ translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     [
         emit({Location, array, Data})
     ],
-    {Env3, Instrs}.
+    {Env3, Instrs, []}.
 
 translate_fundec({_Meta, _Type, Name, Formals}, Env0) ->
     {Env0, fundec}.
@@ -75,11 +75,12 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     {Env2, LabelStop}  = ?ENV:get_new_label(Env1),
     LabelStart = {label, Name},
     Env4 = ?ENV:set_labels(Env2, LabelStart, LabelStop),
-    {Env5, Instrs2} = translate_formals(Formals, Env4),
-    {Env6, Instrs3} = translate_locals(Locals, Env5),
-    {Env7, Instrs4} = translate_stmts(Stmts, Env6),
+    {Env5, Instrs2, Temps444} = translate_formals(Formals, Env4),
+    io:format("~p~n", [aoeuaoeuao]),
+    {Env6, Instrs3, Temps555} = translate_locals(Locals, Env5),
+    {Env7, Instrs4, Temps666} = translate_stmts(Stmts, Env6),
     FrameSize = ?ENV:get_frame_size(Env7),
-    {Env7, {proc, LabelStart, FrameSize, Instrs2++Instrs3++Instrs4}}.
+    {Env7, {proc, LabelStart, Temps666, FrameSize, Instrs2++Instrs3++Instrs4}}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -100,7 +101,7 @@ translate_farraydec({_Meta, Type, Name}, Env0) ->
     [
         emit({Location, farray, Data})
     ],
-    {Env2, Instrs}.
+    {Env2, Instrs, []}.
 
 translate_locals(Locals, Env0) ->
     Translator = fun(Node, Env) -> translate_local(Node, Env) end,
@@ -130,12 +131,12 @@ translate_stmt(Stmt, Env0) ->
 
 translate_return({_Meta, Expr}, Env0) ->
     %% XXX HOWTO return?
-    {Env1, Instrs1} = translate_expr(Expr, Env0),
+    {Env1, Instrs1, Temps1} = translate_expr(Expr, Env0),
     Instrs2 =
     [
         emit(return)
     ],
-    {Env1, Instrs1++Instrs2}.
+    {Env1, Instrs1++Instrs2, Temps1}.
 
 translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env1, Instrs1} = translate_expr(Cond, Env0),
@@ -149,9 +150,9 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {Env1, LabelElse} = ?ENV:get_new_label(Env0),
     {Env2, LabelEnd} = ?ENV:get_new_label(Env1),
-    {EnvCond, InstrsCond} = translate_expr(Cond, Env2),
-    {EnvThen, InstrsThen} = translate_stmt(Then, EnvCond),
-    {EnvElse, InstrsElse} = translate_stmt(Else, EnvThen),
+    {EnvCond, InstrsCond, TempsCond} = translate_expr(Cond, Env2),
+    {EnvThen, InstrsThen, TempsThen} = translate_stmt(Then, EnvCond),
+    {EnvElse, InstrsElse, TempsElse} = translate_stmt(Else, EnvThen),
     RetCond = ?ENV:get_current_temp(EnvCond),
     Instrs =
         InstrsCond ++
@@ -161,7 +162,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
         [{labdef, LabelElse}] ++
         InstrsElse ++
         [{labdef, LabelEnd}],
-    {EnvElse, Instrs}.
+    {EnvElse, Instrs, TempsCond}.
 
 translate_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
@@ -176,12 +177,12 @@ translate_expr(Expr, Env0) ->
     end.
 
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
-    {Env1, Instrs1} = translate_expr(Lhs, Env0),
+    {Env1, Instrs1, Temps1} = translate_expr(Lhs, Env0),
     LhsTemp = ?ENV:get_current_temp(Env1),
-    {Env2, Instrs2} = translate_expr(Rhs, Env1),
+    {Env2, Instrs2, Temps2} = translate_expr(Rhs, Env1),
     RhsTemp = ?ENV:get_current_temp(Env2),
-    {Env3, Instrs3} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
-    {Env3, Instrs1++Instrs2++Instrs3}.
+    {Env3, Instrs3, Temps3} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
+    {Env3, Instrs1++Instrs2++Instrs3, Temps1++Temps2++Temps3}.
 
 translate_intconst({_Meta, Value}, Env0) ->
     {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
@@ -189,7 +190,7 @@ translate_intconst({_Meta, Value}, Env0) ->
     [
         emit_intconst(ReturnTemp, Value)
     ],
-    {Env1, Instrs}.
+    {Env1, Instrs, [ReturnTemp]}.
 
 translate_eval(Op, Env0, RetLhs, RetRhs) ->
     {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
@@ -197,7 +198,7 @@ translate_eval(Op, Env0, RetLhs, RetRhs) ->
     [
         emit_eval(Op, ReturnTemp, RetLhs, RetRhs)
     ],
-    {Env1, Instrs}.
+    {Env1, Instrs, [ReturnTemp]}.
 
 translate_unop({_Meta, _Op, Rhs}, Env0) ->
     {Env1, Instrs1} = translate_expr(Rhs, Env0),
@@ -223,19 +224,23 @@ translate_funcall({_Meta, Name, Actuals}, Env0) ->
     ArgInstrs = ?HELPER:conc_instrs(ActualInstrs),
     Env1 = case ActualInstrs of
         [] -> Env0;
-        _  -> {EnvX, _Instrs} = lists:last(ActualInstrs),
+        _  -> {EnvX, _Instrs, _Temps} = lists:last(ActualInstrs),
               EnvX
     end,
     {Env2, RetTemp} = ?ENV:get_new_temp(Env1),
     Instrs =
         ArgInstrs ++
         [{call, RetTemp, {label, Name}, ArgTemps}],
-    {Env2, Instrs}.
+    {Env2, Instrs, get_temps(ActualInstrs)++[RetTemp]}.
+
+get_temps([]) -> [];
+get_temps([{_E,_I,T}|Xs]) ->
+    T++get_temps(Xs).
 
 translate_actuals([], Env0) -> [];
 translate_actuals([A|As], Env0) ->
-    {Env1, Instrs1} = translate_actual(A, Env0),
-    [{Env1, Instrs1}|translate_actuals(As, Env1)].
+    {Env1, Instrs1, Temps1} = translate_actual(A, Env0),
+    [{Env1, Instrs1, Temps1}|translate_actuals(As, Env1)].
 
 translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).
