@@ -26,8 +26,8 @@ increment_frame_size({T,L,FS,SymTabs}, Bytes) ->
 
 new() ->
     FrameSize = 0,
-    LastUsedTemp = 1,
-    LastUsedLabel = 99,
+    LastUsedTemp = temp(1),
+    LastUsedLabel = label(99),
     SymTabs = [],
     Env = env(LastUsedTemp, LastUsedLabel, FrameSize, SymTabs),
     enter_scope(global, Env).
@@ -74,19 +74,19 @@ label(Id) ->
 temp(Id) ->
     {temp, Id}.
 
-env(TempId, LabelId, FS, SymTabs) ->
-    {TempId, LabelId, FS, SymTabs}.
+env(Temp, Label, FS, SymTabs) ->
+    {Temp, Label, FS, SymTabs}.
 
-get_new_label({LastTempId, LastLabelId, FS, SymTabs}) ->
-    NewLabelId = LastLabelId + 1,
-    {env(LastTempId,NewLabelId,FS,SymTabs), label(NewLabelId)}.
+get_new_label({LastTemp, {label, LastLabelId}, FS, SymTabs}) ->
+    NewLabel = label(LastLabelId + 1),
+    {env(LastTemp,NewLabel,FS,SymTabs), NewLabel}.
 
-get_new_temp({LastTempId, LastLabelId, FS, SymTabs}) ->
-    NewTempId = LastTempId + 1,
-    {env(NewTempId,LastLabelId,FS,SymTabs), temp(NewTempId)}.
+get_new_temp({{temp, LastTempId}, LastLabel, FS, SymTabs}) ->
+    NewTemp = temp(LastTempId + 1),
+    {env(NewTemp,LastLabel,FS,SymTabs), NewTemp}.
 
-get_current_temp({LastTempId, _LastLabelId, _FS, _SymTabs}) ->
-    temp(LastTempId).
+get_current_temp({LastTemp, _LastLabel, _FS, _SymTabs}) ->
+    LastTemp.
 
-get_current_label({_LastTempId, LastLabelId, _FS, _SymTabs}) ->
-    label(LastLabelId).
+get_current_label({_LastTemp, LastLabel, _FS, _SymTabs}) ->
+    LastLabel.
