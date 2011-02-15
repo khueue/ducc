@@ -2,7 +2,7 @@
 
 Compiler Project, VT11
 
-2011-XX-XX
+2011-02-XXXXXXXXXX
 
 Emil Hessman (emhe9781@student...)
 
@@ -17,7 +17,13 @@ default which doesn't include Leex nor escript).
 
 ## Introduction
 
-XXX
+In this report, we will briefly discuss our attempt to implement a
+translation from the abstract syntax tree (AST) into a flat, RTL-like,
+intermediate representation for the uC language.
+
+We started out by implementing a depth-first search algorithm for traversing
+the AST. The translator starts at the root node (`program`) and recursively
+translates its children in a left-to-right order.
 
 ## Tools Used
 
@@ -30,7 +36,7 @@ Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 XXX will probably be similar to the analyzer env?
 
-The environment is implemented in `XXXXXXXXXXXX`.
+The environment is implemented in `src/translator/translator_env.erl`.
 
 The environment is represented as a stack of scopes wrapped in a tuple:
 
