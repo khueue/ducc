@@ -67,23 +67,21 @@ translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     ],
     {Env3, Instrs}.
 
-translate_fundec({_Meta, _Type, _Name, Formals}, Env0) ->
-    {Env1, Instrs1} = translate_formals(Formals, Env0),
-    Instrs2 =
-    [
-        emit(fundec)
-    ],
-    {Env1, Instrs1++Instrs2}.
+translate_fundec({_Meta, _Type, Name, Formals}, Env0) ->
+    {Env0, []}.
 
-translate_fundef({_Meta, _Type, _Name, Formals, Locals, Stmts}, Env0) ->
-    {Env1, Instrs1} = translate_formals(Formals, Env0),
-    {Env2, Instrs2} = translate_locals(Locals, Env1),
-    {Env3, Instrs3} = translate_stmts(Stmts, Env2),
-    Instrs4 =
+translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
+    %% XXXXX update symbol table with name and {label, Id}?
+    Env1 = ?ENV:enter_scope(Name, Env0),
+    {Env2, Instrs2} = translate_formals(Formals, Env1),
+    {Env3, Instrs3} = translate_locals(Locals, Env2),
+    {Env4, Instrs4} = translate_stmts(Stmts, Env3),
+    Instrs5 =
     [
         emit(fundef)
     ],
-    {Env3, Instrs1++Instrs2++Instrs3++Instrs4}.
+    %% XXXXX remember to pass on correct Env. with updated symbol table.
+    {Env0, Instrs2++Instrs3++Instrs4++Instrs5}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -96,12 +94,15 @@ translate_formal(Formal, Env0) ->
         farraydec -> translate_farraydec(Formal, Env0)
     end.
 
-translate_farraydec({_Meta, _Type, _Name}, Env0) ->
+translate_farraydec({_Meta, Type, Name}, Env0) ->
+    {Env1, Location} = ?HELPER:assign_scalar_location(Env0),
+    Data = ?HELPER:create_scalar_data(Location, Type),
+    Env2 = ?ENV:set_symbol(Name, {Location, farray, Data}, Env1),
     Instrs =
     [
-        emit(farraydec)
+        emit({Location, farray, Data})
     ],
-    {Env0, Instrs}.
+    {Env2, Instrs}.
 
 translate_locals(Locals, Env0) ->
     Translator = fun(Node, Env) -> translate_local(Node, Env) end,
@@ -130,6 +131,7 @@ translate_stmt(Stmt, Env0) ->
     end.
 
 translate_return({_Meta, Expr}, Env0) ->
+    %% XXX HOWTO return?
     {Env1, Instrs1} = translate_expr(Expr, Env0),
     Instrs2 =
     [
@@ -218,9 +220,10 @@ translate_funcall({_Meta, _Name, Actuals}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2}.
 
-translate_actuals(Actuals, Env0) ->
-    Translator = fun(Node, Env) -> translate_actual(Node, Env) end,
-    translate_list(Actuals, Translator, Env0).
+translate_actuals([], Env0) -> [];
+translate_actuals([A|As], Env0) ->
+    {Env1, Instrs1} = translate_actual(A, Env0),
+    [{Env1, Instrs1}|translate_actuals(As, Env1)].
 
 translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).

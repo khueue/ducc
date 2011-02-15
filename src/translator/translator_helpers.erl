@@ -4,7 +4,9 @@
          create_scalar_data/2,
          assign_array_location/1,
          create_array_data/4,
-         ducc_byte_size/1]).
+         ducc_byte_size/1,
+         arg_list/1,
+         conc_instrs/1]).
 
 -define(ENV, translator_env).
 
@@ -48,3 +50,12 @@ type_size(char) -> byte.
 
 ducc_byte_size(long) -> 4;
 ducc_byte_size(byte) -> 1.
+
+arg_list([]) -> [];
+arg_list([{Env, _Instrs}|R]) ->
+    RetTemp = ?ENV:get_current_temp(Env),
+    [RetTemp|arg_list(R)].
+
+conc_instrs([]) -> [];
+conc_instrs([{_Env, Instrs}|R]) ->
+    Instrs ++ conc_instrs(R).
