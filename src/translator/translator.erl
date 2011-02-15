@@ -11,8 +11,7 @@
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
-    {_Env1, Instrs} = translate(ParseTree, Env),
-    Instrs.
+    translate(ParseTree, Env).
 
 translate(ParseTree, Env0) ->
     translate_program(ParseTree, Env0).
@@ -20,9 +19,10 @@ translate(ParseTree, Env0) ->
 translate_program({_Meta, _File, Topdecs}, Env0) ->
     translate_topdecs(Topdecs, Env0).
 
-translate_topdecs(Topdecs, Env0) ->
-    Translator = fun(Node, Env) -> translate_topdec(Node, Env) end,
-    translate_list(Topdecs, Translator, Env0).
+translate_topdecs([], Env0) -> [];
+translate_topdecs([T|Ts], Env0) ->
+    {Env1, Topdec} = translate_topdec(T, Env0),
+    [Topdec|translate_topdecs(Ts, Env1)].
 
 translate_list([], _Translator, Env0) ->
     {Env0, []};
@@ -68,20 +68,18 @@ translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env3, Instrs}.
 
 translate_fundec({_Meta, _Type, Name, Formals}, Env0) ->
-    {Env0, []}.
+    {Env0, fundec}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
-    %% XXXXX update symbol table with name and {label, Id}?
     Env1 = ?ENV:enter_scope(Name, Env0),
-    {Env2, Instrs2} = translate_formals(Formals, Env1),
-    {Env3, Instrs3} = translate_locals(Locals, Env2),
-    {Env4, Instrs4} = translate_stmts(Stmts, Env3),
-    Instrs5 =
-    [
-        emit(fundef)
-    ],
-    %% XXXXX remember to pass on correct Env. with updated symbol table.
-    {Env0, Instrs2++Instrs3++Instrs4++Instrs5}.
+    {Env2, LabelStop}  = ?ENV:get_new_label(Env1),
+    LabelStart = {label, Name},
+    Env4 = ?ENV:set_labels(Env2, LabelStart, LabelStop),
+    {Env5, Instrs2} = translate_formals(Formals, Env4),
+    {Env6, Instrs3} = translate_locals(Locals, Env5),
+    {Env7, Instrs4} = translate_stmts(Stmts, Env6),
+    FrameSize = ?ENV:get_frame_size(Env7),
+    {Env7, {proc, LabelStart, FrameSize, Instrs2++Instrs3++Instrs4}}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -149,14 +147,21 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env2, Instrs1++Instrs2++Instrs3}.
 
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
-    {Env1, Instrs1} = translate_expr(Cond, Env0),
-    {Env2, Instrs2} = translate_stmt(Then, Env1),
-    {Env3, Instrs3} = translate_stmt(Else, Env2),
-    Instrs4 =
-    [
-        emit('if')
-    ],
-    {Env3, Instrs1++Instrs2++Instrs3++Instrs4}.
+    {Env1, LabelElse} = ?ENV:get_new_label(Env0),
+    {Env2, LabelEnd} = ?ENV:get_new_label(Env1),
+    {EnvCond, InstrsCond} = translate_expr(Cond, Env2),
+    {EnvThen, InstrsThen} = translate_stmt(Then, EnvCond),
+    {EnvElse, InstrsElse} = translate_stmt(Else, EnvThen),
+    RetCond = ?ENV:get_current_temp(EnvCond),
+    Instrs =
+        InstrsCond ++
+        [{cjump, eq, RetCond, 0, LabelElse}] ++
+        InstrsThen ++
+        [{jump, LabelEnd}] ++
+        [{labdef, LabelElse}] ++
+        InstrsElse ++
+        [{labdef, LabelEnd}],
+    {EnvElse, Instrs}.
 
 translate_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
@@ -212,13 +217,20 @@ translate_ident({_Meta, _Name}, Env0) ->
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
 
-translate_funcall({_Meta, _Name, Actuals}, Env0) ->
-    {Env1, Instrs1} = translate_actuals(Actuals, Env0),
-    Instrs2 =
-    [
-        emit(funcall)
-    ],
-    {Env1, Instrs1++Instrs2}.
+translate_funcall({_Meta, Name, Actuals}, Env0) ->
+    ActualInstrs = translate_actuals(Actuals, Env0),
+    ArgTemps = ?HELPER:arg_list(ActualInstrs),
+    ArgInstrs = ?HELPER:conc_instrs(ActualInstrs),
+    Env1 = case ActualInstrs of
+        [] -> Env0;
+        _  -> {EnvX, _Instrs} = lists:last(ActualInstrs),
+              EnvX
+    end,
+    {Env2, RetTemp} = ?ENV:get_new_temp(Env1),
+    Instrs =
+        ArgInstrs ++
+        [{call, RetTemp, {label, Name}, ArgTemps}],
+    {Env2, Instrs}.
 
 translate_actuals([], Env0) -> [];
 translate_actuals([A|As], Env0) ->

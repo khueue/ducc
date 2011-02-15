@@ -10,7 +10,11 @@
     get_new_label/1,
     get_new_temp/1,
     get_current_label/1,
-    get_current_temp/1]).
+    get_current_temp/1,
+    get_frame_size/1,
+    increment_frame_size/2,
+    set_labels/3,
+    get_labels/1]).
 
 scope(Env) ->
     case scope_name(Env) of
@@ -18,24 +22,27 @@ scope(Env) ->
         _Fun   -> local
     end.
 
-get_frame_size({_T,_L,FS,_SymTabs}) ->
+get_frame_size({_T,_L,{_,_,FS},_SymTabs}) ->
     FS.
 
-increment_frame_size({T,L,FS,SymTabs}, Bytes) ->
-    env(T, L, FS+Bytes, SymTabs).
+increment_frame_size({T,L,{Start,Stop,FS},SymTabs}, Bytes) ->
+    env(T, L, {Start,Stop,FS+Bytes}, SymTabs).
 
 new() ->
-    FrameSize = 0,
     LastUsedTemp = temp(1),
     LastUsedLabel = label(99),
+    StartLabel = nil,
+    StopLabel = nil,
+    FrameSize = 0,
+    Function = {StartLabel, StopLabel, FrameSize},
     SymTabs = [],
-    Env = env(LastUsedTemp, LastUsedLabel, FrameSize, SymTabs),
+    Env = env(LastUsedTemp, LastUsedLabel, Function, SymTabs),
     enter_scope(global, Env).
 
-enter_scope(Scope, {T,L,FS,SymTabs}) ->
-    env(T, L, FS, stack_push({Scope,dict:new()}, SymTabs)).
+enter_scope(Scope, {T,L,F,SymTabs}) ->
+    env(T, L, F, stack_push({Scope,dict:new()}, SymTabs)).
 
-scope_name({_T,_L,_FS,[{Scope,_}|_]}) ->
+scope_name({_T,_L,_F,[{Scope,_}|_]}) ->
     Scope.
 
 lookup_or_throw(Name, Node, Env, Exception) ->
@@ -44,21 +51,27 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
-lookup_current_scope(Name, Node, {T,L,FS,[SymTab|_]}) ->
-    lookup(Name, Node, {T,L,FS,[SymTab]}).
+lookup_current_scope(Name, Node, {T,L,F,[SymTab|_]}) ->
+    lookup(Name, Node, {T,L,F,[SymTab]}).
 
-lookup(_Name, _Node, {_T,_L,_FS,[]}) ->
+lookup(_Name, _Node, {_T,_L,_F,[]}) ->
     not_found;
-lookup(Name, Node, {T,L,FS,[{_Scope,SymTab}|SymTabs]}) ->
+lookup(Name, Node, {T,L,F,[{_Scope,SymTab}|SymTabs]}) ->
     case dict:find(Name, SymTab) of
         {ok, Val} -> Val;
-        error     -> lookup(Name, Node, {T,L,FS,SymTabs})
+        error     -> lookup(Name, Node, {T,L,F,SymTabs})
     end.
 
-set_symbol(Key, Value, {T,L,FS,SymTabs}) ->
+set_symbol(Key, Value, {T,L,F,SymTabs}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
-    env(T,L,FS,stack_push({Scope,Updated}, Rest)).
+    env(T,L,F,stack_push({Scope,Updated}, Rest)).
+
+set_labels({T,L,{_Start,_Stop,FS},Symtabs}, NewStartLabel, NewStopLabel) ->
+    env(T, L, {NewStartLabel,NewStopLabel,FS}, Symtabs).
+
+get_labels({_T,_L,{StartLabel,StopLabel,_FS},_Symtabs}) ->
+    {StartLabel, StopLabel}.
 
 stack_push(X, Stack) ->
     [X|Stack].
@@ -74,19 +87,19 @@ label(Id) ->
 temp(Id) ->
     {temp, Id}.
 
-env(Temp, Label, FS, SymTabs) ->
-    {Temp, Label, FS, SymTabs}.
+env(Temp, Label, F, SymTabs) ->
+    {Temp, Label, F, SymTabs}.
 
-get_new_label({LastTemp, {label, LastLabelId}, FS, SymTabs}) ->
+get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs}) ->
     NewLabel = label(LastLabelId + 1),
-    {env(LastTemp,NewLabel,FS,SymTabs), NewLabel}.
+    {env(LastTemp,NewLabel,F,SymTabs), NewLabel}.
 
-get_new_temp({{temp, LastTempId}, LastLabel, FS, SymTabs}) ->
+get_new_temp({{temp, LastTempId}, LastLabel, F, SymTabs}) ->
     NewTemp = temp(LastTempId + 1),
-    {env(NewTemp,LastLabel,FS,SymTabs), NewTemp}.
+    {env(NewTemp,LastLabel,F,SymTabs), NewTemp}.
 
-get_current_temp({LastTemp, _LastLabel, _FS, _SymTabs}) ->
+get_current_temp({LastTemp, _LastLabel, _F, _SymTabs}) ->
     LastTemp.
 
-get_current_label({_LastTemp, LastLabel, _FS, _SymTabs}) ->
+get_current_label({_LastTemp, LastLabel, _F, _SymTabs}) ->
     LastLabel.

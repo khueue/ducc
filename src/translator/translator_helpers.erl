@@ -36,7 +36,7 @@ assign_array_location(Env0) ->
             {Env1, Label} = ?ENV:get_new_label(Env0),
             {Env1, {global, Label}};
         local ->
-            {Env0, stack}
+            {Env0, {local, stack}}
     end.
 
 create_array_data(_Env0, {global, {label, _}}, Type, Count) ->
