@@ -34,13 +34,33 @@ Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 ## Translator Environment
 
-XXX will probably be similar to the analyzer env?
-
 The environment is implemented in `src/translator/translator_env.erl`.
 
-The environment is represented as a stack of scopes wrapped in a tuple:
+The environment is represented as a stack of scopes wrapped in a tuple with
+some meta data:
 
-    {Scopes}
+    {LastUsedTemp, LastUsedLabel, FrameSize, Scopes}
+
+Each `LastUsedTemp` is used for actual parameters and local scalar variables.
+`LastUsedTemp` has the form:
+
+    {temp, TempId}
+
+`TempId` is an integer and starts at 1, denoting that the next free temporary
+register is `{temp, 2}`.
+`{temp, 0}` is reserved for the return value. `{temp, 1}` is reserved for the
+virtual frame pointer which is used for local array variables.
+
+Each `LastUsedLabel` is used for global variables. `LastUsedLabel` has the
+form:
+
+    {label, LabelId}
+
+`LabelId` is an integer and starts at 99, denoting that the next free label is
+`{label, 100}`.
+
+`FrameSize` is an integer value which denotes the frame size of the current
+scope (see description of `Scopes` below).
 
 The head of the `Scopes` stack (which is just a list) is the current scope.
 Each scope has the form:
@@ -54,7 +74,7 @@ or the atom `global` if the translator happens to be looking at the top-level.
 For example, if the translator is currently investigating the function `main`,
 the environment will look like:
 
-    {[{"main", SymTab1}, {global, SymTab0}]}
+    {LastUsedTemp, LastUsedLabel, FrameSize, [{"main", SymTab1}, {global, SymTab0}]}
 
 The scope stack will never grow beyond two elements because the only
 scope-introducing construct in uC is the function. Nevertheless, a stack
