@@ -29,7 +29,7 @@
        {labdef,{label,103}}},
  {proc,{label,"mov"},
        [{temp,13}],
-       [{temp,14},{temp,15},{temp,13},{temp,16}],
+       [{temp,13},{temp,14},{temp,15},{temp,16}],
        0,
        [{eval,{temp,14},{labref,{label,101}}},
         {eval,{temp,15},{load,byte,{temp,14}}},
