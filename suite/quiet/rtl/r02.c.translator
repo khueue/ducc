@@ -5,6 +5,6 @@
        [{temp,3},{temp,4},{temp,5}],
        40,
        [{eval,{temp,3},{icon,0}},
-        {eval,{temp,4},{'+',{temp,1},{temp,3}}},
+        {eval,{temp,4},{binop,'+',{temp,1},{temp,3}}},
         {call,{temp,5},{label,"f"},[{temp,4}]}],
        {labdef,{label,101}}}].

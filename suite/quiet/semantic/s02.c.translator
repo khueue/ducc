@@ -9,5 +9,5 @@
         {eval,{temp,5},{labref,{label,100}}},
         {eval,{temp,6},{load,long,{temp,5}}},
         {call,{temp,7},{label,"foo"},[{temp,6}]},
-        {eval,{temp,8},{'=',{temp,4},{temp,7}}}],
+        {eval,{temp,8},{binop,'=',{temp,4},{temp,7}}}],
        {labdef,{label,102}}}].

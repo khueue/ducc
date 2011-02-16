@@ -2,5 +2,5 @@
        [],
        [{temp,2},{temp,3}],
        0,
-       [{icon,42},{call,{temp,3},{label,"putint"},[{temp,2}]}],
+       [{eval,{temp,2},{icon,42}},{call,{temp,3},{label,"putint"},[{temp,2}]}],
        {labdef,{label,100}}}].

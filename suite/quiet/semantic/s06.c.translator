@@ -9,6 +9,6 @@
         {temp,2},
         {temp,5}],
        0,
-       [{eval,{temp,4},{'=',{temp,2},{temp,3}}},
-        {eval,{temp,5},{'=',{temp,3},{temp,2}}}],
+       [{eval,{temp,4},{binop,'=',{temp,2},{temp,3}}},
+        {eval,{temp,5},{binop,'=',{temp,3},{temp,2}}}],
        {labdef,{label,100}}}].

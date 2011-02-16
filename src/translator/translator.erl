@@ -110,7 +110,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             TempsUsed,
             FrameSize,
             Instructions,
-            {labdef, LabelEnd}
+            {labdef, LabelEnd} % xxx ???
         },
     {Env6, Proc, []}. % xxxx wrong scope?!?! but what about labels?
 
@@ -160,7 +160,7 @@ translate_stmt(Stmt, Env0) ->
 translate_return({_Meta, nil}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
     Instructions =
-        [{jump, LabelEnd}],
+        [emit_jump(LabelEnd)],
     Temps =
         [],
     {Env0, Instructions, Temps};
@@ -169,7 +169,7 @@ translate_return({_Meta, Expr}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env1),
     Instructions =
         InsExpr ++
-        [{jump, LabelEnd}],
+        [emit_jump(LabelEnd)],
     Temps =
         TempsExpr,
     {Env1, Instructions, Temps}.
@@ -180,13 +180,13 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env3, InsStmt, TempsStmt} = translate_stmt(Stmt, Env2),
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
-        [{jump, LabelTest}] ++
-        [{labdef, LabelBody}] ++
+        [emit_jump(LabelTest)] ++
+        [emit_labdef(LabelBody)] ++
         InsStmt ++
-        [{labdef, LabelTest}] ++
+        [emit_labdef(LabelTest)] ++
         InsCond ++
-        [{cjump, neq, RetCond, 0, LabelBody}] ++
-        [{labdef, LabelEnd}],
+        [emit_cjump(neq, RetCond, 0, LabelBody)] ++
+        [emit_labdef(LabelEnd)],
     Temps =
         TempsCond ++
         TempsStmt,
@@ -200,12 +200,12 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
         InsCond ++
-        [{cjump, eq, RetCond, 0, LabelElse}] ++
+        [emit_cjump(eq, RetCond, 0, LabelElse)] ++
         InsThen ++
-        [{jump, LabelEnd}] ++
-        [{labdef, LabelElse}] ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelElse)] ++
         InsElse ++
-        [{labdef, LabelEnd}],
+        [emit_labdef(LabelEnd)],
     Temps =
         TempsCond ++
         TempsThen ++
@@ -227,30 +227,18 @@ translate_expr(Expr, Env0) ->
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
     {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
-    LhsTemp = ?HELPER:get_return_temp(TempsLhs),
-    RhsTemp = ?HELPER:get_return_temp(TempsRhs),
-    {Env3, InsOp, TempsOp} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
+    TempResultLhs = ?HELPER:get_return_temp(TempsLhs),
+    TempResultRhs = ?HELPER:get_return_temp(TempsRhs),
+    {Env3, [TempResult]} = ?ENV:get_new_temps(1, Env2),
     Instructions =
         InsLhs ++
         InsRhs ++
-        InsOp,
+        [emit_eval(TempResult, rtl_binop(Op, TempResultLhs, TempResultRhs))],
     Temps =
         TempsLhs ++
         TempsRhs ++
-        TempsOp,
+        [TempResult],
     {Env3, Instructions, Temps}.
-
-translate_intconst({_Meta, Value}, Env0) ->
-    {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),
-    Instructions =
-        [emit_intconst(ReturnTemp, Value)],
-    {Env1, Instructions, Temps}.
-
-translate_eval(Op, Env0, RetLhs, RetRhs) ->
-    {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),
-    Instructions =
-        [emit_eval(Op, ReturnTemp, RetLhs, RetRhs)],
-    {Env1, Instructions, Temps}.
 
 translate_unop({_Meta, _Op, Rhs}, Env0) ->
     {Env1, InsRhs, TempsRhs} = translate_expr(Rhs, Env0),
@@ -258,6 +246,12 @@ translate_unop({_Meta, _Op, Rhs}, Env0) ->
         InsRhs ++
         [emit(unop)],
     {Env1, Instructions, TempsRhs}.
+
+translate_intconst({_Meta, Value}, Env0) ->
+    {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),
+    Instructions =
+        [emit_eval(ReturnTemp, rtl_icon(Value))],
+    {Env1, Instructions, Temps}.
 
 translate_ident(Node={_Meta, Name}, Env0) ->
     SymTabNode = {{Scope,_}, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
@@ -276,36 +270,36 @@ translate_ident(Node={_Meta, Name}, Env0) ->
     end,
     {Env1, Instructions, Temps}.
 
-translate_local_array({{local, stack}, array, {_Type,_Count,Offset}}, Env0) ->
+translate_local_array({{local,stack}, array, {_Type,_Count,Offset}}, Env0) ->
     TempFP = ?ENV:get_fp(),
     {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [
-        {eval, TempOffset, {icon, Offset}},
-        {eval, TempAddress, {'+', TempFP, TempOffset}}
+        emit_eval(TempOffset, rtl_icon(Offset)),
+        emit_eval(TempAddress, rtl_binop('+', TempFP, TempOffset))
     ],
     {Env1, Instructions, Temps}.
 
-translate_local_scalar({{local, Temp}, scalar, {_Type}}, Env0) ->
+translate_local_scalar({{local,Temp}, scalar, {_Type}}, Env0) ->
     Instructions =
     [
     ],
     {Env0, Instructions, [Temp]}.
 
-translate_global_scalar({{global, Label}, scalar, {Type}}, Env0) ->
+translate_global_scalar({{global,Label}, scalar, {Type}}, Env0) ->
     {Env1, Temps=[TempAddress,TempValue]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [
-        {eval, TempAddress, {labref, Label}},
-        {eval, TempValue, {load, Type, TempAddress}}
+        emit_eval(TempAddress, rtl_labref(Label)),
+        emit_eval(TempValue, {load, Type, TempAddress}) %%% xxx what is a load?
     ],
     {Env1, Instructions, Temps}.
 
-translate_global_array({{global, Label}, array, {_Type,_Count}}, Env0) ->
+translate_global_array({{global,Label}, array, {_Type,_Count}}, Env0) ->
     {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),
     Instructions =
     [
-        {eval, TempAddress, {labref, Label}}
+        emit_eval(TempAddress, rtl_labref(Label))
     ],
     {Env1, Instructions, Temps}.
 
@@ -315,8 +309,9 @@ translate_charconst(Node = {_Meta, _Value}, Env0) ->
 % xxx Needs serious fixing.
 translate_funcall({_Meta, Name, Actuals}, Env0) ->
     TranslatedActuals = translate_actuals(Actuals, Env0),
-    ArgTemps = ?HELPER:arg_list(TranslatedActuals),
-    ArgInstrs = ?HELPER:conc_instrs(TranslatedActuals),
+    ResultsActuals = ?HELPER:arg_list(TranslatedActuals),
+    InsActuals = ?HELPER:combine_instrs(TranslatedActuals),
+    TempsActuals = ?HELPER:combine_temps(TranslatedActuals),
     Env1 = case TranslatedActuals of
         [] ->
             Env0;
@@ -326,13 +321,12 @@ translate_funcall({_Meta, Name, Actuals}, Env0) ->
     end,
     {Env2, [RetTemp]} = ?ENV:get_new_temps(1, Env1),
     Instructions =
-        ArgInstrs ++
-        [{call, RetTemp, {label, Name}, ArgTemps}],
-    {Env2, Instructions, get_temps(TranslatedActuals)++[RetTemp]}.
-
-get_temps([]) -> [];
-get_temps([{_E,_I,T}|Xs]) ->
-    T++get_temps(Xs).
+        InsActuals ++
+        [emit_call(RetTemp, {label,Name}, ResultsActuals)],
+    Temps =
+        TempsActuals ++
+        [RetTemp],
+    {Env2, Instructions, Temps}.
 
 translate_actuals([], _Env0) -> [];
 translate_actuals([Actual|Actuals], Env0) ->
@@ -349,11 +343,53 @@ translate_arrelem({_Meta, _Name, Index}, Env0) ->
         [emit(arrelem)],
     {Env1, Instructions, TempsIndex}.
 
-emit_intconst(_TempRet, Value) ->
-    {icon, Value}.
+    % exprs:
+    %TEMP temp
+    %ICON i
+    %LABREF label
+    %UNARY unop src
+    %BINARY binop src1 src2
 
-emit_eval(Op, TempRet, TempLhs, TempRhs) ->
-    {eval, TempRet, {Op, TempLhs, TempRhs}}.
+rtl_temp(Temp) ->
+    Temp. % ??? xxx
+
+rtl_icon(Int) ->
+    {icon, Int}.
+
+rtl_labref(Label) ->
+    {labref, Label}.
+
+rtl_binop(Op, TempLhs, TempRhs) ->
+    {binop, Op, TempLhs, TempRhs}.
+
+rtl_unop(Op, TempRhs) ->
+    {unop, Op, TempRhs}.
+
+    % ins:
+    %LABDEF label
+    %JUMP label
+    %CJUMP relop src1 src2 label
+    %STORE ty dst src
+    %EVAL dst exp
+    %CALL dst label (temp list)
+
+emit_labdef(Label) ->
+    {labdef, Label}.
+
+emit_jump(Label) ->
+    {jump, Label}.
+
+emit_cjump(Relop, TempLhs, TempRhs, Label) ->
+    {cjump, Relop, TempLhs, TempRhs, Label}.
+
+emit_store(Type, TempDestAddress, TempValue) ->
+    {store, Type, TempDestAddress, TempValue}.
+
+emit_eval(TempResult, RtlExpr) ->
+    {eval, TempResult, RtlExpr}.
+
+emit_call(TempResult, Label, TempsActuals) ->
+    {call, TempResult, Label, TempsActuals}.
 
 emit(X) ->
     {X}.

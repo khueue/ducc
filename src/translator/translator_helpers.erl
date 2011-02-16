@@ -6,7 +6,8 @@
          create_array_data/4,
          ducc_byte_size/1,
          arg_list/1,
-         conc_instrs/1,
+         combine_instrs/1,
+         combine_temps/1,
          get_return_temp/1]).
 
 -define(ENV, translator_env).
@@ -57,9 +58,13 @@ arg_list([{_Env, _Instrs, Temps}|R]) ->
     RetTemp = get_return_temp(Temps),
     [RetTemp|arg_list(R)].
 
-conc_instrs([]) -> [];
-conc_instrs([{_Env, Instrs, _Temps}|R]) ->
-    Instrs ++ conc_instrs(R).
+combine_instrs([]) -> [];
+combine_instrs([{_Env, Ins, _Temps}|Xs]) ->
+    Ins ++ combine_instrs(Xs).
+
+combine_temps([]) -> [];
+combine_temps([{_Env, _Ins, Temps}|Xs]) ->
+    Temps ++ combine_temps(Xs).
 
 get_return_temp(Temps) ->
     lists:last(Temps).
