@@ -46,10 +46,15 @@ translate_topdec(Topdec, Env0) ->
     end.
 
 translate_scalardec({_Meta, Type, Name}, Env0) ->
-    {Env1, Location = {_Scope, Temp}} = ?HELPER:assign_scalar_location(Env0),
-    Data = ?HELPER:create_scalar_data(Location, Type),
+    {Env1, Location = {Scope, TempOrLabel}} = ?HELPER:assign_scalar_location(Env0),
+    Data = {Size} = ?HELPER:create_scalar_data(Location, Type),
     Env2 = ?ENV:set_symbol(Name, {Location, scalar, Data}, Env1),
-    {Env2, [], [Temp]}.
+    case Scope of
+        global ->
+            {Env2, {data, TempOrLabel, Size}, [TempOrLabel]};
+        local ->
+            {Env2, [], [TempOrLabel]}
+    end.
 
 translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env1, Location} = ?HELPER:assign_array_location(Env0),
