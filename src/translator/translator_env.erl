@@ -17,8 +17,8 @@
     get_current_temp/1,
     get_frame_size/1,
     increment_frame_size/2,
-    set_labels/3,
-    get_labels/1]).
+    set_function_labels/3,
+    get_function_labels/1]).
 
 scope(Env) ->
     case scope_name(Env) of
@@ -68,10 +68,10 @@ set_symbol(Key, Value, {T,L,F,SymTabs}) ->
     Updated = dict:store(Key, Value, Current),
     env(T,L,F,stack_push({Scope,Updated}, Rest)).
 
-set_labels({T,L,{_Start,_Stop,FS},Symtabs}, NewStartLabel, NewStopLabel) ->
+set_function_labels({T,L,{_Start,_Stop,FS},Symtabs}, NewStartLabel, NewStopLabel) ->
     env(T, L, {NewStartLabel,NewStopLabel,FS}, Symtabs).
 
-get_labels({_T,_L,{StartLabel,StopLabel,_FS},_Symtabs}) ->
+get_function_labels({_T,_L,{StartLabel,StopLabel,_FS},_Symtabs}) ->
     {StartLabel, StopLabel}.
 
 stack_push(X, Stack) ->

@@ -87,16 +87,32 @@ translate_fundec({_Meta, _Type, _Name, _Formals}, Env0) ->
     {Env0, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
-    Env1 = ?ENV:enter_scope(Name, Env0),
-    {Env2, EndLabel}  = ?ENV:get_new_label(Env1),
-    StartLabel = {label, Name},
-    Env3 = ?ENV:set_labels(Env2, StartLabel, EndLabel),
-    {Env4, Instrs4, FormalTemps} = translate_formals(Formals, Env3),
-    {Env5, Instrs5, LocalTemps} = translate_locals(Locals, Env4),
-    {Env6, Instrs6, StmtTemps} = translate_stmts(Stmts, Env5),
+    {Env1, LabelEnd} = ?ENV:get_new_label(Env0),
+    Env2 = ?ENV:enter_scope(Name, Env1),
+    LabelStart = {label, Name},
+    Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd),
+    {Env4, InsFormals, TempsFormals} = translate_formals(Formals, Env3),
+    {Env5, InsLocals, TempsLocals} = translate_locals(Locals, Env4),
+    {Env6, InsStmts, TempsStmts} = translate_stmts(Stmts, Env5),
     FrameSize = ?ENV:get_frame_size(Env6),
-    {Env6, {proc, StartLabel, FormalTemps, LocalTemps++StmtTemps, FrameSize,
-            Instrs4++Instrs5++Instrs6, {labdef, EndLabel}}, []}.
+    Instructions =
+        InsFormals ++
+        InsLocals ++
+        InsStmts,
+    TempsUsed =
+        TempsLocals ++
+        TempsStmts,
+    Proc =
+        {
+            proc,
+            LabelStart,
+            TempsFormals,
+            TempsUsed,
+            FrameSize,
+            Instructions,
+            {labdef, LabelEnd}
+        },
+    {Env6, Proc, []}. % xxxx wrong scope?!?! but what about labels?
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -142,14 +158,21 @@ translate_stmt(Stmt, Env0) ->
     end.
 
 translate_return({_Meta, nil}, Env0) ->
-    {_StartLabel, EndLabel} = ?ENV:get_labels(Env0),
-    Instrs = [{jump, EndLabel}],
-    {Env0, Instrs, []};
+    {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
+    Instructions =
+        [{jump, LabelEnd}],
+    Temps =
+        [],
+    {Env0, Instructions, Temps};
 translate_return({_Meta, Expr}, Env0) ->
-    {Env1, Instrs1, Temps1} = translate_expr(Expr, Env0),
-    {_StartLabel, EndLabel} = ?ENV:get_labels(Env1),
-    Instrs2 = [{jump, EndLabel}],
-    {Env1, Instrs1++Instrs2, Temps1}.
+    {Env1, InsExpr, TempsExpr} = translate_expr(Expr, Env0),
+    {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env1),
+    Instructions =
+        InsExpr ++
+        [{jump, LabelEnd}],
+    Temps =
+        TempsExpr,
+    {Env1, Instructions, Temps}.
 
 translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env1, [LabelTest,LabelBody,LabelEnd]} = ?ENV:get_new_labels(3, Env0),
