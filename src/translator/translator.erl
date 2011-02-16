@@ -248,21 +248,19 @@ translate_ident(Node={_Meta, Name}, Env0) ->
 
 translate_local_array({{local, stack}, array, {_Type,_Count,Offset}}, Env0) ->
     TempFP = {temp, 1}, % xxxxxx fp
-    {Env1, TempOffset} = ?ENV:get_new_temp(Env0),
-    {Env2, TempAddress} = ?ENV:get_new_temp(Env1),
+    {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [
         {eval, TempOffset, {icon, Offset}},
         {eval, TempAddress, {'+', TempFP, TempOffset}}
     ],
-    {Env2, Instructions, [TempOffset,TempAddress]}.
+    {Env1, Instructions, Temps}.
 
 translate_local_scalar({{local, Temp}, scalar, {_Type}}, Env0) ->
     Instructions =
     [
-        Temp
     ],
-    {Env0, [], [Temp]}.
+    {Env0, Instructions, [Temp]}.
 
 translate_global_scalar({{global, Label}, scalar, {Type}}, Env0) ->
     {Env1, TempAddress} = ?ENV:get_new_temp(Env0),

@@ -8,6 +8,7 @@
     lookup_or_throw/4,
     scope/1,
     get_new_label/1,
+    get_new_temps/2,
     get_new_temp/1,
     get_current_label/1,
     get_current_temp/1,
@@ -93,6 +94,13 @@ env(Temp, Label, F, SymTabs) ->
 get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs}) ->
     NewLabel = label(LastLabelId + 1),
     {env(LastTemp,NewLabel,F,SymTabs), NewLabel}.
+
+get_new_temps(0, Env) ->
+    {Env, []};
+get_new_temps(N, Env0) ->
+    {Env1, Temp} = get_new_temp(Env0),
+    {Env2, Temps} = get_new_temps(N-1, Env1),
+    {Env2, [Temp|Temps]}.
 
 get_new_temp({{temp, LastTempId}, LastLabel, F, SymTabs}) ->
     NewTemp = temp(LastTempId + 1),
