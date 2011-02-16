@@ -36,34 +36,45 @@ Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 The environment is implemented in `src/translator/translator_env.erl`.
 
-The environment is represented as a stack of scopes wrapped in a tuple with
-some meta data:
+The environment has the form:
 
-    {LastUsedTemp, LastUsedLabel, FrameSize, Scopes}
+    {LastUsedTemp, LastUsedLabel, CurrentScopeData, Scopes}
 
-Each `LastUsedTemp` is used for actual parameters and local scalar variables.
-`LastUsedTemp` has the form:
+`LastUsedTemp` is used to denote the last used temporary register, and has
+the form:
 
     {temp, TempId}
 
-`TempId` is an integer and starts at 1, denoting that the next free temporary
-register is `{temp, 2}`.
-`{temp, 0}` is reserved for the return value. `{temp, 1}` is reserved for the
-virtual frame pointer which is used for local array variables.
+The temporaries are used for actual parameters and local scalar variables.
 
-Each `LastUsedLabel` is used for global variables. `LastUsedLabel` has the
-form:
+`TempId` is an integer value and starts at 1, denoting that the next free 
+temporary register is `{temp, 2}`.
+`{temp, 0}` is reserved for the return value. `{temp, 1}` is reserved for the
+virtual frame pointer (which is used for local array variables).
+
+`LastUsedLabel` is used to denote the last used label, and has the form:
 
     {label, LabelId}
 
-`LabelId` is an integer and starts at 99, denoting that the next free label is
-`{label, 100}`.
+The labels are used for global variables.
+
+`LabelId` is an integer value and starts at 99, denoting that the next free
+label is `{label, 100}`.
+
+`CurrentScopeData` contains data about the current scope (i.e. function), and
+has the form:
+
+    {StartLabel, EndLabel, FrameSize}
+
+The `StartLabel` and `EndLabel` are labels of the same form as indicated by 
+`LastUsedLabel` above. Although they are the start and end label of the
+current scope.
 
 `FrameSize` is an integer value which denotes the frame size of the current
-scope (see description of `Scopes` below).
+scope.
 
-The head of the `Scopes` stack (which is just a list) is the current scope.
-Each scope has the form:
+`Scopes` is a stack of scopes. The head of the `Scopes` stack (which is just 
+a list) is the current scope. Each scope has the form:
 
     {ScopeName, SymTab}
 
