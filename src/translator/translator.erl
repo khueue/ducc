@@ -282,20 +282,23 @@ translate_global_array({{global, Label}, array, {_Type,_Count}}, Env0) ->
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
 
+% xxx Needs serious fixing.
 translate_funcall({_Meta, Name, Actuals}, Env0) ->
-    ActualInstrs = translate_actuals(Actuals, Env0),
-    ArgTemps = ?HELPER:arg_list(ActualInstrs),
-    ArgInstrs = ?HELPER:conc_instrs(ActualInstrs),
-    Env1 = case ActualInstrs of
-        [] -> Env0;
-        _  -> {EnvX, _Instrs, _Temps} = lists:last(ActualInstrs),
-              EnvX
+    TranslatedActuals = translate_actuals(Actuals, Env0),
+    ArgTemps = ?HELPER:arg_list(TranslatedActuals),
+    ArgInstrs = ?HELPER:conc_instrs(TranslatedActuals),
+    Env1 = case TranslatedActuals of
+        [] ->
+            Env0;
+        _  ->
+            {EnvX, _Instrs, _Temps} = lists:last(TranslatedActuals),
+            EnvX
     end,
-    {Env2, RetTemp} = ?ENV:get_new_temp(Env1),
-    Instrs =
+    {Env2, [RetTemp]} = ?ENV:get_new_temps(1, Env1),
+    Instructions =
         ArgInstrs ++
         [{call, RetTemp, {label, Name}, ArgTemps}],
-    {Env2, Instrs, get_temps(ActualInstrs)++[RetTemp]}.
+    {Env2, Instructions, get_temps(TranslatedActuals)++[RetTemp]}.
 
 get_temps([]) -> [];
 get_temps([{_E,_I,T}|Xs]) ->
@@ -310,12 +313,11 @@ translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).
 
 translate_arrelem({_Meta, _Name, Index}, Env0) ->
-    {Env1, Instrs1, TempsIndex} = translate_expr(Index, Env0),
-    Instrs2 =
-    [
-        emit(arrelem)
-    ],
-    {Env1, Instrs1++Instrs2, TempsIndex}.
+    {Env1, InsIndex, TempsIndex} = translate_expr(Index, Env0),
+    Instructions =
+        InsIndex ++
+        [emit(arrelem)],
+    {Env1, Instructions, TempsIndex}.
 
 emit_intconst(_TempRet, Value) ->
     {icon, Value}.
