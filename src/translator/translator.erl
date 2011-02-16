@@ -25,14 +25,14 @@ translate_program({_Meta, _File, Topdecs}, Env0) ->
     translate_topdecs(Topdecs, Env0).
 
 translate_topdecs([], _Env0) -> [];
-translate_topdecs([T|Ts], Env0) ->
-    Tag = ?HELPER:get_tag(T),
+translate_topdecs([Topdec|Topdecs], Env0) ->
+    Tag = ?HELPER:get_tag(Topdec),
     case Tag of
         fundec ->
-            translate_topdecs(Ts, Env0);
+            translate_topdecs(Topdecs, Env0);
         _Other ->
-            {Env1, Topdec, _Temps} = translate_topdec(T, Env0),
-            [Topdec|translate_topdecs(Ts, Env1)]
+            {Env1, ToplevelStruct} = translate_topdec(Topdec, Env0),
+            [ToplevelStruct|translate_topdecs(Topdecs, Env1)]
     end.
 
 translate_list([], _Translator, Env0) ->
@@ -45,46 +45,40 @@ translate_list([Node|Nodes], Translator, Env0) ->
 translate_topdec(Topdec, Env0) ->
     Tag = ?HELPER:get_tag(Topdec),
     case Tag of
-        scalardec -> translate_scalardec(Topdec, Env0);
-        arraydec  -> translate_arraydec(Topdec, Env0);
-        fundec    -> translate_fundec(Topdec, Env0);
+        scalardec -> translate_global_scalardec(Topdec, Env0);
+        arraydec  -> translate_global_arraydec(Topdec, Env0);
         fundef    -> translate_fundef(Topdec, Env0)
     end.
 
-translate_scalardec({_Meta, Type, Name}, Env0) ->
-    {Env1, Location = {Scope, TempOrLabel}} = ?HELPER:assign_scalar_location(Env0),
-    Data = {Size} = ?HELPER:create_scalar_data(Location, Type),
-    Env2 = ?ENV:set_symbol(Name, {Location, scalar, Data}, Env1),
-    case Scope of
-        global ->
-            {Env2, {data, TempOrLabel, Size}, [TempOrLabel]};
-        local ->
-            {Env2, [], [TempOrLabel]}
-    end.
+translate_global_scalardec({_Meta, Type, Name}, Env0) ->
+    {Env1, Label} = ?ENV:get_new_label(Env0),
+    Size = ?HELPER:type_size(Type),
+    SymbolInfo = {global, Label, scalar, {Size}},
+    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
+    {Env2, toplevel_data(Label, ?HELPER:ducc_byte_size(Size))}.
 
-translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
-    {Env1, Location = {Scope, LabelOrStack}} = ?HELPER:assign_array_location(Env0),
-    Data = ?HELPER:create_array_data(Env1, Location, Type, Count),
-    Env2 = case Data of
-        {Size1, Count1, _Offset} ->
-            Bytes1 = ?HELPER:ducc_byte_size(Size1),
-            ?ENV:increment_frame_size(Env1, Bytes1*Count1);
-        _ ->
-            Env1
-    end,
-    Env3 = ?ENV:set_symbol(Name, {Location, array, Data}, Env2),
-    case Scope of
-        global ->
-            {Size2, Count2} = Data,
-            Bytes2 = ?HELPER:ducc_byte_size(Size2),
-            {Env3, {data, LabelOrStack, Bytes2*Count2}, []};
-        local ->
-            %% No temp for arrays. Use virtual stack frame.
-            {Env3, [], []}
-    end.
+translate_global_arraydec({_Meta, Type, Name, Count}, Env0) ->
+    {Env1, Label} = ?ENV:get_new_label(Env0),
+    Size = ?HELPER:type_size(Type),
+    SymbolInfo = {global, Label, array, {Size, Count}},
+    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
+    {Env2, toplevel_data(Label, Count*?HELPER:ducc_byte_size(Size))}.
 
-translate_fundec({_Meta, _Type, _Name, _Formals}, Env0) ->
-    {Env0, [], []}.
+translate_local_scalardec({_Meta, Type, Name}, Env0) ->
+    {Env1, Temp} = ?ENV:get_new_temp(Env0),
+    Size = ?HELPER:type_size(Type),
+    SymbolInfo = {local, Temp, scalar, {Size}},
+    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
+    {Env2, [], [Temp]}.
+
+translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
+    Offset = ?ENV:get_frame_size(Env0),
+    Size = ?HELPER:type_size(Type),
+    SymbolInfo = {local, stack, array, {Size, Count, Offset}},
+    Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
+    Bytes = ?HELPER:ducc_byte_size(Size),
+    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count), %%% xxx round 4?
+    {Env2, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     {Env1, LabelEnd} = ?ENV:get_new_label(Env0),
@@ -103,16 +97,14 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
         TempsLocals ++
         TempsStmts,
     Proc =
-        {
-            proc,
+        toplevel_proc(
             LabelStart,
             TempsFormals,
             lists:usort(TempsUsed),
             FrameSize,
             Instructions,
-            {labdef, LabelEnd} % xxx ???
-        },
-    {Env6, Proc, []}. % xxxx wrong scope?!?! but what about labels?
+            LabelEnd),
+    {Env6, Proc}. % xxxx wrong scope?!?! but what about labels?
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -121,7 +113,7 @@ translate_formals(Formals, Env0) ->
 translate_formal(Formal, Env0) ->
     Tag = ?HELPER:get_tag(Formal),
     case Tag of
-        scalardec -> translate_scalardec(Formal, Env0);
+        scalardec -> translate_local_scalardec(Formal, Env0);
         farraydec -> translate_farraydec(Formal, Env0)
     end.
 
@@ -138,8 +130,8 @@ translate_locals(Locals, Env0) ->
 translate_local(Local, Env0) ->
     Tag = ?HELPER:get_tag(Local),
     case Tag of
-        scalardec -> translate_scalardec(Local, Env0);
-        arraydec  -> translate_arraydec(Local, Env0)
+        scalardec -> translate_local_scalardec(Local, Env0);
+        arraydec  -> translate_local_arraydec(Local, Env0)
     end.
 
 translate_stmts(Stmts, Env0) ->
@@ -254,7 +246,7 @@ translate_intconst({_Meta, Value}, Env0) ->
     {Env1, Instructions, Temps}.
 
 translate_ident(Node={_Meta, Name}, Env0) ->
-    SymTabNode = {{Scope,_}, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
+    SymTabNode = {Scope, _, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
     {Env1, Instructions, Temps} =
     case Scope of
         global ->
@@ -270,7 +262,7 @@ translate_ident(Node={_Meta, Name}, Env0) ->
     end,
     {Env1, Instructions, Temps}.
 
-translate_local_array({{local,stack}, array, {_Type,_Count,Offset}}, Env0) ->
+translate_local_array({local, stack, array, {_Type,_Count,Offset}}, Env0) ->
     TempFP = ?ENV:get_fp(),
     {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
@@ -280,13 +272,13 @@ translate_local_array({{local,stack}, array, {_Type,_Count,Offset}}, Env0) ->
     ],
     {Env1, Instructions, Temps}.
 
-translate_local_scalar({{local,Temp}, scalar, {_Type}}, Env0) ->
+translate_local_scalar({local, Temp, scalar, {_Type}}, Env0) ->
     Instructions =
     [
     ],
     {Env0, Instructions, [Temp]}.
 
-translate_global_scalar({{global,Label}, scalar, {Type}}, Env0) ->
+translate_global_scalar({global, Label, scalar, {Type}}, Env0) ->
     {Env1, Temps=[TempAddress,TempValue]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [
@@ -295,7 +287,7 @@ translate_global_scalar({{global,Label}, scalar, {Type}}, Env0) ->
     ],
     {Env1, Instructions, Temps}.
 
-translate_global_array({{global,Label}, array, {_Type,_Count}}, Env0) ->
+translate_global_array({global, Label, array, {_Type,_Count}}, Env0) ->
     {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),
     Instructions =
     [
@@ -394,3 +386,9 @@ emit_call(TempResult, Label, TempsActuals) ->
 
 emit(X) ->
     {X}.
+
+toplevel_data(Label, Bytes) ->
+    {data, Label, Bytes}.
+
+toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
+    {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}. % xxx ???
