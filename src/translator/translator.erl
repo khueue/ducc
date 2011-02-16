@@ -63,32 +63,40 @@ translate_scalardec({_Meta, Type, Name}, Env0) ->
     end.
 
 translate_arraydec({_Meta, Type, Name, Count}, Env0) ->
-    {Env1, Location} = ?HELPER:assign_array_location(Env0),
+    {Env1, Location = {Scope, LabelOrStack}} = ?HELPER:assign_array_location(Env0),
     Data = ?HELPER:create_array_data(Env1, Location, Type, Count),
     Env2 = case Data of
-        {Size, Count, _FrameSize} ->
-            Bytes = ?HELPER:ducc_byte_size(Size),
-            ?ENV:increment_frame_size(Env1, Bytes*Count);
+        {Size1, Count1, _Offset} ->
+            Bytes1 = ?HELPER:ducc_byte_size(Size1),
+            ?ENV:increment_frame_size(Env1, Bytes1*Count1);
         _ ->
             Env1
     end,
     Env3 = ?ENV:set_symbol(Name, {Location, array, Data}, Env2),
-    %% No temp for arrays. Use virtual stack frame.
-    {Env3, [], []}.
+    case Scope of
+        global ->
+            {Size2, Count2} = Data,
+            Bytes2 = ?HELPER:ducc_byte_size(Size2),
+            {Env3, {data, LabelOrStack, Bytes2*Count2}, []};
+        local ->
+            %% No temp for arrays. Use virtual stack frame.
+            {Env3, [], []}
+    end.
 
 translate_fundec({_Meta, _Type, _Name, _Formals}, Env0) ->
     {Env0, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Env1 = ?ENV:enter_scope(Name, Env0),
-    {Env2, LabelStop}  = ?ENV:get_new_label(Env1),
-    LabelStart = {label, Name},
-    Env3 = ?ENV:set_labels(Env2, LabelStart, LabelStop),
+    {Env2, EndLabel}  = ?ENV:get_new_label(Env1),
+    StartLabel = {label, Name},
+    Env3 = ?ENV:set_labels(Env2, StartLabel, EndLabel),
     {Env4, Instrs4, FormalTemps} = translate_formals(Formals, Env3),
     {Env5, Instrs5, LocalTemps} = translate_locals(Locals, Env4),
     {Env6, Instrs6, StmtTemps} = translate_stmts(Stmts, Env5),
     FrameSize = ?ENV:get_frame_size(Env6),
-    {Env6, {proc, LabelStart, FormalTemps, LocalTemps++StmtTemps, FrameSize, Instrs4++Instrs5++Instrs6}, []}.
+    {Env6, {proc, StartLabel, FormalTemps, LocalTemps++StmtTemps, FrameSize,
+            Instrs4++Instrs5++Instrs6, {labdef, EndLabel}}, []}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,
@@ -133,23 +141,32 @@ translate_stmt(Stmt, Env0) ->
         _Expr  -> translate_expr(Stmt, Env0)
     end.
 
+translate_return({_Meta, nil}, Env0) ->
+    {_StartLabel, EndLabel} = ?ENV:get_labels(Env0),
+    Instrs = [{jump, EndLabel}],
+    {Env0, Instrs, []};
 translate_return({_Meta, Expr}, Env0) ->
-    %% XXX HOWTO return?
     {Env1, Instrs1, Temps1} = translate_expr(Expr, Env0),
-    Instrs2 =
-    [
-        emit(return)
-    ],
+    {_StartLabel, EndLabel} = ?ENV:get_labels(Env1),
+    Instrs2 = [{jump, EndLabel}],
     {Env1, Instrs1++Instrs2, Temps1}.
 
 translate_while({_Meta, Cond, Stmt}, Env0) ->
-    {Env1, Instrs1, TempsCond} = translate_expr(Cond, Env0),
-    {Env2, Instrs2, TempsStmt} = translate_stmt(Stmt, Env1),
-    Instrs3 =
-    [
-        emit(while)
-    ],
-    {Env2, Instrs1++Instrs2++Instrs3, TempsCond++TempsStmt}.
+    {Env1, LabelTest} = ?ENV:get_new_label(Env0),
+    {Env2, LabelBody} = ?ENV:get_new_label(Env1),
+    {Env3, LabelEnd} = ?ENV:get_new_label(Env2),
+    {Env4, InstrsCond, TempsCond} = translate_expr(Cond, Env3),
+    {Env5, InstrsStmt, TempsStmt} = translate_stmt(Stmt, Env4),
+    RetCond = ?ENV:get_current_temp(Env4),
+    Instrs =
+        [{jump, LabelTest}] ++
+        [{labdef, LabelBody}] ++
+        InstrsStmt ++
+        [{labdef, LabelTest}] ++
+        InstrsCond ++
+        [{cjump, neq, RetCond, 0, LabelBody}] ++
+        [{labdef, LabelEnd}],
+    {Env5, Instrs, TempsCond++TempsStmt}.
 
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {Env1, LabelElse} = ?ENV:get_new_label(Env0),
@@ -212,7 +229,18 @@ translate_unop({_Meta, _Op, Rhs}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2, TempsRhs}.
 
-translate_ident({_Meta, _Name}, Env0) ->
+translate_ident({_Meta, Name}, Env0) ->
+    {Location, Type, Data} = ?ENV:lookup(Name, Env0),
+    
+    Instrs = case Location of
+        {global, Label} -> 
+            case Type of
+                array -> ;
+                scalar ->
+            end;
+        {local, Temp} -> 
+    end,
+
     Instrs =
     [
         emit(ident)

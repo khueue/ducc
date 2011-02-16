@@ -42,8 +42,8 @@ assign_array_location(Env0) ->
 create_array_data(_Env0, {global, {label, _}}, Type, Count) ->
     {type_size(Type), Count};
 create_array_data(Env0, {local, stack}, Type, Count) ->
-    FrameSize = ?ENV:get_frame_size(Env0),
-    {type_size(Type), Count, FrameSize}.
+    Offset = ?ENV:get_frame_size(Env0),
+    {type_size(Type), Count, Offset}.
 
 type_size(int)  -> long;
 type_size(char) -> byte.
