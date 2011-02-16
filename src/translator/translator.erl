@@ -107,7 +107,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             proc,
             LabelStart,
             TempsFormals,
-            lists:usort(?HELPER:remove_dups(TempsUsed)),
+            lists:usort(TempsUsed),
             FrameSize,
             Instructions,
             {labdef, LabelEnd} % xxx ???

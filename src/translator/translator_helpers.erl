@@ -8,8 +8,7 @@
          arg_list/1,
          combine_instrs/1,
          combine_temps/1,
-         get_return_temp/1,
-         remove_dups/1]).
+         get_return_temp/1]).
 
 -define(ENV, translator_env).
 
@@ -69,10 +68,3 @@ combine_temps([{_Env, _Ins, Temps}|Xs]) ->
 
 get_return_temp(Temps) ->
     lists:last(Temps).
-
-remove_dups([]) -> [];
-remove_dups([X|Xs]) ->
-    case lists:member(X, Xs) of
-        true  -> remove_dups(Xs);
-        false -> [X|remove_dups(Xs)]
-    end.
