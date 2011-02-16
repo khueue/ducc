@@ -25,11 +25,15 @@ translate_program({_Meta, _File, Topdecs}, Env0) ->
     translate_topdecs(Topdecs, Env0).
 
 translate_topdecs([], _Env0) -> [];
-translate_topdecs([{{_,fundec},_Name,_Type,_Formals}|Ts], Env0) ->
-    translate_topdecs(Ts, Env0);
 translate_topdecs([T|Ts], Env0) ->
-    {Env1, Topdec, _Temps} = translate_topdec(T, Env0),
-    [Topdec|translate_topdecs(Ts, Env1)].
+    Tag = ?HELPER:get_tag(T),
+    case Tag of
+        fundec ->
+            translate_topdecs(Ts, Env0);
+        _Other ->
+            {Env1, Topdec, _Temps} = translate_topdec(T, Env0),
+            [Topdec|translate_topdecs(Ts, Env1)]
+    end.
 
 translate_list([], _Translator, Env0) ->
     {Env0, [], []};
