@@ -229,23 +229,60 @@ translate_unop({_Meta, _Op, Rhs}, Env0) ->
     ],
     {Env1, Instrs1++Instrs2, TempsRhs}.
 
-translate_ident({_Meta, Name}, Env0) ->
-    {Location, Type, Data} = ?ENV:lookup(Name, Env0),
-    
-    Instrs = case Location of
-        {global, Label} -> 
+translate_ident(Node={_Meta, Name}, Env0) ->
+    SymTabNode = {{Scope,_}, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
+    {Env1, Instructions, Temps} =
+    case Scope of
+        global ->
             case Type of
-                array -> ;
-                scalar ->
+                array  -> translate_global_array(SymTabNode, Env0);
+                scalar -> translate_global_scalar(SymTabNode, Env0)
             end;
-        {local, Temp} -> 
+        local ->
+            case Type of
+                array  -> translate_local_array(SymTabNode, Env0);
+                scalar -> translate_local_scalar(SymTabNode, Env0)
+            end
     end,
+    {Env1, Instructions, Temps}.
 
-    Instrs =
+translate_local_array({{local, stack}, array, {_Type,_Count,Offset}}, Env0) ->
+    TempFP = {temp, 1}, % xxxxxx fp
+    {Env1, TempOffset} = ?ENV:get_new_temp(Env0),
+    {Env2, TempAddress} = ?ENV:get_new_temp(Env1),
+    Instructions =
     [
-        emit(ident)
+        {eval, TempOffset, {icon, Offset}},
+        {eval, TempAddress, {'+', TempFP, TempOffset}}
     ],
-    {Env0, Instrs, []}.
+    {Env2, Instructions, [TempOffset,TempAddress]}.
+
+translate_local_scalar({{local, Temp}, scalar, {_Type}}, Env0) ->
+    Instructions =
+    [
+        Temp
+    ],
+    {Env0, [], [Temp]}.
+
+translate_global_scalar({{global, Label}, scalar, {Type}}, Env0) ->
+    {Env1, TempAddress} = ?ENV:get_new_temp(Env0),
+    {Env2, TempValue} = ?ENV:get_new_temp(Env1),
+    Instructions =
+    [
+        {eval, TempAddress, {labref, Label}},
+        {eval, TempValue, {load, Type, TempAddress}}
+    ],
+    {Env2, Instructions, [TempAddress,TempValue]}.
+
+% xxx {Env1, Temps={Temp1,Temp2,Temp3}} = get_new_temps(3, Env0)
+
+translate_global_array({{global, Label}, array, {_Type,_Count}}, Env0) ->
+    {Env1, TempAddress} = ?ENV:get_new_temp(Env0),
+    Instructions =
+    [
+        {eval, TempAddress, {labref, Label}}
+    ],
+    {Env1, Instructions, [TempAddress]}.
 
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
