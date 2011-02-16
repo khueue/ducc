@@ -291,7 +291,7 @@ translate_global_scalar({{global,Label}, scalar, {Type}}, Env0) ->
     Instructions =
     [
         emit_eval(TempAddress, rtl_labref(Label)),
-        emit_eval(TempValue, {load, Type, TempAddress}) %%% xxx what is a load?
+        emit_load(Type, TempValue, TempAddress)
     ],
     {Env1, Instructions, Temps}.
 
@@ -347,7 +347,7 @@ translate_arrelem({_Meta, _Name, Index}, Env0) ->
     %TEMP temp
     %ICON i
     %LABREF label
-    %UNARY unop src
+    %UNARY unop src %%% removed
     %BINARY binop src1 src2
 
 rtl_temp(Temp) ->
@@ -361,9 +361,6 @@ rtl_labref(Label) ->
 
 rtl_binop(Op, TempLhs, TempRhs) ->
     {binop, Op, TempLhs, TempRhs}.
-
-rtl_unop(Op, TempRhs) ->
-    {unop, Op, TempRhs}.
 
     % ins:
     %LABDEF label
@@ -384,6 +381,9 @@ emit_cjump(Relop, TempLhs, TempRhs, Label) ->
 
 emit_store(Type, TempDestAddress, TempValue) ->
     {store, Type, TempDestAddress, TempValue}.
+
+emit_load(Type, TempDest, TempSourceAddress) ->
+    {load, Type, TempDest, TempSourceAddress}.
 
 emit_eval(TempResult, RtlExpr) ->
     {eval, TempResult, RtlExpr}.
