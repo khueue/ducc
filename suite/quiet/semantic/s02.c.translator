@@ -1,0 +1,13 @@
+[{data,{label,100},long},
+ {proc,{label,"foo"},[{temp,2}],[],0,[],{labdef,{label,101}}},
+ {proc,{label,"main"},
+       [],
+       [{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8}],
+       0,
+       [{eval,{temp,3},{labref,{label,100}}},
+        {eval,{temp,4},{load,long,{temp,3}}},
+        {eval,{temp,5},{labref,{label,100}}},
+        {eval,{temp,6},{load,long,{temp,5}}},
+        {call,{temp,7},{label,"foo"},[{temp,6}]},
+        {eval,{temp,8},{'=',{temp,4},{temp,7}}}],
+       {labdef,{label,102}}}].

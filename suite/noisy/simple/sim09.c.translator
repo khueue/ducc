@@ -1,0 +1,9 @@
+{'EXIT',{{case_clause,farray},
+         [{translator,translate_ident,2},
+          {translator,translate_actuals,2},
+          {translator,translate_funcall,2},
+          {translator,translate_list,3},
+          {translator,translate_fundef,2},
+          {translator,translate_topdecs,2},
+          {translator,translate_topdecs,2},
+          {translator_driver,translate,2}]}}

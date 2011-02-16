@@ -157,7 +157,7 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env3, LabelEnd} = ?ENV:get_new_label(Env2),
     {Env4, InstrsCond, TempsCond} = translate_expr(Cond, Env3),
     {Env5, InstrsStmt, TempsStmt} = translate_stmt(Stmt, Env4),
-    RetCond = ?ENV:get_current_temp(Env4),
+    RetCond = ?HELPER:get_return_temp(TempsCond),
     Instrs =
         [{jump, LabelTest}] ++
         [{labdef, LabelBody}] ++
@@ -174,7 +174,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {EnvCond, InstrsCond, TempsCond} = translate_expr(Cond, Env2),
     {EnvThen, InstrsThen, TempsThen} = translate_stmt(Then, EnvCond),
     {EnvElse, InstrsElse, TempsElse} = translate_stmt(Else, EnvThen),
-    RetCond = ?ENV:get_current_temp(EnvCond),
+    RetCond = ?HELPER:get_return_temp(TempsCond),
     Instrs =
         InstrsCond ++
         [{cjump, eq, RetCond, 0, LabelElse}] ++
@@ -199,9 +199,9 @@ translate_expr(Expr, Env0) ->
 
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, Instrs1, Temps1} = translate_expr(Lhs, Env0),
-    LhsTemp = ?ENV:get_current_temp(Env1),
+    LhsTemp = ?HELPER:get_return_temp(Temps1),
     {Env2, Instrs2, Temps2} = translate_expr(Rhs, Env1),
-    RhsTemp = ?ENV:get_current_temp(Env2),
+    RhsTemp = ?HELPER:get_return_temp(Temps2),
     {Env3, Instrs3, Temps3} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
     {Env3, Instrs1++Instrs2++Instrs3, Temps1++Temps2++Temps3}.
 

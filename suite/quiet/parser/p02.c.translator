@@ -1,0 +1,8 @@
+{'EXIT',{badarg,[{translator_helpers,get_meta,1},
+                 {translator_helpers,get_tag,1},
+                 {translator,translate_stmt,2},
+                 {translator,translate_if,2},
+                 {translator,translate_while,2},
+                 {translator,translate_list,3},
+                 {translator,translate_list,3},
+                 {translator,translate_fundef,2}]}}
