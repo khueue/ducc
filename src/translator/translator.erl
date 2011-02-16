@@ -263,24 +263,21 @@ translate_local_scalar({{local, Temp}, scalar, {_Type}}, Env0) ->
     {Env0, Instructions, [Temp]}.
 
 translate_global_scalar({{global, Label}, scalar, {Type}}, Env0) ->
-    {Env1, TempAddress} = ?ENV:get_new_temp(Env0),
-    {Env2, TempValue} = ?ENV:get_new_temp(Env1),
+    {Env1, Temps=[TempAddress,TempValue]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [
         {eval, TempAddress, {labref, Label}},
         {eval, TempValue, {load, Type, TempAddress}}
     ],
-    {Env2, Instructions, [TempAddress,TempValue]}.
-
-% xxx {Env1, Temps={Temp1,Temp2,Temp3}} = get_new_temps(3, Env0)
+    {Env1, Instructions, Temps}.
 
 translate_global_array({{global, Label}, array, {_Type,_Count}}, Env0) ->
-    {Env1, TempAddress} = ?ENV:get_new_temp(Env0),
+    {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),
     Instructions =
     [
         {eval, TempAddress, {labref, Label}}
     ],
-    {Env1, Instructions, [TempAddress]}.
+    {Env1, Instructions, Temps}.
 
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
