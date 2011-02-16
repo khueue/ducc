@@ -5,7 +5,8 @@
          combine_instrs/1,
          combine_temps/1,
          get_return_temp/1,
-         type_size/1]).
+         type_size/1,
+         round4/1]).
 
 -define(ENV, translator_env).
 
@@ -37,3 +38,12 @@ combine_temps([{_Env, _Ins, Temps}|Xs]) ->
 
 get_return_temp(Temps) ->
     lists:last(Temps).
+
+round4(N) ->
+    round4(0, N).
+
+round4(Try, Real) ->
+    case Try >= Real of
+        true  -> Try;
+        false -> round4(Try+4, Real)
+    end.
