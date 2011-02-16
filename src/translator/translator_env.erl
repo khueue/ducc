@@ -9,6 +9,7 @@
     scope/1,
     get_rv/0,
     get_fp/0,
+    get_new_labels/2,
     get_new_label/1,
     get_new_temps/2,
     get_new_temp/1,
@@ -95,6 +96,13 @@ get_rv() ->
 
 get_fp() ->
     temp(1).
+
+get_new_labels(0, Env) ->
+    {Env, []};
+get_new_labels(N, Env0) ->
+    {Env1, Label} = get_new_label(Env0),
+    {Env2, Labels} = get_new_labels(N-1, Env1),
+    {Env2, [Label|Labels]}.
 
 get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs}) ->
     NewLabel = label(LastLabelId + 1),

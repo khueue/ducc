@@ -169,21 +169,24 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
     {Env5, Instrs, TempsCond++TempsStmt}.
 
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
-    {Env1, LabelElse} = ?ENV:get_new_label(Env0),
-    {Env2, LabelEnd} = ?ENV:get_new_label(Env1),
-    {EnvCond, InstrsCond, TempsCond} = translate_expr(Cond, Env2),
-    {EnvThen, InstrsThen, TempsThen} = translate_stmt(Then, EnvCond),
-    {EnvElse, InstrsElse, TempsElse} = translate_stmt(Else, EnvThen),
+    {Env1, [LabelElse,LabelEnd]} = ?ENV:get_new_labels(2, Env0),
+    {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
+    {Env3, InsThen, TempsThen} = translate_stmt(Then, Env2),
+    {Env4, InsElse, TempsElse} = translate_stmt(Else, Env3),
     RetCond = ?HELPER:get_return_temp(TempsCond),
-    Instrs =
-        InstrsCond ++
+    Instructions =
+        InsCond ++
         [{cjump, eq, RetCond, 0, LabelElse}] ++
-        InstrsThen ++
+        InsThen ++
         [{jump, LabelEnd}] ++
         [{labdef, LabelElse}] ++
-        InstrsElse ++
+        InsElse ++
         [{labdef, LabelEnd}],
-    {EnvElse, Instrs, TempsCond++TempsThen++TempsElse}.
+    Temps =
+        TempsCond ++
+        TempsThen ++
+        TempsElse,
+    {Env4, Instructions, Temps}.
 
 translate_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
@@ -198,36 +201,39 @@ translate_expr(Expr, Env0) ->
     end.
 
 translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
-    {Env1, Instrs1, Temps1} = translate_expr(Lhs, Env0),
-    LhsTemp = ?HELPER:get_return_temp(Temps1),
-    {Env2, Instrs2, Temps2} = translate_expr(Rhs, Env1),
-    RhsTemp = ?HELPER:get_return_temp(Temps2),
-    {Env3, Instrs3, Temps3} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
-    {Env3, Instrs1++Instrs2++Instrs3, Temps1++Temps2++Temps3}.
+    {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
+    {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
+    LhsTemp = ?HELPER:get_return_temp(TempsLhs),
+    RhsTemp = ?HELPER:get_return_temp(TempsRhs),
+    {Env3, InsOp, TempsOp} = translate_eval(Op, Env2, LhsTemp, RhsTemp),
+    Instructions =
+        InsLhs ++
+        InsRhs ++
+        InsOp,
+    Temps =
+        TempsLhs ++
+        TempsRhs ++
+        TempsOp,
+    {Env3, Instructions, Temps}.
 
 translate_intconst({_Meta, Value}, Env0) ->
-    {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
-    Instrs =
-    [
-        emit_intconst(ReturnTemp, Value)
-    ],
-    {Env1, Instrs, [ReturnTemp]}.
+    {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),
+    Instructions =
+        [emit_intconst(ReturnTemp, Value)],
+    {Env1, Instructions, Temps}.
 
 translate_eval(Op, Env0, RetLhs, RetRhs) ->
-    {Env1, ReturnTemp} = ?ENV:get_new_temp(Env0),
-    Instrs =
-    [
-        emit_eval(Op, ReturnTemp, RetLhs, RetRhs)
-    ],
-    {Env1, Instrs, [ReturnTemp]}.
+    {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),
+    Instructions =
+        [emit_eval(Op, ReturnTemp, RetLhs, RetRhs)],
+    {Env1, Instructions, Temps}.
 
 translate_unop({_Meta, _Op, Rhs}, Env0) ->
-    {Env1, Instrs1, TempsRhs} = translate_expr(Rhs, Env0),
-    Instrs2 =
-    [
-        emit(unop)
-    ],
-    {Env1, Instrs1++Instrs2, TempsRhs}.
+    {Env1, InsRhs, TempsRhs} = translate_expr(Rhs, Env0),
+    Instructions =
+        InsRhs ++
+        [emit(unop)],
+    {Env1, Instructions, TempsRhs}.
 
 translate_ident(Node={_Meta, Name}, Env0) ->
     SymTabNode = {{Scope,_}, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
