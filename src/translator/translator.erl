@@ -77,7 +77,7 @@ translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
     SymbolInfo = {local, stack, array, {Size, Count, Offset}},
     Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
     Bytes = ?HELPER:ducc_byte_size(Size),
-    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count), %%% xxx round 4?
+    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count),
     {Env2, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
