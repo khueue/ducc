@@ -47,7 +47,7 @@ the form:
 
 The temporaries are used for actual parameters and local scalar variables.
 
-`TempId` is an integer value and starts at 1, denoting that the next free 
+`TempId` is an integer value and starts at 1, denoting that the next free
 temporary register is `{temp, 2}`.
 `{temp, 0}` is reserved for the return value. `{temp, 1}` is reserved for the
 virtual frame pointer (which is used for local array variables).
@@ -66,14 +66,14 @@ has the form:
 
     {StartLabel, EndLabel, FrameSize}
 
-The `StartLabel` and `EndLabel` are labels of the same form as indicated by 
+The `StartLabel` and `EndLabel` are labels of the same form as indicated by
 `LastUsedLabel` above. Although they are the start and end label of the
 current scope.
 
 `FrameSize` is an integer value which denotes the frame size of the current
 scope.
 
-`Scopes` is a stack of scopes. The head of the `Scopes` stack (which is just 
+`Scopes` is a stack of scopes. The head of the `Scopes` stack (which is just
 a list) is the current scope. Each scope has the form:
 
     {ScopeName, SymTab}
