@@ -152,21 +152,22 @@ translate_return({_Meta, Expr}, Env0) ->
     {Env1, Instrs1++Instrs2, Temps1}.
 
 translate_while({_Meta, Cond, Stmt}, Env0) ->
-    {Env1, LabelTest} = ?ENV:get_new_label(Env0),
-    {Env2, LabelBody} = ?ENV:get_new_label(Env1),
-    {Env3, LabelEnd} = ?ENV:get_new_label(Env2),
-    {Env4, InstrsCond, TempsCond} = translate_expr(Cond, Env3),
-    {Env5, InstrsStmt, TempsStmt} = translate_stmt(Stmt, Env4),
+    {Env1, [LabelTest,LabelBody,LabelEnd]} = ?ENV:get_new_labels(3, Env0),
+    {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
+    {Env3, InsStmt, TempsStmt} = translate_stmt(Stmt, Env2),
     RetCond = ?HELPER:get_return_temp(TempsCond),
-    Instrs =
+    Instructions =
         [{jump, LabelTest}] ++
         [{labdef, LabelBody}] ++
-        InstrsStmt ++
+        InsStmt ++
         [{labdef, LabelTest}] ++
-        InstrsCond ++
+        InsCond ++
         [{cjump, neq, RetCond, 0, LabelBody}] ++
         [{labdef, LabelEnd}],
-    {Env5, Instrs, TempsCond++TempsStmt}.
+    Temps =
+        TempsCond ++
+        TempsStmt,
+    {Env3, Instructions, Temps}.
 
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {Env1, [LabelElse,LabelEnd]} = ?ENV:get_new_labels(2, Env0),
