@@ -367,6 +367,7 @@ rtl_binop(Op, TempLhs, TempRhs) ->
     %JUMP label
     %CJUMP relop src1 src2 label
     %STORE ty dst src
+    %LOAD ty dst src %%% added
     %EVAL dst exp
     %CALL dst label (temp list)
 
