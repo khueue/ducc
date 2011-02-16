@@ -85,7 +85,7 @@ or the atom `global` if the translator happens to be looking at the top-level.
 For example, if the translator is currently investigating the function `main`,
 the environment will look like:
 
-    {LastUsedTemp, LastUsedLabel, FrameSize, [{"main", SymTab1}, {global, SymTab0}]}
+    {LastUsedTemp, LastUsedLabel, CurrentScopeData, [{"main", SymTab1}, {global, SymTab0}]}
 
 The scope stack will never grow beyond two elements because the only
 scope-introducing construct in uC is the function. Nevertheless, a stack
