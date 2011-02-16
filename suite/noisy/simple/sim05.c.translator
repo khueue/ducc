@@ -197,7 +197,7 @@
         {temp,196},
         {temp,197},
         {temp,198}],
-       1,
+       4,
        [{eval,{temp,4},{icon,0}},
         {arrelem},
         {eval,{temp,5},{icon,'\\n'}},

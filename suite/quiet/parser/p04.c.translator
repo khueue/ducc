@@ -1,4 +1,4 @@
-[{data,{label,100},long},
+[{data,{label,100},4},
  {proc,{label,"foo"},[{temp,2}],[],0,[],{labdef,{label,101}}},
  {proc,{label,"main"},
        [],

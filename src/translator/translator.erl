@@ -118,9 +118,10 @@ translate_formal(Formal, Env0) ->
     end.
 
 translate_farraydec({_Meta, Type, Name}, Env0) ->
-    {Env1, Location = {_Scope, Temp}} = ?HELPER:assign_scalar_location(Env0),
-    Data = ?HELPER:create_scalar_data(Location, Type),
-    Env2 = ?ENV:set_symbol(Name, {Location, farray, Data}, Env1),
+    {Env1, Temp} = ?ENV:get_new_temp(Env0),
+    Size = ?HELPER:type_size(Type),
+    SymbolInfo = {local, Temp, farray, {Size}},
+    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
     {Env2, [], [Temp]}.
 
 translate_locals(Locals, Env0) ->
@@ -184,6 +185,8 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
         TempsStmt,
     {Env3, Instructions, Temps}.
 
+translate_if({_Meta, _Cond, _Then, nil}, Env0) -> %% xxxxxx fix this properly
+    {Env0, [], []};
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {Env1, [LabelElse,LabelEnd]} = ?ENV:get_new_labels(2, Env0),
     {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
@@ -257,7 +260,8 @@ translate_ident(Node={_Meta, Name}, Env0) ->
         local ->
             case Type of
                 array  -> translate_local_array(SymTabNode, Env0);
-                scalar -> translate_local_scalar(SymTabNode, Env0)
+                scalar -> translate_local_scalar(SymTabNode, Env0);
+                farray -> {Env0, [ins], [temps]} %%%% xxxxxxx unhandled yet
             end
     end,
     {Env1, Instructions, Temps}.
