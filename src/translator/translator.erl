@@ -302,9 +302,9 @@ get_temps([{_E,_I,T}|Xs]) ->
     T++get_temps(Xs).
 
 translate_actuals([], _Env0) -> [];
-translate_actuals([A|As], Env0) ->
-    {Env1, Instrs1, Temps1} = translate_actual(A, Env0),
-    [{Env1, Instrs1, Temps1}|translate_actuals(As, Env1)].
+translate_actuals([Actual|Actuals], Env0) ->
+    Translated = {Env1, _Instrs1, _Temps1} = translate_actual(Actual, Env0),
+    [Translated|translate_actuals(Actuals, Env1)].
 
 translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).
