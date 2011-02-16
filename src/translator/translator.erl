@@ -4,6 +4,11 @@
 -define(HELPER, translator_helpers).
 -define(ENV, translator_env).
 
+% - Top-level structs:
+% {data, {label,"minarray"}, Size}
+% {proc, {label,"minfunc"}, FormalTemps, LocalTemps, FrameSize, Instructions}
+
+% - SymTab stuff:
 % {local,{temp,123}},    array, {Type, Count, Offset}
 % {local,{temp,123}},   scalar, {Type}
 % {global,{label,321}},  array, {Type, Count}
@@ -70,9 +75,9 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Env3 = ?ENV:set_labels(Env2, LabelStart, LabelStop),
     {Env4, Instrs4, FormalTemps} = translate_formals(Formals, Env3),
     {Env5, Instrs5, LocalTemps} = translate_locals(Locals, Env4),
-    {Env6, Instrs6, _StmtTemps} = translate_stmts(Stmts, Env5),
+    {Env6, Instrs6, StmtTemps} = translate_stmts(Stmts, Env5),
     FrameSize = ?ENV:get_frame_size(Env6),
-    {Env6, {proc, LabelStart, FormalTemps, LocalTemps, FrameSize, Instrs4++Instrs5++Instrs6}, []}.
+    {Env6, {proc, LabelStart, FormalTemps, LocalTemps++StmtTemps, FrameSize, Instrs4++Instrs5++Instrs6}, []}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,

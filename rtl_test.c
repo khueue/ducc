@@ -1,6 +1,6 @@
 int bar(int x, int y);
 
-int foo(void) 
+int foo(char caaarrrrr) 
 {
     int a[10];
     char c;
