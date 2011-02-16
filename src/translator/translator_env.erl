@@ -52,9 +52,6 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
-lookup_current_scope(Name, Node, {T,L,F,[SymTab|_]}) ->
-    lookup(Name, Node, {T,L,F,[SymTab]}).
-
 lookup(_Name, _Node, {_T,_L,_F,[]}) ->
     not_found;
 lookup(Name, Node, {T,L,F,[{_Scope,SymTab}|SymTabs]}) ->
