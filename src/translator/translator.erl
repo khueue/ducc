@@ -247,7 +247,7 @@ translate_ident(Node={_Meta, Name}, Env0) ->
     {Env1, Instructions, Temps}.
 
 translate_local_array({{local, stack}, array, {_Type,_Count,Offset}}, Env0) ->
-    TempFP = {temp, 1}, % xxxxxx fp
+    TempFP = ?ENV:get_fp(),
     {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
     [

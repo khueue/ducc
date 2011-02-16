@@ -7,6 +7,8 @@
     lookup/3,
     lookup_or_throw/4,
     scope/1,
+    get_rv/0,
+    get_fp/0,
     get_new_label/1,
     get_new_temps/2,
     get_new_temp/1,
@@ -87,6 +89,12 @@ temp(Id) ->
 
 env(Temp, Label, F, SymTabs) ->
     {Temp, Label, F, SymTabs}.
+
+get_rv() ->
+    temp(0).
+
+get_fp() ->
+    temp(1).
 
 get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs}) ->
     NewLabel = label(LastLabelId + 1),
