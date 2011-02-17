@@ -238,13 +238,13 @@ translate_expr(Expr, Env0) ->
 
 translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
     case Op of
-        '='  -> translate_assignment(Expr, Env0); %% xxx replace properly
+        '='  -> translate_assignment(Expr, Env0);
         '+'  -> translate_arithmetic(Expr, Env0);
         '-'  -> translate_arithmetic(Expr, Env0);
         '*'  -> translate_arithmetic(Expr, Env0);
         '/'  -> translate_arithmetic(Expr, Env0);
-        '&&' -> translate_arithmetic(Expr, Env0);
-        '||' -> translate_arithmetic(Expr, Env0);
+        '&&' -> translate_arithmetic(Expr, Env0); %% xxx logical (control flow)
+        '||' -> translate_arithmetic(Expr, Env0); %% xxx logical (control flow)
         '<'  -> translate_arithmetic(Expr, Env0);
         '>'  -> translate_arithmetic(Expr, Env0);
         '<=' -> translate_arithmetic(Expr, Env0);
