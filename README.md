@@ -4,8 +4,9 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Implement translator:
-   * Fix exprs
+ * Assignment 4:
+    * Verify total correctness!
+    * Write report
  * Include .c source in AST?
 
 ## Before Hand-In
