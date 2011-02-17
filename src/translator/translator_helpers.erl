@@ -8,7 +8,8 @@
     combine_temps/1,
     get_return_temp/1,
     type_size/1,
-    round4/1]).
+    round4/1,
+    char_to_int/1]).
 
 -define(ENV, translator_env).
 
@@ -52,4 +53,10 @@ round4(Try, Real) ->
     case Try >= Real of
         true  -> Try;
         false -> round4(Try+4, Real)
+    end.
+
+char_to_int(Value) ->
+    case atom_to_list(Value) of
+        [$\\,$n] -> 10; % ASCII newline.
+        [Int]    -> Int
     end.
