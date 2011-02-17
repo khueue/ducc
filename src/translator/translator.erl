@@ -188,8 +188,20 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
         TempsStmt,
     {Env3, Instructions, Temps}.
 
-translate_if({_Meta, _Cond, _Then, nil}, Env0) -> %% xxxxxx fix this properly
-    {Env0, [], []};
+translate_if({_Meta, Cond, Then, nil}, Env0) ->
+    {Env1, [LabelEnd]} = ?ENV:get_new_labels(1, Env0),
+    {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
+    {Env3, InsThen, TempsThen} = translate_stmt(Then, Env2),
+    RetCond = ?HELPER:get_return_temp(TempsCond),
+    Instructions =
+        InsCond ++
+        [emit_cjump(eq, RetCond, 0, LabelEnd)] ++
+        InsThen ++
+        [emit_labdef(LabelEnd)],
+    Temps =
+        TempsCond ++
+        TempsThen,
+    {Env3, Instructions, Temps};
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
     {Env1, [LabelElse,LabelEnd]} = ?ENV:get_new_labels(2, Env0),
     {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
