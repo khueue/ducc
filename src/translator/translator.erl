@@ -243,7 +243,7 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '-'  -> translate_arithmetic(Expr, Env0);
         '*'  -> translate_arithmetic(Expr, Env0);
         '/'  -> translate_arithmetic(Expr, Env0);
-        '&&' -> translate_arithmetic(Expr, Env0); %% xxx logical (control flow)
+        '&&' -> translate_logical_and(Expr, Env0);
         '||' -> translate_logical_or(Expr, Env0);
         '<'  -> translate_arithmetic(Expr, Env0);
         '>'  -> translate_arithmetic(Expr, Env0);
@@ -252,6 +252,29 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '==' -> translate_arithmetic(Expr, Env0);
         '!=' -> translate_arithmetic(Expr, Env0)
     end.
+
+translate_logical_and({_Meta, Lhs, '&&', Rhs}, Env0) ->
+    {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
+    {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
+    TempLhs = ?HELPER:get_return_temp(TempsLhs),
+    TempRhs = ?HELPER:get_return_temp(TempsRhs),
+    {Env3, [LabelFalse,LabelEnd]} = ?ENV:get_new_labels(2, Env2),
+    {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
+    Instructions =
+        InsLhs ++
+        [emit_cjump(eq, TempLhs, 0, LabelFalse)] ++
+        InsRhs ++
+        [emit_cjump(eq, TempRhs, 0, LabelFalse)] ++
+        [emit_eval(TempResult, rtl_icon(1))] ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelFalse)] ++
+        [emit_eval(TempResult, rtl_icon(0))] ++
+        [emit_labdef(LabelEnd)],
+    Temps =
+        TempsLhs ++
+        TempsRhs ++
+        [TempResult],
+    {Env4, Instructions, Temps}.
 
 translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
     {Env1, [LabelEnd]} = ?ENV:get_new_labels(1, Env0),
