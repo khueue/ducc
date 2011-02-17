@@ -57,7 +57,7 @@
         {temp,36},
         {temp,37},
         {temp,38}],
-       8,
+       6,
        [{eval,{temp,11},{icon,0}},
         {arrelem},
         {eval,{temp,12},{icon,' '}},

@@ -39,7 +39,7 @@
         {temp,31},
         {temp,32},
         {temp,33}],
-       52,
+       50,
        [{eval,{temp,14},{labref,{label,100}}},
         {load,long,{temp,15},{temp,14}},
         {eval,{temp,16},{icon,0}},

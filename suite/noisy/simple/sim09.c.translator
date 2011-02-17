@@ -90,7 +90,7 @@
         {temp,70},
         {temp,71},
         {temp,72}],
-       52,
+       50,
        [{eval,{temp,11},{icon,3}},
         {arrelem},
         {eval,{temp,12},{icon,12}},

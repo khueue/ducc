@@ -70,7 +70,7 @@
         {temp,42},
         {temp,43},
         {temp,44}],
-       8,
+       6,
        [{eval,{temp,17},{icon,0}},
         {arrelem},
         {eval,{temp,18},{icon,' '}},

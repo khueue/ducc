@@ -34,7 +34,7 @@
         {temp,29},
         {temp,30},
         {temp,31}],
-       4,
+       2,
        [{eval,{temp,7},{icon,10}},
         {eval,{temp,8},{binop,'=',{temp,6},{temp,7}}},
         {eval,{temp,9},{icon,1}},

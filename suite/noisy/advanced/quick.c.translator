@@ -162,7 +162,7 @@
         {temp,95},
         {temp,96},
         {temp,97}],
-       28,
+       27,
        [{eval,{temp,44},{icon,0}},
         {arrelem},
         {eval,{temp,45},{icon,'\\n'}},

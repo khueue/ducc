@@ -21,7 +21,7 @@
         {temp,16},
         {temp,17},
         {temp,18}],
-       52,
+       50,
        [{eval,{temp,8},{labref,{label,100}}},
         {load,long,{temp,9},{temp,8}},
         {eval,{temp,10},{icon,0}},
