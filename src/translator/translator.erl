@@ -244,7 +244,7 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '*'  -> translate_arithmetic(Expr, Env0);
         '/'  -> translate_arithmetic(Expr, Env0);
         '&&' -> translate_arithmetic(Expr, Env0); %% xxx logical (control flow)
-        '||' -> translate_arithmetic(Expr, Env0); %% xxx logical (control flow)
+        '||' -> translate_logical_or(Expr, Env0);
         '<'  -> translate_arithmetic(Expr, Env0);
         '>'  -> translate_arithmetic(Expr, Env0);
         '<=' -> translate_arithmetic(Expr, Env0);
@@ -252,6 +252,21 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '==' -> translate_arithmetic(Expr, Env0);
         '!=' -> translate_arithmetic(Expr, Env0)
     end.
+
+translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
+    {Env1, [LabelEnd]} = ?ENV:get_new_labels(1, Env0),
+    {Env2, InsLhs, TempsLhs} = translate_expr(Lhs, Env1),
+    TempLhs = ?HELPER:get_return_temp(TempsLhs),
+    {Env3, InsRhs, TempsRhs} = translate_expr(Rhs, Env2),
+    Instructions =
+        InsLhs ++
+        [emit_cjump(neq, TempLhs, 0, LabelEnd)] ++
+        InsRhs ++
+        [emit_labdef(LabelEnd)],
+    Temps =
+        TempsLhs ++
+        TempsRhs,
+    {Env3, Instructions, Temps}.
 
 translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
     {Env1, InsRval, TempsRval} = translate_expr(Rhs, Env0), % xxxxxxxx expr?
