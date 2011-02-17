@@ -260,15 +260,17 @@ translate_logical_and({_Meta, Lhs, '&&', Rhs}, Env0) ->
     TempRhs = ?HELPER:get_return_temp(TempsRhs),
     {Env3, [LabelFalse,LabelEnd]} = ?ENV:get_new_labels(2, Env2),
     {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
+    ValueTrue  = rtl_icon(1),
+    ValueFalse = rtl_icon(0),
     Instructions =
         InsLhs ++
         [emit_cjump(eq, TempLhs, 0, LabelFalse)] ++
         InsRhs ++
         [emit_cjump(eq, TempRhs, 0, LabelFalse)] ++
-        [emit_eval(TempResult, rtl_icon(1))] ++
+        [emit_eval(TempResult, ValueTrue)] ++
         [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelFalse)] ++
-        [emit_eval(TempResult, rtl_icon(0))] ++
+        [emit_eval(TempResult, ValueFalse)] ++
         [emit_labdef(LabelEnd)],
     Temps =
         TempsLhs ++
