@@ -219,7 +219,24 @@ translate_expr(Expr, Env0) ->
         arrelem   -> translate_arrelem(Expr, Env0)
     end.
 
-translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
+translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
+    case Op of
+        '='  -> translate_arithmetic(Expr, Env0); %% xxx replace properly
+        '+'  -> translate_arithmetic(Expr, Env0);
+        '-'  -> translate_arithmetic(Expr, Env0);
+        '*'  -> translate_arithmetic(Expr, Env0);
+        '/'  -> translate_arithmetic(Expr, Env0);
+        '&&' -> translate_arithmetic(Expr, Env0);
+        '||' -> translate_arithmetic(Expr, Env0);
+        '<'  -> translate_arithmetic(Expr, Env0);
+        '>'  -> translate_arithmetic(Expr, Env0);
+        '<=' -> translate_arithmetic(Expr, Env0);
+        '>=' -> translate_arithmetic(Expr, Env0);
+        '==' -> translate_arithmetic(Expr, Env0);
+        '!=' -> translate_arithmetic(Expr, Env0)
+    end.
+
+translate_arithmetic({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
     {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
     TempResultLhs = ?HELPER:get_return_temp(TempsLhs),
@@ -235,12 +252,14 @@ translate_binop({_Meta, Lhs, Op, Rhs}, Env0) ->
         [TempResult],
     {Env3, Instructions, Temps}.
 
-translate_unop({_Meta, _Op, Rhs}, Env0) ->
-    {Env1, InsRhs, TempsRhs} = translate_expr(Rhs, Env0),
-    Instructions =
-        InsRhs ++
-        [emit(unop)],
-    {Env1, Instructions, TempsRhs}.
+translate_unop(Unop = {_Meta, Op, Rhs}, Env0) ->
+    Line = ?HELPER:get_line(Unop),
+    Meta = {Line,binop},
+    Zero = {{0,intconst}, 0}, % line num? xxx
+    case Op of
+        '-' -> translate_binop({Meta, Zero, '-', Rhs}, Env0);
+        '!' -> translate_binop({Meta, Zero, '==', Rhs}, Env0)
+    end.
 
 translate_intconst({_Meta, Value}, Env0) ->
     {Env1, Temps=[ReturnTemp]} = ?ENV:get_new_temps(1, Env0),

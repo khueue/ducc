@@ -1,12 +1,14 @@
 -module(translator_helpers).
--export([get_tag/1,
-         ducc_byte_size/1,
-         arg_list/1,
-         combine_instrs/1,
-         combine_temps/1,
-         get_return_temp/1,
-         type_size/1,
-         round4/1]).
+-export([
+    get_tag/1,
+    get_line/1,
+    ducc_byte_size/1,
+    arg_list/1,
+    combine_instrs/1,
+    combine_temps/1,
+    get_return_temp/1,
+    type_size/1,
+    round4/1]).
 
 -define(ENV, translator_env).
 
@@ -16,6 +18,10 @@ get_meta(Node) ->
 get_tag(Node) ->
     {_Line, Tag} = get_meta(Node),
     Tag.
+
+get_line(Node) ->
+    {Line, _Tag} = get_meta(Node),
+    Line.
 
 type_size(int)  -> long;
 type_size(char) -> byte.
