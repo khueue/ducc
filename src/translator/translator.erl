@@ -84,7 +84,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     {Env1, LabelEnd} = ?ENV:get_new_label(Env0),
     Env2 = ?ENV:enter_scope(Name, Env1),
     LabelStart = {label, Name},
-    Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd),
+    Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd), % xxx set fp also?
     {Env4, InsFormals, TempsFormals} = translate_formals(Formals, Env3),
     {Env5, InsLocals, TempsLocals} = translate_locals(Locals, Env4),
     {Env6, InsStmts, TempsStmts} = translate_stmts(Stmts, Env5),
@@ -104,7 +104,8 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             FrameSize,
             Instructions,
             LabelEnd),
-    {Env6, Proc}. % xxxx wrong scope?!?! but what about labels?
+    Env7 = ?ENV:leave_scope(Env6),
+    {Env7, Proc}.
 
 translate_formals(Formals, Env0) ->
     Translator = fun(Node, Env) -> translate_formal(Node, Env) end,

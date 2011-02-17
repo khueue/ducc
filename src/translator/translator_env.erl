@@ -2,6 +2,7 @@
 -export([
     new/0,
     enter_scope/2,
+    leave_scope/1,
     scope_name/1,
     set_symbol/3,
     lookup/3,
@@ -46,6 +47,13 @@ new() ->
 
 enter_scope(Scope, {T,L,F,SymTabs}) ->
     env(T, L, F, stack_push({Scope,dict:new()}, SymTabs)).
+
+leave_scope({T,L,_F,[_SymTab|SymTabs]}) ->
+    StartLabel = nil,
+    StopLabel = nil,
+    FrameSize = 0,
+    Function = {StartLabel, StopLabel, FrameSize},
+    env(T, L, Function, SymTabs).
 
 scope_name({_T,_L,_F,[{Scope,_}|_]}) ->
     Scope.
