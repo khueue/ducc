@@ -1,6 +1,5 @@
-int main(void)
+
+int main(int fa[])
 {
-    int la[5];
-    int la2[5];
-    la2[1] = 42;
+    fa[1] = 7;
 }

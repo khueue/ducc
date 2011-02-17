@@ -317,6 +317,15 @@ translate_lval_local_arrelem({local, stack, array, {Size,_Count,Offset}}, Env0, 
         [emit_eval(TempFrameAndMultOffset, rtl_binop('+', TempFrameOffset, TempMult))] ++
         [emit_eval(TempElementAddress, rtl_binop('+', ?ENV:get_fp(), TempFrameAndMultOffset))] ++
         [emit_store(Size, TempElementAddress, TempRhs)],
+    {Env1, Instructions, Temps};
+translate_lval_local_arrelem({local, Temp, farray, {Size}}, Env0, TempIndex, TempRhs) ->
+    {Env1, Temps=[TempSizeof,TempMult,TempElementAddress]} = ?ENV:get_new_temps(3, Env0),
+    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', Temp, TempMult))] ++
+        [emit_store(Size, TempElementAddress, TempRhs)],
     {Env1, Instructions, Temps}.
 
 translate_lval_global_scalar({global, Label, scalar, {Size}}, Env0, TempRhs) ->
