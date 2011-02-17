@@ -295,10 +295,16 @@ translate_ident(Node={_Meta, Name}, Env0) ->
             case Type of
                 array  -> translate_local_array(SymTabNode, Env0);
                 scalar -> translate_local_scalar(SymTabNode, Env0);
-                farray -> {Env0, [ins], [temps]} %%%% xxxxxxx unhandled yet
+                farray -> translate_farray(SymTabNode, Env0)
             end
     end,
     {Env1, Instructions, Temps}.
+
+translate_farray({local, Temp, farray, {_Type}}, Env0) ->
+    Instructions =
+    [
+    ],
+    {Env0, Instructions, [Temp]}.
 
 translate_local_array({local, stack, array, {_Type,_Count,Offset}}, Env0) ->
     TempFP = ?ENV:get_fp(),
