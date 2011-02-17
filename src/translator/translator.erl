@@ -254,19 +254,25 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
     end.
 
 translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
-    {Env1, [LabelEnd]} = ?ENV:get_new_labels(1, Env0),
-    {Env2, InsLhs, TempsLhs} = translate_expr(Lhs, Env1),
+    {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
+    {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
     TempLhs = ?HELPER:get_return_temp(TempsLhs),
-    {Env3, InsRhs, TempsRhs} = translate_expr(Rhs, Env2),
+    TempRhs = ?HELPER:get_return_temp(TempsRhs),
+    {Env3, [LabelTrue, LabelEnd]} = ?ENV:get_new_labels(2, Env2),
+    {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
     Instructions =
         InsLhs ++
-        [emit_cjump(neq, TempLhs, 0, LabelEnd)] ++
+        [emit_cjump(neq, TempLhs, 0, LabelTrue)] ++
         InsRhs ++
+        [emit_cjump(eq, TempRhs, 0, LabelEnd)] ++
+        [emit_labdef(LabelTrue)] ++
+        [emit_eval(TempResult, rtl_icon(1))] ++
         [emit_labdef(LabelEnd)],
     Temps =
         TempsLhs ++
-        TempsRhs,
-    {Env3, Instructions, Temps}.
+        TempsRhs ++
+        [TempResult],
+    {Env4, Instructions, Temps}.
 
 translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
     {Env1, InsRval, TempsRval} = translate_expr(Rhs, Env0), % xxxxxxxx expr?
