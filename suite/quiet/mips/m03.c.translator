@@ -2,7 +2,7 @@
        [{temp,2}],
        [{temp,3},{temp,4}],
        0,
-       [{eval,{temp,4},{icon,1}},{jump,{label,100}}],
+       [{eval,{temp,4},{icon,1}},{eval,{temp,0},{temp,4}},{jump,{label,100}}],
        {labdef,{label,100}}},
  {proc,{label,"main"},
        [],

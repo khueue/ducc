@@ -16,6 +16,7 @@
         {eval,{temp,7},{binop,'-',{temp,2},{temp,6}}},
         {call,{temp,8},{label,"fib"},[{temp,7}]},
         {eval,{temp,9},{binop,'+',{temp,5},{temp,8}}},
+        {eval,{temp,0},{temp,9}},
         {jump,{label,100}}],
        {labdef,{label,100}}},
  {proc,{label,"main"},

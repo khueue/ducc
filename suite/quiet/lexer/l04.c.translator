@@ -38,5 +38,6 @@
         {cjump,neq,{temp,13},0,{label,104}},
         {labdef,{label,105}},
         {eval,{temp,16},{icon,42}},
+        {eval,{temp,0},{temp,16}},
         {jump,{label,100}}],
        {labdef,{label,100}}}].
