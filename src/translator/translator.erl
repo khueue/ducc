@@ -268,8 +268,8 @@ translate_assignment(Node = {_Meta, Lhs, '=', Rhs}, Env0) ->
 translate_lval(Lhs, Env0, TempRhs) ->
     Tag = ?HELPER:get_tag(Lhs),
     case Tag of
-        ident   -> translate_lval_ident(Lhs, Env0, TempRhs)
-        % xxxx arrelem -> translate_lval_arrelem(Lhs, Env0, TempRhs)
+        ident   -> translate_lval_ident(Lhs, Env0, TempRhs);
+        arrelem -> translate_lval_arrelem(Lhs, Env0, TempRhs)
     end.
 
 translate_lval_ident(Node = {_Meta, Name}, Env0, TempRhs) ->
@@ -278,6 +278,34 @@ translate_lval_ident(Node = {_Meta, Name}, Env0, TempRhs) ->
         global -> translate_lval_global_scalar(SymbolInfo, Env0, TempRhs);
         local  -> translate_lval_local_scalar(SymbolInfo, Env0, TempRhs)
     end.
+
+translate_lval_arrelem(Node = {_Meta, Name, Index}, Env0, TempRhs) ->
+    {Env1, InsIndex, TempsIndex} = translate_expr(Index, Env0),
+    TempIndex = ?HELPER:get_return_temp(TempsIndex),
+    SymbolInfo = {Scope, _, _, _} = ?ENV:lookup(Name, Node, Env1),
+    {Env2, InsLval, TempsLval} =
+    case Scope of
+        global -> translate_lval_global_arrelem(SymbolInfo, Env1, TempIndex, TempRhs)
+        %%% xxx local  -> translate_lval_local_scalar(SymbolInfo, Env1, TempRhs)
+    end,
+    Instructions =
+        InsIndex ++
+        InsLval,
+    Temps =
+        TempsIndex ++
+        TempsLval,
+    {Env2, Instructions, Temps}.
+
+translate_lval_global_arrelem({global, Label, array, {Size,Count}}, Env0, TempIndex, TempRhs) ->
+    {Env1, Temps=[TempSizeof,TempOffset,TempBaseAddr,TempAddress]} = ?ENV:get_new_temps(4, Env0),
+    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempOffset, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempBaseAddr, rtl_labref(Label))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempBaseAddr, TempOffset))] ++
+        [emit_store(Size, TempAddress, TempRhs)],
+    {Env1, Instructions, Temps}.
 
 translate_lval_global_scalar({global, Label, scalar, {Size}}, Env0, TempRhs) ->
     {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),

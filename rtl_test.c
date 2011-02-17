@@ -1,5 +1,7 @@
+int ga[5];
+
 int main(void)
 {
-    int local;
-    local = 7;
+    ga[2] = 7;
+    return 115;
 }
