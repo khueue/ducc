@@ -20,6 +20,113 @@
 
 
 
+### ducc -t suite/our/binop_or.c gives:
+
+	[{proc,{label,"main"},
+	       [],
+	       [{temp,2},{temp,3},{temp,4}],
+	       0,
+	       [{eval,{temp,2},{icon,111}},
+	        {cjump,neq,{temp,2},0,{label,101}},
+	        {eval,{temp,3},{icon,222}},
+	        {cjump,neq,{temp,3},0,{label,101}},
+	        {eval,{temp,4},{icon,0}},
+	        {jump,{label,102}},
+	        {labdef,{label,101}},
+	        {eval,{temp,4},{icon,1}},
+	        {labdef,{label,102}}],
+	       {labdef,{label,100}}}].
+
+
+
+### ducc -t suite/our/lval_global_arrelem.c gives:
+
+	[{data,{label,100},40},
+	 {proc,{label,"main"},
+	       [],
+	       [{temp,2},{temp,3},{temp,4},{temp,5},{temp,6},{temp,7}],
+	       0,
+	       [{eval,{temp,2},{icon,333}},
+	        {eval,{temp,3},{icon,9}},
+	        {eval,{temp,4},{icon,4}},
+	        {eval,{temp,5},{binop,'*',{temp,3},{temp,4}}},
+	        {eval,{temp,6},{labref,{label,100}}},
+	        {eval,{temp,7},{binop,'+',{temp,6},{temp,5}}},
+	        {store,long,{temp,7},{temp,2}}],
+	       {labdef,{label,101}}}].
+
+
+
+### ducc -t suite/our/lval_global_scalar.c gives:
+
+	[{data,{label,100},4},
+	 {proc,{label,"main"},
+	       [],
+	       [{temp,2},{temp,3}],
+	       0,
+	       [{eval,{temp,2},{icon,333}},
+	        {eval,{temp,3},{labref,{label,100}}},
+	        {store,long,{temp,3},{temp,2}}],
+	       {labdef,{label,101}}}].
+
+
+
+### ducc -t suite/our/lval_local_arrelem.c gives:
+
+	[{proc,{label,"main"},
+	       [],
+	       [{temp,2},{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8}],
+	       40,
+	       [{eval,{temp,2},{icon,333}},
+	        {eval,{temp,3},{icon,9}},
+	        {eval,{temp,4},{icon,4}},
+	        {eval,{temp,5},{binop,'*',{temp,3},{temp,4}}},
+	        {eval,{temp,6},{icon,0}},
+	        {eval,{temp,7},{binop,'+',{temp,6},{temp,5}}},
+	        {eval,{temp,8},{binop,'+',{temp,1},{temp,7}}},
+	        {store,long,{temp,8},{temp,2}}],
+	       {labdef,{label,100}}}].
+
+
+
+### ducc -t suite/our/lval_local_arrelem_farray.c gives:
+
+	[{proc,{label,"main"},
+	       [{temp,2}],
+	       [{temp,3},{temp,4},{temp,5},{temp,6},{temp,7}],
+	       0,
+	       [{eval,{temp,3},{icon,333}},
+	        {eval,{temp,4},{icon,9}},
+	        {eval,{temp,5},{icon,4}},
+	        {eval,{temp,6},{binop,'*',{temp,4},{temp,5}}},
+	        {eval,{temp,7},{binop,'+',{temp,2},{temp,6}}},
+	        {store,long,{temp,7},{temp,3}}],
+	       {labdef,{label,100}}}].
+
+
+
+### ducc -t suite/our/lval_local_scalar1.c gives:
+
+	[{proc,{label,"main"},
+	       [],
+	       [{temp,2},{temp,3}],
+	       0,
+	       [{eval,{temp,3},{icon,333}},{eval,{temp,2},{temp,3}}],
+	       {labdef,{label,100}}}].
+
+
+
+### ducc -t suite/our/lval_local_scalar2.c gives:
+
+	[{proc,{label,"foo"},
+	       [{temp,2}],
+	       [{temp,3}],
+	       0,
+	       [{eval,{temp,3},{icon,333}},{eval,{temp,2},{temp,3}}],
+	       {labdef,{label,100}}}].
+
+
+
 ### ducc -t suite/incorrect/lexer/bad.c gives:
 
 	suite/incorrect/lexer/bad.c:16: lexical error, user: unterminated comment
