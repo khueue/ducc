@@ -49,10 +49,10 @@ get_return_temp(Temps) ->
 round4(N) ->
     round4(0, N).
 
-round4(Try, Real) ->
-    case Try >= Real of
-        true  -> Try;
-        false -> round4(Try+4, Real)
+round4(MultipleOfFour, N) ->
+    case MultipleOfFour >= N of
+        true  -> MultipleOfFour;
+        false -> round4(MultipleOfFour+4, N)
     end.
 
 char_to_int(Value) ->
