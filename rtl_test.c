@@ -1,7 +1,6 @@
-int ga[5];
-
 int main(void)
 {
-    ga[2] = 7;
-    return 115;
+    int la[5];
+    int la2[5];
+    la2[1] = 42;
 }

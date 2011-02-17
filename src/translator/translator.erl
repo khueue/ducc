@@ -285,8 +285,8 @@ translate_lval_arrelem(Node = {_Meta, Name, Index}, Env0, TempRhs) ->
     SymbolInfo = {Scope, _, _, _} = ?ENV:lookup(Name, Node, Env1),
     {Env2, InsLval, TempsLval} =
     case Scope of
-        global -> translate_lval_global_arrelem(SymbolInfo, Env1, TempIndex, TempRhs)
-        %%% xxx local  -> translate_lval_local_scalar(SymbolInfo, Env1, TempRhs)
+        global -> translate_lval_global_arrelem(SymbolInfo, Env1, TempIndex, TempRhs);
+        local  -> translate_lval_local_arrelem(SymbolInfo, Env1, TempIndex, TempRhs)
     end,
     Instructions =
         InsIndex ++
@@ -296,7 +296,7 @@ translate_lval_arrelem(Node = {_Meta, Name, Index}, Env0, TempRhs) ->
         TempsLval,
     {Env2, Instructions, Temps}.
 
-translate_lval_global_arrelem({global, Label, array, {Size,Count}}, Env0, TempIndex, TempRhs) ->
+translate_lval_global_arrelem({global, Label, array, {Size,_Count}}, Env0, TempIndex, TempRhs) ->
     {Env1, Temps=[TempSizeof,TempOffset,TempBaseAddr,TempAddress]} = ?ENV:get_new_temps(4, Env0),
     Sizeof = ?HELPER:ducc_byte_size(Size),
     Instructions =
@@ -305,6 +305,18 @@ translate_lval_global_arrelem({global, Label, array, {Size,Count}}, Env0, TempIn
         [emit_eval(TempBaseAddr, rtl_labref(Label))] ++
         [emit_eval(TempAddress, rtl_binop('+', TempBaseAddr, TempOffset))] ++
         [emit_store(Size, TempAddress, TempRhs)],
+    {Env1, Instructions, Temps}.
+
+translate_lval_local_arrelem({local, stack, array, {Size,_Count,Offset}}, Env0, TempIndex, TempRhs) ->
+    {Env1, Temps=[TempSizeof,TempMult,TempFrameOffset,TempFrameAndMultOffset,TempElementAddress]} = ?ENV:get_new_temps(5, Env0),
+    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempFrameOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempFrameAndMultOffset, rtl_binop('+', TempFrameOffset, TempMult))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', ?ENV:get_fp(), TempFrameAndMultOffset))] ++
+        [emit_store(Size, TempElementAddress, TempRhs)],
     {Env1, Instructions, Temps}.
 
 translate_lval_global_scalar({global, Label, scalar, {Size}}, Env0, TempRhs) ->
