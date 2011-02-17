@@ -1,0 +1,6 @@
+{{1,program},
+ "suite/our/lval_local_scalar1.c",
+ [{{1,fundef},
+   int,"main",[],
+   [{{3,scalardec},int,"ls"}],
+   [{{4,binop},{{4,ident},"ls"},'=',{{4,intconst},333}}]}]}.

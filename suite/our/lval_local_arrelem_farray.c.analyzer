@@ -1,0 +1,10 @@
+{{1,program},
+ "suite/our/lval_local_arrelem_farray.c",
+ [{{1,fundef},
+   int,"main",
+   [{{1,farraydec},int,"farray"}],
+   [],
+   [{{3,binop},
+     {{3,arrelem},"farray",{{3,intconst},9}},
+     '=',
+     {{3,intconst},333}}]}]}.

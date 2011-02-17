@@ -1,0 +1,9 @@
+[{data,{label,100},4},
+ {proc,{label,"main"},
+       [],
+       [{temp,2},{temp,3}],
+       0,
+       [{eval,{temp,2},{icon,333}},
+        {eval,{temp,3},{labref,{label,100}}},
+        {store,long,{temp,3},{temp,2}}],
+       {labdef,{label,101}}}].
