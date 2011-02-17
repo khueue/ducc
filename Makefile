@@ -36,10 +36,10 @@ compile:
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 gen_tests: all
-	ruby src/gen_tests.rb -l suite/**/*.c
-	ruby src/gen_tests.rb -p suite/**/*.c
-	ruby src/gen_tests.rb -a suite/**/*.c
-	ruby src/gen_tests.rb -t suite/**/*.c
+	ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -t suite/**/*.c suite/**/**/*.c
 	# ruby src/gen_tests.rb -e suite/**/*.c
 
 tests: all
