@@ -1,5 +1,6 @@
-
-int main(int fa[])
+int main(void)
 {
-    fa[1] = 7;
+  char s[27];
+  char t;
+  s[0] = 'a'+t;
 }
