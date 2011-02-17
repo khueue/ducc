@@ -1,6 +1,5 @@
-int g;
-
 int main(void)
 {
-    g = 7;
+    int local;
+    local = 7;
 }

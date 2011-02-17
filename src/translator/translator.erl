@@ -276,7 +276,7 @@ translate_lval_ident(Node = {_Meta, Name}, Env0, TempRhs) ->
     SymbolInfo = {Scope, _, _, _} = ?ENV:lookup(Name, Node, Env0),
     case Scope of
         global -> translate_lval_global_scalar(SymbolInfo, Env0, TempRhs);
-        local  -> aoeu
+        local  -> translate_lval_local_scalar(SymbolInfo, Env0, TempRhs)
     end.
 
 translate_lval_global_scalar({global, Label, scalar, {Size}}, Env0, TempRhs) ->
@@ -285,6 +285,13 @@ translate_lval_global_scalar({global, Label, scalar, {Size}}, Env0, TempRhs) ->
         [emit_eval(TempAddress, rtl_labref(Label))] ++
         [emit_store(Size, TempAddress, TempRhs)],
     {Env1, Instructions, Temps}.
+
+translate_lval_local_scalar({local, Temp, scalar, {_Size}}, Env0, TempRhs) ->
+    Instructions =
+        [emit_eval(Temp, rtl_temp(TempRhs))],
+    Temps =
+        [],
+    {Env0, Instructions, Temps}.
 
 translate_arithmetic({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
