@@ -5,7 +5,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 ## TODO
 
  * Implement translator:
-   * Fix farray
    * Fix exprs
  * Include .c source in AST?
 
