@@ -160,8 +160,10 @@ translate_return({_Meta, nil}, Env0) ->
 translate_return({_Meta, Expr}, Env0) ->
     {Env1, InsExpr, TempsExpr} = translate_expr(Expr, Env0),
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env1),
+    ReturnTemp = ?HELPER:get_return_temp(TempsExpr),
     Instructions =
         InsExpr ++
+        [emit_eval(?ENV:get_rv(), rtl_temp(ReturnTemp))] ++
         [emit_jump(LabelEnd)],
     Temps =
         TempsExpr,
