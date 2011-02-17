@@ -72,12 +72,14 @@ translate_local_scalardec({_Meta, Type, Name}, Env0) ->
     {Env2, [], [Temp]}.
 
 translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
-    Offset = ?ENV:get_frame_size(Env0),
+    FS = ?ENV:get_frame_size(Env0),
+    Offset = ?HELPER:round4(FS),
+    Padding = Offset - FS,
     Size = ?HELPER:type_size(Type),
     SymbolInfo = {local, stack, array, {Size, Count, Offset}},
     Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
     Bytes = ?HELPER:ducc_byte_size(Size),
-    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count),
+    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count + Padding),
     {Env2, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
@@ -250,6 +252,30 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '==' -> translate_arithmetic(Expr, Env0);
         '!=' -> translate_arithmetic(Expr, Env0)
     end.
+
+%translate_assignment(Node = {_Meta, Lhs, '=', Rhs}, Env0) ->
+%    {Env1, InsLval, TempsLval} = translate_lval(Lhs, Env0),
+%    {Env2, InsRval, TempsRval} = translate_rval(Rhs, Env1),
+%    aoeu.
+
+%translate_lval(Lhs, Env0) ->
+%    Tag = ?HELPER:get_tag(Lhs),
+%    case Tag of
+%        ident   -> translate_lval_ident(Lhs, Env0);
+%        arrelem -> translate_lval_arrelem(Lhs, Env0)
+%    end.
+
+%translate_lval_ident(Node = {_Meta, Name}, Env0) ->
+%    {Scope, _, _, _} = ?ENV:lookup(Name, Node, Env0),
+%    case Scope of
+%        global ->
+%            aoeu;
+%        local ->
+%            aoeu
+%    end.
+
+%translate_lval_arrelem.
+%translate_lval_scalar.
 
 translate_arithmetic({_Meta, Lhs, Op, Rhs}, Env0) ->
     {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),

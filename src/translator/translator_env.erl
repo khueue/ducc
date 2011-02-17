@@ -31,7 +31,7 @@ get_frame_size({_T,_L,{_,_,FS},_SymTabs}) ->
     FS.
 
 increment_frame_size({T,L,{Start,Stop,FS},SymTabs}, Bytes) ->
-    NewFS = translator_helpers:round4(FS + Bytes),
+    NewFS = FS + Bytes,
     env(T, L, {Start,Stop,NewFS}, SymTabs).
 
 new() ->
