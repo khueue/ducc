@@ -285,13 +285,17 @@ translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
     TempRhs = ?HELPER:get_return_temp(TempsRhs),
     {Env3, [LabelTrue, LabelEnd]} = ?ENV:get_new_labels(2, Env2),
     {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
+    ValueTrue = rtl_icon(1),
+    ValueFalse = rtl_icon(0),
     Instructions =
         InsLhs ++
         [emit_cjump(neq, TempLhs, 0, LabelTrue)] ++
         InsRhs ++
-        [emit_cjump(eq, TempRhs, 0, LabelEnd)] ++
+        [emit_cjump(neq, TempRhs, 0, LabelTrue)] ++
+        [emit_eval(TempResult, ValueFalse)] ++
+        [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelTrue)] ++
-        [emit_eval(TempResult, rtl_icon(1))] ++
+        [emit_eval(TempResult, ValueTrue)] ++
         [emit_labdef(LabelEnd)],
     Temps =
         TempsLhs ++
