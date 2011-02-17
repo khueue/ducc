@@ -253,8 +253,8 @@ translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
         '!=' -> translate_arithmetic(Expr, Env0)
     end.
 
-translate_assignment(Node = {_Meta, Lhs, '=', Rhs}, Env0) ->
-    {Env1, InsRval, TempsRval} = translate_expr(Rhs, Env0), % xxxxxxxx
+translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
+    {Env1, InsRval, TempsRval} = translate_expr(Rhs, Env0), % xxxxxxxx expr?
     TempRhs = ?HELPER:get_return_temp(TempsRval),
     {Env2, InsLval, TempsLval} = translate_lval(Lhs, Env1, TempRhs),
     Instructions =
@@ -373,9 +373,8 @@ translate_intconst({_Meta, Value}, Env0) ->
         [emit_eval(ReturnTemp, rtl_icon(Value))],
     {Env1, Instructions, Temps}.
 
-translate_ident(Node={_Meta, Name}, Env0) ->
+translate_ident(Node = {_Meta, Name}, Env0) ->
     SymTabNode = {Scope, _, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
-    {Env1, Instructions, Temps} =
     case Scope of
         global ->
             case Type of
@@ -388,8 +387,7 @@ translate_ident(Node={_Meta, Name}, Env0) ->
                 scalar -> translate_local_scalar(SymTabNode, Env0);
                 farray -> translate_farray(SymTabNode, Env0)
             end
-    end,
-    {Env1, Instructions, Temps}.
+    end.
 
 translate_farray({local, Temp, farray, {_Type}}, Env0) ->
     Instructions =
