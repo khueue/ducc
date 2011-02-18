@@ -208,12 +208,3 @@ be used. `ducc` takes a single file as argument and runs all (implemented)
 successive steps on it, and prints the result to standard output:
 
     ducc file.c
-
-### Error Handling
-
-When a script (such as `translator`) receives invalid input, an error message
-is printed and execution stops.
-
-An error exhibited by the translator looks like:
-
-    XXX
