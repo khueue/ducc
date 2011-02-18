@@ -114,17 +114,43 @@ XXX RTL design, datatypes, ...
 
 #### if
 
-XXX
+There are two cases for the if statement which we have to consider. The one
+where the else part has been omitted, and the one where the else part is
+included.
+
+The case without the else part:
+
+    Instructions =
+        InsCond ++
+        [emit_cjump(eq, RetCond, 0, LabelEnd)] ++
+        InsThen ++
+        [emit_labdef(LabelEnd)],
+
+The case with the else part:
+
+    Instructions =
+        InsCond ++
+        [emit_cjump(eq, RetCond, 0, LabelElse)] ++
+        InsThen ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelElse)] ++
+        InsElse ++
+        [emit_labdef(LabelEnd)],
+
+`InsCond` is the instructions for the condition, which has been recursively
+translated by translate_expr/2.
+`InsThen` and `InsElse` is the instructions for the then and else part,
+respectively, which has been recursively translated by translate_stmt/2.
 
 #### while
 
 XXX
 
-#### Logical and (`&&`)
+#### Logical and
 
 XXX
 
-#### Logical or (`||`)
+#### Logical or
 
 Logical or, `||`, is translated by translating the expressions in the left and
 right hand sides recursively.
