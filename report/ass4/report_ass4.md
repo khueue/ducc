@@ -153,7 +153,6 @@ XXX
 #### Logical or
 
 Logical or, `||`, is translated by translating the expressions in the left and
-<<<<<<< HEAD
 right hand sides recursively. The resulting instructions are:
 
     Instructions =
