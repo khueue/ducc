@@ -155,7 +155,7 @@ instructions:
         [emit_labdef(LabelTest)] ++
         InsCond ++
         [emit_cjump(neq, RetCond, 0, LabelBody)] ++
-        [emit_labdef(LabelEnd)],
+        [emit_labdef(LabelEnd)]
 
 `InsStmt` is the instructions for the statement (body) and InsCond is the
 instructions for the condition.
@@ -163,7 +163,27 @@ instructions for the condition.
 
 #### Logical and
 
-XXX
+Logical and, `&&`, is translated by translating the expressions in the left
+and right hand sides recursively. The resulting instructions are:
+
+    Instructions =
+        InsLhs ++
+        [emit_cjump(eq, TempLhs, 0, LabelFalse)] ++
+        InsRhs ++
+        [emit_cjump(eq, TempRhs, 0, LabelFalse)] ++
+        [emit_eval(TempResult, ValueTrue)] ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelFalse)] ++
+        [emit_eval(TempResult, ValueFalse)] ++
+        [emit_labdef(LabelEnd)]
+
+`InsLhs` and `InsRhs` are the instructions for the left hand side and right
+right hand side, respectively, which has been recursively translated by
+translate_expr/2.
+`TempLhs` contains the result of the left hand side. `TempRhs` contains the
+result of the right hand side.
+`TempResult` will contain the result of the entire logical and statement,
+which either will be true (1) or false (0).
 
 #### Logical or
 
@@ -179,7 +199,7 @@ right hand sides recursively. The resulting instructions are:
         [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelTrue)] ++
         [emit_eval(TempResult, ValueTrue)] ++
-        [emit_labdef(LabelEnd)
+        [emit_labdef(LabelEnd)]
 
 `InsLhs` and `InsRhs` are the instructions for the left hand side and right
 right hand side, respectively, which has been recursively translated by
