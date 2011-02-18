@@ -55,7 +55,7 @@ round4(MultipleOfFour, N) ->
         false -> round4(MultipleOfFour+4, N)
     end.
 
-% xxx move to emitter step.
+% XXX Move to emitter step.
 char_to_int(Value) ->
     case atom_to_list(Value) of
         [$\\,$n] -> 10; % ASCII newline.

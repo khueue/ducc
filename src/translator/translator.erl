@@ -86,7 +86,8 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     {Env1, LabelEnd} = ?ENV:get_new_label(Env0),
     Env2 = ?ENV:enter_scope(Name, Env1),
     LabelStart = {label, Name},
-    Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd), % xxx set fp also?
+    % XXX Maybe we should force the fundef to set more of its env (fp)?
+    Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd),
     {Env4, InsFormals, TempsFormals} = translate_formals(Formals, Env3),
     {Env5, InsLocals, TempsLocals} = translate_locals(Locals, Env4),
     {Env6, InsStmts, TempsStmts} = translate_stmts(Stmts, Env5),
@@ -414,7 +415,7 @@ translate_arithmetic({_Meta, Lhs, Op, Rhs}, Env0) ->
 translate_unop(Unop = {_Meta, Op, Rhs}, Env0) ->
     Line = ?HELPER:get_line(Unop),
     Meta = {Line,binop},
-    Zero = {{0,intconst}, 0}, % line num? xxx
+    Zero = {{0,intconst}, 0}, % We fake line number 0.
     case Op of
         '-' -> translate_binop({Meta, Zero, '-', Rhs}, Env0);
         '!' -> translate_binop({Meta, Zero, '==', Rhs}, Env0)
@@ -484,12 +485,13 @@ translate_global_array({global, Label, array, {_Type,_Count}}, Env0) ->
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
     translate_intconst(Node, Env0).
 
-% xxx Needs serious fixing.
+% XXX Needs serious cleaning.
 translate_funcall({_Meta, Name, Actuals}, Env0) ->
     TranslatedActuals = translate_actuals(Actuals, Env0),
     ResultsActuals = ?HELPER:arg_list(TranslatedActuals),
     InsActuals = ?HELPER:combine_instrs(TranslatedActuals),
     TempsActuals = ?HELPER:combine_temps(TranslatedActuals),
+    % Looks like crap, but works. We only update the env if we have any actuals.
     Env1 = case TranslatedActuals of
         [] ->
             Env0;
@@ -529,7 +531,7 @@ translate_arrelem({_Meta, _Name, Index}, Env0) ->
     %BINARY binop src1 src2
 
 rtl_temp(Temp) ->
-    Temp. % ??? xxx
+    Temp. % Nothing new, since we use this tuple everywhere anyway.
 
 rtl_icon(Int) ->
     {icon, Int}.
@@ -577,4 +579,5 @@ toplevel_data(Label, Bytes) ->
     {data, Label, Bytes}.
 
 toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
-    {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}. % xxx ???
+    % XXX How should we reason about the end label?
+    {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}.
