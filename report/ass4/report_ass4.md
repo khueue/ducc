@@ -144,7 +144,22 @@ respectively, which has been recursively translated by translate_stmt/2.
 
 #### while
 
-XXX
+While statements are translated by recursively translating the condition with
+translate_expr/2 and the statement (body) with translate_stmt/2. Yielding the
+instructions:
+
+    Instructions =
+        [emit_jump(LabelTest)] ++
+        [emit_labdef(LabelBody)] ++
+        InsStmt ++
+        [emit_labdef(LabelTest)] ++
+        InsCond ++
+        [emit_cjump(neq, RetCond, 0, LabelBody)] ++
+        [emit_labdef(LabelEnd)],
+
+`InsStmt` is the instructions for the statement (body) and InsCond is the
+instructions for the condition.
+`RetCond` contains the result of the translated condition.
 
 #### Logical and
 
