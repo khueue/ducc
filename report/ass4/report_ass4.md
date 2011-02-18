@@ -29,9 +29,8 @@ translates its children in a left-to-right order.
 
 ## Translator Environment
 
-The environment is implemented in `src/translator/translator_env.erl`.
-
-The environment has the form:
+The environment is implemented in `src/translator/translator_env.erl` and
+has the form:
 
     {LastUsedTemp, LastUsedLabel, CurrentScopeData, Scopes}
 
@@ -97,7 +96,8 @@ encountered symbols.
 #### Symbol Tables
 
 As soon as a new variable declaration is encountered, it is entered into
-the symbol table of the current scope. We store the following structures:
+the symbol table of the current scope. We store the following structures,
+indexed by the name of the identifier:
 
  * Global scalar: `{global, {label,321}, scalar, {Size}`
  * Global array : `{global, {label,321}, array,  {Size, Count}`

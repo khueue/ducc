@@ -444,42 +444,34 @@ translate_ident(Node = {_Meta, Name}, Env0) ->
     end.
 
 translate_farray({local, Temp, farray, {_Type}}, Env0) ->
-    Instructions =
-    [
-    ],
-    {Env0, Instructions, [Temp]}.
+    Instructions = [],
+    Temps = [Temp],
+    {Env0, Instructions, Temps}.
 
 translate_local_array({local, stack, array, {_Type,_Count,Offset}}, Env0) ->
     TempFP = ?ENV:get_fp(),
     {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
-    [
-        emit_eval(TempOffset, rtl_icon(Offset)),
-        emit_eval(TempAddress, rtl_binop('+', TempFP, TempOffset))
-    ],
+        [emit_eval(TempOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempFP, TempOffset))],
     {Env1, Instructions, Temps}.
 
 translate_local_scalar({local, Temp, scalar, {_Type}}, Env0) ->
-    Instructions =
-    [
-    ],
-    {Env0, Instructions, [Temp]}.
+    Instructions = [],
+    Temps = [Temp],
+    {Env0, Instructions, Temps}.
 
 translate_global_scalar({global, Label, scalar, {Type}}, Env0) ->
     {Env1, Temps=[TempAddress,TempValue]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
-    [
-        emit_eval(TempAddress, rtl_labref(Label)),
-        emit_load(Type, TempValue, TempAddress)
-    ],
+        [emit_eval(TempAddress, rtl_labref(Label))] ++
+        [emit_load(Type, TempValue, TempAddress)],
     {Env1, Instructions, Temps}.
 
 translate_global_array({global, Label, array, {_Type,_Count}}, Env0) ->
     {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),
     Instructions =
-    [
-        emit_eval(TempAddress, rtl_labref(Label))
-    ],
+        [emit_eval(TempAddress, rtl_labref(Label))],
     {Env1, Instructions, Temps}.
 
 translate_charconst(Node = {_Meta, _Value}, Env0) ->
@@ -516,19 +508,62 @@ translate_actuals([Actual|Actuals], Env0) ->
 translate_actual(Actual, Env0) ->
     translate_expr(Actual, Env0).
 
-translate_arrelem({_Meta, _Name, Index}, Env0) ->
+translate_arrelem(Node = {_Meta, Name, Index}, Env0) ->
     {Env1, InsIndex, TempsIndex} = translate_expr(Index, Env0),
+    TempIndex = ?HELPER:get_return_temp(TempsIndex),
+    SymbolInfo = ?ENV:lookup(Name, Node, Env1),
+    {Env2, InsArrelem, TempsArrelem} = translate_rval_arrelem(SymbolInfo, Env1, TempIndex),
     Instructions =
         InsIndex ++
-        [emit(arrelem)],
-    {Env1, Instructions, TempsIndex}.
+        InsArrelem,
+    Temps =
+        TempsIndex ++
+        TempsArrelem,
+    {Env2, Instructions, Temps}.
 
-    % exprs:
-    %TEMP temp
-    %ICON i
-    %LABREF label
-    %UNARY unop src %%% removed
-    %BINARY binop src1 src2
+translate_rval_arrelem(Symbol = {Scope, _, Tag, _}, Env0, TempIndex) ->
+    case Scope of
+        global -> translate_rval_global_arrelem(Symbol, Env0, TempIndex);
+        local ->
+            case Tag of
+                array  -> translate_rval_local_arrelem(Symbol, Env0, TempIndex);
+                farray -> translate_rval_farrelem(Symbol, Env0, TempIndex)
+            end
+    end.
+
+translate_rval_local_arrelem({local, stack, array, {Size,_Count,Offset}}, Env0, TempIndex) ->
+    {Env1, Temps=[TempSizeof,TempMult,TempFrameOffset,TempFrameAndMultOffset,TempElementAddress,TempResult]} = ?ENV:get_new_temps(6, Env0),
+    Sizeof = ?HELPER:size_of(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempFrameOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempFrameAndMultOffset, rtl_binop('+', TempFrameOffset, TempMult))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', ?ENV:get_fp(), TempFrameAndMultOffset))] ++
+        [emit_load(Size, TempResult, TempElementAddress)],
+    {Env1, Instructions, Temps}.
+
+translate_rval_global_arrelem({global, Label, array, {Size,_Count}}, Env0, TempIndex) ->
+    {Env1, Temps=[TempSizeof,TempOffset,TempBaseAddr,TempAddress,TempResult]} = ?ENV:get_new_temps(5, Env0),
+    Sizeof = ?HELPER:size_of(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempOffset, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempBaseAddr, rtl_labref(Label))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempBaseAddr, TempOffset))] ++
+        [emit_load(Size, TempResult, TempAddress)],
+    {Env1, Instructions, Temps}.
+
+% make sure Type is Size everywhere xxxx
+translate_rval_farrelem({local, TempBase, farray, {Size}}, Env0, TempIndex) ->
+    {Env1, Temps=[TempSizeof,TempMult,TempElementAddress,TempResult]} = ?ENV:get_new_temps(4, Env0),
+    Sizeof = ?HELPER:size_of(Size),
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', TempBase, TempMult))] ++
+        [emit_load(Size, TempResult, TempElementAddress)],
+    {Env1, Instructions, Temps}.
 
 rtl_temp(Temp) ->
     Temp. % Nothing new, since we use this tuple everywhere anyway.
@@ -541,15 +576,6 @@ rtl_labref(Label) ->
 
 rtl_binop(Op, TempLhs, TempRhs) ->
     {binop, Op, TempLhs, TempRhs}.
-
-    % ins:
-    %LABDEF label
-    %JUMP label
-    %CJUMP relop src1 src2 label
-    %STORE ty dst src
-    %LOAD ty dst src %%% added
-    %EVAL dst exp
-    %CALL dst label (temp list)
 
 emit_labdef(Label) ->
     {labdef, Label}.
@@ -572,12 +598,9 @@ emit_eval(TempResult, RtlExpr) ->
 emit_call(TempResult, Label, TempsActuals) ->
     {call, TempResult, Label, TempsActuals}.
 
-emit(X) ->
-    {X}.
-
 toplevel_data(Label, Bytes) ->
     {data, Label, Bytes}.
 
 toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
-    % XXX How should we reason about the end label?
+    % XXX How should we deal with the end label?
     {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}.
