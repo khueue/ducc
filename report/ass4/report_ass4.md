@@ -2,7 +2,7 @@
 
 Compiler Project, VT11
 
-2011-02-XXXXXXXXXX
+2011-02-18
 
 Emil Hessman (emhe9781@student...)
 
@@ -40,17 +40,24 @@ The environment has the form:
 
     {LastUsedTemp, LastUsedLabel, CurrentScopeData, Scopes}
 
+#### LastUsedTemp
+
 `LastUsedTemp` is used to denote the last used temporary register, and has
 the form:
 
     {temp, TempId}
 
-The temporaries are used for actual parameters and local scalar variables.
+The temporary registers are used for actual parameters and local scalar
+variables.
 
-`TempId` is an integer value and starts at 1, denoting that the next free
-temporary register is `{temp, 2}`.
-`{temp, 0}` is reserved for the return value. `{temp, 1}` is reserved for the
-virtual frame pointer (which is used for local array variables).
+`TempId` is an integer value which starts at 0. `{temp, 0}` is reserved for
+the return value. `{temp, 1}` is reserved for the virtual frame pointer 
+(which is used for local array variables). The next free temporary register
+is `{temp, 2}`.
+
+Note that `LastUsedTemp` is preserved when leaving a scope.
+
+#### LastUsedLabel
 
 `LastUsedLabel` is used to denote the last used label, and has the form:
 
@@ -58,8 +65,12 @@ virtual frame pointer (which is used for local array variables).
 
 The labels are used for global variables.
 
-`LabelId` is an integer value and starts at 99, denoting that the next free
-label is `{label, 100}`.
+`LabelId` is an integer value and is set to 99 in a new environment, denoting
+that the next free label is `{label, 100}`.
+
+Note that `LastUsedLabel` is preserved when leaving a scope. 
+
+#### CurrentScopeData
 
 `CurrentScopeData` contains data about the current scope (i.e. function), and
 has the form:
@@ -68,10 +79,15 @@ has the form:
 
 The `StartLabel` and `EndLabel` are labels of the same form as indicated by
 `LastUsedLabel` above. Although they are the start and end label of the
-current scope.
+current scope. Initially when entering a scope, `StartLabel` and `EndLabel`
+is set to `nil`.
 
 `FrameSize` is an integer value which denotes the frame size of the current
-scope.
+scope.  and Initially when entering a scope, `FrameSize` is set to 0.
+
+Note that `CurrentScopeData` is not preserved when leaving a scope.
+
+#### Scopes
 
 `Scopes` is a stack of scopes. The head of the `Scopes` stack (which is just
 a list) is the current scope. Each scope has the form:
