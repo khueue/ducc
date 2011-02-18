@@ -113,6 +113,47 @@ the size of char would be `byte` and the size of int would be ´long´.
 
 ## RTL
 
+### Expressions
+
+Basic RTL expressions are represented by the following structures:
+
+    rtl_temp(Temp) ->
+        Temp.
+
+    rtl_icon(Int) ->
+        {icon, Int}.
+
+    rtl_labref(Label) ->
+        {labref, Label}.
+
+    rtl_binop(Op, TempLhs, TempRhs) ->
+        {binop, Op, TempLhs, TempRhs}.
+
+### Instructions
+
+Instructions emitted by the translator have the following structure:
+
+    emit_labdef(Label) ->
+        {labdef, Label}.
+
+    emit_jump(Label) ->
+        {jump, Label}.
+
+    emit_cjump(Relop, TempLhs, TempRhs, Label) ->
+        {cjump, Relop, TempLhs, TempRhs, Label}.
+
+    emit_store(Size, TempDestAddress, TempValue) ->
+        {store, Size, TempDestAddress, TempValue}.
+
+    emit_load(Size, TempDest, TempSourceAddress) ->
+        {load, Size, TempDest, TempSourceAddress}.
+
+    emit_eval(TempResult, RtlExpr) ->
+        {eval, TempResult, RtlExpr}.
+
+    emit_call(TempResult, Label, TempsActuals) ->
+        {call, TempResult, Label, TempsActuals}.
+
 XXX RTL design, datatypes, ...
 
 ## Translation Process
