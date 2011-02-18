@@ -67,7 +67,7 @@ The labels are used for global variables.
 distinguish them easily) in a new environment, denoting that the next free
 label is `{label, 100}`.
 
-Note that `LastUsedLabel` is just as "global" as `LastUsedTemp`. 
+Note that `LastUsedLabel` is just as "global" as `LastUsedTemp`.
 
 #### CurrentScopeData
 
@@ -127,10 +127,10 @@ XXX
 #### Logical or (`||`)
 
 Logical or, `||`, is translated by translating the expressions in the left and
-right hand sides recursively. 
+right hand sides recursively.
 
 If the result of the left hand side is true, it skips the instructions for the
-right hand side by jumping to a label further down, where it sets the result 
+right hand side by jumping to a label further down, where it sets the result
 of the entire logical expression to true and reaches the end.
 
 If the result of the left hand side is false (e.g. 0), it continues evaluating
