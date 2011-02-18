@@ -386,3 +386,9 @@ be used. `ducc` takes a single file as argument and runs all (implemented)
 successive steps on it, and prints the result to standard output:
 
     ducc file.c
+
+The script `ducc` can also be flagged to stop after a certain step. To stop
+after for example the translator (which is currently the default since we
+have not implemented any more steps yet), one can issue the command:
+
+    ducc -t file.c
