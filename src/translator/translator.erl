@@ -304,7 +304,7 @@ translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
     {Env4, Instructions, Temps}.
 
 translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
-    {Env1, InsRval, TempsRval} = translate_expr(Rhs, Env0), % xxxxxxxx expr?
+    {Env1, InsRval, TempsRval} = translate_rval(Rhs, Env0),
     TempRhs = ?HELPER:get_return_temp(TempsRval),
     {Env2, InsLval, TempsLval} = translate_lval(Lhs, Env1, TempRhs),
     Instructions =
@@ -314,6 +314,9 @@ translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
         TempsRval ++
         TempsLval,
     {Env2, Instructions, Temps}.
+
+translate_rval(Rhs, Env0) ->
+    translate_expr(Rhs, Env0).
 
 translate_lval(Lhs, Env0, TempRhs) ->
     Tag = ?HELPER:get_tag(Lhs),
