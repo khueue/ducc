@@ -152,7 +152,22 @@ respectively, which has been recursively translated by translate_stmt/2.
 
 #### while
 
-XXX
+While statements are translated by recursively translating the condition with
+translate_expr/2 and the statement (body) with translate_stmt/2. Yielding the
+instructions:
+
+    Instructions =
+        [emit_jump(LabelTest)] ++
+        [emit_labdef(LabelBody)] ++
+        InsStmt ++
+        [emit_labdef(LabelTest)] ++
+        InsCond ++
+        [emit_cjump(neq, RetCond, 0, LabelBody)] ++
+        [emit_labdef(LabelEnd)],
+
+`InsStmt` is the instructions for the statement (body) and InsCond is the
+instructions for the condition.
+`RetCond` contains the result of the translated condition.
 
 #### Logical and
 
@@ -161,18 +176,26 @@ XXX
 #### Logical or
 
 Logical or, `||`, is translated by translating the expressions in the left and
-right hand sides recursively.
+right hand sides recursively. The resulting instructions are:
 
-If the result of the left hand side is true, it skips the instructions for the
-right hand side by jumping to a label further down, where it sets the result
-of the entire logical expression to true and reaches the end.
+    Instructions =
+        InsLhs ++
+        [emit_cjump(neq, TempLhs, 0, LabelTrue)] ++
+        InsRhs ++
+        [emit_cjump(neq, TempRhs, 0, LabelTrue)] ++
+        [emit_eval(TempResult, ValueFalse)] ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelTrue)] ++
+        [emit_eval(TempResult, ValueTrue)] ++
+        [emit_labdef(LabelEnd)
 
-If the result of the left hand side is false (e.g. 0), it continues evaluating
-the instructions for the right hand side. If the result of the right hand side
-is true, it jumps to the label which sets the result of the entire logical
-expression to true and reaches the end.
-In the case when the right hand side is false it sets the result of the entire
-logical expression to false and jumps to the end.
+`InsLhs` and `InsRhs` are the instructions for the left hand side and right
+right hand side, respectively, which has been recursively translated by
+translate_expr/2.
+`TempLhs` contains the result of the left hand side. `TempRhs` contains the
+result of the right hand side.
+`TempResult` will contain the result of the entire logical or statement, which
+either will be true (1) or false (0).
 
 ### Variable References
 
@@ -207,12 +230,3 @@ be used. `ducc` takes a single file as argument and runs all (implemented)
 successive steps on it, and prints the result to standard output:
 
     ducc file.c
-
-### Error Handling
-
-When a script (such as `translator`) receives invalid input, an error message
-is printed and execution stops.
-
-An error exhibited by the translator looks like:
-
-    XXX
