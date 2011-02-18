@@ -78,12 +78,12 @@ has the form:
     {StartLabel, EndLabel, FrameSize}
 
 The `StartLabel` and `EndLabel` are labels of the same form as indicated by
-`LastUsedLabel` above. Although they are the start and end label of the
-current scope. Initially when entering a scope, `StartLabel` and `EndLabel`
-is set to `nil`.
+`LastUsedLabel` above. They are used to mark the start and end of the current
+scope, respectively. Initially when entering a scope, `StartLabel` and
+`EndLabel` are set to `nil`.
 
 `FrameSize` is an integer value which denotes the frame size of the current
-scope.  and Initially when entering a scope, `FrameSize` is set to 0.
+scope. Initially when entering a scope, `FrameSize` is set to 0.
 
 Note that `CurrentScopeData` is not preserved when leaving a scope.
 
