@@ -9,7 +9,7 @@ Emil Hessman (emhe9781@student...)
 Sebastian Lundström (selu7901@student...)
 
 The source and executables are available on the IT department server at:
-/home/emhe9781/src/XXX
+/home/emhe9781/src/ducc-2011-02-18.tar.gz
 
 Previous reports can be found in the project folder under `report`.
 
