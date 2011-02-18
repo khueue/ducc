@@ -108,7 +108,7 @@ indexed by the name of the identifier:
 Formal scalars are treated as local scalars.
 
 In the above enumeration, `Size` is the size requirement of the data type, so
-the size of char would be `byte` and the size of int would be ´long´.
+the size of char would be `byte` and the size of int would be `long`.
 `Offset` is the offset of the array from the enclosing function's FP.
 
 ## RTL
@@ -277,13 +277,91 @@ either will be true (1) or false (0).
 
 ### Variable References
 
-#### Global and Local Variables
+Global lval array element:
 
-XXX
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempOffset, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempBaseAddr, rtl_labref(Label))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempBaseAddr, TempOffset))] ++
+        [emit_store(Size, TempAddress, TempRhs)],
 
-#### Array and Scalar Variables
+Global rval array element:
 
-XXX
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempOffset, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempBaseAddr, rtl_labref(Label))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempBaseAddr, TempOffset))] ++
+        [emit_load(Size, TempResult, TempAddress)],
+
+Global lval scalar:
+
+    Instructions =
+        [emit_eval(TempAddress, rtl_labref(Label))] ++
+        [emit_store(Size, TempAddress, TempRhs)],
+
+Global rval scalar:
+
+    Instructions =
+        [emit_eval(TempAddress, rtl_labref(Label))] ++
+        [emit_load(Type, TempValue, TempAddress)],
+
+Global rval array:
+
+    Instructions =
+        [emit_eval(TempAddress, rtl_labref(Label))],
+
+Local lval array element:
+
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempFrameOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempFrameAndMultOffset, rtl_binop('+', TempFrameOffset, TempMult))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', ?ENV:get_fp(), TempFrameAndMultOffset))] ++
+        [emit_store(Size, TempElementAddress, TempRhs)],
+
+Local lval formal array element:
+
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', Temp, TempMult))] ++
+        [emit_store(Size, TempElementAddress, TempRhs)],
+
+Local lval scalar:
+
+    Instructions =
+        [emit_eval(Temp, rtl_temp(TempRhs))],
+
+Local rval array:
+
+    Instructions =
+        [emit_eval(TempOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempAddress, rtl_binop('+', TempFP, TempOffset))],
+
+Local rval array element:
+
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempFrameOffset, rtl_icon(Offset))] ++
+        [emit_eval(TempFrameAndMultOffset, rtl_binop('+', TempFrameOffset, TempMult))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', ?ENV:get_fp(), TempFrameAndMultOffset))] ++
+        [emit_load(Size, TempResult, TempElementAddress)],
+
+Local rval formal array element:
+
+    Instructions =
+        [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
+        [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
+        [emit_eval(TempElementAddress, rtl_binop('+', TempBase, TempMult))] ++
+        [emit_load(Size, TempResult, TempElementAddress)],
+
+Local formal arrays and local scalars as rvals does not generate any
+instructions since they are assigned to temporary registers, which can
+be used ad-hoc.
 
 ## Running the Translator
 
