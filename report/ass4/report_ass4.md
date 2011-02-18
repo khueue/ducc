@@ -100,19 +100,59 @@ the symbol table of the current scope. We store the following structures,
 indexed by the name of the identifier:
 
  * Global scalar: `{global, {label,321}, scalar, {Size}`
- * Global array : `{global, {label,321}, array,  {Size, Count}`
+ * Global array : `{global, {label,321}, array,  {Size}`
  * Local scalar:  `{local,  {temp,123},  scalar, {Size}`
- * Local array:   `{local,  stack,       array,  {Size, Count, Offset}`
+ * Local array:   `{local,  stack,       array,  {Size, Offset}`
  * Formal array:  `{local,  {temp,123},  farray, {Size}`
 
 Formal scalars are treated as local scalars.
 
 In the above enumeration, `Size` is the size requirement of the data type, so
 the size of char would be `byte` and the size of int would be ´long´.
-`Count` is the number of elements in the array, and `Offset` is the offset
-of the array from the enclosing functions FP.
+`Offset` is the offset of the array from the enclosing function's FP.
 
 ## RTL
+
+### Expressions
+
+Basic RTL expressions are represented by the following structures:
+
+    rtl_temp(Temp) ->
+        Temp.
+
+    rtl_icon(Int) ->
+        {icon, Int}.
+
+    rtl_labref(Label) ->
+        {labref, Label}.
+
+    rtl_binop(Op, TempLhs, TempRhs) ->
+        {binop, Op, TempLhs, TempRhs}.
+
+### Instructions
+
+Instructions emitted by the translator have the following structure:
+
+    emit_labdef(Label) ->
+        {labdef, Label}.
+
+    emit_jump(Label) ->
+        {jump, Label}.
+
+    emit_cjump(Relop, TempLhs, TempRhs, Label) ->
+        {cjump, Relop, TempLhs, TempRhs, Label}.
+
+    emit_store(Size, TempDestAddress, TempValue) ->
+        {store, Size, TempDestAddress, TempValue}.
+
+    emit_load(Size, TempDest, TempSourceAddress) ->
+        {load, Size, TempDest, TempSourceAddress}.
+
+    emit_eval(TempResult, RtlExpr) ->
+        {eval, TempResult, RtlExpr}.
+
+    emit_call(TempResult, Label, TempsActuals) ->
+        {call, TempResult, Label, TempsActuals}.
 
 XXX RTL design, datatypes, ...
 
