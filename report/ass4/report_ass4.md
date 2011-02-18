@@ -51,7 +51,7 @@ The temporary registers are used for actual parameters and local scalar
 variables.
 
 `TempId` is an integer value which starts at 0. `{temp, 0}` is reserved for
-the return value. `{temp, 1}` is reserved for the virtual frame pointer 
+the return value. `{temp, 1}` is reserved for the virtual frame pointer
 (which is used for local array variables). The next free temporary register
 is `{temp, 2}`.
 
@@ -65,10 +65,10 @@ Note that `LastUsedTemp` is preserved when leaving a scope.
 
 The labels are used for global variables.
 
-`LabelId` is an integer value and is set to 99 in a new environment, denoting
+`LabelId` is an integer value which is set to 99 in a new environment, denoting
 that the next free label is `{label, 100}`.
 
-Note that `LastUsedLabel` is preserved when leaving a scope. 
+Note that `LastUsedLabel` is preserved when leaving a scope.
 
 #### CurrentScopeData
 
