@@ -113,6 +113,26 @@ the size of char would be `byte` and the size of int would be ´long´.
 
 ## RTL
 
+We have mostly followed the proposed RTL. We made load and store into
+proper instructions. Unary instructions are converted to binary instructions.
+
+### Top-Level Constructs
+
+The result from the translator consists of a list of top-level declarations
+of the following two types, either data or procedure:
+
+    toplevel_data(Label, Bytes) ->
+        {data, Label, Bytes}.
+
+    toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
+        {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}.
+
+The `data` construct contains an identifying label and a size in bytes.
+The `proc` construct contains start and end labels, a list of temps used
+by formal arguments, a list of temps used by the body of the function,
+the frame size required by the function (its local arrays), and the
+instructions emitted by the function body.
+
 ### Expressions
 
 Basic RTL expressions are represented by the following structures:
@@ -153,8 +173,6 @@ Instructions emitted by the translator have the following structure:
 
     emit_call(TempResult, Label, TempsActuals) ->
         {call, TempResult, Label, TempsActuals}.
-
-XXX RTL design, datatypes, ...
 
 ## Translation Process
 
