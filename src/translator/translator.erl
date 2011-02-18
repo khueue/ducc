@@ -55,14 +55,14 @@ translate_global_scalardec({_Meta, Type, Name}, Env0) ->
     Size = ?HELPER:type_size(Type),
     SymbolInfo = {global, Label, scalar, {Size}},
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
-    {Env2, toplevel_data(Label, ?HELPER:ducc_byte_size(Size))}.
+    {Env2, toplevel_data(Label, ?HELPER:size_of(Size))}.
 
 translate_global_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env1, Label} = ?ENV:get_new_label(Env0),
     Size = ?HELPER:type_size(Type),
     SymbolInfo = {global, Label, array, {Size, Count}},
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
-    {Env2, toplevel_data(Label, Count*?HELPER:ducc_byte_size(Size))}.
+    {Env2, toplevel_data(Label, Count*?HELPER:size_of(Size))}.
 
 translate_local_scalardec({_Meta, Type, Name}, Env0) ->
     {Env1, Temp} = ?ENV:get_new_temp(Env0),
@@ -78,7 +78,7 @@ translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
     Size = ?HELPER:type_size(Type),
     SymbolInfo = {local, stack, array, {Size, Count, Offset}},
     Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
-    Bytes = ?HELPER:ducc_byte_size(Size),
+    Bytes = ?HELPER:size_of(Size),
     Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count + Padding),
     {Env2, [], []}.
 
@@ -348,7 +348,7 @@ translate_lval_arrelem(Node = {_Meta, Name, Index}, Env0, TempRhs) ->
 
 translate_lval_global_arrelem({global, Label, array, {Size,_Count}}, Env0, TempIndex, TempRhs) ->
     {Env1, Temps=[TempSizeof,TempOffset,TempBaseAddr,TempAddress]} = ?ENV:get_new_temps(4, Env0),
-    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Sizeof = ?HELPER:size_of(Size),
     Instructions =
         [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
         [emit_eval(TempOffset, rtl_binop('*', TempIndex, TempSizeof))] ++
@@ -359,7 +359,7 @@ translate_lval_global_arrelem({global, Label, array, {Size,_Count}}, Env0, TempI
 
 translate_lval_local_arrelem({local, stack, array, {Size,_Count,Offset}}, Env0, TempIndex, TempRhs) ->
     {Env1, Temps=[TempSizeof,TempMult,TempFrameOffset,TempFrameAndMultOffset,TempElementAddress]} = ?ENV:get_new_temps(5, Env0),
-    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Sizeof = ?HELPER:size_of(Size),
     Instructions =
         [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
         [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
@@ -370,7 +370,7 @@ translate_lval_local_arrelem({local, stack, array, {Size,_Count,Offset}}, Env0, 
     {Env1, Instructions, Temps};
 translate_lval_local_arrelem({local, Temp, farray, {Size}}, Env0, TempIndex, TempRhs) ->
     {Env1, Temps=[TempSizeof,TempMult,TempElementAddress]} = ?ENV:get_new_temps(3, Env0),
-    Sizeof = ?HELPER:ducc_byte_size(Size),
+    Sizeof = ?HELPER:size_of(Size),
     Instructions =
         [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
         [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++

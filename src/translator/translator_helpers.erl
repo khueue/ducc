@@ -2,7 +2,7 @@
 -export([
     get_tag/1,
     get_line/1,
-    ducc_byte_size/1,
+    size_of/1,
     arg_list/1,
     combine_instrs/1,
     combine_temps/1,
@@ -27,8 +27,8 @@ get_line(Node) ->
 type_size(int)  -> long;
 type_size(char) -> byte.
 
-ducc_byte_size(long) -> 4;
-ducc_byte_size(byte) -> 1.
+size_of(long) -> 4;
+size_of(byte) -> 1.
 
 arg_list([]) -> [];
 arg_list([{_Env, _Instrs, Temps}|R]) ->
