@@ -35,7 +35,7 @@ The environment has the form:
 
     {LastUsedTemp, LastUsedLabel, CurrentScopeData, Scopes}
 
-#### LastUsedTemp
+### LastUsedTemp
 
 `LastUsedTemp` is used to denote the last used temporary register, and has
 the form:
@@ -55,7 +55,7 @@ therefore preserved when leaving a scope. Each invocation of a function that
 gives a new temporary is guaranteed to get a unique temporary as long as
 the latest environment is always passed along.
 
-#### LastUsedLabel
+### LastUsedLabel
 
 `LastUsedLabel` is used to denote the last used label, and has the form:
 
@@ -69,7 +69,7 @@ label is `{label, 100}`.
 
 Note that `LastUsedLabel` is just as "global" as `LastUsedTemp`.
 
-#### CurrentScopeData
+### CurrentScopeData
 
 `CurrentScopeData` contains data about the current scope (only has meaning
 when translating a function), and has the form:
@@ -88,13 +88,13 @@ scope. Initially when entering a scope, `FrameSize` is set to 0.
 Note that `CurrentScopeData` is not preserved when leaving a scope with
 `leave_scope/1`.
 
-#### Scopes
+### Scopes
 
 `Scopes` is a stack of scopes, just as in the analyzer. In these scopes,
 we use dicts that store information about location, type and size of
 encountered symbols.
 
-### Symbol Tables
+#### Symbol Tables
 
 As soon as a new variable declaration is encountered, it is entered into
 the symbol table of the current scope. We store the following structures:
