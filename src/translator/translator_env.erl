@@ -35,7 +35,7 @@ increment_frame_size({T,L,{Start,Stop,FS},SymTabs}, Bytes) ->
     env(T, L, {Start,Stop,NewFS}, SymTabs).
 
 new() ->
-    LastUsedTemp = temp(1),
+    LastUsedTemp = get_fp(),
     LastUsedLabel = label(99),
     StartLabel = nil,
     StopLabel = nil,
@@ -45,8 +45,12 @@ new() ->
     Env = env(LastUsedTemp, LastUsedLabel, Function, SymTabs),
     enter_scope(global, Env).
 
-enter_scope(Scope, {T,L,F,SymTabs}) ->
-    env(T, L, F, stack_push({Scope,dict:new()}, SymTabs)).
+enter_scope(Scope, {T,L,_F,SymTabs}) ->
+    StartLabel = nil,
+    StopLabel = nil,
+    FrameSize = 0,
+    Function = {StartLabel, StopLabel, FrameSize},
+    env(T, L, Function, stack_push({Scope,dict:new()}, SymTabs)).
 
 leave_scope({T,L,_F,[_SymTab|SymTabs]}) ->
     StartLabel = nil,
