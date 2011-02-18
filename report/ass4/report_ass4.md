@@ -11,6 +11,8 @@ Sebastian Lundström (selu7901@student...)
 The source and executables are available on the IT department server at:
 /home/emhe9781/src/XXX
 
+Previous reports can be found in the project folder under `report`.
+
 (Note that the source won't compile and the executables won't run on the IT
 department servers. The servers have an old release of Erlang installed as
 default which doesn't include Leex nor escript).
@@ -24,13 +26,6 @@ intermediate representation for the uC language.
 We started out by implementing a depth-first search algorithm for traversing
 the AST. The translator starts at the root node (`program`) and recursively
 translates its children in a left-to-right order.
-
-## Tools Used
-
-Erlang provides a module `dict`, which implements a key-value dictionary. We
-use `dict` to implement the symbol table in our environment.
-
-Documentation for `dict`: <http://www.erlang.org/doc/man/dict.html>
 
 ## Translator Environment
 
@@ -55,7 +50,10 @@ the return value. `{temp, 1}` is reserved for the virtual frame pointer
 (which is used for local array variables). The next free temporary register
 is `{temp, 2}`.
 
-Note that `LastUsedTemp` is preserved when leaving a scope.
+Note that `LastUsedTemp` is supposed to act as a global variable, and is
+therefore preserved when leaving a scope. Each invocation of a function that
+gives a new temporary is guaranteed to get a unique temporary as long as
+the latest environment is always passed along.
 
 #### LastUsedLabel
 
@@ -65,47 +63,36 @@ Note that `LastUsedTemp` is preserved when leaving a scope.
 
 The labels are used for global variables.
 
-`LabelId` is an integer value which is set to 99 in a new environment, 
-denoting that the next free label is `{label, 100}`.
+`LabelId` is an integer value which is set to 99 (different from temps, to
+distinguish them easily) in a new environment, denoting that the next free
+label is `{label, 100}`.
 
-Note that `LastUsedLabel` is preserved when leaving a scope.
+Note that `LastUsedLabel` is just as "global" as `LastUsedTemp`.
 
 #### CurrentScopeData
 
-`CurrentScopeData` contains data about the current scope (i.e. function), and
-has the form:
+`CurrentScopeData` contains data about the current scope (only has meaning
+when translating a function), and has the form:
 
     {StartLabel, EndLabel, FrameSize}
 
 The `StartLabel` and `EndLabel` are labels of the same form as indicated by
 `LastUsedLabel` above. They are used to mark the start and end of the current
-scope, respectively. Initially when entering a scope, `StartLabel` and
-`EndLabel` are set to `nil`.
+function, respectively. Initially when entering a scope, `StartLabel` and
+`EndLabel` are set to `nil` (later to be filled in by the function under
+translation).
 
 `FrameSize` is an integer value which denotes the frame size of the current
 scope. Initially when entering a scope, `FrameSize` is set to 0.
 
-Note that `CurrentScopeData` is not preserved when leaving a scope.
+Note that `CurrentScopeData` is not preserved when leaving a scope with
+`leave_scope/1`.
 
 #### Scopes
 
-`Scopes` is a stack of scopes. The head of the `Scopes` stack (which is just
-a list) is the current scope. Each scope has the form:
-
-    {ScopeName, SymTab}
-
-`ScopeName` is either the name of a function represented as a string,
-or the atom `global` if the translator happens to be looking at the top-level.
-`SymTab` is a dictionary as returned by `dict:new()`.
-
-For example, if the translator is currently investigating the function `main`,
-the environment will look like:
-
-    {LastUsedTemp, LastUsedLabel, CurrentScopeData, [{"main", SymTab1}, {global, SymTab0}]}
-
-The scope stack will never grow beyond two elements because the only
-scope-introducing construct in uC is the function. Nevertheless, a stack
-is a natural and convenient representation of scopes.
+`Scopes` is a stack of scopes, just as in the analyzer. In these scopes,
+we use dicts that store information about location, type and size of
+encountered symbols.
 
 ### Symbol Tables
 
@@ -166,6 +153,7 @@ XXX
 #### Logical or
 
 Logical or, `||`, is translated by translating the expressions in the left and
+<<<<<<< HEAD
 right hand sides recursively. The resulting instructions are:
 
     Instructions =
