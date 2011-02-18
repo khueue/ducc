@@ -96,13 +96,21 @@ encountered symbols.
 
 ### Symbol Tables
 
-XXX different kind of nodes compared to the analyzer?
+As soon as a new variable declaration is encountered, it is entered into
+the symbol table of the current scope. We store the following structures:
 
-Each symbol table is represented by an Erlang dictionary. When we encounter
-a new declaration, its identifier is used as the key, and its entire AST node
-is used as the associated value. This provides us with all the information we
-need (and more), and we do not need to devise new data types. On the
-downside, this probably involves more copying than necessary.
+ * Global scalar: `{global, {label,321}, scalar, {Size}`
+ * Global array : `{global, {label,321}, array,  {Size, Count}`
+ * Local scalar:  `{local,  {temp,123},  scalar, {Size}`
+ * Local array:   `{local,  stack,       array,  {Size, Count, Offset}`
+ * Formal array:  `{local,  {temp,123},  farray, {Size}`
+
+Formal scalars are treated as local scalars.
+
+In the above enumeration, `Size` is the size requirement of the data type, so
+the size of char would be `byte` and the size of int would be ´long´.
+`Count` is the number of elements in the array, and `Offset` is the offset
+of the array from the enclosing functions FP.
 
 ## RTL
 
