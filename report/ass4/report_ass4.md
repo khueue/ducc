@@ -65,8 +65,8 @@ Note that `LastUsedTemp` is preserved when leaving a scope.
 
 The labels are used for global variables.
 
-`LabelId` is an integer value which is set to 99 in a new environment, denoting
-that the next free label is `{label, 100}`.
+`LabelId` is an integer value which is set to 99 in a new environment, 
+denoting that the next free label is `{label, 100}`.
 
 Note that `LastUsedLabel` is preserved when leaving a scope.
 
@@ -125,7 +125,33 @@ XXX RTL design, datatypes, ...
 
 ### Control Flow Statements
 
+#### if
+
 XXX
+
+#### while
+
+XXX
+
+#### Logical and (`&&`)
+
+XXX
+
+#### Logical or (`||`)
+
+Logical or, `||`, is translated by translating the expressions in the left and
+right hand sides recursively. 
+
+If the result of the left hand side is true, it skips the instructions for the
+right hand side by jumping to a label further down, where it sets the result 
+of the entire logical expression to true and reaches the end.
+
+If the result of the left hand side is false (e.g. 0), it continues evaluating
+the instructions for the right hand side. If the result of the right hand side
+is true, it jumps to the label which sets the result of the entire logical
+expression to true and reaches the end.
+In the case when the right hand side is false it sets the result of the entire
+logical expression to false and jumps to the end.
 
 ### Variable References
 
