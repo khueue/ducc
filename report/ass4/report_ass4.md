@@ -317,7 +317,6 @@ Local lval scalar:
     Instructions =
         [emit_eval(Temp, rtl_temp(TempRhs))],
 
-
 Local rval array:
 
     Instructions =
