@@ -166,18 +166,26 @@ XXX
 #### Logical or
 
 Logical or, `||`, is translated by translating the expressions in the left and
-right hand sides recursively. 
+right hand sides recursively. The resulting instructions are:
 
-If the result of the left hand side is true, it skips the instructions for the
-right hand side by jumping to a label further down, where it sets the result 
-of the entire logical expression to true and reaches the end.
+    Instructions =
+        InsLhs ++
+        [emit_cjump(neq, TempLhs, 0, LabelTrue)] ++
+        InsRhs ++
+        [emit_cjump(neq, TempRhs, 0, LabelTrue)] ++
+        [emit_eval(TempResult, ValueFalse)] ++
+        [emit_jump(LabelEnd)] ++
+        [emit_labdef(LabelTrue)] ++
+        [emit_eval(TempResult, ValueTrue)] ++
+        [emit_labdef(LabelEnd)
 
-If the result of the left hand side is false (e.g. 0), it continues evaluating
-the instructions for the right hand side. If the result of the right hand side
-is true, it jumps to the label which sets the result of the entire logical
-expression to true and reaches the end.
-In the case when the right hand side is false it sets the result of the entire
-logical expression to false and jumps to the end.
+`InsLhs` and `InsRhs` are the instructions for the left hand side and right
+right hand side, respectively, which has been recursively translated by
+translate_expr/2.
+`TempLhs` contains the result of the left hand side. `TempRhs` contains the
+result of the right hand side.
+`TempResult` will contain the result of the entire logical or statement, which
+either will be true (1) or false (0).
 
 ### Variable References
 
