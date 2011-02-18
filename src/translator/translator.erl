@@ -9,10 +9,10 @@
 % {proc, {label,"minfunc"}, FormalTemps, LocalTemps, FrameSize, Instructions}
 
 % - SymTab stuff:
-% {local,{temp,123}},    array, {Type, Count, Offset}
-% {local,{temp,123}},   scalar, {Type}
-% {global,{label,321}},  array, {Type, Count}
-% {global,{label,321}}, scalar, {Type}
+% {local,{temp,123}},    array, {Size, Count, Offset}
+% {local,{temp,123}},   scalar, {Size}
+% {global,{label,321}},  array, {Size, Count}
+% {global,{label,321}}, scalar, {Size}
 
 translate(ParseTree) ->
     Env = ?ENV:new(),
@@ -428,27 +428,27 @@ translate_intconst({_Meta, Value}, Env0) ->
     {Env1, Instructions, Temps}.
 
 translate_ident(Node = {_Meta, Name}, Env0) ->
-    SymTabNode = {Scope, _, Type, _Data} = ?ENV:lookup(Name, Node, Env0),
+    SymTabNode = {Scope, _, Tag, _} = ?ENV:lookup(Name, Node, Env0),
     case Scope of
         global ->
-            case Type of
+            case Tag of
                 array  -> translate_global_array(SymTabNode, Env0);
                 scalar -> translate_global_scalar(SymTabNode, Env0)
             end;
         local ->
-            case Type of
+            case Tag of
                 array  -> translate_local_array(SymTabNode, Env0);
                 scalar -> translate_local_scalar(SymTabNode, Env0);
                 farray -> translate_farray(SymTabNode, Env0)
             end
     end.
 
-translate_farray({local, Temp, farray, {_Type}}, Env0) ->
+translate_farray({local, Temp, farray, {_Size}}, Env0) ->
     Instructions = [],
     Temps = [Temp],
     {Env0, Instructions, Temps}.
 
-translate_local_array({local, stack, array, {_Type,Offset}}, Env0) ->
+translate_local_array({local, stack, array, {_Size,Offset}}, Env0) ->
     TempFP = ?ENV:get_fp(),
     {Env1, Temps=[TempOffset,TempAddress]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
@@ -456,19 +456,19 @@ translate_local_array({local, stack, array, {_Type,Offset}}, Env0) ->
         [emit_eval(TempAddress, rtl_binop('+', TempFP, TempOffset))],
     {Env1, Instructions, Temps}.
 
-translate_local_scalar({local, Temp, scalar, {_Type}}, Env0) ->
+translate_local_scalar({local, Temp, scalar, {_Size}}, Env0) ->
     Instructions = [],
     Temps = [Temp],
     {Env0, Instructions, Temps}.
 
-translate_global_scalar({global, Label, scalar, {Type}}, Env0) ->
+translate_global_scalar({global, Label, scalar, {Size}}, Env0) ->
     {Env1, Temps=[TempAddress,TempValue]} = ?ENV:get_new_temps(2, Env0),
     Instructions =
         [emit_eval(TempAddress, rtl_labref(Label))] ++
-        [emit_load(Type, TempValue, TempAddress)],
+        [emit_load(Size, TempValue, TempAddress)],
     {Env1, Instructions, Temps}.
 
-translate_global_array({global, Label, array, {_Type}}, Env0) ->
+translate_global_array({global, Label, array, {_Size}}, Env0) ->
     {Env1, Temps=[TempAddress]} = ?ENV:get_new_temps(1, Env0),
     Instructions =
         [emit_eval(TempAddress, rtl_labref(Label))],
@@ -554,7 +554,6 @@ translate_rval_global_arrelem({global, Label, array, {Size}}, Env0, TempIndex) -
         [emit_load(Size, TempResult, TempAddress)],
     {Env1, Instructions, Temps}.
 
-% make sure Type is Size everywhere xxxx
 translate_rval_farrelem({local, TempBase, farray, {Size}}, Env0, TempIndex) ->
     {Env1, Temps=[TempSizeof,TempMult,TempElementAddress,TempResult]} = ?ENV:get_new_temps(4, Env0),
     Sizeof = ?HELPER:size_of(Size),
@@ -586,11 +585,11 @@ emit_jump(Label) ->
 emit_cjump(Relop, TempLhs, TempRhs, Label) ->
     {cjump, Relop, TempLhs, TempRhs, Label}.
 
-emit_store(Type, TempDestAddress, TempValue) ->
-    {store, Type, TempDestAddress, TempValue}.
+emit_store(Size, TempDestAddress, TempValue) ->
+    {store, Size, TempDestAddress, TempValue}.
 
-emit_load(Type, TempDest, TempSourceAddress) ->
-    {load, Type, TempDest, TempSourceAddress}.
+emit_load(Size, TempDest, TempSourceAddress) ->
+    {load, Size, TempDest, TempSourceAddress}.
 
 emit_eval(TempResult, RtlExpr) ->
     {eval, TempResult, RtlExpr}.

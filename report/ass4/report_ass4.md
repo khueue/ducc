@@ -109,7 +109,7 @@ Formal scalars are treated as local scalars.
 
 In the above enumeration, `Size` is the size requirement of the data type, so
 the size of char would be `byte` and the size of int would be ´long´.
-`Offset` is the offset of the array from the enclosing functions FP.
+`Offset` is the offset of the array from the enclosing function's FP.
 
 ## RTL
 
