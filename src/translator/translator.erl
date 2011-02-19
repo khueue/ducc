@@ -4,16 +4,6 @@
 -define(HELPER, translator_helpers).
 -define(ENV, translator_env).
 
-% - Top-level structs:
-% {data, {label,"minarray"}, Size}
-% {proc, {label,"minfunc"}, FormalTemps, LocalTemps, FrameSize, Instructions}
-
-% - SymTab stuff:
-% {local,{temp,123}},    array, {Size, Count, Offset}
-% {local,{temp,123}},   scalar, {Size}
-% {global,{label,321}},  array, {Size, Count}
-% {global,{label,321}}, scalar, {Size}
-
 translate(ParseTree, Lines) ->
     Env = ?ENV:new(Lines),
     translate_program(ParseTree, Env).
