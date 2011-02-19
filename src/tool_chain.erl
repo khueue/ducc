@@ -30,18 +30,10 @@ read_lines_from_stream(Stream, LineNum) ->
         eof ->
             [];
         {ok, LineWithNewline} ->
-            Line = strip_newline(LineWithNewline),
+            Line = string:strip(LineWithNewline, right, $\n),
             [{LineNum, Line} | read_lines_from_stream(Stream, LineNum+1)];
         {error, Reason} ->
             io:format("~p~n", [Reason])
-    end.
-
-strip_newline([]) -> [];
-strip_newline(String) ->
-    LastChar = lists:last(String),
-    case LastChar of
-        $\n -> string:substr(String, 1, erlang:length(String)-1);
-        _Ch -> String
     end.
 
 string_from_lines([]) -> [];
