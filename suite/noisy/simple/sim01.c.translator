@@ -11,7 +11,9 @@
              [],
              [{temp,2},{temp,3}],
              0,
-             [{'SOURCE',7,"  putint( 42);"},
+             [{'- SOURCE -',7,funcall,"  putint( 42);"},
+              {'- SOURCE -',7,funcall,"  putint( 42);"},
+              {'- SOURCE -',7,intconst,"  putint( 42);"},
               {eval,{temp,2},{icon,42}},
               {call,{temp,3},{label,"putint"},[{temp,2}]}],
              {labdef,{label,100}}}]}}.

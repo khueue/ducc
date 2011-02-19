@@ -134,15 +134,17 @@ translate_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     translate_stmts(Stmts, Env0);
 translate_stmt(Stmt, Env0) ->
     Tag = ?HELPER:get_tag(Stmt),
-    {Env1, Instructions, Temps} = case Tag of
+    {Env1, Instructions, Temps} =
+    case Tag of
         return -> translate_return(Stmt, Env0);
         while  -> translate_while(Stmt, Env0);
         'if'   -> translate_if(Stmt, Env0);
         _Expr  -> translate_expr(Stmt, Env0)
     end,
+    % XXX Factor this out:
     LineNum = ?HELPER:get_line(Stmt),
     SourceLine = ?ENV:get_source_line(LineNum, Env1),
-    {Env1, [{'SOURCE',LineNum,SourceLine}|Instructions], Temps}.
+    {Env1, [{'- SOURCE -',LineNum,Tag,SourceLine}|Instructions], Temps}.
 
 translate_return({_Meta, nil}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
@@ -217,6 +219,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
 
 translate_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
+    {Env1, Instructions, Temps} =
     case Tag of
         binop     -> translate_binop(Expr, Env0);
         unop      -> translate_unop(Expr, Env0);
@@ -225,7 +228,11 @@ translate_expr(Expr, Env0) ->
         charconst -> translate_charconst(Expr, Env0);
         funcall   -> translate_funcall(Expr, Env0);
         arrelem   -> translate_arrelem(Expr, Env0)
-    end.
+    end,
+    % XXX Factor this out:
+    LineNum = ?HELPER:get_line(Expr),
+    SourceLine = ?ENV:get_source_line(LineNum, Env1),
+    {Env1, [{'- SOURCE -',LineNum,Tag,SourceLine}|Instructions], Temps}.
 
 translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
     case Op of
