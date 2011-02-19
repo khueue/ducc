@@ -23,6 +23,6 @@ main(_) ->
     usage().
 
 process(Stream, String) ->
-    {Source, {ast,ParseTree}} = tool_chain:term_from_string(String),
-    {ok, RtlCode} = translator_driver:translate(Stream, ParseTree),
-    {Source, {rtl,RtlCode}}.
+    {{source,Lines}, {ast,ParseTree}} = tool_chain:term_from_string(String),
+    {ok, RtlCode} = translator_driver:translate(Stream, ParseTree, Lines),
+    {{source,Lines}, {rtl,RtlCode}}.

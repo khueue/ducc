@@ -1,6 +1,7 @@
 -module(translator_env).
 -export([
-    new/0,
+    new/1,
+    get_source_line/2,
     enter_scope/2,
     leave_scope/1,
     scope_name/1,
@@ -27,14 +28,14 @@ scope(Env) ->
         _Fun   -> local
     end.
 
-get_frame_size({_T,_L,{_,_,FS},_SymTabs}) ->
+get_frame_size({_T,_L,{_,_,FS},_SymTabs,_LineDict}) ->
     FS.
 
-increment_frame_size({T,L,{Start,Stop,FS},SymTabs}, Bytes) ->
+increment_frame_size({T,L,{Start,Stop,FS},SymTabs,LineDict}, Bytes) ->
     NewFS = FS + Bytes,
-    env(T, L, {Start,Stop,NewFS}, SymTabs).
+    env(T, L, {Start,Stop,NewFS}, SymTabs, LineDict).
 
-new() ->
+new(Lines) ->
     LastUsedTemp = get_fp(),
     LastUsedLabel = label(99),
     StartLabel = nil,
@@ -42,24 +43,39 @@ new() ->
     FrameSize = 0,
     Function = {StartLabel, StopLabel, FrameSize},
     SymTabs = [],
-    Env = env(LastUsedTemp, LastUsedLabel, Function, SymTabs),
+    LineDict = line_dict(Lines),
+    Env = env(LastUsedTemp, LastUsedLabel, Function, SymTabs, LineDict),
     enter_scope(global, Env).
 
-enter_scope(Scope, {T,L,_F,SymTabs}) ->
+line_dict(Lines) ->
+    Dict = dict:new(),
+    insert_lines(Lines, Dict).
+
+insert_lines([], Dict) ->
+    Dict;
+insert_lines([{Num,Line}|Lines], Dict0) ->
+    Dict1 = dict:store(Num, Line, Dict0),
+    insert_lines(Lines, Dict1).
+
+get_source_line(LineNum, {_T,_L,_F,_S,Dict}) ->
+    {ok, Line} = dict:find(LineNum, Dict),
+    Line.
+
+enter_scope(Scope, {T,L,_F,SymTabs,LineDict}) ->
     StartLabel = nil,
     StopLabel = nil,
     FrameSize = 0,
     Function = {StartLabel, StopLabel, FrameSize},
-    env(T, L, Function, stack_push({Scope,dict:new()}, SymTabs)).
+    env(T, L, Function, stack_push({Scope,dict:new()}, SymTabs), LineDict).
 
-leave_scope({T,L,_F,[_SymTab|SymTabs]}) ->
+leave_scope({T,L,_F,[_SymTab|SymTabs], LineDict}) ->
     StartLabel = nil,
     StopLabel = nil,
     FrameSize = 0,
     Function = {StartLabel, StopLabel, FrameSize},
-    env(T, L, Function, SymTabs).
+    env(T, L, Function, SymTabs, LineDict).
 
-scope_name({_T,_L,_F,[{Scope,_}|_]}) ->
+scope_name({_T,_L,_F,[{Scope,_}|_],_LineDict}) ->
     Scope.
 
 lookup_or_throw(Name, Node, Env, Exception) ->
@@ -68,23 +84,23 @@ lookup_or_throw(Name, Node, Env, Exception) ->
         FoundNode -> FoundNode
     end.
 
-lookup(_Name, _Node, {_T,_L,_F,[]}) ->
+lookup(_Name, _Node, {_T,_L,_F,[],_LineDict}) ->
     not_found;
-lookup(Name, Node, {T,L,F,[{_Scope,SymTab}|SymTabs]}) ->
+lookup(Name, Node, {T,L,F,[{_Scope,SymTab}|SymTabs],LineDict}) ->
     case dict:find(Name, SymTab) of
         {ok, Val} -> Val;
-        error     -> lookup(Name, Node, {T,L,F,SymTabs})
+        error     -> lookup(Name, Node, {T,L,F,SymTabs,LineDict})
     end.
 
-set_symbol(Key, Value, {T,L,F,SymTabs}) ->
+set_symbol(Key, Value, {T,L,F,SymTabs,LineDict}) ->
     {{Scope,Current}, Rest} = stack_peek(SymTabs),
     Updated = dict:store(Key, Value, Current),
-    env(T,L,F,stack_push({Scope,Updated}, Rest)).
+    env(T, L, F, stack_push({Scope,Updated}, Rest), LineDict).
 
-set_function_labels({T,L,{_Start,_Stop,FS},Symtabs}, NewStartLabel, NewStopLabel) ->
-    env(T, L, {NewStartLabel,NewStopLabel,FS}, Symtabs).
+set_function_labels({T,L,{_Start,_Stop,FS},Symtabs,LineDict}, NewStartLabel, NewStopLabel) ->
+    env(T, L, {NewStartLabel,NewStopLabel,FS}, Symtabs,LineDict).
 
-get_function_labels({_T,_L,{StartLabel,StopLabel,_FS},_Symtabs}) ->
+get_function_labels({_T,_L,{StartLabel,StopLabel,_FS},_Symtabs,_LineDict}) ->
     {StartLabel, StopLabel}.
 
 stack_push(X, Stack) ->
@@ -101,8 +117,8 @@ label(Id) ->
 temp(Id) ->
     {temp, Id}.
 
-env(Temp, Label, F, SymTabs) ->
-    {Temp, Label, F, SymTabs}.
+env(Temp, Label, F, SymTabs, LineDict) ->
+    {Temp, Label, F, SymTabs, LineDict}.
 
 get_rv() ->
     temp(0).
@@ -117,9 +133,9 @@ get_new_labels(N, Env0) ->
     {Env2, Labels} = get_new_labels(N-1, Env1),
     {Env2, [Label|Labels]}.
 
-get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs}) ->
+get_new_label({LastTemp, {label, LastLabelId}, F, SymTabs, LineDict}) ->
     NewLabel = label(LastLabelId + 1),
-    {env(LastTemp,NewLabel,F,SymTabs), NewLabel}.
+    {env(LastTemp,NewLabel,F,SymTabs,LineDict), NewLabel}.
 
 get_new_temps(0, Env) ->
     {Env, []};
@@ -128,12 +144,12 @@ get_new_temps(N, Env0) ->
     {Env2, Temps} = get_new_temps(N-1, Env1),
     {Env2, [Temp|Temps]}.
 
-get_new_temp({{temp, LastTempId}, LastLabel, F, SymTabs}) ->
+get_new_temp({{temp, LastTempId}, LastLabel, F, SymTabs, LineDict}) ->
     NewTemp = temp(LastTempId + 1),
-    {env(NewTemp,LastLabel,F,SymTabs), NewTemp}.
+    {env(NewTemp,LastLabel,F,SymTabs,LineDict), NewTemp}.
 
-get_current_temp({LastTemp, _LastLabel, _F, _SymTabs}) ->
+get_current_temp({LastTemp, _LastLabel, _F, _SymTabs, _LineDict}) ->
     LastTemp.
 
-get_current_label({_LastTemp, LastLabel, _F, _SymTabs}) ->
+get_current_label({_LastTemp, LastLabel, _F, _SymTabs, _LineDict}) ->
     LastLabel.

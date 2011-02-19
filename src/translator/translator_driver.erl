@@ -1,8 +1,8 @@
 -module(translator_driver).
--export([translate/2]).
+-export([translate/3]).
 
-translate(Stream, ParseTree) ->
-    RtlCode = try translator:translate(ParseTree)
+translate(Stream, ParseTree, Lines) ->
+    RtlCode = try translator:translate(ParseTree, Lines)
     catch
         {translator_exception, {Line, Message}} ->
             Message1 = format_error(Stream, Line, Message),

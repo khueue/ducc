@@ -41,7 +41,7 @@ read_lines_and_string(Stream) ->
     {Lines, String}.
 
 compile(Program, Stream, String, Lines) ->
-    Result = (catch process(Program, Stream, String)),
+    Result = (catch process(Program, Stream, String, Lines)),
     case Result of
         {ok, Output} ->
             tool_chain:term_to_output({{source,Lines}, Output});
@@ -57,23 +57,23 @@ compile(Program, Stream, String, Lines) ->
             tool_chain:die(String)
     end.
 
-process(Program, Stream, String) ->
+process(Program, Stream, String, Lines) ->
     case Program of
         lexer ->
             {ok, Tokens} = lexer_driver:tokenize(Stream, String),
             {ok, {tokens,Tokens}};
         parser ->
-            {ok, {tokens,Tokens}} = process(lexer, Stream, String),
+            {ok, {tokens,Tokens}} = process(lexer, Stream, String, Lines),
             {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
             {ok, {ast,ParseTree}};
         analyzer ->
-            {ok, {ast,ParseTree}} = process(parser, Stream, String),
+            {ok, {ast,ParseTree}} = process(parser, Stream, String, Lines),
             {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
             {ok, {ast,ParseTree1}};
         translator ->
-            {ok, {ast,ParseTree1}} = process(analyzer, Stream, String),
-            {ok, RtlCode} = translator_driver:translate(Stream, ParseTree1),
+            {ok, {ast,ParseTree1}} = process(analyzer, Stream, String, Lines),
+            {ok, RtlCode} = translator_driver:translate(Stream, ParseTree1, Lines),
             {ok, {rtl,RtlCode}};
         _DefaultAllSteps ->
-            process(translator, Stream, String)
+            process(translator, Stream, String, Lines)
     end.

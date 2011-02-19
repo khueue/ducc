@@ -1,5 +1,5 @@
 -module(translator).
--export([translate/1]).
+-export([translate/2]).
 
 -define(HELPER, translator_helpers).
 -define(ENV, translator_env).
@@ -14,12 +14,9 @@
 % {global,{label,321}},  array, {Size, Count}
 % {global,{label,321}}, scalar, {Size}
 
-translate(ParseTree) ->
-    Env = ?ENV:new(),
-    translate(ParseTree, Env).
-
-translate(ParseTree, Env0) ->
-    translate_program(ParseTree, Env0).
+translate(ParseTree, Lines) ->
+    Env = ?ENV:new(Lines),
+    translate_program(ParseTree, Env).
 
 translate_program({_Meta, _File, Topdecs}, Env0) ->
     translate_topdecs(Topdecs, Env0).
@@ -147,12 +144,15 @@ translate_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     translate_stmts(Stmts, Env0);
 translate_stmt(Stmt, Env0) ->
     Tag = ?HELPER:get_tag(Stmt),
-    case Tag of
+    {Env1, Instructions, Temps} = case Tag of
         return -> translate_return(Stmt, Env0);
         while  -> translate_while(Stmt, Env0);
         'if'   -> translate_if(Stmt, Env0);
         _Expr  -> translate_expr(Stmt, Env0)
-    end.
+    end,
+    LineNum = ?HELPER:get_line(Stmt),
+    SourceLine = ?ENV:get_source_line(LineNum, Env1),
+    {Env1, [{source,LineNum,SourceLine}|Instructions], Temps}.
 
 translate_return({_Meta, nil}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
