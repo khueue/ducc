@@ -9,7 +9,7 @@
              [],
              [{temp,2},{temp,3}],
              0,
-             [{source,5,"    gs = 333;"},
+             [{'SOURCE',5,"    gs = 333;"},
               {eval,{temp,2},{icon,333}},
               {eval,{temp,3},{labref,{label,100}}},
               {store,long,{temp,3},{temp,2}}],

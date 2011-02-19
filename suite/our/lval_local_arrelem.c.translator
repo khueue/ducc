@@ -7,7 +7,7 @@
              [],
              [{temp,2},{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8}],
              40,
-             [{source,4,"    la[9] = 333;"},
+             [{'SOURCE',4,"    la[9] = 333;"},
               {eval,{temp,2},{icon,333}},
               {eval,{temp,3},{icon,9}},
               {eval,{temp,4},{icon,4}},

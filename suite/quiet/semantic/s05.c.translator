@@ -16,7 +16,7 @@
               {temp,9},
               {temp,10}],
              27,
-             [{source,5,"  s[0] = 'a'+t;"},
+             [{'SOURCE',5,"  s[0] = 'a'+t;"},
               {eval,{temp,3},{icon,a}},
               {eval,{temp,4},{binop,'+',{temp,3},{temp,2}}},
               {eval,{temp,5},{icon,0}},

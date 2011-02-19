@@ -11,7 +11,7 @@
              [],
              [{temp,3},{temp,4},{temp,5},{temp,6}],
              0,
-             [{source,6,"  a = foo(a);\t"},
+             [{'SOURCE',6,"  a = foo(a);\t"},
               {eval,{temp,3},{labref,{label,100}}},
               {load,long,{temp,4},{temp,3}},
               {call,{temp,5},{label,"foo"},[{temp,4}]},

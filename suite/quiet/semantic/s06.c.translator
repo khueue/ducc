@@ -9,8 +9,8 @@
              [],
              [{temp,2},{temp,3}],
              0,
-             [{source,5,"  x = y;"},
+             [{'SOURCE',5,"  x = y;"},
               {eval,{temp,2},{temp,3}},
-              {source,6,"  y = x;"},
+              {'SOURCE',6,"  y = x;"},
               {eval,{temp,3},{temp,2}}],
              {labdef,{label,100}}}]}}.
