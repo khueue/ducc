@@ -5,7 +5,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 ## TODO
 
  * Assignment 5
- * Include .c source in AST?
 
 ## Before Hand-In
 

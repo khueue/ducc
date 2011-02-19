@@ -1,1 +1,4 @@
-{{1,program},"suite/quiet/lexer/l01.c",[{{1,fundef},int,"main",[],[],[]}]}.
+{{source,[{1,"int main (void) { ; }"},{2,[]}]},
+ {ast,{{1,program},
+       "suite/quiet/lexer/l01.c",
+       [{{1,fundef},int,"main",[],[],[]}]}}}.

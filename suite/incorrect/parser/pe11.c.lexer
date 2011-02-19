@@ -1,1 +1,6 @@
-[{ident,3,"foo"},{'(',3},{intconst,3,0},{')',3},{';',3}].
+{{source,[{1,
+           "/* Test file for syntactic errors. Contains exactly one error. */"},
+          {2,[]},
+          {3,"foo(0);"},
+          {4,[]}]},
+ {tokens,[{ident,3,"foo"},{'(',3},{intconst,3,0},{')',3},{';',3}]}}.

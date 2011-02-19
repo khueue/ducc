@@ -1,1 +1,8 @@
-[{void,3},{ident,3,"fred"},{'{',3},{';',4},{'}',5}].
+{{source,[{1,
+           "/* Test file for syntactic errors. Contains exactly one error. */"},
+          {2,[]},
+          {3,"void fred { // Missing parameter list"},
+          {4,"  ;"},
+          {5,"}"},
+          {6,[]}]},
+ {tokens,[{void,3},{ident,3,"fred"},{'{',3},{';',4},{'}',5}]}}.

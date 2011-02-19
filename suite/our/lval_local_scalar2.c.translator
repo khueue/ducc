@@ -1,6 +1,9 @@
-[{proc,{label,"foo"},
-       [{temp,2}],
-       [{temp,3}],
-       0,
-       [{eval,{temp,3},{icon,333}},{eval,{temp,2},{temp,3}}],
-       {labdef,{label,100}}}].
+{{source,[{1,"int foo(int ls)"},{2,"{"},{3,"    ls = 333;"},{4,"}"}]},
+ {rtl,[{proc,{label,"foo"},
+             [{temp,2}],
+             [{temp,3}],
+             0,
+             [{source,3,"    ls = 333;"},
+              {eval,{temp,3},{icon,333}},
+              {eval,{temp,2},{temp,3}}],
+             {labdef,{label,100}}}]}}.

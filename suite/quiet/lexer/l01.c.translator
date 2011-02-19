@@ -1,1 +1,2 @@
-[{proc,{label,"main"},[],[],0,[],{labdef,{label,100}}}].
+{{source,[{1,"int main (void) { ; }"},{2,[]}]},
+ {rtl,[{proc,{label,"main"},[],[],0,[],{labdef,{label,100}}}]}}.

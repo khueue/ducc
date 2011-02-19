@@ -1,5 +1,6 @@
-{{1,program},
- "suite/our/binop_or.c",
- [{{1,fundef},
-   int,"main",[],[],
-   [{{3,binop},{{3,intconst},111},'||',{{3,intconst},222}}]}]}.
+{{source,[{1,"int main(void)"},{2,"{"},{3,"    111 || 222;"},{4,"}"}]},
+ {ast,{{1,program},
+       "suite/our/binop_or.c",
+       [{{1,fundef},
+         int,"main",[],[],
+         [{{3,binop},{{3,intconst},111},'||',{{3,intconst},222}}]}]}}}.
