@@ -152,7 +152,7 @@ translate_stmt(Stmt, Env0) ->
     end,
     LineNum = ?HELPER:get_line(Stmt),
     SourceLine = ?ENV:get_source_line(LineNum, Env1),
-    {Env1, [{source,LineNum,SourceLine}|Instructions], Temps}.
+    {Env1, [{'SOURCE',LineNum,SourceLine}|Instructions], Temps}.
 
 translate_return({_Meta, nil}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
