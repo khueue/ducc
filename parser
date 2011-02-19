@@ -10,8 +10,8 @@ main([]) ->
     String = tool_chain:string_from_input(),
     Result = (catch process(Stream, String)),
     case Result of
-        {ok, ParseTree} ->
-            tool_chain:term_to_output(ParseTree);
+        {_SourceLines, {ast,_ParseTree}} = Output ->
+            tool_chain:term_to_output(Output);
         {parser_exception, Message} ->
             tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
@@ -23,5 +23,6 @@ main(_) ->
     usage().
 
 process(Stream, String) ->
-    Tokens = tool_chain:term_from_string(String),
-    parser_driver:parse(Stream, Tokens).
+    {SourceLines, {tokens,Tokens}} = tool_chain:term_from_string(String),
+    {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+    {SourceLines, {ast,ParseTree}}.

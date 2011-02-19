@@ -11,42 +11,40 @@ usage() ->
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
 main(["-l", File]) ->
-    String = read_string(File),
-    compile(lexer, File, String);
+    {Lines, String} = read_lines_and_string(File),
+    compile(lexer, File, String, Lines);
 main(["-p", File]) ->
-    String = read_string(File),
-    compile(parser, File, String);
+    {Lines, String} = read_lines_and_string(File),
+    compile(parser, File, String, Lines);
 main(["-a", File]) ->
-    String = read_string(File),
-    compile(analyzer, File, String);
+    {Lines, String} = read_lines_and_string(File),
+    compile(analyzer, File, String, Lines);
 main(["-t", File]) ->
-    String = read_string(File),
-    compile(translator, File, String);
+    {Lines, String} = read_lines_and_string(File),
+    compile(translator, File, String, Lines);
 main([]) ->
-    String = read_string(standard_io),
-    compile(default, '<stdin>', String);
+    {Lines, String} = read_lines_and_string(standard_io),
+    compile(default, '<stdin>', String, Lines);
 main([File]) ->
-    String = read_string(File),
-    compile(default, File, String);
+    {Lines, String} = read_lines_and_string(File),
+    compile(default, File, String, Lines);
 main(_) ->
     usage().
 
-read_string(standard_io) ->
-    tool_chain:string_from_input();
-read_string(Stream) ->
-    Result = (catch tool_chain:string_from_file(Stream)),
-    case Result of
-        {ok, String} ->
-            String;
-        {file_exception, Message} ->
-            tool_chain:die(Message)
-    end.
+read_lines_and_string(standard_io) ->
+    Lines = tool_chain:read_lines_from_stream(standard_io),
+    String = tool_chain:string_from_lines(Lines),
+    {Lines, String};
+read_lines_and_string(Stream) ->
+    Lines = tool_chain:read_lines_from_file(Stream),
+    String = tool_chain:string_from_lines(Lines),
+    {Lines, String}.
 
-compile(Program, Stream, String) ->
+compile(Program, Stream, String, Lines) ->
     Result = (catch process(Program, Stream, String)),
     case Result of
-        {ok, ParseTree} ->
-            tool_chain:term_to_output(ParseTree);
+        {ok, Output} ->
+            tool_chain:term_to_output({{source,Lines}, Output});
         {lexer_exception, Message} ->
             tool_chain:die(Message);
         {parser_exception, Message} ->
@@ -56,30 +54,26 @@ compile(Program, Stream, String) ->
         {translator_exception, Message} ->
             tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String);
-        UnknownError ->
-            tool_chain:die('~p~n', [UnknownError])
+            tool_chain:die(String)
     end.
 
 process(Program, Stream, String) ->
     case Program of
         lexer ->
-            {ok, _Tokens} = lexer_driver:tokenize(Stream, String);
+            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
+            {ok, {tokens,Tokens}};
         parser ->
-            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
-            {ok, _ParseTree} = parser_driver:parse(Stream, Tokens);
+            {ok, {tokens,Tokens}} = process(lexer, Stream, String),
+            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
+            {ok, {ast,ParseTree}};
         analyzer ->
-            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
-            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-            {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree);
+            {ok, {ast,ParseTree}} = process(parser, Stream, String),
+            {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
+            {ok, {ast,ParseTree1}};
         translator ->
-            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
-            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-            {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
-            {ok, _Instrs} = translator_driver:translate(Stream, ParseTree1);
-        _Default ->
-            {ok, Tokens} = lexer_driver:tokenize(Stream, String),
-            {ok, ParseTree} = parser_driver:parse(Stream, Tokens),
-            {ok, ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
-            {ok, _ParseTree2} = translator_driver:translate(Stream, ParseTree1)
+            {ok, {ast,ParseTree1}} = process(analyzer, Stream, String),
+            {ok, RtlCode} = translator_driver:translate(Stream, ParseTree1),
+            {ok, {rtl,RtlCode}};
+        _DefaultAllSteps ->
+            process(translator, Stream, String)
     end.

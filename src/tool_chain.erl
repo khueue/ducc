@@ -1,12 +1,53 @@
 -module(tool_chain).
 -export([
+    read_lines_from_file/1,
+    read_lines_from_stream/1,
     string_from_input/0,
+    string_from_lines/1,
     string_from_file/1,
     string_from_stream/1,
     term_from_string/1,
     term_to_output/1,
     die/1,
     die/2]).
+
+read_lines_from_file(File) ->
+    case file:open(File, [read]) of
+        {ok, Stream} ->
+            Lines = read_lines_from_stream(Stream),
+            file:close(Stream),
+            Lines;
+        _Error ->
+            Message = io_lib:format('Error reading file: ~s~n', [File]),
+            throw({file_exception, Message})
+    end.
+
+read_lines_from_stream(Stream) ->
+    read_lines_from_stream(Stream, 1).
+
+read_lines_from_stream(Stream, LineNum) ->
+    case file:read_line(Stream) of
+        eof ->
+            [];
+        {ok, LineWithNewline} ->
+            Line = strip_newline(LineWithNewline),
+            [{LineNum, Line} | read_lines_from_stream(Stream, LineNum+1)];
+        {error, Reason} ->
+            io:format("~p~n", [Reason])
+    end.
+
+strip_newline([]) -> [];
+strip_newline(String) ->
+    LastChar = lists:last(String),
+    case LastChar of
+        $\n -> string:substr(String, 1, erlang:length(String)-1);
+        _Ch -> String
+    end.
+
+string_from_lines([]) -> [];
+string_from_lines([{_Num,Line}|Lines]) ->
+    Line ++ "\n" ++
+    string_from_lines(Lines).
 
 string_from_input() ->
     string_from_stream(standard_io).
