@@ -9,6 +9,7 @@
     get_return_temp/1,
     type_size/1,
     round4/1,
+    source_line_header/2,
     char_to_int/1]).
 
 -define(ENV, translator_env).
@@ -54,6 +55,12 @@ round4(MultipleOfFour, N) ->
         true  -> MultipleOfFour;
         false -> round4(MultipleOfFour+4, N)
     end.
+
+source_line_header(Node, Env) ->
+    Tag = get_tag(Node),
+    LineNum = get_line(Node),
+    SourceLine = ?ENV:get_source_line(LineNum, Env),
+    {'- SOURCE -', LineNum, Tag, SourceLine}.
 
 % XXX Move to emitter step.
 char_to_int(Value) ->

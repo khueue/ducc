@@ -141,10 +141,8 @@ translate_stmt(Stmt, Env0) ->
         'if'   -> translate_if(Stmt, Env0);
         _Expr  -> translate_expr(Stmt, Env0)
     end,
-    % XXX Factor this out:
-    LineNum = ?HELPER:get_line(Stmt),
-    SourceLine = ?ENV:get_source_line(LineNum, Env1),
-    {Env1, [{'- SOURCE -',LineNum,Tag,SourceLine}|Instructions], Temps}.
+    SourceLineHeader = ?HELPER:source_line_header(Stmt, Env1),
+    {Env1, [SourceLineHeader|Instructions], Temps}.
 
 translate_return({_Meta, nil}, Env0) ->
     {_LabelStart, LabelEnd} = ?ENV:get_function_labels(Env0),
@@ -229,10 +227,8 @@ translate_expr(Expr, Env0) ->
         funcall   -> translate_funcall(Expr, Env0);
         arrelem   -> translate_arrelem(Expr, Env0)
     end,
-    % XXX Factor this out:
-    LineNum = ?HELPER:get_line(Expr),
-    SourceLine = ?ENV:get_source_line(LineNum, Env1),
-    {Env1, [{'- SOURCE -',LineNum,Tag,SourceLine}|Instructions], Temps}.
+    SourceLineHeader = ?HELPER:source_line_header(Expr, Env1),
+    {Env1, [SourceLineHeader|Instructions], Temps}.
 
 translate_binop(Expr = {_Meta, _Lhs, Op, _Rhs}, Env0) ->
     case Op of
