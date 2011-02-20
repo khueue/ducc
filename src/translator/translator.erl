@@ -320,10 +320,13 @@ translate_rval(Rhs, Env0) ->
 
 translate_lval(Lhs, Env0, TempRhs) ->
     Tag = ?HELPER:get_tag(Lhs),
+    {Env1, Instructions, Temps} =
     case Tag of
         ident   -> translate_lval_ident(Lhs, Env0, TempRhs);
         arrelem -> translate_lval_arrelem(Lhs, Env0, TempRhs)
-    end.
+    end,
+    SourceLineHeader = ?HELPER:source_line_header(Lhs, Env1),
+    {Env1, [SourceLineHeader|Instructions], Temps}.
 
 translate_lval_ident(Node = {_Meta, Name}, Env0, TempRhs) ->
     SymbolInfo = {Scope, _, _, _} = ?ENV:lookup(Name, Node, Env0),
