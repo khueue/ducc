@@ -79,7 +79,7 @@ to_term(Tokens) ->
     end.
 
 term_to_output(Term) ->
-    io:fwrite('~p.~n', [Term]).
+    io:fwrite('~100p.~n', [Term]).
 
 die(Message) ->
     die(Message, []).
