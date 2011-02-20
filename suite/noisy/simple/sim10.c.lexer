@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Let's try all I/O operations. The program waits until you have"},
+{{source,[{1,"/* Let's try all I/O operations. The program waits until you have"},
           {2,"   answered the questions. */"},
           {3,[]},
           {4,"void putint(int x);"},

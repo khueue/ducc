@@ -1,7 +1,6 @@
 {{source,[{1,"void putint(int x);"},
           {2,[]},
-          {3,
-           "/* Test the implementation of global and local arrays. Note that"},
+          {3,"/* Test the implementation of global and local arrays. Note that"},
           {4,"   output will appear as \"123456\".*/"},
           {5,[]},
           {6,"int a[10];"},

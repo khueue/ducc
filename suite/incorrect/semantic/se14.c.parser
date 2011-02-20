@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"int f(int n) {"},
           {4,"  return n / 2;"},
@@ -31,12 +30,7 @@
          void,"p",
          [{{8,scalardec},int,"n"}],
          [{{9,scalardec},int,"f"}],
-         [{{11,binop},
-           {{11,ident},"f"},
-           '=',
-           {{11,binop},{{11,ident},"n"},'*',{{11,intconst},2}}},
+         [{{11,binop},{{11,ident},"f"},'=',{{11,binop},{{11,ident},"n"},'*',{{11,intconst},2}}},
           {{12,funcall},"f",[{{12,ident},"n"}]}]},
         {{16,scalardec},int,"n"},
-        {{18,fundef},
-         int,"main",[],[],
-         [{{19,funcall},"p",[{{19,ident},"n"}]}]}]}}}.
+        {{18,fundef},int,"main",[],[],[{{19,funcall},"p",[{{19,ident},"n"}]}]}]}}}.

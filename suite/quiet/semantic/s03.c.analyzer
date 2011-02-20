@@ -16,6 +16,4 @@
          [{{4,farraydec},int,"x"}],
          [],
          [{{5,return},{{5,arrelem},"x",{{5,intconst},0}}}]},
-        {{8,fundef},
-         int,"main",[],[],
-         [{{9,funcall},"foo",[{{9,ident},"a"}]}]}]}}}.
+        {{8,fundef},int,"main",[],[],[{{9,funcall},"foo",[{{9,ident},"a"}]}]}]}}}.

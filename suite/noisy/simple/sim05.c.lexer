@@ -1,5 +1,4 @@
-{{source,[{1,
-           "// Should first print 42 nine times, then an approximation of PI"},
+{{source,[{1,"// Should first print 42 nine times, then an approximation of PI"},
           {2,"// times one million. Finally it should print 110001000."},
           {3,[]},
           {4,"void putint(int i);"},

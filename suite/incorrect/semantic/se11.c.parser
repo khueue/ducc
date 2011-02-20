@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"int a(void) {"},
           {4,"  a = 1;\t// 'a' is not an lval"},
@@ -13,6 +12,5 @@
        "suite/incorrect/semantic/se11.c",
        [{{3,fundef},
          int,"a",[],[],
-         [{{4,binop},{{4,ident},"a"},'=',{{4,intconst},1}},
-          {{5,return},{{5,intconst},0}}]},
+         [{{4,binop},{{4,ident},"a"},'=',{{4,intconst},1}},{{5,return},{{5,intconst},0}}]},
         {{7,fundef},int,"main",[],[],[{{8,funcall},"a",[]}]}]}}}.

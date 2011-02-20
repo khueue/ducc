@@ -1,14 +1,7 @@
-{{source,[{1,"int main(void)"},
-          {2,"{"},
-          {3,"    int la[10];"},
-          {4,"    la[9] = 333;"},
-          {5,"}"}]},
+{{source,[{1,"int main(void)"},{2,"{"},{3,"    int la[10];"},{4,"    la[9] = 333;"},{5,"}"}]},
  {ast,{{1,program},
        "suite/our/lval_local_arrelem.c",
        [{{1,fundef},
          int,"main",[],
          [{{3,arraydec},int,"la",10}],
-         [{{4,binop},
-           {{4,arrelem},"la",{{4,intconst},9}},
-           '=',
-           {{4,intconst},333}}]}]}}}.
+         [{{4,binop},{{4,arrelem},"la",{{4,intconst},9}},'=',{{4,intconst},333}}]}]}}}.

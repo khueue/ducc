@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,[]},
           {4,"int a;"},
@@ -10,6 +9,4 @@
  {ast,{{4,program},
        "suite/incorrect/semantic/se12.c",
        [{{4,scalardec},int,"a"},
-        {{5,fundef},
-         int,"main",[],[],
-         [{{6,funcall},"a",[{{6,intconst},2}]}]}]}}}.
+        {{5,fundef},int,"main",[],[],[{{6,funcall},"a",[{{6,intconst},2}]}]}]}}}.

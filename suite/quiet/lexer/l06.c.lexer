@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* This file contains examples of various types of white space and comments. */"},
+{{source,[{1,"/* This file contains examples of various types of white space and comments. */"},
           {2,"// A blank (32)"},
           {3," "},
           {4,"// A new-line (10)"},
@@ -17,11 +16,4 @@
           {16,[]},
           {17,[]},
           {18,[]}]},
- {tokens,[{int,14},
-          {ident,14,"main"},
-          {'(',14},
-          {void,15},
-          {')',15},
-          {'{',15},
-          {';',15},
-          {'}',15}]}}.
+ {tokens,[{int,14},{ident,14,"main"},{'(',14},{void,15},{')',15},{'{',15},{';',15},{'}',15}]}}.

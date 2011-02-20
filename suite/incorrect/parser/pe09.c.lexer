@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for syntactic errors. Contains exactly one error */"},
+{{source,[{1,"/* Test file for syntactic errors. Contains exactly one error */"},
           {2,"int main(void) ;"},
           {3,"     ; // '}' missing "},
           {4,[]}]},

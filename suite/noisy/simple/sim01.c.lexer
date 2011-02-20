@@ -1,7 +1,6 @@
 {{source,[{1,"void putint(int x);"},
           {2,[]},
-          {3,
-           "/* A program that prints 42. Note that the output does not end with a"},
+          {3,"/* A program that prints 42. Note that the output does not end with a"},
           {4,"   newline. */"},
           {5,[]},
           {6,"int main(void) {"},

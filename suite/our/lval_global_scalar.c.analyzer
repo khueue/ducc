@@ -1,12 +1,5 @@
-{{source,[{1,"int gs;"},
-          {2,[]},
-          {3,"int main(void)"},
-          {4,"{"},
-          {5,"    gs = 333;"},
-          {6,"}"}]},
+{{source,[{1,"int gs;"},{2,[]},{3,"int main(void)"},{4,"{"},{5,"    gs = 333;"},{6,"}"}]},
  {ast,{{1,program},
        "suite/our/lval_global_scalar.c",
        [{{1,scalardec},int,"gs"},
-        {{3,fundef},
-         int,"main",[],[],
-         [{{5,binop},{{5,ident},"gs"},'=',{{5,intconst},333}}]}]}}}.
+        {{3,fundef},int,"main",[],[],[{{5,binop},{{5,ident},"gs"},'=',{{5,intconst},333}}]}]}}}.

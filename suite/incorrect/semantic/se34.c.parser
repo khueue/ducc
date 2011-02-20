@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"int d(int a, int b);"},
           {4,[]},
@@ -11,6 +10,4 @@
        [{{3,fundec},int,"d",[{{3,scalardec},int,"a"},{{3,scalardec},int,"b"}]},
         {{5,fundef},
          int,"main",[],[],
-         [{{6,funcall},
-           "d",
-           [{{6,intconst},1},{{6,intconst},2},{{6,intconst},3}]}]}]}}}.
+         [{{6,funcall},"d",[{{6,intconst},1},{{6,intconst},2},{{6,intconst},3}]}]}]}}}.

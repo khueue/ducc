@@ -1,10 +1,7 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,"int main(void) {"},
           {3,"  output(0);\t// Procedure 'output' not defined"},
           {4,"}"}]},
  {ast,{{2,program},
        "suite/incorrect/semantic/se03.c",
-       [{{2,fundef},
-         int,"main",[],[],
-         [{{3,funcall},"output",[{{3,intconst},0}]}]}]}}}.
+       [{{2,fundef},int,"main",[],[],[{{3,funcall},"output",[{{3,intconst},0}]}]}]}}}.

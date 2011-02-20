@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* This file contains examples of various types of white space and comments. */"},
+{{source,[{1,"/* This file contains examples of various types of white space and comments. */"},
           {2,"// A blank (32)"},
           {3," "},
           {4,"// A new-line (10)"},
@@ -17,6 +16,4 @@
           {16,[]},
           {17,[]},
           {18,[]}]},
- {ast,{{14,program},
-       "suite/quiet/lexer/l06.c",
-       [{{14,fundef},int,"main",[],[],[]}]}}}.
+ {ast,{{14,program},"suite/quiet/lexer/l06.c",[{{14,fundef},int,"main",[],[],[]}]}}}.

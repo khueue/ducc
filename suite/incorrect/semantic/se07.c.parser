@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"void a(int n) {"},
           {4,"  return 2 * n;\t// Attempt to return value from procedure"},
@@ -16,6 +15,4 @@
          [{{3,scalardec},int,"n"}],
          [],
          [{{4,return},{{4,binop},{{4,intconst},2},'*',{{4,ident},"n"}}}]},
-        {{7,fundef},
-         int,"main",[],[],
-         [{{8,funcall},"a",[{{8,intconst},2}]}]}]}}}.
+        {{7,fundef},int,"main",[],[],[{{8,funcall},"a",[{{8,intconst},2}]}]}]}}}.

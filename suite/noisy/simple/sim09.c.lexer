@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Passing arrays as arguments of functions poses some particular"},
+{{source,[{1,"/* Passing arrays as arguments of functions poses some particular"},
           {2,"   difficulties. This program should output"},
           {3,[]},
           {4,"   12345678"},

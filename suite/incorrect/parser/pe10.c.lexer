@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for syntactic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for syntactic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"void  foo(int a, int b, int c){"},
           {4,"  ;"},

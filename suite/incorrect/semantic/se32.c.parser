@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"void foo(int n);"},
           {4,[]},
@@ -11,7 +10,4 @@
        [{{3,fundec},void,"foo",[{{3,scalardec},int,"n"}]},
         {{5,fundef},
          int,"main",[],[],
-         [{{6,binop},
-           {{6,intconst},1},
-           '+',
-           {{6,funcall},"foo",[{{6,intconst},0}]}}]}]}}}.
+         [{{6,binop},{{6,intconst},1},'+',{{6,funcall},"foo",[{{6,intconst},0}]}}]}]}}}.

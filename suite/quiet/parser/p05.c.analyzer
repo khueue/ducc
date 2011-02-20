@@ -36,16 +36,8 @@
           {{12,scalardec},char,"k"},
           {{13,arraydec},int,"l",10},
           {{14,arraydec},char,"m",10}],
-         [{{16,funcall},
-           "f",
-           [{{16,ident},"a"},
-            {{16,ident},"k"},
-            {{16,ident},"l"},
-            {{16,ident},"d"}]},
+         [{{16,funcall},"f",[{{16,ident},"a"},{{16,ident},"k"},{{16,ident},"l"},{{16,ident},"d"}]},
           {{18,binop},
            {{18,arrelem},"c",{{18,intconst},5}},
            '=',
-           {{18,binop},
-            {{18,arrelem},"l",{{18,intconst},7}},
-            '+',
-            {{18,intconst},1}}}]}]}}}.
+           {{18,binop},{{18,arrelem},"l",{{18,intconst},7}},'+',{{18,intconst},1}}}]}]}}}.

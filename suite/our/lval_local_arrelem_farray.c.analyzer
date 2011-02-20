@@ -1,14 +1,8 @@
-{{source,[{1,"int main(int farray[])"},
-          {2,"{"},
-          {3,"    farray[9] = 333;"},
-          {4,"}"}]},
+{{source,[{1,"int main(int farray[])"},{2,"{"},{3,"    farray[9] = 333;"},{4,"}"}]},
  {ast,{{1,program},
        "suite/our/lval_local_arrelem_farray.c",
        [{{1,fundef},
          int,"main",
          [{{1,farraydec},int,"farray"}],
          [],
-         [{{3,binop},
-           {{3,arrelem},"farray",{{3,intconst},9}},
-           '=',
-           {{3,intconst},333}}]}]}}}.
+         [{{3,binop},{{3,arrelem},"farray",{{3,intconst},9}},'=',{{3,intconst},333}}]}]}}}.

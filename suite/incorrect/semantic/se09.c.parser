@@ -1,11 +1,9 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"int a(int n) {"},
           {4,"  char x[1];"},
           {5,"  if (n != 0) return 2;"},
-          {6,
-           "  else return x;    // Return from function with erroneous type"},
+          {6,"  else return x;    // Return from function with erroneous type"},
           {7,"}"},
           {8,[]},
           {9,"int main(void) {"},
@@ -23,6 +21,4 @@
            {{5,binop},{{5,ident},"n"},'!=',{{5,intconst},0}},
            {{5,return},{{5,intconst},2}},
            {{6,return},{{6,ident},"x"}}}]},
-        {{9,fundef},
-         int,"main",[],[],
-         [{{10,funcall},"a",[{{10,intconst},5}]}]}]}}}.
+        {{9,fundef},int,"main",[],[],[{{10,funcall},"a",[{{10,intconst},5}]}]}]}}}.

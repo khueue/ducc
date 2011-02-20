@@ -1,7 +1,6 @@
 {{source,[{1,"void putint(int x);"},
           {2,[]},
-          {3,
-           "/* Test the implementation of global and local variables. Note that"},
+          {3,"/* Test the implementation of global and local variables. Note that"},
           {4,"   output will appear as \"7654321\".*/"},
           {5,[]},
           {6,"int foo;"},

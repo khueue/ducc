@@ -11,7 +11,4 @@
         {{2,fundef},int,"foo",[{{2,scalardec},int,"x"}],[],[]},
         {{5,fundef},
          int,"main",[],[],
-         [{{6,binop},
-           {{6,ident},"a"},
-           '=',
-           {{6,funcall},"foo",[{{6,ident},"a"}]}}]}]}}}.
+         [{{6,binop},{{6,ident},"a"},'=',{{6,funcall},"foo",[{{6,ident},"a"}]}}]}]}}}.

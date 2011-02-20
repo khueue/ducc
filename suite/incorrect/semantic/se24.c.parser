@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"char first(int a[]) {"},
           {4,"  int b[10];"},
@@ -14,5 +13,4 @@
          char,"first",
          [{{3,farraydec},int,"a"}],
          [{{4,arraydec},int,"b",10}],
-         [{{6,binop},{{6,ident},"b"},'=',{{6,ident},"a"}},
-          {{7,return},{{7,intconst},1}}]}]}}}.
+         [{{6,binop},{{6,ident},"b"},'=',{{6,ident},"a"}},{{7,return},{{7,intconst},1}}]}]}}}.

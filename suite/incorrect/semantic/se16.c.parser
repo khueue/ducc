@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,[]},
           {4,"int d(int a, int b) {"},
@@ -18,6 +17,4 @@
          [{{5,return},{{5,binop},{{5,ident},"b"},'-',{{5,ident},"a"}}}]},
         {{8,fundef},
          int,"main",[],[],
-         [{{9,funcall},
-           "d",
-           [{{9,intconst},1},{{9,intconst},2},{{9,intconst},3}]}]}]}}}.
+         [{{9,funcall},"d",[{{9,intconst},1},{{9,intconst},2},{{9,intconst},3}]}]}]}}}.

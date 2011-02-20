@@ -1,6 +1,5 @@
 {{source,[{1,"/* Some strange but legal expressions and statements. "},
-          {2,
-           "   For more examples of semantically correct code, see noisy/simple "},
+          {2,"   For more examples of semantically correct code, see noisy/simple "},
           {3,"*/"},
           {4,[]},
           {5,"int x;"},

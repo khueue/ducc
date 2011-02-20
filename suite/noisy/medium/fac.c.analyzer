@@ -31,13 +31,9 @@
             {{11,binop},
              {{11,ident},"n"},
              '*',
-             {{11,funcall},
-              "fac",
-              [{{11,binop},{{11,ident},"n"},'-',{{11,intconst},1}}]}}}}]},
+             {{11,funcall},"fac",[{{11,binop},{{11,ident},"n"},'-',{{11,intconst},1}}]}}}}]},
         {{14,scalardec},int,"a"},
         {{15,fundef},
          int,"main",[],[],
          [{{16,binop},{{16,ident},"a"},'=',{{16,funcall},"getint",[]}},
-          {{17,funcall},
-           "putint",
-           [{{17,funcall},"fac",[{{17,ident},"a"}]}]}]}]}}}.
+          {{17,funcall},"putint",[{{17,funcall},"fac",[{{17,ident},"a"}]}]}]}]}}}.

@@ -1,5 +1,4 @@
-{{source,[{1,
-           "/* Test file for semantic errors. Contains exactly one error. */"},
+{{source,[{1,"/* Test file for semantic errors. Contains exactly one error. */"},
           {2,[]},
           {3,"char a[10];"},
           {4,[]},
@@ -9,6 +8,4 @@
  {ast,{{3,program},
        "suite/incorrect/semantic/se18.c",
        [{{3,arraydec},char,"a",10},
-        {{5,fundef},
-         int,"main",[],[],
-         [{{6,binop},{{6,ident},"a"},'=',{{6,intconst},42}}]}]}}}.
+        {{5,fundef},int,"main",[],[],[{{6,binop},{{6,ident},"a"},'=',{{6,intconst},42}}]}]}}}.

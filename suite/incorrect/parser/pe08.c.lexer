@@ -1,12 +1,5 @@
-{{source,[{1,
-           "/* Test file for syntactic errors. Contains exactly one error */"},
+{{source,[{1,"/* Test file for syntactic errors. Contains exactly one error */"},
           {2,"int main(void) "},
           {3,"     42; // Procedure definition must have {}"},
           {4,[]}]},
- {tokens,[{int,2},
-          {ident,2,"main"},
-          {'(',2},
-          {void,2},
-          {')',2},
-          {intconst,3,42},
-          {';',3}]}}.
+ {tokens,[{int,2},{ident,2,"main"},{'(',2},{void,2},{')',2},{intconst,3,42},{';',3}]}}.
