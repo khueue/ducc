@@ -59,7 +59,10 @@ round4(MultipleOfFour, N) ->
 source_line_header(Node, Env) ->
     Tag = get_tag(Node),
     LineNum = get_line(Node),
-    SourceLine = ?ENV:get_source_line(LineNum, Env),
+    SourceLine = case LineNum of
+        0 -> "<no correspondence in source>";
+        _ -> ?ENV:get_source_line(LineNum, Env)
+    end,
     {'- SOURCE -', LineNum, Tag, SourceLine}.
 
 % XXX Move to emitter step.

@@ -40,21 +40,21 @@ translate_topdec(Topdec, Env0) ->
 translate_global_scalardec({_Meta, Type, Name}, Env0) ->
     {Env1, Label} = ?ENV:get_new_label(Env0),
     Size = ?HELPER:type_size(Type),
-    SymbolInfo = {global, Label, scalar, {Size}},
+    SymbolInfo = symbol_global_scalar(Label, Size),
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
     {Env2, toplevel_data(Label, ?HELPER:size_of(Size))}.
 
 translate_global_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env1, Label} = ?ENV:get_new_label(Env0),
     Size = ?HELPER:type_size(Type),
-    SymbolInfo = {global, Label, array, {Size}},
+    SymbolInfo = symbol_global_array(Label, Size),
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
     {Env2, toplevel_data(Label, Count*?HELPER:size_of(Size))}.
 
 translate_local_scalardec({_Meta, Type, Name}, Env0) ->
     {Env1, Temp} = ?ENV:get_new_temp(Env0),
     Size = ?HELPER:type_size(Type),
-    SymbolInfo = {local, Temp, scalar, {Size}},
+    SymbolInfo = symbol_local_scalar(Temp, Size),
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
     {Env2, [], [Temp]}.
 
@@ -63,7 +63,7 @@ translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
     Offset = ?HELPER:round4(FS),
     Padding = Offset - FS,
     Size = ?HELPER:type_size(Type),
-    SymbolInfo = {local, stack, array, {Size, Offset}},
+    SymbolInfo = symbol_local_array(Size, Offset),
     Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
     Bytes = ?HELPER:size_of(Size),
     Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count + Padding),
@@ -111,7 +111,7 @@ translate_formal(Formal, Env0) ->
 translate_farraydec({_Meta, Type, Name}, Env0) ->
     {Env1, Temp} = ?ENV:get_new_temp(Env0),
     Size = ?HELPER:type_size(Type),
-    SymbolInfo = {local, Temp, farray, {Size}},
+    SymbolInfo = symbol_farray(Temp, Size),
     Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
     {Env2, [], [Temp]}.
 
@@ -596,3 +596,18 @@ toplevel_data(Label, Bytes) ->
 toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
     % XXX How should we deal with the end label?
     {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}.
+
+symbol_global_scalar(Label, Size) ->
+    {global, Label, scalar, {Size}}.
+
+symbol_global_array(Label, Size) ->
+    {global, Label, array, {Size}}.
+
+symbol_local_scalar(Temp, Size) ->
+    {local, Temp, scalar, {Size}}.
+
+symbol_local_array(Size, Offset) ->
+    {local, stack, array, {Size, Offset}}.
+
+symbol_farray(Temp, Size) ->
+    {local, Temp, farray, {Size}}.
