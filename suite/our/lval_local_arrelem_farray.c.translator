@@ -6,6 +6,7 @@
              [{'- SOURCE -',3,binop,"    farray[9] = 333;"},
               {'- SOURCE -',3,intconst,"    farray[9] = 333;"},
               {eval,{temp,3},{icon,333}},
+              {'- SOURCE -',3,arrelem,"    farray[9] = 333;"},
               {'- SOURCE -',3,intconst,"    farray[9] = 333;"},
               {eval,{temp,4},{icon,9}},
               {eval,{temp,5},{icon,4}},

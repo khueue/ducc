@@ -125,6 +125,7 @@
               {'- SOURCE -',13,intconst,"  i=21==22;"},
               {eval,{temp,32},{icon,22}},
               {eval,{temp,33},{binop,'==',{temp,31},{temp,32}}},
+              {'- SOURCE -',13,ident,"  i=21==22;"},
               {eval,{temp,5},{temp,33}},
               {'- SOURCE -',14,binop,"  25 >=27>28;"},
               {'- SOURCE -',14,binop,"  25 >=27>28;"},

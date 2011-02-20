@@ -191,6 +191,7 @@
               {'- SOURCE -',26,binop,"  x = 5;"},
               {'- SOURCE -',26,intconst,"  x = 5;"},
               {eval,{temp,31},{icon,5}},
+              {'- SOURCE -',26,ident,"  x = 5;"},
               {eval,{temp,24},{temp,31}},
               {'- SOURCE -',27,funcall,"  foo(x+0, x+1, x+2, x+x-2, x*2-1);"},
               {'- SOURCE -',27,binop,"  foo(x+0, x+1, x+2, x+x-2, x*2-1);"},

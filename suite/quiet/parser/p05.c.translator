@@ -72,6 +72,7 @@
               {'- SOURCE -',18,intconst,"  c[5] = l[7]+1;"},
               {eval,{temp,21},{icon,1}},
               {eval,{temp,22},{binop,'+',{temp,20},{temp,21}}},
+              {'- SOURCE -',18,arrelem,"  c[5] = l[7]+1;"},
               {'- SOURCE -',18,intconst,"  c[5] = l[7]+1;"},
               {eval,{temp,23},{icon,5}},
               {eval,{temp,24},{icon,4}},

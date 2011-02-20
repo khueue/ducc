@@ -16,11 +16,13 @@ ERL        = erl -pa $(DIR_EBIN) -noshell
 all: setup clean compile
 
 setup:
+	@ echo '--- Trimming and cleaning ...'
 	mkdir -p $(DIR_EBIN)
 	- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
 		report/**/*.* $(SCRIPTS)
 
 clean:
+	@ echo '--- Removing generated files ...'
 	rm -rf $(DIR_LEXER)/$(LEXER_NAME).erl
 	rm -rf $(DIR_PARSER)/$(PARSER_NAME).erl
 	rm -rf $(DIR_EBIN)/*.beam
@@ -36,6 +38,7 @@ compile:
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
 gen_tests: all
+	@ echo '--- Regenerating tests ...'
 	ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
 	ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
 	ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c

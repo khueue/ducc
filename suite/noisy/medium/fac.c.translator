@@ -57,6 +57,7 @@
              [{'- SOURCE -',16,binop,"  a = getint();"},
               {'- SOURCE -',16,funcall,"  a = getint();"},
               {call,{temp,10},{label,"getint"},[]},
+              {'- SOURCE -',16,ident,"  a = getint();"},
               {eval,{temp,11},{labref,{label,103}}},
               {store,long,{temp,11},{temp,10}},
               {'- SOURCE -',17,funcall,"  putint( fac(a));"},

@@ -11,8 +11,10 @@
              0,
              [{'- SOURCE -',5,binop,"  x = y;"},
               {'- SOURCE -',5,ident,"  x = y;"},
+              {'- SOURCE -',5,ident,"  x = y;"},
               {eval,{temp,2},{temp,3}},
               {'- SOURCE -',6,binop,"  y = x;"},
+              {'- SOURCE -',6,ident,"  y = x;"},
               {'- SOURCE -',6,ident,"  y = x;"},
               {eval,{temp,3},{temp,2}}],
              {labdef,{label,100}}}]}}.

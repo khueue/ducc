@@ -17,6 +17,7 @@
               {eval,{temp,3},{labref,{label,100}}},
               {load,long,{temp,4},{temp,3}},
               {call,{temp,5},{label,"foo"},[{temp,4}]},
+              {'- SOURCE -',6,ident,"  a = foo(a);\t"},
               {eval,{temp,6},{labref,{label,100}}},
               {store,long,{temp,6},{temp,5}}],
              {labdef,{label,102}}}]}}.

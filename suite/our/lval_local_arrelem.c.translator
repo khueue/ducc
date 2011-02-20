@@ -6,6 +6,7 @@
              [{'- SOURCE -',4,binop,"    la[9] = 333;"},
               {'- SOURCE -',4,intconst,"    la[9] = 333;"},
               {eval,{temp,2},{icon,333}},
+              {'- SOURCE -',4,arrelem,"    la[9] = 333;"},
               {'- SOURCE -',4,intconst,"    la[9] = 333;"},
               {eval,{temp,3},{icon,9}},
               {eval,{temp,4},{icon,4}},

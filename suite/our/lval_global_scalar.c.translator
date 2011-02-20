@@ -7,6 +7,7 @@
              [{'- SOURCE -',5,binop,"    gs = 333;"},
               {'- SOURCE -',5,intconst,"    gs = 333;"},
               {eval,{temp,2},{icon,333}},
+              {'- SOURCE -',5,ident,"    gs = 333;"},
               {eval,{temp,3},{labref,{label,100}}},
               {store,long,{temp,3},{temp,2}}],
              {labdef,{label,101}}}]}}.

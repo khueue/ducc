@@ -25,6 +25,7 @@
              [{'- SOURCE -',8,binop,"  a[0] = 5;"},
               {'- SOURCE -',8,intconst,"  a[0] = 5;"},
               {eval,{temp,3},{icon,5}},
+              {'- SOURCE -',8,arrelem,"  a[0] = 5;"},
               {'- SOURCE -',8,intconst,"  a[0] = 5;"},
               {eval,{temp,4},{icon,0}},
               {eval,{temp,5},{icon,4}},
