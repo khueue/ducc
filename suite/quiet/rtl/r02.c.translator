@@ -13,7 +13,6 @@
              [{temp,3},{temp,4}],
              0,
              [{'- SOURCE -',7,funcall,"  f(a);"},
-              {'- SOURCE -',7,funcall,"  f(a);"},
               {'- SOURCE -',7,ident,"  f(a);"},
               {eval,{temp,3},{labref,{label,101}}},
               {call,{temp,4},{label,"f"},[{temp,3}]}],

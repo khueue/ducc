@@ -29,7 +29,6 @@
              [{temp,8},{temp,9}],
              0,
              [{'- SOURCE -',9,funcall,"  foo(a);\t"},
-              {'- SOURCE -',9,funcall,"  foo(a);\t"},
               {'- SOURCE -',9,ident,"  foo(a);\t"},
               {eval,{temp,8},{labref,{label,100}}},
               {call,{temp,9},{label,"foo"},[{temp,8}]}],

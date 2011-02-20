@@ -4,7 +4,6 @@
              [{temp,2},{temp,3},{temp,4}],
              0,
              [{'- SOURCE -',3,binop,"    111 || 222;"},
-              {'- SOURCE -',3,binop,"    111 || 222;"},
               {'- SOURCE -',3,intconst,"    111 || 222;"},
               {eval,{temp,2},{icon,111}},
               {cjump,neq,{temp,2},0,{label,101}},

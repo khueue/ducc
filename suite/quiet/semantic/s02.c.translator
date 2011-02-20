@@ -12,7 +12,6 @@
              [{temp,3},{temp,4},{temp,5},{temp,6}],
              0,
              [{'- SOURCE -',6,binop,"  a = foo(a);\t"},
-              {'- SOURCE -',6,binop,"  a = foo(a);\t"},
               {'- SOURCE -',6,funcall,"  a = foo(a);\t"},
               {'- SOURCE -',6,ident,"  a = foo(a);\t"},
               {eval,{temp,3},{labref,{label,100}}},

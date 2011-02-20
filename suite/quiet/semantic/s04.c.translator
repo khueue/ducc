@@ -26,7 +26,6 @@
              [{temp,8},{temp,9},{temp,10}],
              10,
              [{'- SOURCE -',7,funcall,"  foo(a);\t"},
-              {'- SOURCE -',7,funcall,"  foo(a);\t"},
               {'- SOURCE -',7,ident,"  foo(a);\t"},
               {eval,{temp,8},{icon,0}},
               {eval,{temp,9},{binop,'+',{temp,1},{temp,8}}},

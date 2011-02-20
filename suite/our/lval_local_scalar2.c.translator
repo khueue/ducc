@@ -4,7 +4,6 @@
              [{temp,3}],
              0,
              [{'- SOURCE -',3,binop,"    ls = 333;"},
-              {'- SOURCE -',3,binop,"    ls = 333;"},
               {'- SOURCE -',3,intconst,"    ls = 333;"},
               {eval,{temp,3},{icon,333}},
               {eval,{temp,2},{temp,3}}],

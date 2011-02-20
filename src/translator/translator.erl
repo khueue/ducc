@@ -134,12 +134,18 @@ translate_stmt(Stmts, Env0) when erlang:is_list(Stmts) ->
     translate_stmts(Stmts, Env0);
 translate_stmt(Stmt, Env0) ->
     Tag = ?HELPER:get_tag(Stmt),
+    case lists:member(Tag, [return,while,'if']) of
+        true  -> translate_control_flow_stmt(Stmt, Env0);
+        false -> translate_expr(Stmt, Env0)
+    end.
+
+translate_control_flow_stmt(Stmt, Env0) ->
+    Tag = ?HELPER:get_tag(Stmt),
     {Env1, Instructions, Temps} =
     case Tag of
         return -> translate_return(Stmt, Env0);
         while  -> translate_while(Stmt, Env0);
-        'if'   -> translate_if(Stmt, Env0);
-        _Expr  -> translate_expr(Stmt, Env0)
+        'if'   -> translate_if(Stmt, Env0)
     end,
     SourceLineHeader = ?HELPER:source_line_header(Stmt, Env1),
     {Env1, [SourceLineHeader|Instructions], Temps}.
