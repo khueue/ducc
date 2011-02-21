@@ -8,28 +8,27 @@ usage() ->
     io:fwrite('ducc ~s~n', [version()]),
     io:format('usage: ducc [-a|-l|-p|-t|-v] [file]~n').
 
+main([Step, File]) ->
+    {Lines, String} = read_lines_and_string(File),
+    compile(step(Step), File, String, Lines);
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
-main(["-l", File]) ->
-    {Lines, String} = read_lines_and_string(File),
-    compile(lexer, File, String, Lines);
-main(["-p", File]) ->
-    {Lines, String} = read_lines_and_string(File),
-    compile(parser, File, String, Lines);
-main(["-a", File]) ->
-    {Lines, String} = read_lines_and_string(File),
-    compile(analyzer, File, String, Lines);
-main(["-t", File]) ->
-    {Lines, String} = read_lines_and_string(File),
-    compile(translator, File, String, Lines);
-main([]) ->
+main(["-"++Flag]) ->
     {Lines, String} = read_lines_and_string(standard_io),
-    compile(default, '<stdin>', String, Lines);
+    compile(program(Flag), '<stdin>', String, Lines);
 main([File]) ->
     {Lines, String} = read_lines_and_string(File),
     compile(default, File, String, Lines);
+main([]) ->
+    {Lines, String} = read_lines_and_string(standard_io),
+    compile(default, '<stdin>', String, Lines);
 main(_) ->
     usage().
+
+program("l") -> lexer;
+program("p") -> parser;
+program("a") -> analyzer;
+program("t") -> translator.
 
 read_lines_and_string(standard_io) ->
     Lines = tool_chain:read_lines_from_stream(standard_io),
