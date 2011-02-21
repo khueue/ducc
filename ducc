@@ -4,12 +4,15 @@
 version() ->
     '0.4.0'.
 
+write_version() ->
+    io:fwrite('ducc ~s~n', [version()]).
+
 usage() ->
-    io:fwrite('ducc ~s~n', [version()]),
+    write_version(),
     io:format('usage: ducc [-a|-l|-p|-t|-v] [file]~n').
 
 main(["-v"]) ->
-    io:fwrite('ducc ~s~n', [version()]);
+    write_version();
 main(["-"++Flag, File]) ->
     {Lines, String} = read_lines_and_string(File),
     compile(program(Flag), File, String, Lines);
@@ -18,17 +21,18 @@ main(["-"++Flag]) ->
     compile(program(Flag), '<stdin>', String, Lines);
 main([File]) ->
     {Lines, String} = read_lines_and_string(File),
-    compile(default, File, String, Lines);
+    compile(program(default), File, String, Lines);
 main([]) ->
     {Lines, String} = read_lines_and_string(standard_io),
-    compile(default, '<stdin>', String, Lines);
+    compile(program(default), '<stdin>', String, Lines);
 main(_) ->
     usage().
 
-program("l") -> lexer;
-program("p") -> parser;
-program("a") -> analyzer;
-program("t") -> translator.
+program("l")     -> lexer;
+program("p")     -> parser;
+program("a")     -> analyzer;
+program("t")     -> translator;
+program(default) -> translator.
 
 read_lines_and_string(standard_io) ->
     Lines = tool_chain:read_lines_from_stream(standard_io),
@@ -74,5 +78,5 @@ process(Program, Stream, String, Lines) ->
             {ok, RtlCode} = translator_driver:translate(Stream, ParseTree1, Lines),
             {ok, {rtl,RtlCode}};
         _DefaultAllSteps ->
-            process(translator, Stream, String, Lines)
+            process(program(default), Stream, String, Lines)
     end.
