@@ -13,12 +13,12 @@ usage() ->
 
 main(["-v"]) ->
     write_version();
-main(["-"++Flag, File]) ->
+main(["-"++Initial, File]) ->
     {Lines, String} = read_lines_and_string(File),
-    compile(program(Flag), File, String, Lines);
-main(["-"++Flag]) ->
+    compile(program(Initial), File, String, Lines);
+main(["-"++Initial]) ->
     {Lines, String} = read_lines_and_string(standard_io),
-    compile(program(Flag), '<stdin>', String, Lines);
+    compile(program(Initial), '<stdin>', String, Lines);
 main([File]) ->
     {Lines, String} = read_lines_and_string(File),
     compile(program(default), File, String, Lines);
@@ -28,11 +28,11 @@ main([]) ->
 main(_) ->
     usage().
 
-program("l")     -> lexer;
-program("p")     -> parser;
-program("a")     -> analyzer;
-program("t")     -> translator;
-program(default) -> translator.
+program("l")  -> lexer;
+program("p")  -> parser;
+program("a")  -> analyzer;
+program("t")  -> translator;
+program(_Def) -> translator.
 
 read_lines_and_string(standard_io) ->
     Lines = tool_chain:read_lines_from_stream(standard_io),
