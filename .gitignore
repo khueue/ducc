@@ -10,3 +10,6 @@ src/parser/parser.erl
 *.beam
 *.gz
 tests_output.md
+
+# Our own temporary test files.
+*.c
