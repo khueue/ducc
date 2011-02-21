@@ -9,3 +9,4 @@ src/parser/parser.erl
 *.dump
 *.beam
 *.gz
+tests_output.md
