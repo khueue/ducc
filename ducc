@@ -8,11 +8,11 @@ usage() ->
     io:fwrite('ducc ~s~n', [version()]),
     io:format('usage: ducc [-a|-l|-p|-t|-v] [file]~n').
 
-main([Step, File]) ->
-    {Lines, String} = read_lines_and_string(File),
-    compile(step(Step), File, String, Lines);
 main(["-v"]) ->
     io:fwrite('ducc ~s~n', [version()]);
+main(["-"++Flag, File]) ->
+    {Lines, String} = read_lines_and_string(File),
+    compile(program(Flag), File, String, Lines);
 main(["-"++Flag]) ->
     {Lines, String} = read_lines_and_string(standard_io),
     compile(program(Flag), '<stdin>', String, Lines);
