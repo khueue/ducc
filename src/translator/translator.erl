@@ -180,7 +180,7 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
         InsStmt ++
         [emit_labdef(LabelTest)] ++
         InsCond ++
-        [emit_cjump(neq, RetCond, 0, LabelBody)] ++
+        [emit_cjump(neq, RetCond, rtl_icon(0), LabelBody)] ++
         [emit_labdef(LabelEnd)],
     Temps =
         TempsCond ++
@@ -194,7 +194,7 @@ translate_if({_Meta, Cond, Then, nil}, Env0) ->
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
         InsCond ++
-        [emit_cjump(eq, RetCond, 0, LabelEnd)] ++
+        [emit_cjump(eq, RetCond, rtl_icon(0), LabelEnd)] ++
         InsThen ++
         [emit_labdef(LabelEnd)],
     Temps =
@@ -209,7 +209,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
         InsCond ++
-        [emit_cjump(eq, RetCond, 0, LabelElse)] ++
+        [emit_cjump(eq, RetCond, rtl_icon(0), LabelElse)] ++
         InsThen ++
         [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelElse)] ++
@@ -264,9 +264,9 @@ translate_logical_and({_Meta, Lhs, '&&', Rhs}, Env0) ->
     ValueFalse = rtl_icon(0),
     Instructions =
         InsLhs ++
-        [emit_cjump(eq, TempLhs, 0, LabelFalse)] ++
+        [emit_cjump(eq, TempLhs, rtl_icon(0), LabelFalse)] ++
         InsRhs ++
-        [emit_cjump(eq, TempRhs, 0, LabelFalse)] ++
+        [emit_cjump(eq, TempRhs, rtl_icon(0), LabelFalse)] ++
         [emit_eval(TempResult, ValueTrue)] ++
         [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelFalse)] ++
@@ -289,9 +289,9 @@ translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
     ValueFalse = rtl_icon(0),
     Instructions =
         InsLhs ++
-        [emit_cjump(neq, TempLhs, 0, LabelTrue)] ++
+        [emit_cjump(neq, TempLhs, rtl_icon(0), LabelTrue)] ++
         InsRhs ++
-        [emit_cjump(neq, TempRhs, 0, LabelTrue)] ++
+        [emit_cjump(neq, TempRhs, rtl_icon(0), LabelTrue)] ++
         [emit_eval(TempResult, ValueFalse)] ++
         [emit_jump(LabelEnd)] ++
         [emit_labdef(LabelTrue)] ++
