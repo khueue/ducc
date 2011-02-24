@@ -18,7 +18,7 @@
               {'- SOURCE -',2,intconst,"  if (x > 0)"},
               {eval,{temp,3},{icon,0}},
               {eval,{temp,4},{binop,'>',{temp,2},{temp,3}}},
-              {cjump,eq,{temp,4},0,{label,101}},
+              {cjump,eq,{temp,4},{icon,0},{label,101}},
               {'- SOURCE -',3,return,"    return 2 + f(x-1);"},
               {'- SOURCE -',3,binop,"    return 2 + f(x-1);"},
               {'- SOURCE -',3,intconst,"    return 2 + f(x-1);"},

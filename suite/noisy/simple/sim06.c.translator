@@ -112,7 +112,7 @@
               {eval,{temp,2},{temp,22}},
               {labdef,{label,102}},
               {'- SOURCE -',13,ident,"  while (b) {"},
-              {cjump,neq,{temp,2},0,{label,103}},
+              {cjump,neq,{temp,2},{icon,0},{label,103}},
               {labdef,{label,104}},
               {'- SOURCE -',19,binop,"  t[0] = '\\n';"},
               {'- SOURCE -',19,charconst,"  t[0] = '\\n';"},

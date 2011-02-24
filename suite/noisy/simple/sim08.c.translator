@@ -89,7 +89,7 @@
               {'- SOURCE -',19,intconst,"  if (x == 0) return 1;"},
               {eval,{temp,16},{icon,0}},
               {eval,{temp,17},{binop,'==',{temp,15},{temp,16}}},
-              {cjump,eq,{temp,17},0,{label,103}},
+              {cjump,eq,{temp,17},{icon,0},{label,103}},
               {'- SOURCE -',19,return,"  if (x == 0) return 1;"},
               {'- SOURCE -',19,intconst,"  if (x == 0) return 1;"},
               {eval,{temp,18},{icon,1}},

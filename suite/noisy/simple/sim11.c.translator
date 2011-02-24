@@ -125,7 +125,7 @@
               {eval,{temp,8},{temp,28}},
               {labdef,{label,102}},
               {'- SOURCE -',16,ident,"  while (b) {"},
-              {cjump,neq,{temp,8},0,{label,103}},
+              {cjump,neq,{temp,8},{icon,0},{label,103}},
               {labdef,{label,104}},
               {'- SOURCE -',22,funcall,"  f('\\n', t);"},
               {'- SOURCE -',22,charconst,"  f('\\n', t);"},

@@ -38,7 +38,7 @@
               {'- SOURCE -',9,intconst,"  if (n == 0) return 1;"},
               {eval,{temp,3},{icon,0}},
               {eval,{temp,4},{binop,'==',{temp,2},{temp,3}}},
-              {cjump,eq,{temp,4},0,{label,101}},
+              {cjump,eq,{temp,4},{icon,0},{label,101}},
               {'- SOURCE -',9,return,"  if (n == 0) return 1;"},
               {'- SOURCE -',9,intconst,"  if (n == 0) return 1;"},
               {eval,{temp,5},{icon,1}},
@@ -196,6 +196,6 @@
               {'- SOURCE -',23,intconst,"  while (i<=10) {"},
               {eval,{temp,40},{icon,10}},
               {eval,{temp,41},{binop,'<=',{temp,10},{temp,40}}},
-              {cjump,neq,{temp,41},0,{label,106}},
+              {cjump,neq,{temp,41},{icon,0},{label,106}},
               {labdef,{label,107}}],
              {labdef,{label,104}}}]}}.
