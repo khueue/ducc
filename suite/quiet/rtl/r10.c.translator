@@ -106,7 +106,7 @@
               {temp,54},
               {temp,55},
               {temp,56}],
-             50,
+             52,
              [{'- SOURCE -',18,funcall,"  f(a, k, l, d);"},
               {'- SOURCE -',18,ident,"  f(a, k, l, d);"},
               {eval,{temp,18},{labref,{label,100}}},

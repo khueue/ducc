@@ -75,7 +75,7 @@
               {temp,33},
               {temp,34},
               {temp,35}],
-             2,
+             4,
              [{'- SOURCE -',13,binop,"  b = 10;"},
               {'- SOURCE -',13,intconst,"  b = 10;"},
               {eval,{temp,9},{icon,10}},

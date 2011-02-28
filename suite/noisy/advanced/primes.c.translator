@@ -130,7 +130,7 @@
               {temp,81},
               {temp,82},
               {temp,83}],
-             6,
+             8,
              [{'- SOURCE -',15,binop,"  cr[0] = '\\n';"},
               {'- SOURCE -',15,charconst,"  cr[0] = '\\n';"},
               {eval,{temp,4},{icon,'\\n'}},

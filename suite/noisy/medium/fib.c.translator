@@ -135,7 +135,7 @@
               {temp,56},
               {temp,57},
               {temp,58}],
-             6,
+             8,
              [{'- SOURCE -',17,binop,"  space[0] = ' ';  space[1] = 0;"},
               {'- SOURCE -',17,charconst,"  space[0] = ' ';  space[1] = 0;"},
               {eval,{temp,17},{icon,' '}},

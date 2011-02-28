@@ -217,7 +217,7 @@
               {temp,123},
               {temp,124},
               {temp,125}],
-             50,
+             52,
              [{'- SOURCE -',35,binop,"  x[3] = 12;"},
               {'- SOURCE -',35,intconst,"  x[3] = 12;"},
               {eval,{temp,15},{icon,12}},

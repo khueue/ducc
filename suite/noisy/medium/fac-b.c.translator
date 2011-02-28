@@ -107,7 +107,7 @@
               {temp,50},
               {temp,51},
               {temp,52}],
-             6,
+             8,
              [{'- SOURCE -',18,binop,"  space[0] = ' ';  space[1] = 0;"},
               {'- SOURCE -',18,charconst,"  space[0] = ' ';  space[1] = 0;"},
               {eval,{temp,11},{icon,' '}},

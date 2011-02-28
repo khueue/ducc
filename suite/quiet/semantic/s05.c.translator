@@ -7,7 +7,7 @@
  {rtl,[{proc,{label,"main"},
              [],
              [{temp,2},{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8},{temp,9},{temp,10}],
-             27,
+             28,
              [{'- SOURCE -',5,binop,"  s[0] = 'a'+t;"},
               {'- SOURCE -',5,binop,"  s[0] = 'a'+t;"},
               {'- SOURCE -',5,charconst,"  s[0] = 'a'+t;"},

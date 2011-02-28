@@ -267,7 +267,7 @@
               {temp,204},
               {temp,205},
               {temp,206}],
-             1,
+             4,
              [{'- SOURCE -',11,binop,"  cr[0]='\\n';"},
               {'- SOURCE -',11,charconst,"  cr[0]='\\n';"},
               {eval,{temp,4},{icon,'\\n'}},

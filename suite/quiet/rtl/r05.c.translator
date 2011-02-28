@@ -55,7 +55,7 @@
               {temp,21},
               {temp,22},
               {temp,23}],
-             9,
+             12,
              [{'- SOURCE -',9,binop,"  a[0] = 5;"},
               {'- SOURCE -',9,intconst,"  a[0] = 5;"},
               {eval,{temp,14},{icon,5}},

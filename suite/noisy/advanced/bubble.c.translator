@@ -290,7 +290,7 @@
               {temp,99},
               {temp,100},
               {temp,101}],
-             27,
+             28,
              [{'- SOURCE -',42,binop,"  eol[0] = '\\n';"},
               {'- SOURCE -',42,charconst,"  eol[0] = '\\n';"},
               {eval,{temp,56},{icon,'\\n'}},

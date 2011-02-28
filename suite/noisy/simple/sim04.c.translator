@@ -155,7 +155,7 @@
               {temp,116},
               {temp,117},
               {temp,118}],
-             10,
+             12,
              [{'- SOURCE -',16,binop,"  x[0] = 'H';"},
               {'- SOURCE -',16,charconst,"  x[0] = 'H';"},
               {eval,{temp,2},{icon,'H'}},
