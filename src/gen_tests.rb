@@ -2,7 +2,7 @@
 # encoding: UTF-8
 
 def usage()
-    puts "usage: ruby #{__FILE__} -l|-p|-a|-t file [file, ...]"
+    puts "usage: ruby #{__FILE__} -a|-c|-l|-p|-t file [file, ...]"
     exit 0
 end
 
@@ -46,6 +46,9 @@ command = case ARGV[0]
     when "-t"
         program = "translator"
         "ducc -t"
+    when "-c"
+        program = "codegen"
+        "ducc -c"
     else
         usage()
 end

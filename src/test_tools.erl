@@ -37,6 +37,8 @@ command(File, Program) ->
             Ducc ++ "-a " ++ File;
         "translator" ->
             Ducc ++ "-t " ++ File;
+        "codegen" ->
+            Ducc ++ "-c " ++ File;
         _Default ->
             Ducc ++ File
     end.

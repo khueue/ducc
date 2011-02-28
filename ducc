@@ -9,7 +9,7 @@ write_version() ->
 
 usage() ->
     write_version(),
-    io:format('usage: ducc [-a|-l|-p|-t|-v] [file]~n').
+    io:format('usage: ducc [-a|-c|-l|-p|-t|-v] [file]~n').
 
 main(["-v"]) ->
     write_version();
@@ -32,7 +32,8 @@ program("l")  -> lexer;
 program("p")  -> parser;
 program("a")  -> analyzer;
 program("t")  -> translator;
-program(_Def) -> translator.
+program("c")  -> codegen;
+program(_Def) -> codegen.
 
 read_lines_and_string(standard_io) ->
     Lines = tool_chain:read_lines_from_stream(standard_io),
@@ -56,6 +57,8 @@ compile(Program, Stream, String, Lines) ->
             tool_chain:die(Message);
         {translator_exception, Message} ->
             tool_chain:die(Message);
+        {codegen_exception, Message} ->
+            tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String)
     end.
@@ -77,6 +80,10 @@ process(Program, Stream, String, Lines) ->
             {ok, {ast,ParseTree1}} = process(analyzer, Stream, String, Lines),
             {ok, RtlCode} = translator_driver:translate(Stream, ParseTree1, Lines),
             {ok, {rtl,RtlCode}};
+        codegen ->
+            {ok, {rtl,RtlCode}} = process(translator, Stream, String, Lines),
+            {ok, AsmCode} = codegen_driver:generate_code(Stream, RtlCode, Lines),
+            {ok, {asm,AsmCode}};
         _DefaultAllSteps ->
             process(program(default), Stream, String, Lines)
     end.
