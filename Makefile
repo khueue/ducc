@@ -38,9 +38,9 @@ compile:
 
 gen_tests: all
 	@ echo '--- Regenerating tests ...'
-	ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
-	ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
-	ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
+	#ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
+	#ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
+	#ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
 	ruby src/gen_tests.rb -t suite/**/*.c suite/**/**/*.c
 	# ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
 

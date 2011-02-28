@@ -38,18 +38,18 @@ translate_topdec(Topdec, Env0) ->
     end.
 
 translate_global_scalardec({_Meta, Type, Name}, Env0) ->
-    {Env1, Label} = ?ENV:get_new_label(Env0),
+    Label = {label,Name},
     Size = ?HELPER:type_size(Type),
     SymbolInfo = symbol_global_scalar(Label, Size),
-    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
-    {Env2, toplevel_data(Label, ?HELPER:size_of(Size))}.
+    Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
+    {Env1, toplevel_data(Label, ?HELPER:size_of(Size))}.
 
 translate_global_arraydec({_Meta, Type, Name, Count}, Env0) ->
-    {Env1, Label} = ?ENV:get_new_label(Env0),
+    Label = {label,Name},
     Size = ?HELPER:type_size(Type),
     SymbolInfo = symbol_global_array(Label, Size),
-    Env2 = ?ENV:set_symbol(Name, SymbolInfo, Env1),
-    {Env2, toplevel_data(Label, Count*?HELPER:size_of(Size))}.
+    Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
+    {Env1, toplevel_data(Label, Count*?HELPER:size_of(Size))}.
 
 translate_local_scalardec({_Meta, Type, Name}, Env0) ->
     {Env1, Temp} = ?ENV:get_new_temp(Env0),
@@ -69,9 +69,9 @@ translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
     {Env2, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
-    {Env1, LabelEnd} = ?ENV:get_new_label(Env0),
+    LabelStart = {label,Name},
+    {Env1, LabelEnd} = ?ENV:get_new_label(Env0, Name++"_end"),
     Env2 = ?ENV:enter_scope(Name, Env1),
-    LabelStart = {label, Name},
     % XXX Maybe we should force the fundef to set more of its env (fp)?
     Env3 = ?ENV:set_function_labels(Env2, LabelStart, LabelEnd),
     {Env4, InsFormals, TempsFormals} = translate_formals(Formals, Env3),
@@ -81,7 +81,8 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
     Instructions =
         InsFormals ++
         InsLocals ++
-        InsStmts,
+        InsStmts ++
+        [emit_labdef(LabelEnd)],
     TempsUsed =
         TempsLocals ++
         TempsStmts,
@@ -92,7 +93,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             lists:usort(TempsUsed) -- TempsFormals,
             FrameSize,
             Instructions,
-            LabelEnd),
+            LabelEnd), %%% XXX Remove it if we append it to ins. instead?
     Env7 = ?ENV:leave_scope(Env6),
     {Env7, Proc}.
 
@@ -169,9 +170,11 @@ translate_return({_Meta, Expr}, Env0) ->
     {Env1, Instructions, Temps}.
 
 translate_while({_Meta, Cond, Stmt}, Env0) ->
-    {Env1, [LabelTest,LabelBody,LabelEnd]} = ?ENV:get_new_labels(3, Env0),
-    {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
-    {Env3, InsStmt, TempsStmt} = translate_stmt(Stmt, Env2),
+    {Env1, LabelTest} = ?ENV:get_new_label(Env0, "while_test"),
+    {Env2, LabelBody} = ?ENV:get_new_label(Env1, "while_body"),
+    {Env3, LabelEnd}  = ?ENV:get_new_label(Env2, "while_end"),
+    {Env4, InsCond, TempsCond} = translate_expr(Cond, Env3),
+    {Env5, InsStmt, TempsStmt} = translate_stmt(Stmt, Env4),
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
         [emit_jump(LabelTest)] ++
@@ -184,10 +187,10 @@ translate_while({_Meta, Cond, Stmt}, Env0) ->
     Temps =
         TempsCond ++
         TempsStmt,
-    {Env3, Instructions, Temps}.
+    {Env5, Instructions, Temps}.
 
 translate_if({_Meta, Cond, Then, nil}, Env0) ->
-    {Env1, [LabelEnd]} = ?ENV:get_new_labels(1, Env0),
+    {Env1, LabelEnd} = ?ENV:get_new_label(Env0, "if_end"),
     {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
     {Env3, InsThen, TempsThen} = translate_stmt(Then, Env2),
     RetCond = ?HELPER:get_return_temp(TempsCond),
@@ -201,10 +204,11 @@ translate_if({_Meta, Cond, Then, nil}, Env0) ->
         TempsThen,
     {Env3, Instructions, Temps};
 translate_if({_Meta, Cond, Then, Else}, Env0) ->
-    {Env1, [LabelElse,LabelEnd]} = ?ENV:get_new_labels(2, Env0),
-    {Env2, InsCond, TempsCond} = translate_expr(Cond, Env1),
-    {Env3, InsThen, TempsThen} = translate_stmt(Then, Env2),
-    {Env4, InsElse, TempsElse} = translate_stmt(Else, Env3),
+    {Env1, LabelElse} = ?ENV:get_new_label(Env0, "if_else"),
+    {Env2, LabelEnd}  = ?ENV:get_new_label(Env1, "if_end"),
+    {Env3, InsCond, TempsCond} = translate_expr(Cond, Env2),
+    {Env4, InsThen, TempsThen} = translate_stmt(Then, Env3),
+    {Env5, InsElse, TempsElse} = translate_stmt(Else, Env4),
     RetCond = ?HELPER:get_return_temp(TempsCond),
     Instructions =
         InsCond ++
@@ -218,7 +222,7 @@ translate_if({_Meta, Cond, Then, Else}, Env0) ->
         TempsCond ++
         TempsThen ++
         TempsElse,
-    {Env4, Instructions, Temps}.
+    {Env5, Instructions, Temps}.
 
 translate_expr(Expr, Env0) ->
     Tag = ?HELPER:get_tag(Expr),
@@ -257,8 +261,9 @@ translate_logical_and({_Meta, Lhs, '&&', Rhs}, Env0) ->
     {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
     TempLhs = ?HELPER:get_return_temp(TempsLhs),
     TempRhs = ?HELPER:get_return_temp(TempsRhs),
-    {Env3, [LabelFalse,LabelEnd]} = ?ENV:get_new_labels(2, Env2),
-    {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
+    {Env3, LabelFalse} = ?ENV:get_new_label(Env2, "and_false"),
+    {Env4, LabelEnd}   = ?ENV:get_new_label(Env3, "and_end"),
+    {Env5, [TempResult]} = ?ENV:get_new_temps(1, Env4),
     ValueTrue  = rtl_icon(1),
     ValueFalse = rtl_icon(0),
     Instructions =
@@ -275,15 +280,16 @@ translate_logical_and({_Meta, Lhs, '&&', Rhs}, Env0) ->
         TempsLhs ++
         TempsRhs ++
         [TempResult],
-    {Env4, Instructions, Temps}.
+    {Env5, Instructions, Temps}.
 
 translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
     {Env1, InsLhs, TempsLhs} = translate_expr(Lhs, Env0),
     {Env2, InsRhs, TempsRhs} = translate_expr(Rhs, Env1),
     TempLhs = ?HELPER:get_return_temp(TempsLhs),
     TempRhs = ?HELPER:get_return_temp(TempsRhs),
-    {Env3, [LabelTrue, LabelEnd]} = ?ENV:get_new_labels(2, Env2),
-    {Env4, [TempResult]} = ?ENV:get_new_temps(1, Env3),
+    {Env3, LabelTrue} = ?ENV:get_new_label(Env2, "or_true"),
+    {Env4, LabelEnd}  = ?ENV:get_new_label(Env3, "or_end"),
+    {Env5, [TempResult]} = ?ENV:get_new_temps(1, Env4),
     ValueTrue = rtl_icon(1),
     ValueFalse = rtl_icon(0),
     Instructions =
@@ -300,7 +306,7 @@ translate_logical_or({_Meta, Lhs, '||', Rhs}, Env0) ->
         TempsLhs ++
         TempsRhs ++
         [TempResult],
-    {Env4, Instructions, Temps}.
+    {Env5, Instructions, Temps}.
 
 translate_assignment({_Meta, Lhs, '=', Rhs}, Env0) ->
     {Env1, InsRval, TempsRval} = translate_rval(Rhs, Env0),
