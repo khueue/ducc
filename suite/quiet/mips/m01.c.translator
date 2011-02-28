@@ -44,7 +44,7 @@
              {labdef,{label,103}}},
        {proc,{label,"mov"},
              [{temp,11}],
-             [{temp,11},{temp,12}],
+             [{temp,12}],
              0,
              [{'- SOURCE -',12,binop,"  addi = lb;"},
               {'- SOURCE -',12,ident,"  addi = lb;"},

@@ -18,7 +18,7 @@
           {18,"}"}]},
  {rtl,[{proc,{label,"fac"},
              [{temp,2}],
-             [{temp,2},{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8},{temp,9}],
+             [{temp,3},{temp,4},{temp,5},{temp,6},{temp,7},{temp,8},{temp,9}],
              0,
              [{'- SOURCE -',10,'if',"  if (n == 0) return 1;"},
               {'- SOURCE -',10,binop,"  if (n == 0) return 1;"},

@@ -33,7 +33,7 @@
           {33,[]}]},
  {rtl,[{proc,{label,"f"},
              [{temp,2},{temp,3}],
-             [{temp,2},{temp,4},{temp,5},{temp,6},{temp,7}],
+             [{temp,4},{temp,5},{temp,6},{temp,7}],
              0,
              [{'- SOURCE -',7,binop,"  v[0] = i;"},
               {'- SOURCE -',7,ident,"  v[0] = i;"},

@@ -15,7 +15,7 @@
           {15,"}"}]},
  {rtl,[{proc,{label,"f"},
              [{temp,2},{temp,3}],
-             [{temp,2},{temp,3},{temp,4}],
+             [{temp,4}],
              0,
              [{'- SOURCE -',2,return,"  return x + y;"},
               {'- SOURCE -',2,binop,"  return x + y;"},
