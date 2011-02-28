@@ -12,5 +12,6 @@
               {eval,{temp,5},{icon,4}},
               {eval,{temp,6},{binop,'*',{temp,4},{temp,5}}},
               {eval,{temp,7},{binop,'+',{temp,2},{temp,6}}},
-              {store,long,{temp,7},{temp,3}}],
-             {labdef,{label,100}}}]}}.
+              {store,long,{temp,7},{temp,3}},
+              {labdef,{label,100,"main_end"}}],
+             {labdef,{label,100,"main_end"}}}]}}.

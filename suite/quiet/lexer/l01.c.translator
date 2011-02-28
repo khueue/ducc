@@ -1,2 +1,5 @@
 {{source,[{1,"int main (void) { ; }"},{2,[]}]},
- {rtl,[{proc,{label,"main"},[],[],0,[],{labdef,{label,100}}}]}}.
+ {rtl,[{proc,{label,"main"},
+             [],[],0,
+             [{labdef,{label,100,"main_end"}}],
+             {labdef,{label,100,"main_end"}}}]}}.

@@ -35,5 +35,6 @@
               {'- SOURCE -',7,charconst,"  i = '\\n';"},
               {eval,{temp,7},{icon,'\\n'}},
               {'- SOURCE -',7,ident,"  i = '\\n';"},
-              {eval,{temp,2},{temp,7}}],
-             {labdef,{label,100}}}]}}.
+              {eval,{temp,2},{temp,7}},
+              {labdef,{label,100,"main_end"}}],
+             {labdef,{label,100,"main_end"}}}]}}.
