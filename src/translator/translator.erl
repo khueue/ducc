@@ -90,7 +90,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
         toplevel_proc(
             LabelStart,
             TempsFormals,
-            lists:usort(TempsUsed),
+            lists:usort(TempsUsed) -- TempsFormals,
             FrameSize,
             Instructions,
             LabelEnd),
