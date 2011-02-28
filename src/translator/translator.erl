@@ -60,13 +60,12 @@ translate_local_scalardec({_Meta, Type, Name}, Env0) ->
 
 translate_local_arraydec({_Meta, Type, Name, Count}, Env0) ->
     FS = ?ENV:get_frame_size(Env0),
-    Offset = ?HELPER:round4(FS),
-    Padding = Offset - FS,
+    Offset = FS,
     Size = ?HELPER:type_size(Type),
     SymbolInfo = symbol_local_array(Size, Offset),
     Env1 = ?ENV:set_symbol(Name, SymbolInfo, Env0),
     Bytes = ?HELPER:size_of(Size),
-    Env2 = ?ENV:increment_frame_size(Env1, Bytes*Count + Padding),
+    Env2 = ?ENV:increment_frame_size(Env1, ?HELPER:round4(Bytes*Count)),
     {Env2, [], []}.
 
 translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
