@@ -54,7 +54,7 @@ epilogue(FS, ArraysSize, LabelEnd) ->
     lw(ra, FS-ArraysSize-8, sp) ++
     lw(fp, FS-ArraysSize-4, sp) ++
     addu(sp, sp, FS) ++
-    j(ra).
+    jr(ra).
 
 segment_data() ->
     [{segment, data}].
@@ -86,8 +86,8 @@ sw(Src, Offset, Dst) ->
 lw(Dst, Offset, Src) ->
     [{lw, Dst, Offset, Src}].
 
-j(Dst) ->
-    [{j, Dst}].
+jr(Dst) ->
+    [{jr, Dst}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].
