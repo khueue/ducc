@@ -1,13 +1,10 @@
-{{source,[{1,"int main(void)"},{2,"{"},{3,"    111 || 222;"},{4,"}"}]},
- {asm,[[{segment,text},
-        {globl,{label,"main"}},
-        {labdef,{label,"main"}},
-        {subu,sp,sp,20},
-        {sw,fp,16,sp},
-        {sw,ra,12,sp},
-        {addu,fp,sp,20},
-        {labdef,{label,100,"main_end"}},
-        {lw,ra,12,sp},
-        {lw,fp,16,sp},
-        {addu,sp,sp,20},
-        {j,ra}]]}}.
+escript: exception error: no case clause matching 
+                 {'EXIT',{{case_clause,cjump},
+                          [{codegen,translate_instruction,1},
+                           {codegen,translate_instructions,1},
+                           {codegen,translate_instructions,1},
+                           {codegen,translate_proc,2},
+                           {codegen,translate_toplevels,2},
+                           {codegen_driver,generate_code,3},
+                           {erl_eval,do_apply,5},
+                           {erl_eval,expr,5}]}}

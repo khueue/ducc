@@ -8,12 +8,13 @@ usage() ->
 main([]) ->
     Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    {ok, AsmString} = try process(Stream, String)
-    catch
-        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
-        {_CompilationException, Message}     -> tool_chain:die(Message)
-    end,
-    tool_chain:raw_string_to_output(AsmString);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, AsmString} ->
+            tool_chain:raw_string_to_output(AsmString);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String)
+    end;
 main(_) ->
     usage().
 

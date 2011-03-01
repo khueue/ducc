@@ -27,4 +27,4 @@
         {lw,ra,0,sp},
         {lw,fp,4,sp},
         {addu,sp,sp,8},
-        {j,ra}]]}}.
+        {jr,ra}]]}}.

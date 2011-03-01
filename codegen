@@ -8,12 +8,15 @@ usage() ->
 main([]) ->
     Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Output = try process(Stream, String)
-    catch
-        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
-        {_CompilationException, Message}     -> tool_chain:die(Message)
-    end,
-    tool_chain:term_to_output(Output);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {_Source, {asm,_AsmCode}} = Output ->
+            tool_chain:term_to_output(Output);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String);
+        UnknownError ->
+            tool_chain:die('~p~n', [UnknownError])
+    end;
 main(_) ->
     usage().
 

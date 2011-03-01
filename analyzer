@@ -8,12 +8,15 @@ usage() ->
 main([]) ->
     Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Output = try process(Stream, String)
-    catch
-        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
-        {_CompilationException, Message}     -> tool_chain:die(Message)
-    end,
-    tool_chain:term_to_output(Output);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {_SourceLines, {ast,_ParseTree}} = Output ->
+            tool_chain:term_to_output(Output);
+        {analyzer_exception, Message} ->
+            tool_chain:die(Message);
+        {tool_chain_exception, invalid_term} ->
+            tool_chain:die(String)
+    end;
 main(_) ->
     usage().
 

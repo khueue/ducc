@@ -9,13 +9,14 @@ main([]) ->
     Stream = '<stdin>',
     Lines = tool_chain:read_lines_from_stream(standard_io),
     String = tool_chain:string_from_lines(Lines),
-    {ok, Tokens} = try process(Stream, String)
-    catch
-        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
-        {_CompilationException, Message}     -> tool_chain:die(Message)
-    end,
-    Output = {{source,Lines}, {tokens,Tokens}},
-    tool_chain:term_to_output(Output);
+    Result = (catch process(Stream, String)),
+    case Result of
+        {ok, Tokens} ->
+            Output = {{source,Lines}, {tokens,Tokens}},
+            tool_chain:term_to_output(Output);
+        {lexer_exception, Message} ->
+            tool_chain:die(Message)
+    end;
 main(_) ->
     usage().
 

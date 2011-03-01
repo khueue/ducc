@@ -2,7 +2,7 @@
 %%! -pa ebin -Wall
 
 usage() ->
-    io:format('usage: runtest [-a|-c|-l|-p|-t]~n').
+    io:format('usage: runtest [-a|-c|-e|-l|-p|-t]~n').
 
 main(["-l"]) ->
     testing(lexer),
@@ -19,12 +19,16 @@ main(["-t"]) ->
 main(["-c"]) ->
     testing(codegen),
     codegen_test:test();
+main(["-e"]) ->
+    testing(emitter),
+    emitter_test:test();
 main([]) ->
     main(["-l"]),
     main(["-p"]),
     main(["-a"]),
     main(["-t"]),
     main(["-c"]);
+    main(["-e"]);
 main(_) ->
     usage().
 

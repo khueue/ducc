@@ -1,0 +1,13 @@
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 8
+	sw 	$fp, 4($sp)
+	sw 	$ra, 0($sp)
+	addu 	$fp, $sp, 8
+L100_main_end:
+	lw 	$ra, 0($sp)
+	lw 	$fp, 4($sp)
+	addu 	$sp, $sp, 8
+	jr 	$ra
+
