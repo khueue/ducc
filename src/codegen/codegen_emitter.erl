@@ -18,31 +18,43 @@ toplevel_to_string([In|Ins]) ->
 instruction_to_string({segment, Type}) ->
     indent() ++ "." ++ erlang:atom_to_list(Type);
 instruction_to_string({align, Bytes}) ->
-    indent() ++ ".align " ++ erlang:integer_to_list(Bytes);
+    indent() ++ ".align " ++ indent() ++
+    erlang:integer_to_list(Bytes);
 instruction_to_string({globl, Label}) ->
-    indent() ++ ".globl " ++ label_string(Label);
+    indent() ++ ".globl " ++ indent() ++
+    label_string(Label);
 instruction_to_string({labdef, Label}) ->
     label_string(Label) ++ ":";
 instruction_to_string({space, Bytes}) ->
-    indent() ++ ".space " ++ erlang:integer_to_list(Bytes);
+    indent() ++ ".space " ++ indent() ++
+    erlang:integer_to_list(Bytes);
 instruction_to_string({subu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
-    indent() ++ "subu " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
+    indent() ++ "subu " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({subu, Dst, Src1, Src2}) ->
-    indent() ++ "subu " ++ commalist([reg(Dst), reg(Src1), reg(Src2)]);
+    indent() ++ "subu " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
 instruction_to_string({addi, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
-    indent() ++ "addi " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
+    indent() ++ "addi " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({addu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
-    indent() ++ "addu " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
+    indent() ++ "addu " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({addu, Dst, Src1, Src2}) ->
-    indent() ++ "addu " ++ commalist([reg(Dst), reg(Src1), reg(Src2)]);
+    indent() ++ "addu " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
 instruction_to_string({sub, Dst, Src1, Src2}) ->
-    indent() ++ "sub " ++ commalist([reg(Dst), reg(Src1), reg(Src2)]);
+    indent() ++ "sub " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
 instruction_to_string({sw, Src, Offset, Dst}) ->
-    indent() ++ "sw " ++ commalist([reg(Src), mem(Offset, Dst)]);
+    indent() ++ "sw " ++ indent() ++
+    commalist([reg(Src), mem(Offset, Dst)]);
 instruction_to_string({lw, Dst, Offset, Src}) ->
-    indent() ++ "lw " ++ commalist([reg(Dst), mem(Offset, Src)]);
+    indent() ++ "lw " ++ indent() ++
+    commalist([reg(Dst), mem(Offset, Src)]);
 instruction_to_string({jr, Dst}) ->
-    indent() ++ "jr " ++ reg(Dst);
+    indent() ++ "jr " ++ indent() ++
+    reg(Dst);
 instruction_to_string(X) ->
     indent() ++ "XXX --- " ++ erlang:atom_to_list(erlang:element(1, X)).
 
