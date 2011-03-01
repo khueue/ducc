@@ -8,17 +8,14 @@ usage() ->
 main([]) ->
     Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Result = (catch process(Stream, String)),
-    case Result of
-        {_SourceLines, {ast,_ParseTree}} = Output ->
-            tool_chain:term_to_output(Output);
+    Output = try process(Stream, String)
+    catch
         {parser_exception, Message} ->
             tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String);
-        UnknownError ->
-            tool_chain:die('~p~n', [UnknownError])
-    end;
+            tool_chain:die(String)
+    end,
+    tool_chain:term_to_output(Output);
 main(_) ->
     usage().
 
