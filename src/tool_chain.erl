@@ -7,6 +7,7 @@
     string_from_file/1,
     string_from_stream/1,
     term_from_string/1,
+    raw_string_to_output/1,
     term_to_output/1,
     die/1,
     die/2]).
@@ -77,6 +78,9 @@ to_term(Tokens) ->
         _Error ->
             throw({tool_chain_exception, invalid_term})
     end.
+
+raw_string_to_output(Str) ->
+    io:fwrite('~s~n', [Str]).
 
 term_to_output(Term) ->
     io:fwrite('~100p.~n', [Term]).

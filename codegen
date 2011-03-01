@@ -12,7 +12,7 @@ main([]) ->
     case Result of
         {_Source, {asm,AsmCode}} ->
             AsmString = codegen_emitter:asm_to_string(AsmCode),
-            io:format("~s~n", [AsmString]);
+            tool_chain:raw_string_to_output(AsmString);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->

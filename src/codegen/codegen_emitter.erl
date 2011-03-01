@@ -4,7 +4,8 @@
 asm_to_string(AsmCode) ->
     toplevels_to_string(AsmCode).
 
-toplevels_to_string([]) -> "";
+toplevels_to_string([Toplevel]) ->
+    toplevel_to_string(Toplevel);
 toplevels_to_string([Toplevel|Toplevels]) ->
     toplevel_to_string(Toplevel) ++ newline() ++
     toplevels_to_string(Toplevels).
@@ -18,10 +19,10 @@ instruction_to_string({segment, Type}) ->
     indent() ++ "." ++ erlang:atom_to_list(Type);
 instruction_to_string({align, Bytes}) ->
     indent() ++ ".align " ++ erlang:integer_to_list(Bytes);
-instruction_to_string({globl, {label, Name}}) ->
-    indent() ++ ".globl " ++ Name;
-instruction_to_string({labdef, {label, Name}}) ->
-    Name ++ ":";
+instruction_to_string({globl, Label}) ->
+    indent() ++ ".globl " ++ label_string(Label);
+instruction_to_string({labdef, Label}) ->
+    label_string(Label) ++ ":";
 instruction_to_string({space, Bytes}) ->
     indent() ++ ".space " ++ erlang:integer_to_list(Bytes);
 instruction_to_string({subu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
@@ -40,8 +41,17 @@ instruction_to_string({lw, Dst, Offset, Src}) ->
     indent() ++ "lw " ++ commalist([reg(Dst), mem(Offset, Src)]);
 instruction_to_string({jr, Dst}) ->
     indent() ++ "jr " ++ reg(Dst);
-instruction_to_string(_) ->
-    indent() ++ "XXX".
+instruction_to_string(X) ->
+    indent() ++ erlang:atom_to_list(erlang:element(1, X)).
+
+label_string({label, "main"}) ->
+    "main";
+label_string({label, Name}) ->
+    "L" ++ Name;
+label_string({label, Id, ""}) ->
+    "L" ++ erlang:integer_to_list(Id);
+label_string({label, Id, Name}) ->
+    "L" ++ erlang:integer_to_list(Id) ++ "_" ++ Name.
 
 commalist([X]) ->
     X;
