@@ -46,20 +46,16 @@ read_lines_and_string(Stream) ->
     {Lines, String}.
 
 compile(Program, Stream, String, Lines) ->
-    Result = (catch process(Program, Stream, String, Lines)),
+    Result = try process(Program, Stream, String, Lines)
+    catch
+        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
+        {_CompilationException, Message}     -> tool_chain:die(Message)
+    end,
     case Result of
         {ok, {string,AsmString}} ->
             tool_chain:raw_string_to_output(AsmString);
-        {ok, Output} ->
-            tool_chain:term_to_output({{source,Lines}, Output});
-        {lexer_exception, Message} ->
-            tool_chain:die(Message);
-        {parser_exception, Message} ->
-            tool_chain:die(Message);
-        {analyzer_exception, Message} ->
-            tool_chain:die(Message);
-        {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String)
+        {ok, _Output} ->
+            tool_chain:term_to_output({{source,Lines}, Result})
     end.
 
 process(Program, Stream, String, Lines) ->

@@ -11,10 +11,8 @@ main([]) ->
     String = tool_chain:string_from_lines(Lines),
     {ok, Tokens} = try process(Stream, String)
     catch
-        {lexer_exception, Message} ->
-            tool_chain:die(Message);
-        {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String)
+        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
+        {_CompilationException, Message}     -> tool_chain:die(Message)
     end,
     Output = {{source,Lines}, {tokens,Tokens}},
     tool_chain:term_to_output(Output);

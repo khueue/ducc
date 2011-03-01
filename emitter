@@ -10,8 +10,8 @@ main([]) ->
     String = tool_chain:string_from_input(),
     {ok, AsmString} = try process(Stream, String)
     catch
-        {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String)
+        {tool_chain_exception, invalid_term} -> tool_chain:die(String);
+        {_CompilationException, Message}     -> tool_chain:die(Message)
     end,
     tool_chain:raw_string_to_output(AsmString);
 main(_) ->
