@@ -15,9 +15,9 @@ ERL        = erl -pa $(DIR_EBIN) -noshell
 all: setup clean compile
 
 setup:
-	@ echo '--- Trimming and cleaning ...'
+	@ echo '--- Trimming ...'
 	mkdir -p $(DIR_EBIN)
-	- ruby src/trim_and_clean.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
+	- ruby src/trim.rb $(DIR_SRC)/*.* $(DIR_SRC)/**/*.* \
 		report/**/*.* $(SCRIPTS)
 
 clean:
