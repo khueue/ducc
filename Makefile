@@ -56,7 +56,7 @@ gen_test_t: all
 
 gen_test_c: all
 	@ echo '--- Regenerating codegen tests ...'
-	# ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'

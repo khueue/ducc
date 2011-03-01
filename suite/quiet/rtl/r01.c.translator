@@ -77,5 +77,5 @@
               {'- SOURCE -',16,charconst,"  w = 'D';"},
               {eval,{temp,15},{icon,'D'}},
               {'- SOURCE -',16,ident,"  w = 'D';"},
-              {eval,{temp,3},{temp,15}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {eval,{temp,3},{temp,15}}],
+             {label,100,"main_end"}}]}}.

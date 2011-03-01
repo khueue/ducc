@@ -6,7 +6,7 @@
           {6,"  a = foo(a);\t"},
           {7,"}"}]},
  {rtl,[{data,{label,"a"},4},
-       {proc,{label,"foo"},[{temp,2}],[],0,[{labdef,{label,100,"foo_end"}}]},
+       {proc,{label,"foo"},[{temp,2}],[],0,[],{label,100,"foo_end"}},
        {proc,{label,"main"},
              [],
              [{temp,3},{temp,4},{temp,5},{temp,6}],
@@ -19,5 +19,5 @@
               {call,{temp,5},{label,"foo"},[{temp,4}]},
               {'- SOURCE -',6,ident,"  a = foo(a);\t"},
               {eval,{temp,6},{labref,{label,"a"}}},
-              {store,long,{temp,6},{temp,5}},
-              {labdef,{label,101,"main_end"}}]}]}}.
+              {store,long,{temp,6},{temp,5}}],
+             {label,101,"main_end"}}]}}.

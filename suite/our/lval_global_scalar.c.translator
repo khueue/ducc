@@ -9,5 +9,5 @@
               {eval,{temp,2},{icon,333}},
               {'- SOURCE -',5,ident,"    gs = 333;"},
               {eval,{temp,3},{labref,{label,"gs"}}},
-              {store,long,{temp,3},{temp,2}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {store,long,{temp,3},{temp,2}}],
+             {label,100,"main_end"}}]}}.

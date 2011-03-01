@@ -47,8 +47,8 @@
               {eval,{temp,9},{binop,'*',{temp,2},{temp,8}}},
               {eval,{temp,0},{temp,9}},
               {jump,{label,100,"fac_end"}},
-              {labdef,{label,102,"if_end"}},
-              {labdef,{label,100,"fac_end"}}]},
+              {labdef,{label,102,"if_end"}}],
+             {label,100,"fac_end"}},
        {data,{label,"a"},4},
        {proc,{label,"main"},
              [],
@@ -66,5 +66,5 @@
               {eval,{temp,12},{labref,{label,"a"}}},
               {load,long,{temp,13},{temp,12}},
               {call,{temp,14},{label,"fac"},[{temp,13}]},
-              {call,{temp,15},{label,"putint"},[{temp,14}]},
-              {labdef,{label,103,"main_end"}}]}]}}.
+              {call,{temp,15},{label,"putint"},[{temp,14}]}],
+             {label,103,"main_end"}}]}}.

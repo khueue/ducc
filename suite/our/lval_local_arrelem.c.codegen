@@ -1,0 +1,13 @@
+{{source,[{1,"int main(void)"},{2,"{"},{3,"    int la[10];"},{4,"    la[9] = 333;"},{5,"}"}]},
+ {asm,[[{segment,text},
+        {globl,{label,"main"}},
+        {labdef,{label,"main"}},
+        {subu,sp,sp,76},
+        {sw,fp,32,sp},
+        {sw,ra,28,sp},
+        {addu,fp,sp,76},
+        {labdef,{label,100,"main_end"}},
+        {lw,ra,28,sp},
+        {lw,fp,32,sp},
+        {addu,sp,sp,76},
+        {j,ra}]]}}.

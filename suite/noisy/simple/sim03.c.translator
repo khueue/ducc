@@ -87,5 +87,5 @@
               {eval,{temp,26},{binop,'+',{temp,25},{temp,24}}},
               {eval,{temp,27},{binop,'+',{temp,1},{temp,26}}},
               {load,long,{temp,28},{temp,27}},
-              {call,{temp,29},{label,"putint"},[{temp,28}]},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {call,{temp,29},{label,"putint"},[{temp,28}]}],
+             {label,100,"main_end"}}]}}.

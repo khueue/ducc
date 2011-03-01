@@ -1,0 +1,13 @@
+{{source,[{1,"int main(int farray[])"},{2,"{"},{3,"    farray[9] = 333;"},{4,"}"}]},
+ {asm,[[{segment,text},
+        {globl,{label,"main"}},
+        {labdef,{label,"main"}},
+        {subu,sp,sp,28},
+        {sw,fp,24,sp},
+        {sw,ra,20,sp},
+        {addu,fp,sp,28},
+        {labdef,{label,100,"main_end"}},
+        {lw,ra,20,sp},
+        {lw,fp,24,sp},
+        {addu,sp,sp,28},
+        {j,ra}]]}}.

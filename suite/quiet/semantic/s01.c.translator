@@ -192,5 +192,5 @@
               {eval,{temp,43},{labref,{label,"y"}}},
               {store,byte,{temp,43},{temp,42}},
               {'- SOURCE -',28,intconst,"  42;"},
-              {eval,{temp,44},{icon,42}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {eval,{temp,44},{icon,42}}],
+             {label,100,"main_end"}}]}}.

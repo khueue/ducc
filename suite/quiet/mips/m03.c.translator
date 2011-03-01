@@ -65,8 +65,8 @@
               {'- SOURCE -',8,intconst,"  return 1;"},
               {eval,{temp,13},{icon,1}},
               {eval,{temp,0},{temp,13}},
-              {jump,{label,100,"f_end"}},
-              {labdef,{label,100,"f_end"}}]},
+              {jump,{label,100,"f_end"}}],
+             {label,100,"f_end"}},
        {proc,{label,"main"},
              [],
              [{temp,14},{temp,15}],
@@ -74,5 +74,5 @@
              [{'- SOURCE -',12,funcall,"  f(8);"},
               {'- SOURCE -',12,intconst,"  f(8);"},
               {eval,{temp,14},{icon,8}},
-              {call,{temp,15},{label,"f"},[{temp,14}]},
-              {labdef,{label,102,"main_end"}}]}]}}.
+              {call,{temp,15},{label,"f"},[{temp,14}]}],
+             {label,102,"main_end"}}]}}.

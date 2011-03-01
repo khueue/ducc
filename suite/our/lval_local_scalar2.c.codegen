@@ -1,0 +1,13 @@
+{{source,[{1,"int foo(int ls)"},{2,"{"},{3,"    ls = 333;"},{4,"}"}]},
+ {asm,[[{segment,text},
+        {globl,{label,"foo"}},
+        {labdef,{label,"foo"}},
+        {subu,sp,sp,12},
+        {sw,fp,8,sp},
+        {sw,ra,4,sp},
+        {addu,fp,sp,12},
+        {labdef,{label,100,"foo_end"}},
+        {lw,ra,4,sp},
+        {lw,fp,8,sp},
+        {addu,sp,sp,12},
+        {j,ra}]]}}.

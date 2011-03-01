@@ -25,5 +25,5 @@
               {'- SOURCE -',5,ident,"  x=y=4711;"},
               {eval,{temp,3},{temp,5}},
               {'- SOURCE -',5,ident,"  x=y=4711;"},
-              {eval,{temp,2},{temp,5}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {eval,{temp,2},{temp,5}}],
+             {label,100,"main_end"}}]}}.

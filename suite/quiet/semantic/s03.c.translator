@@ -22,8 +22,8 @@
               {eval,{temp,6},{binop,'+',{temp,2},{temp,5}}},
               {load,long,{temp,7},{temp,6}},
               {eval,{temp,0},{temp,7}},
-              {jump,{label,100,"foo_end"}},
-              {labdef,{label,100,"foo_end"}}]},
+              {jump,{label,100,"foo_end"}}],
+             {label,100,"foo_end"}},
        {proc,{label,"main"},
              [],
              [{temp,8},{temp,9}],
@@ -31,5 +31,5 @@
              [{'- SOURCE -',9,funcall,"  foo(a);\t"},
               {'- SOURCE -',9,ident,"  foo(a);\t"},
               {eval,{temp,8},{labref,{label,"a"}}},
-              {call,{temp,9},{label,"foo"},[{temp,8}]},
-              {labdef,{label,101,"main_end"}}]}]}}.
+              {call,{temp,9},{label,"foo"},[{temp,8}]}],
+             {label,101,"main_end"}}]}}.

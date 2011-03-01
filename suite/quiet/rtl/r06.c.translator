@@ -129,5 +129,5 @@
               {load,long,{temp,18},{temp,17}},
               {eval,{temp,19},{binop,'==',{temp,16},{temp,18}}},
               {cjump,neq,{temp,19},{icon,0},{label,108,"while_body"}},
-              {labdef,{label,109,"while_end"}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {labdef,{label,109,"while_end"}}],
+             {label,100,"main_end"}}]}}.

@@ -14,5 +14,5 @@
               {eval,{temp,5},{binop,'*',{temp,3},{temp,4}}},
               {eval,{temp,6},{labref,{label,"ga"}}},
               {eval,{temp,7},{binop,'+',{temp,6},{temp,5}}},
-              {store,long,{temp,7},{temp,2}},
-              {labdef,{label,100,"main_end"}}]}]}}.
+              {store,long,{temp,7},{temp,2}}],
+             {label,100,"main_end"}}]}}.
