@@ -29,6 +29,8 @@ instruction_to_string({subu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
     indent() ++ "subu " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({subu, Dst, Src1, Src2}) ->
     indent() ++ "subu " ++ commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({addi, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
+    indent() ++ "addi " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({addu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
     indent() ++ "addu " ++ commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
 instruction_to_string({addu, Dst, Src1, Src2}) ->
@@ -62,6 +64,8 @@ commalist([X|Xs]) ->
 mem(Offset, Temp) ->
     erlang:integer_to_list(Offset) ++ "(" ++ reg(Temp) ++ ")".
 
+reg(0) ->
+    "$0";
 reg(Temp) ->
     "$" ++ erlang:atom_to_list(Temp).
 
