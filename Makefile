@@ -40,27 +40,27 @@ gen_tests: gen_test_l gen_test_p gen_test_a gen_test_t gen_test_c gen_test_e
 
 gen_test_l: all
 	@ echo '--- Regenerating lexer tests ...'
-	ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -l suite/*.c suite/**/*.c suite/**/**/*.c
 
 gen_test_p: all
 	@ echo '--- Regenerating parser tests ...'
-	ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -p suite/*.c suite/**/*.c suite/**/**/*.c
 
 gen_test_a: all
 	@ echo '--- Regenerating analyzer tests ...'
-	ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -a suite/*.c suite/**/*.c suite/**/**/*.c
 
 gen_test_t: all
 	@ echo '--- Regenerating translator tests ...'
-	ruby src/gen_tests.rb -t suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -t suite/*.c suite/**/*.c suite/**/**/*.c
 
 gen_test_c: all
 	@ echo '--- Regenerating codegen tests ...'
-	ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -c suite/*.c suite/**/*.c suite/**/**/*.c
 
 gen_test_e: all
 	@ echo '--- Regenerating emitter tests ...'
-	ruby src/gen_tests.rb -e suite/**/*.c suite/**/**/*.c
+	ruby src/gen_tests.rb -e suite/*.c suite/**/*.c suite/**/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'
