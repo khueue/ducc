@@ -36,9 +36,15 @@ translate_proc(Proc = {proc, Label, Formals, Temps, ArraysSize, Ins, LabelEnd}, 
         globl(Label) ++
         labdef(Label) ++
         prologue(FS, ArraysSize) ++
-        % Ins ++
+        translate_instructions(Ins) ++
         epilogue(FS, ArraysSize, LabelEnd),
     Instructions.
+
+translate_instructions([]) -> [];
+translate_instructions([{'- SOURCE -',_,_,_}|Ins]) ->
+    translate_instructions(Ins);
+translate_instructions([In|Ins]) ->
+    [In|translate_instructions(Ins)].
 
 calc_frame_size({proc, _Label, _Formals, Temps, ArraysSize, _Ins, LabelEnd}) ->
     4 + 4 + ArraysSize + erlang:length(Temps)*4.
