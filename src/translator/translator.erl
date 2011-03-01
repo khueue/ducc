@@ -92,8 +92,7 @@ translate_fundef({_Meta, _Type, Name, Formals, Locals, Stmts}, Env0) ->
             TempsFormals,
             lists:usort(TempsUsed) -- TempsFormals,
             FrameSize,
-            Instructions,
-            LabelEnd), %%% XXX Remove it if we append it to ins. instead?
+            Instructions),
     Env7 = ?ENV:leave_scope(Env6),
     {Env7, Proc}.
 
@@ -607,9 +606,8 @@ emit_call(TempResult, Label, TempsActuals) ->
 toplevel_data(Label, Bytes) ->
     {data, Label, Bytes}.
 
-toplevel_proc(LabelStart, Formals, Temps, FS, Ins, LabelEnd) ->
-    % XXX How should we deal with the end label?
-    {proc, LabelStart, Formals, Temps, FS, Ins, {labdef, LabelEnd}}.
+toplevel_proc(LabelStart, Formals, Temps, FS, Ins) ->
+    {proc, LabelStart, Formals, Temps, FS, Ins}.
 
 symbol_global_scalar(Label, Size) ->
     {global, Label, scalar, {Size}}.

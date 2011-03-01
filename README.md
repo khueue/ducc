@@ -4,7 +4,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Appended fun_end-labdef to function's instructions. Good/bad? Not yet removed it from the proc itself.
  * Assignment 5
 
 ## Before Hand-In
