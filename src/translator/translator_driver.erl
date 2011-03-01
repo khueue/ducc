@@ -2,13 +2,5 @@
 -export([translate/3]).
 
 translate(Stream, ParseTree, Lines) ->
-    RtlCode = try translator:translate(ParseTree, Lines)
-    catch
-        {translator_exception, {Line, Message}} ->
-            Message1 = format_error(Stream, Line, Message),
-            throw({translator_exception, Message1})
-    end,
+    RtlCode = translator:translate(ParseTree, Lines),
     {ok, RtlCode}.
-
-format_error(Stream, Line, Message) ->
-    io_lib:format('~s:~p: translation error, ~s~n', [Stream, Line, Message]).

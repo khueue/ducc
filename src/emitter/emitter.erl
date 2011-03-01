@@ -1,4 +1,4 @@
--module(codegen_emitter).
+-module(emitter).
 -export([asm_to_string/1]).
 
 asm_to_string(AsmCode) ->

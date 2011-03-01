@@ -2,7 +2,7 @@
 %%! -pa ebin -Wall
 
 usage() ->
-    io:format('Usage: translator~n'),
+    io:format('Usage: emitter~n'),
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
@@ -10,8 +10,8 @@ main([]) ->
     String = tool_chain:string_from_input(),
     Result = (catch process(Stream, String)),
     case Result of
-        {_Source, {rtl,_RtlCode}} = Output ->
-            tool_chain:term_to_output(Output);
+        AsmString when erlang:is_list(AsmString) ->
+            tool_chain:raw_string_to_output(AsmString);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->
@@ -21,6 +21,6 @@ main(_) ->
     usage().
 
 process(Stream, String) ->
-    {{source,Lines}, {ast,ParseTree}} = tool_chain:term_from_string(String),
-    {ok, RtlCode} = translator_driver:translate(Stream, ParseTree, Lines),
-    {{source,Lines}, {rtl,RtlCode}}.
+    {{source,Lines}, {asm,AsmCode}} = tool_chain:term_from_string(String),
+    {ok, AsmString} = emitter_driver:asm_to_string(Stream, AsmCode, Lines),
+    AsmString.

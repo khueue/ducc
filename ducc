@@ -33,7 +33,8 @@ program("p")  -> parser;
 program("a")  -> analyzer;
 program("t")  -> translator;
 program("c")  -> codegen;
-program(_Def) -> codegen.
+program("e")  -> emitter;
+program(_Def) -> emitter.
 
 read_lines_and_string(standard_io) ->
     Lines = tool_chain:read_lines_from_stream(standard_io),
@@ -47,9 +48,8 @@ read_lines_and_string(Stream) ->
 compile(Program, Stream, String, Lines) ->
     Result = (catch process(Program, Stream, String, Lines)),
     case Result of
-        {ok, {asm,AsmCode}} ->
-            AsmString = codegen_emitter:asm_to_string(AsmCode),
-            io:format("~s~n", [AsmString]);
+        {ok, {string,AsmString}} ->
+            tool_chain:raw_string_to_output(AsmString);
         {ok, Output} ->
             tool_chain:term_to_output({{source,Lines}, Output});
         {lexer_exception, Message} ->
@@ -57,10 +57,6 @@ compile(Program, Stream, String, Lines) ->
         {parser_exception, Message} ->
             tool_chain:die(Message);
         {analyzer_exception, Message} ->
-            tool_chain:die(Message);
-        {translator_exception, Message} ->
-            tool_chain:die(Message);
-        {codegen_exception, Message} ->
             tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String)
@@ -87,6 +83,10 @@ process(Program, Stream, String, Lines) ->
             {ok, {rtl,RtlCode}} = process(translator, Stream, String, Lines),
             {ok, AsmCode} = codegen_driver:generate_code(Stream, RtlCode, Lines),
             {ok, {asm,AsmCode}};
+        emitter ->
+            {ok, {asm,AsmCode}} = process(codegen, Stream, String, Lines),
+            {ok, AsmString} = emitter_driver:asm_to_string(Stream, AsmCode, Lines),
+            {ok, {string,AsmString}};
         _DefaultAllSteps ->
             process(program(default), Stream, String, Lines)
     end.

@@ -6,7 +6,7 @@ DIR_PARSER = $(DIR_SRC)/parser
 PROJECT_NAME = ducc
 LEXER_NAME   = lexer
 PARSER_NAME  = parser
-SCRIPTS      = analyzer codegen ducc lexer parser runtest translator
+SCRIPTS      = analyzer codegen ducc emitter lexer parser runtest translator
 
 ERLC_FLAGS = -Wall -Ddebug
 ERLC       = erlc -o $(DIR_EBIN) $(ERLC_FLAGS)
@@ -36,7 +36,7 @@ compile:
 	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
-gen_tests: gen_test_l gen_test_p gen_test_a gen_test_t gen_test_c
+gen_tests: gen_test_l gen_test_p gen_test_a gen_test_t gen_test_c gen_test_e
 
 gen_test_l: all
 	@ echo '--- Regenerating lexer tests ...'
@@ -57,6 +57,10 @@ gen_test_t: all
 gen_test_c: all
 	@ echo '--- Regenerating codegen tests ...'
 	ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
+
+gen_test_e: all
+	@ echo '--- Regenerating emitter tests ...'
+	ruby src/gen_tests.rb -e suite/**/*.c suite/**/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'

@@ -10,9 +10,8 @@ main([]) ->
     String = tool_chain:string_from_input(),
     Result = (catch process(Stream, String)),
     case Result of
-        {_Source, {asm,AsmCode}} ->
-            AsmString = codegen_emitter:asm_to_string(AsmCode),
-            tool_chain:raw_string_to_output(AsmString);
+        {_Source, {asm,_AsmCode}} = Output ->
+            tool_chain:term_to_output(Output);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->
