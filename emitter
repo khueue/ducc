@@ -8,19 +8,15 @@ usage() ->
 main([]) ->
     Stream = '<stdin>',
     String = tool_chain:string_from_input(),
-    Result = (catch process(Stream, String)),
-    case Result of
-        AsmString when erlang:is_list(AsmString) ->
-            tool_chain:raw_string_to_output(AsmString);
+    {ok, AsmString} = try process(Stream, String)
+    catch
         {tool_chain_exception, invalid_term} ->
-            tool_chain:die(String);
-        UnknownError ->
-            tool_chain:die('~p~n', [UnknownError])
-    end;
+            tool_chain:die(String)
+    end,
+    tool_chain:raw_string_to_output(AsmString);
 main(_) ->
     usage().
 
 process(Stream, String) ->
     {{source,Lines}, {asm,AsmCode}} = tool_chain:term_from_string(String),
-    {ok, AsmString} = emitter_driver:asm_to_string(Stream, AsmCode, Lines),
-    AsmString.
+    {ok, _AsmString} = emitter_driver:asm_to_string(Stream, AsmCode, Lines).

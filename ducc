@@ -9,7 +9,7 @@ write_version() ->
 
 usage() ->
     write_version(),
-    io:format('usage: ducc [-a|-c|-l|-p|-t|-v] [file]~n').
+    io:format('usage: ducc [-a|-c|-e|-l|-p|-t|-v] [file]~n').
 
 main(["-v"]) ->
     write_version();
