@@ -86,8 +86,14 @@ sw(Src, Offset, Dst) ->
 lw(Dst, Offset, Src) ->
     [{lw, Dst, Offset, Src}].
 
+j(Label) ->
+    [{j, Label}].
+
 jr(Dst) ->
     [{jr, Dst}].
+
+beqz(Rsrc, Label) ->
+    [{beqz, Rsrc, Label}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].
