@@ -47,6 +47,9 @@ read_lines_and_string(Stream) ->
 compile(Program, Stream, String, Lines) ->
     Result = (catch process(Program, Stream, String, Lines)),
     case Result of
+        {ok, {asm,AsmCode}} ->
+            AsmString = codegen_emitter:asm_to_string(AsmCode),
+            io:format("~s~n", [AsmString]);
         {ok, Output} ->
             tool_chain:term_to_output({{source,Lines}, Output});
         {lexer_exception, Message} ->

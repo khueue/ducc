@@ -10,8 +10,9 @@ main([]) ->
     String = tool_chain:string_from_input(),
     Result = (catch process(Stream, String)),
     case Result of
-        {_Source, {rtl,_RtlCode}} = Output ->
-            tool_chain:term_to_output(Output);
+        {_Source, {asm,AsmCode}} ->
+            AsmString = codegen_emitter:asm_to_string(AsmCode),
+            io:format("~s~n", [AsmString]);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String);
         UnknownError ->
