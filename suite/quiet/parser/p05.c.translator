@@ -24,8 +24,7 @@
        {proc,{label,"f"},
              [{temp,2},{temp,3},{temp,4},{temp,5}],
              [],0,
-             [{labdef,{label,100,"f_end"}}],
-             {labdef,{label,100,"f_end"}}},
+             [{labdef,{label,100,"f_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,6},
@@ -84,5 +83,4 @@
               {eval,{temp,26},{labref,{label,"c"}}},
               {eval,{temp,27},{binop,'+',{temp,26},{temp,25}}},
               {store,long,{temp,27},{temp,22}},
-              {labdef,{label,101,"main_end"}}],
-             {labdef,{label,101,"main_end"}}}]}}.
+              {labdef,{label,101,"main_end"}}]}]}}.

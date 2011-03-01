@@ -15,5 +15,4 @@
               {eval,{temp,7},{binop,'+',{temp,6},{temp,5}}},
               {eval,{temp,8},{binop,'+',{temp,1},{temp,7}}},
               {store,long,{temp,8},{temp,2}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

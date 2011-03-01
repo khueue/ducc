@@ -64,5 +64,4 @@
               {eval,{temp,13},{icon,42}},
               {eval,{temp,0},{temp,13}},
               {jump,{label,100,"main_end"}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

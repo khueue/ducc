@@ -12,11 +12,7 @@
           {12,"  x == 0 && 0;"},
           {13,"}"}]},
  {rtl,[{data,{label,"x"},4},
-       {proc,{label,"foo"},
-             [{temp,2}],
-             [],0,
-             [{labdef,{label,100,"foo_end"}}],
-             {labdef,{label,100,"foo_end"}}},
+       {proc,{label,"foo"},[{temp,2}],[],0,[{labdef,{label,100,"foo_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,3},
@@ -124,5 +120,4 @@
               {labdef,{label,102,"and_false"}},
               {eval,{temp,34},{icon,0}},
               {labdef,{label,103,"and_end"}},
-              {labdef,{label,101,"main_end"}}],
-             {labdef,{label,101,"main_end"}}}]}}.
+              {labdef,{label,101,"main_end"}}]}]}}.

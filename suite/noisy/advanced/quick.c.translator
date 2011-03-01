@@ -294,8 +294,7 @@
               {'- SOURCE -',39,ident,"  if (i < r) sort(a, i, r);"},
               {call,{temp,56},{label,"sort"},[{temp,2},{temp,5},{temp,4}]},
               {labdef,{label,112,"if_end"}},
-              {labdef,{label,100,"sort_end"}}],
-             {labdef,{label,100,"sort_end"}}},
+              {labdef,{label,100,"sort_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,57},
@@ -503,5 +502,4 @@
               {'- SOURCE -',73,ident,"  putstring (eol);"},
               {eval,{temp,119},{labref,{label,"eol"}}},
               {call,{temp,120},{label,"putstring"},[{temp,119}]},
-              {labdef,{label,113,"main_end"}}],
-             {labdef,{label,113,"main_end"}}}]}}.
+              {labdef,{label,113,"main_end"}}]}]}}.

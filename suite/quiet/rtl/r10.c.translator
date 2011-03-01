@@ -62,8 +62,7 @@
               {eval,{temp,14},{binop,'*',{temp,12},{temp,13}}},
               {eval,{temp,15},{binop,'+',{temp,5},{temp,14}}},
               {store,byte,{temp,15},{temp,11}},
-              {labdef,{label,100,"f_end"}}],
-             {labdef,{label,100,"f_end"}}},
+              {labdef,{label,100,"f_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,16},
@@ -175,5 +174,4 @@
               {eval,{temp,55},{binop,'+',{temp,54},{temp,53}}},
               {eval,{temp,56},{binop,'+',{temp,1},{temp,55}}},
               {store,byte,{temp,56},{temp,50}},
-              {labdef,{label,101,"main_end"}}],
-             {labdef,{label,101,"main_end"}}}]}}.
+              {labdef,{label,101,"main_end"}}]}]}}.

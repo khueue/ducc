@@ -43,8 +43,7 @@
               {eval,{temp,12},{binop,'*',{temp,10},{temp,11}}},
               {eval,{temp,13},{binop,'+',{temp,2},{temp,12}}},
               {store,byte,{temp,13},{temp,9}},
-              {labdef,{label,100,"f_end"}}],
-             {labdef,{label,100,"f_end"}}},
+              {labdef,{label,100,"f_end"}}]},
        {data,{label,"a"},7},
        {proc,{label,"main"},
              [],
@@ -65,5 +64,4 @@
               {'- SOURCE -',11,ident,"  f(a);"},
               {eval,{temp,20},{labref,{label,"a"}}},
               {call,{temp,21},{label,"f"},[{temp,20}]},
-              {labdef,{label,101,"main_end"}}],
-             {labdef,{label,101,"main_end"}}}]}}.
+              {labdef,{label,101,"main_end"}}]}]}}.

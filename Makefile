@@ -36,13 +36,27 @@ compile:
 	$(ERLC) $(DIR_SRC)/*.erl
 	$(ERLC) $(DIR_SRC)/**/*.erl
 
-gen_tests: all
-	@ echo '--- Regenerating tests ...'
-	#ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
-	#ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
-	#ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
+gen_tests: all gen_test_l gen_test_p gen_test_a gen_test_t gen_test_c
+
+gen_test_l:
+	@ echo '--- Regenerating lexer tests ...'
+	ruby src/gen_tests.rb -l suite/**/*.c suite/**/**/*.c
+
+gen_test_p:
+	@ echo '--- Regenerating parser tests ...'
+	ruby src/gen_tests.rb -p suite/**/*.c suite/**/**/*.c
+
+gen_test_a:
+	@ echo '--- Regenerating analyzer tests ...'
+	ruby src/gen_tests.rb -a suite/**/*.c suite/**/**/*.c
+
+gen_test_t:
+	@ echo '--- Regenerating translator tests ...'
 	ruby src/gen_tests.rb -t suite/**/*.c suite/**/**/*.c
-	# ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
+
+gen_test_c:
+	@ echo '--- Regenerating codegen tests ...'
+	ruby src/gen_tests.rb -c suite/**/*.c suite/**/**/*.c
 
 tests: all
 	@ echo '--- Running tests ...'

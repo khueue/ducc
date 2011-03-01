@@ -60,8 +60,7 @@
               {eval,{temp,0},{temp,9}},
               {jump,{label,100,"fac_end"}},
               {labdef,{label,102,"if_end"}},
-              {labdef,{label,100,"fac_end"}}],
-             {labdef,{label,100,"fac_end"}}},
+              {labdef,{label,100,"fac_end"}}]},
        {data,{label,"a"},4},
        {proc,{label,"main"},
              [],
@@ -199,5 +198,4 @@
               {eval,{temp,41},{binop,'<=',{temp,10},{temp,40}}},
               {cjump,neq,{temp,41},{icon,0},{label,105,"while_body"}},
               {labdef,{label,106,"while_end"}},
-              {labdef,{label,103,"main_end"}}],
-             {labdef,{label,103,"main_end"}}}]}}.
+              {labdef,{label,103,"main_end"}}]}]}}.

@@ -17,5 +17,4 @@
               {'- SOURCE -',6,ident,"  y = x;"},
               {'- SOURCE -',6,ident,"  y = x;"},
               {eval,{temp,3},{temp,2}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

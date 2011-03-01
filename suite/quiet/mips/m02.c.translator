@@ -39,8 +39,7 @@
               {eval,{temp,10},{icon,112}},
               {eval,{temp,0},{temp,10}},
               {jump,{label,100,"f_end"}},
-              {labdef,{label,100,"f_end"}}],
-             {labdef,{label,100,"f_end"}}},
+              {labdef,{label,100,"f_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,11},{temp,12}],
@@ -49,5 +48,4 @@
               {'- SOURCE -',8,intconst,"  f(8);"},
               {eval,{temp,11},{icon,8}},
               {call,{temp,12},{label,"f"},[{temp,11}]},
-              {labdef,{label,102,"main_end"}}],
-             {labdef,{label,102,"main_end"}}}]}}.
+              {labdef,{label,102,"main_end"}}]}]}}.

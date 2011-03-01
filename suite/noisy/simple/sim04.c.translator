@@ -362,5 +362,4 @@
               {eval,{temp,116},{icon,0}},
               {eval,{temp,117},{binop,'+',{temp,1},{temp,116}}},
               {call,{temp,118},{label,"putstring"},[{temp,117}]},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

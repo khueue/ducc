@@ -15,5 +15,4 @@
               {labdef,{label,101,"or_true"}},
               {eval,{temp,4},{icon,1}},
               {labdef,{label,102,"or_end"}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

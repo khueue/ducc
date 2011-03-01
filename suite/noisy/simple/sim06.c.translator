@@ -129,5 +129,4 @@
               {'- SOURCE -',20,ident,"  putstring(t);"},
               {eval,{temp,29},{labref,{label,"t"}}},
               {call,{temp,30},{label,"putstring"},[{temp,29}]},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

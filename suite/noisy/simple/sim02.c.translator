@@ -35,5 +35,4 @@
               {'- SOURCE -',12,funcall,"  putint(bar);"},
               {'- SOURCE -',12,ident,"  putint(bar);"},
               {call,{temp,9},{label,"putint"},[{temp,2}]},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

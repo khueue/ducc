@@ -6,11 +6,7 @@
           {6,"int main(void ) {"},
           {7,"  f(a);"},
           {8,"}"}]},
- {rtl,[{proc,{label,"f"},
-             [{temp,2}],
-             [],0,
-             [{labdef,{label,100,"f_end"}}],
-             {labdef,{label,100,"f_end"}}},
+ {rtl,[{proc,{label,"f"},[{temp,2}],[],0,[{labdef,{label,100,"f_end"}}]},
        {data,{label,"a"},40},
        {proc,{label,"main"},
              [],
@@ -20,5 +16,4 @@
               {'- SOURCE -',7,ident,"  f(a);"},
               {eval,{temp,3},{labref,{label,"a"}}},
               {call,{temp,4},{label,"f"},[{temp,3}]},
-              {labdef,{label,101,"main_end"}}],
-             {labdef,{label,101,"main_end"}}}]}}.
+              {labdef,{label,101,"main_end"}}]}]}}.

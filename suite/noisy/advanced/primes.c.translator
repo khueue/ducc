@@ -342,5 +342,4 @@
               {eval,{temp,62},{binop,'<',{temp,59},{temp,61}}},
               {cjump,neq,{temp,62},{icon,0},{label,109,"while_body"}},
               {labdef,{label,110,"while_end"}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

@@ -274,8 +274,7 @@
               {labdef,{label,102,"and_end"}},
               {eval,{temp,0},{temp,23}},
               {jump,{label,100,"isNumber_end"}},
-              {labdef,{label,100,"isNumber_end"}}],
-             {labdef,{label,100,"isNumber_end"}}},
+              {labdef,{label,100,"isNumber_end"}}]},
        {proc,{label,"expr"},
              [{temp,24}],
              [{temp,25},
@@ -918,8 +917,7 @@
               {labdef,{label,122,"if_end"}},
               {labdef,{label,114,"if_end"}},
               {labdef,{label,105,"if_end"}},
-              {labdef,{label,103,"expr_end"}}],
-             {labdef,{label,103,"expr_end"}}},
+              {labdef,{label,103,"expr_end"}}]},
        {proc,{label,"main"},
              [],
              [{temp,213},
@@ -1980,5 +1978,4 @@
               {'- SOURCE -',194,ident,"  putstring(cr);"},
               {eval,{temp,574},{labref,{label,"cr"}}},
               {call,{temp,575},{label,"putstring"},[{temp,574}]},
-              {labdef,{label,131,"main_end"}}],
-             {labdef,{label,131,"main_end"}}}]}}.
+              {labdef,{label,131,"main_end"}}]}]}}.

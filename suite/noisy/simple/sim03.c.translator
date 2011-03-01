@@ -88,5 +88,4 @@
               {eval,{temp,27},{binop,'+',{temp,1},{temp,26}}},
               {load,long,{temp,28},{temp,27}},
               {call,{temp,29},{label,"putint"},[{temp,28}]},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

@@ -23,5 +23,4 @@
               {eval,{temp,9},{binop,'+',{temp,8},{temp,7}}},
               {eval,{temp,10},{binop,'+',{temp,1},{temp,9}}},
               {store,byte,{temp,10},{temp,4}},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.

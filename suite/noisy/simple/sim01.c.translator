@@ -14,5 +14,4 @@
               {'- SOURCE -',7,intconst,"  putint( 42);"},
               {eval,{temp,2},{icon,42}},
               {call,{temp,3},{label,"putint"},[{temp,2}]},
-              {labdef,{label,100,"main_end"}}],
-             {labdef,{label,100,"main_end"}}}]}}.
+              {labdef,{label,100,"main_end"}}]}]}}.
