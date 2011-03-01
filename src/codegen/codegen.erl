@@ -44,7 +44,21 @@ translate_instructions([]) -> [];
 translate_instructions([{'- SOURCE -',_,_,_}|Ins]) ->
     translate_instructions(Ins);
 translate_instructions([In|Ins]) ->
-    [In|translate_instructions(Ins)].
+    translate_instruction(In) ++
+    translate_instructions(Ins).
+
+translate_instruction(Instr) ->
+    Tag = erlang:element(1, Instr),
+    case Tag of
+        eval -> translate_eval(Instr)
+    end.
+
+translate_eval({eval, Temp, {icon, Value}}) ->
+    Instructions =
+        addi(Temp, 0, Value).
+
+move(Dst, Src) ->
+    [{move, Dst, Src}].
 
 calc_frame_size({proc, _Label, _Formals, Temps, ArraysSize, _Ins, LabelEnd}) ->
     4 + 4 + ArraysSize + erlang:length(Temps)*4.
@@ -92,8 +106,17 @@ sw(Src, Offset, Dst) ->
 lw(Dst, Offset, Src) ->
     [{lw, Dst, Offset, Src}].
 
+j(Label) ->
+    [{j, Label}].
+
 jr(Dst) ->
     [{jr, Dst}].
+
+beqz(Rsrc, Label) ->
+    [{beqz, Rsrc, Label}].
+
+addi(Dst, Src1, Value) ->
+    [{addi, Dst, Src1, Value}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].
