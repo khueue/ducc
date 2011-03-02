@@ -27,7 +27,7 @@ main([]) ->
     main(["-p"]),
     main(["-a"]),
     main(["-t"]),
-    main(["-c"]);
+    main(["-c"]),
     main(["-e"]);
 main(_) ->
     usage().
