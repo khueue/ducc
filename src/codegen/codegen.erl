@@ -55,7 +55,7 @@ translate_instruction(Instr) ->
 
 translate_eval({eval, Temp, {icon, Value}}) ->
     Instructions =
-        addi(Temp, 0, Value).
+        li(Temp, Value).
 
 move(Dst, Src) ->
     [{move, Dst, Src}].
