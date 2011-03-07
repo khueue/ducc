@@ -18,8 +18,10 @@ asm_fun('>=') -> fun ?ASM:asm_sge/3;
 asm_fun('==') -> fun ?ASM:asm_seq/3;
 asm_fun('!=') -> fun ?ASM:asm_sne/3.
 
-calculate_frame_size(Temps, ArraysSize) ->
-    4 + 4 + ArraysSize + 4*erlang:length(Temps).
+calculate_frame_size(Locals, ArraysSize) ->
+    4 + 4 + % FP and RA.
+    ArraysSize +
+    4 * erlang:length(Locals).
 
 function_prologue(FS, ArraysSize) ->
     [
