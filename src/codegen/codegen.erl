@@ -22,22 +22,22 @@ translate_toplevel(Toplevel) ->
 
 translate_data({data, Label, Bytes}) ->
     Instructions =
-        segment_data() ++
-        align(4) ++
-        labdef(Label) ++
-        space(Bytes),
+        asm_segment_data() ++
+        asm_align(4) ++
+        asm_labdef(Label) ++
+        asm_space(Bytes),
     Instructions.
 
 translate_proc(Proc = {proc, Label, Formals, Locals, ArraysSize, Ins, LabelEnd}) ->
     FS = calc_frame_size(Proc),
     Env = ?ENV:new(nil, Formals, Locals), % xxxxxxxxx
     Instructions =
-        segment_text() ++
-        globl(Label) ++
-        labdef(Label) ++
-        prologue(FS, ArraysSize) ++
+        asm_segment_text() ++
+        asm_globl(Label) ++
+        asm_labdef(Label) ++
+        asm_prologue(FS, ArraysSize) ++
         translate_instructions(Ins, Env) ++
-        epilogue(FS, ArraysSize, LabelEnd),
+        asm_epilogue(FS, ArraysSize, LabelEnd),
     Instructions.
 
 translate_instructions([], _Env) -> [];
@@ -59,7 +59,7 @@ translate_instruction(Instr, Env) ->
 
 translate_labdef({labdef,Label}, Env) ->
     Instructions =
-        labdef(Label),
+        asm_labdef(Label),
     {Env, Instructions}.
 
 translate_load(Instr, Env) ->
@@ -80,8 +80,8 @@ translate_load_long({load, long, TempDst, TempSrcAddress}, Env0) ->
     {{Reg1,Offset1},Env1} = ?ENV:lookup(TempSrcAddress, Env0),
     {{Reg2,Offset2},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
-        lw(t0, Offset1, Reg1) ++
-        sw(t0, Offset2, Reg2),
+        asm_lw(t0, Offset1, Reg1) ++
+        asm_sw(t0, Offset2, Reg2),
     {Env2, Instructions}.
 
 translate_load_byte(_,_) -> % xxxxxxxxxxxx
@@ -91,9 +91,9 @@ translate_store_long({store, long, TempDstAddress, TempValue}, Env0) ->
     {{Reg1,Offset1},Env1} = ?ENV:lookup(TempDstAddress, Env0),
     {{Reg2,Offset2},Env2} = ?ENV:lookup(TempValue, Env1),
     Instructions =
-        lw(t0, Offset1, Reg1) ++
-        lw(t1, Offset2, Reg2) ++
-        sw(t1, 0, t0),
+        asm_lw(t0, Offset1, Reg1) ++
+        asm_lw(t1, Offset2, Reg2) ++
+        asm_sw(t1, 0, t0),
     {Env2, Instructions}.
 
 translate_store_byte(_,_) -> % xxxxxxxxxxxx
@@ -111,239 +111,142 @@ translate_eval({eval, Temp, RtlExpr}, Env) ->
 translate_eval_icon(Temp, {icon,Value}, Env0) ->
     {{sp,Offset},Env1} = ?ENV:lookup(Temp, Env0),
     Instructions =
-        li(t0, Value) ++
-        sw(t0, Offset, sp),
+        asm_li(t0, Value) ++
+        asm_sw(t0, Offset, sp),
     {Env1, Instructions}.
 
 translate_eval_temp(TempDst, TempSrc, Env0) ->
     {{BaseRegSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
     {{BaseRegDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
-        lw(t0, OffsetSrc, BaseRegSrc) ++
-        sw(t0, OffsetDst, BaseRegDst),
+        asm_lw(t0, OffsetSrc, BaseRegSrc) ++
+        asm_sw(t0, OffsetDst, BaseRegDst),
     {Env2, Instructions}.
 
 translate_eval_labref(TempDst, {labref,Label}, Env0) ->
     {{Reg,Offset},Env1} = ?ENV:lookup(TempDst, Env0),
     Instructions =
-        la(t0, Label) ++
-        sw(t0, Offset, Reg),
+        asm_la(t0, Label) ++
+        asm_sw(t0, Offset, Reg),
     {Env1, Instructions}.
 
 translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env) ->
-    case Op of
-        '+'  -> translate_eval_binop_addition(TempDst, Lhs, Rhs, Env);
-        '-'  -> translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env);
-        '*'  -> translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env);
-        '/'  -> translate_eval_binop_division(TempDst, Lhs, Rhs, Env);
-        '<'  -> translate_eval_binop_compare_lt(TempDst, Lhs, Rhs, Env);
-        '<=' -> translate_eval_binop_compare_lte(TempDst, Lhs, Rhs, Env);
-        '>'  -> translate_eval_binop_compare_gt(TempDst, Lhs, Rhs, Env);
-        '>=' -> translate_eval_binop_compare_gte(TempDst, Lhs, Rhs, Env);
-        '==' -> translate_eval_binop_compare_equal(TempDst, Lhs, Rhs, Env);
-        '!=' -> translate_eval_binop_compare_not_equal(TempDst, Lhs, Rhs, Env)
-    end.
+    % XXX Only arithmetics in binop?
+    translate_eval_arithmetic(TempDst, Op, Lhs, Rhs, Env).
 
-translate_eval_binop_compare_lt(TempDst, Lhs, Rhs, Env0) ->
+translate_eval_arithmetic(TempDst, Op, Lhs, Rhs, Env0) ->
     {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
     {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
     {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Fun = asm_fun(Op),
     Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        slt(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
+        asm_lw(t0, OffsetLhs, RegLhs) ++
+        asm_lw(t1, OffsetRhs, RegRhs) ++
+        Fun(t2, t0, t1) ++
+        asm_sw(t2, OffsetDst, RegDst),
     {Env3, Instructions}.
 
-translate_eval_binop_compare_lte(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        sle(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_compare_gt(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        sgt(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_compare_gte(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        sge(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_compare_equal(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        seq(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_compare_not_equal(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        sne(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_addition(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        add(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        sub(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        mul(t2, t0, t1) ++
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
-
-translate_eval_binop_division(TempDst, Lhs, Rhs, Env0) ->
-    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
-    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
-    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Instructions =
-        lw(t0, OffsetLhs, RegLhs) ++
-        lw(t1, OffsetRhs, RegRhs) ++
-        asm_div(t2, t0, t1) ++ % xxxxxxxxxx
-        sw(t2, OffsetDst, RegDst),
-    {Env3, Instructions}.
+asm_fun('+')  -> fun asm_add/3;
+asm_fun('-')  -> fun asm_sub/3;
+asm_fun('*')  -> fun asm_mul/3;
+asm_fun('/')  -> fun asm_div/3;
+asm_fun('<')  -> fun asm_slt/3;
+asm_fun('<=') -> fun asm_sle/3;
+asm_fun('>')  -> fun asm_sgt/3;
+asm_fun('>=') -> fun asm_sge/3;
+asm_fun('==') -> fun asm_seq/3;
+asm_fun('!=') -> fun asm_sne/3.
 
 calc_frame_size({proc, _Label, _Formals, Temps, ArraysSize, _Ins, _LabelEnd}) ->
     4 + 4 + ArraysSize + erlang:length(Temps)*4.
 
-prologue(FS, ArraysSize) ->
-    subu(sp, sp, FS) ++
-    sw(fp, FS-ArraysSize-4, sp) ++
-    sw(ra, FS-ArraysSize-8, sp) ++
-    addu(fp, sp, FS).
+asm_prologue(FS, ArraysSize) ->
+    asm_subu(sp, sp, FS) ++
+    asm_sw(fp, FS-ArraysSize-4, sp) ++
+    asm_sw(ra, FS-ArraysSize-8, sp) ++
+    asm_addu(fp, sp, FS).
 
-epilogue(FS, ArraysSize, LabelEnd) ->
-    labdef(LabelEnd) ++
-    lw(ra, FS-ArraysSize-8, sp) ++
-    lw(fp, FS-ArraysSize-4, sp) ++
-    addu(sp, sp, FS) ++
-    jr(ra).
+asm_epilogue(FS, ArraysSize, LabelEnd) ->
+    asm_labdef(LabelEnd) ++
+    asm_lw(ra, FS-ArraysSize-8, sp) ++
+    asm_lw(fp, FS-ArraysSize-4, sp) ++
+    asm_addu(sp, sp, FS) ++
+    asm_jr(ra).
 
-segment_data() ->
+asm_segment_data() ->
     [{segment, data}].
 
-segment_text() ->
+asm_segment_text() ->
     [{segment, text}].
 
-align(Bytes) ->
+asm_align(Bytes) ->
     [{align, Bytes}].
 
-globl(Label) ->
+asm_globl(Label) ->
     [{globl, Label}].
 
-labdef(Label) ->
+asm_labdef(Label) ->
     [{labdef, Label}].
 
-space(Bytes) ->
+asm_space(Bytes) ->
     [{space, Bytes}].
 
-subu(Dst, Src1, Src2) ->
+asm_subu(Dst, Src1, Src2) ->
     [{subu, Dst, Src1, Src2}].
 
-slt(Dst, Src1, Src2) ->
+asm_slt(Dst, Src1, Src2) ->
     [{slt, Dst, Src1, Src2}].
 
-sle(Dst, Src1, Src2) ->
+asm_sle(Dst, Src1, Src2) ->
     [{sle, Dst, Src1, Src2}].
 
-sgt(Dst, Src1, Src2) ->
+asm_sgt(Dst, Src1, Src2) ->
     [{sgt, Dst, Src1, Src2}].
 
-sge(Dst, Src1, Src2) ->
+asm_sge(Dst, Src1, Src2) ->
     [{sge, Dst, Src1, Src2}].
 
-seq(Dst, Src1, Src2) ->
+asm_seq(Dst, Src1, Src2) ->
     [{seq, Dst, Src1, Src2}].
 
-sne(Dst, Src1, Src2) ->
+asm_sne(Dst, Src1, Src2) ->
     [{sne, Dst, Src1, Src2}].
 
-sub(Dst, Src1, Src2) ->
+asm_sub(Dst, Src1, Src2) ->
     [{sub, Dst, Src1, Src2}].
 
-la(Dst, Label) ->
+asm_la(Dst, Label) ->
     [{la, Dst, Label}].
 
-sw(Src, Offset, Dst) ->
+asm_sw(Src, Offset, Dst) ->
     [{sw, Src, Offset, Dst}].
 
-lw(Dst, Offset, Src) ->
+asm_lw(Dst, Offset, Src) ->
     [{lw, Dst, Offset, Src}].
 
-%j(Label) ->
+%asm_j(Label) ->
 %    [{j, Label}].
 
-jr(Dst) ->
+asm_jr(Dst) ->
     [{jr, Dst}].
 
-%beqz(Rsrc, Label) ->
+%asm_beqz(Rsrc, Label) ->
 %    [{beqz, Rsrc, Label}].
 
-li(Dst, Value) ->
+asm_li(Dst, Value) ->
     [{li, Dst, Value}].
 
-mul(Dst, Src1, Src2) ->
+asm_mul(Dst, Src1, Src2) ->
     [{mul, Dst, Src1, Src2}].
 
 asm_div(Dst, Src1, Src2) ->
     [{'div', Dst, Src1, Src2}].
 
-add(Dst, Src1, Src2) ->
+asm_add(Dst, Src1, Src2) ->
     [{add, Dst, Src1, Src2}].
 
-%addi(Dst, Src1, Value) ->
+%asm_addi(Dst, Src1, Value) ->
 %    [{addi, Dst, Src1, Value}].
 
-addu(Dst, Src1, Src2) ->
+asm_addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].

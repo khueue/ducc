@@ -2,7 +2,7 @@ escript: exception error: no case clause matching
                  {'EXIT',
                      {function_clause,
                          [{codegen_env,lookup,[{temp,3},nil]},
-                          {codegen,translate_eval_binop_multiplication,4},
+                          {codegen,translate_eval_arithmetic,5},
                           {codegen,translate_instructions,2},
                           {codegen,translate_instructions,2},
                           {codegen,translate_proc,1},
