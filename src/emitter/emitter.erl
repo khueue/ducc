@@ -42,6 +42,9 @@ instruction_to_string({addi, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
 instruction_to_string({li, Dst, Icon}) ->
     indent() ++ "li " ++ indent() ++ % xxxxxxxxx
     commalist([reg(Dst), erlang:integer_to_list(Icon)]);
+instruction_to_string({la, Dst, Label}) ->
+    indent() ++ "la " ++ indent() ++
+    commalist([reg(Dst), label_string(Label)]);
 instruction_to_string({addu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
     indent() ++ "addu " ++ indent() ++
     commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);

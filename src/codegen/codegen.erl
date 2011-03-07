@@ -50,8 +50,9 @@ translate_instructions([In|Ins], Env0) ->
 translate_instruction(Instr, Env) ->
     Tag = erlang:element(1, Instr),
     case Tag of
-        eval -> translate_eval(Instr, Env);
-        load -> translate_load(Instr, Env);
+        eval  -> translate_eval(Instr, Env);
+        load  -> translate_load(Instr, Env);
+        store -> translate_store(Instr, Env);
         _ -> {Env,["--- XXX UNHANDLED: " ++ atom_to_list(Tag)]} % xxxxxxxxxx
     end.
 
@@ -62,6 +63,13 @@ translate_load(Instr, Env) ->
         byte -> translate_load_byte(Instr, Env)
     end.
 
+translate_store(Instr, Env) ->
+    Size = erlang:element(2, Instr),
+    case Size of
+        long -> translate_store_long(Instr, Env);
+        byte -> translate_store_byte(Instr, Env)
+    end.
+
 translate_load_long({load, long, TempDst, TempSrcAddress}, Env0) ->
     {{Reg1,Offset1},Env1} = ?ENV:lookup(TempSrcAddress, Env0),
     {{Reg2,Offset2},Env2} = ?ENV:lookup(TempDst, Env1),
@@ -70,7 +78,19 @@ translate_load_long({load, long, TempDst, TempSrcAddress}, Env0) ->
         sw(t0, Offset2, Reg2),
     {Env2, Instructions}.
 
-translate_load_byte(_,_) ->
+translate_load_byte(_,_) -> % xxxxxxxxxxxx
+    {nil,[]}.
+
+translate_store_long({store, long, TempDstAddress, TempValue}, Env0) ->
+    {{Reg1,Offset1},Env1} = ?ENV:lookup(TempDstAddress, Env0),
+    {{Reg2,Offset2},Env2} = ?ENV:lookup(TempValue, Env1),
+    Instructions =
+        lw(t0, Offset1, Reg1) ++
+        lw(t1, Offset2, Reg2) ++
+        sw(t1, 0, t0),
+    {Env2, Instructions}.
+
+translate_store_byte(_,_) -> % xxxxxxxxxxxx
     {nil,[]}.
 
 translate_eval({eval, Temp, RtlExpr}, Env) ->
