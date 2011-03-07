@@ -124,8 +124,57 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
         sw(t0, Offset, Reg),
     {Env1, Instructions}.
 
-translate_eval_binop(_,_,_) ->
-    {nil,[]}.
+translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env) ->
+    case Op of
+        '+' -> translate_eval_binop_addition(TempDst, Lhs, Rhs, Env);
+        '-' -> translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env);
+        '*' -> translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env);
+        '/' -> translate_eval_binop_division(TempDst, Lhs, Rhs, Env)
+    end.
+
+translate_eval_binop_addition(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        add(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        sub(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        mul(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_division(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        asm_div(t2, t0, t1) ++ % xxxxxxxxxx
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
 
 move(Dst, Src) ->
     [{move, Dst, Src}].
@@ -190,6 +239,15 @@ beqz(Rsrc, Label) ->
 
 li(Dst, Value) ->
     [{li, Dst, Value}].
+
+mul(Dst, Src1, Src2) ->
+    [{mul, Dst, Src1, Src2}].
+
+asm_div(Dst, Src1, Src2) ->
+    [{'div', Dst, Src1, Src2}].
+
+add(Dst, Src1, Src2) ->
+    [{add, Dst, Src1, Src2}].
 
 addi(Dst, Src1, Value) ->
     [{addi, Dst, Src1, Value}].

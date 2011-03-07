@@ -1,7 +1,6 @@
 -module(emitter).
 -export([
-    asm_to_string/1,
-    label_string/1]).
+    asm_to_string/1]).
 
 asm_to_string(AsmCode) ->
     toplevels_to_string(AsmCode).
@@ -51,8 +50,17 @@ instruction_to_string({addu, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
 instruction_to_string({addu, Dst, Src1, Src2}) ->
     indent() ++ "addu " ++ indent() ++
     commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({add, Dst, Src1, Src2}) ->
+    indent() ++ "add " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
 instruction_to_string({sub, Dst, Src1, Src2}) ->
     indent() ++ "sub " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({mul, Dst, Src1, Src2}) ->
+    indent() ++ "mul " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({'div', Dst, Src1, Src2}) ->
+    indent() ++ "div " ++ indent() ++
     commalist([reg(Dst), reg(Src1), reg(Src2)]);
 instruction_to_string({sw, Src, Offset, Dst}) ->
     indent() ++ "sw " ++ indent() ++
