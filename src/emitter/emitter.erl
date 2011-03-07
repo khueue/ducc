@@ -91,8 +91,8 @@ instruction_to_string({lw, Dst, Offset, Src}) ->
 instruction_to_string({jr, Dst}) ->
     indent() ++ "jr " ++ indent() ++
     reg(Dst);
-instruction_to_string(X) ->
-    indent() ++ "XXX --- " ++ erlang:atom_to_list(erlang:element(1, X)).
+instruction_to_string({xxx,Str}) ->
+    indent() ++ Str.
 
 label_string({label, "main"}) ->
     "main";

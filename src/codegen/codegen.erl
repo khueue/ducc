@@ -50,11 +50,17 @@ translate_instructions([In|Ins], Env0) ->
 translate_instruction(Instr, Env) ->
     Tag = erlang:element(1, Instr),
     case Tag of
-        eval  -> translate_eval(Instr, Env);
-        load  -> translate_load(Instr, Env);
-        store -> translate_store(Instr, Env);
-        _ -> {Env,["--- XXX UNHANDLED: " ++ atom_to_list(Tag)]} % xxxxxxxxxx
+        eval   -> translate_eval(Instr, Env);
+        load   -> translate_load(Instr, Env);
+        store  -> translate_store(Instr, Env);
+        labdef -> translate_labdef(Instr, Env);
+        _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]} % xxxxxxxxxx
     end.
+
+translate_labdef({labdef,Label}, Env) ->
+    Instructions =
+        labdef(Label),
+    {Env, Instructions}.
 
 translate_load(Instr, Env) ->
     Size = erlang:element(2, Instr),
