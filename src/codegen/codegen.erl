@@ -154,12 +154,12 @@ translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env0) ->
     {{BaseLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
     {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    Fun = ?HELPER:asm_fun(Op),
+    BinopFun = ?HELPER:asm_fun(Op),
     Instructions =
     [
         ?ASM:asm_lw(t0, OffsetLhs, BaseLhs),
         ?ASM:asm_lw(t1, OffsetRhs, BaseRhs),
-        Fun(t2, t0, t1),
+        BinopFun(t2, t0, t1),
         ?ASM:asm_sw(t2, OffsetDst, BaseDst)
     ],
     {Env3, Instructions}.
