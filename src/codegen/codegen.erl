@@ -31,14 +31,14 @@ translate_data({data,Label,Bytes}) ->
     ],
     Instructions.
 
-translate_proc({proc,Label,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
+translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
     FS = ?HELPER:calculate_frame_size(Locals, ArraysSize),
     Env = ?ENV:new(Formals, Locals),
     Instructions =
         [
             ?ASM:asm_segment_text(),
-            ?ASM:asm_globl(Label),
-            ?ASM:asm_labdef(Label)
+            ?ASM:asm_globl(LabelStart),
+            ?ASM:asm_labdef(LabelStart)
         ] ++
         ?HELPER:function_prologue(FS, ArraysSize) ++
         translate_instructions(Ins, Env) ++
@@ -59,7 +59,7 @@ translate_instruction(Instr, Env) ->
         load   -> translate_load(Instr, Env);
         store  -> translate_store(Instr, Env);
         labdef -> translate_labdef(Instr, Env);
-        _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]} % xxxxxxxxxx
+        _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
     end.
 
 translate_labdef({labdef,Label}, Env) ->
@@ -85,7 +85,6 @@ translate_load_long(TempDst, TempSrcAddr, Env0) ->
     ],
     {Env2, Instructions}.
 
-% xxxxxx.
 translate_load_byte(_TempDst, _TempSrcAddr, Env0) ->
     {Env0, [{xxx,"--- XXX UNHANDLED: load byte"}]}.
 
@@ -106,7 +105,6 @@ translate_store_long(TempDstAddr, TempValue, Env0) ->
     ],
     {Env2, Instructions}.
 
-% xxxxxx.
 translate_store_byte(_TempDstAddr, _TempValue, Env0) ->
     {Env0, [{xxx,"--- XXX UNHANDLED: store byte"}]}.
 
