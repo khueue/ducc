@@ -9,6 +9,10 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
     - cjump
     - call
     - syscalls
+        - putint
+        - putstring
+        - getint
+        - getstring
     - load byte
     - store byte
     - report
