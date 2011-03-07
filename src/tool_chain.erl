@@ -80,7 +80,7 @@ to_term(Tokens) ->
     end.
 
 raw_string_to_output(Str) ->
-    io:fwrite('~s~n', [Str]).
+    io:fwrite('~s', [Str]).
 
 term_to_output(Term) ->
     io:fwrite('~100p.~n', [Term]).
