@@ -1,5 +1,7 @@
 -module(emitter).
--export([asm_to_string/1]).
+-export([
+    asm_to_string/1,
+    label_string/1]).
 
 asm_to_string(AsmCode) ->
     toplevels_to_string(AsmCode).

@@ -50,22 +50,62 @@ translate_instructions([In|Ins], Env0) ->
 translate_instruction(Instr, Env) ->
     Tag = erlang:element(1, Instr),
     case Tag of
-        eval -> translate_eval(Instr, Env)
+        eval -> translate_eval(Instr, Env);
+        load -> translate_load(Instr, Env);
+        _ -> {Env,["--- XXX UNHANDLED: " ++ atom_to_list(Tag)]} % xxxxxxxxxx
     end.
 
-translate_eval({eval, Temp, {icon, Value}}, Env0) ->
+translate_load(Instr, Env) ->
+    Size = erlang:element(2, Instr),
+    case Size of
+        long -> translate_load_long(Instr, Env);
+        byte -> translate_load_byte(Instr, Env)
+    end.
+
+translate_load_long({load, long, TempDst, TempSrcAddress}, Env0) ->
+    {{Reg1,Offset1},Env1} = ?ENV:lookup(TempSrcAddress, Env0),
+    {{Reg2,Offset2},Env2} = ?ENV:lookup(TempDst, Env1),
+    Instructions =
+        lw(t0, Offset1, Reg1) ++
+        sw(t0, Offset2, Reg2),
+    {Env2, Instructions}.
+
+translate_load_byte(_,_) ->
+    {nil,[]}.
+
+translate_eval({eval, Temp, RtlExpr}, Env) ->
+    Type = erlang:element(1, RtlExpr),
+    case Type of
+        icon   -> translate_eval_icon(Temp, RtlExpr, Env);
+        temp   -> translate_eval_temp(Temp, RtlExpr, Env);
+        labref -> translate_eval_labref(Temp, RtlExpr, Env);
+        binop  -> translate_eval_binop(Temp, RtlExpr, Env)
+    end.
+
+translate_eval_icon(Temp, {icon,Value}, Env0) ->
     {{sp,Offset},Env1} = ?ENV:lookup(Temp, Env0),
     Instructions =
         li(t0, Value) ++
         sw(t0, Offset, sp),
-    {Env1, Instructions};
-translate_eval({eval, TempDst, TempSrc={temp,_}}, Env0) ->
+    {Env1, Instructions}.
+
+translate_eval_temp(TempDst, TempSrc, Env0) ->
     {{BaseRegSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
     {{BaseRegDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
         lw(t0, OffsetSrc, BaseRegSrc) ++
         sw(t0, OffsetDst, BaseRegDst),
     {Env2, Instructions}.
+
+translate_eval_labref(TempDst, {labref,Label}, Env0) ->
+    {{Reg,Offset},Env1} = ?ENV:lookup(TempDst, Env0),
+    Instructions =
+        la(t0, Label) ++
+        sw(t0, Offset, Reg),
+    {Env1, Instructions}.
+
+translate_eval_binop(_,_,_) ->
+    {nil,[]}.
 
 move(Dst, Src) ->
     [{move, Dst, Src}].
@@ -109,6 +149,9 @@ subu(Dst, Src1, Src2) ->
 
 sub(Dst, Src1, Src2) ->
     [{sub, Dst, Src1, Src2}].
+
+la(Dst, Label) ->
+    [{la, Dst, Label}].
 
 sw(Src, Offset, Dst) ->
     [{sw, Src, Offset, Dst}].
