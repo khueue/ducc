@@ -5,23 +5,22 @@
 -define(ENV, codegen_env).
 
 generate_code(RtlCode, Lines) ->
-    Env = ?ENV:new(Lines),
-    AsmCode = translate_toplevels(RtlCode, Env),
+    AsmCode = translate_toplevels(RtlCode),
     AsmCode.
 
-translate_toplevels([], _Env) -> [];
-translate_toplevels([Toplevel|Toplevels], Env) ->
-    ToplevelAsm = translate_toplevel(Toplevel, Env),
-    [ToplevelAsm|translate_toplevels(Toplevels, Env)].
+translate_toplevels([]) -> [];
+translate_toplevels([Toplevel|Toplevels]) ->
+    ToplevelAsm = translate_toplevel(Toplevel),
+    [ToplevelAsm|translate_toplevels(Toplevels)].
 
-translate_toplevel(Toplevel, Env) ->
+translate_toplevel(Toplevel) ->
     Type = erlang:element(1, Toplevel),
     case Type of
-        data -> translate_data(Toplevel, Env);
-        proc -> translate_proc(Toplevel, Env)
+        data -> translate_data(Toplevel);
+        proc -> translate_proc(Toplevel)
     end.
 
-translate_data({data, Label, Bytes}, _Env) ->
+translate_data({data, Label, Bytes}) ->
     Instructions =
         segment_data() ++
         align(4) ++
@@ -29,33 +28,43 @@ translate_data({data, Label, Bytes}, _Env) ->
         space(Bytes),
     Instructions.
 
-translate_proc(Proc = {proc, Label, Formals, Temps, ArraysSize, Ins, LabelEnd}, _Env) ->
+translate_proc(Proc = {proc, Label, Formals, Temps, ArraysSize, Ins, LabelEnd}) ->
     FS = calc_frame_size(Proc),
+    Env = ?ENV:new(nil), % xxxxxxxxx
     Instructions =
         segment_text() ++
         globl(Label) ++
         labdef(Label) ++
         prologue(FS, ArraysSize) ++
-        translate_instructions(Ins) ++
+        translate_instructions(Ins, Env) ++
         epilogue(FS, ArraysSize, LabelEnd),
     Instructions.
 
-translate_instructions([]) -> [];
-translate_instructions([{'- SOURCE -',_,_,_}|Ins]) ->
-    translate_instructions(Ins);
-translate_instructions([In|Ins]) ->
-    translate_instruction(In) ++
-    translate_instructions(Ins).
+translate_instructions([], _Env) -> [];
+translate_instructions([{'- SOURCE -',_,_,_}|Ins], Env) ->
+    translate_instructions(Ins, Env);
+translate_instructions([In|Ins], Env0) ->
+    {Env1,Ins1} = translate_instruction(In, Env0),
+    Ins1 ++ translate_instructions(Ins, Env1).
 
-translate_instruction(Instr) ->
+translate_instruction(Instr, Env) ->
     Tag = erlang:element(1, Instr),
     case Tag of
-        eval -> translate_eval(Instr)
+        eval -> translate_eval(Instr, Env)
     end.
 
-translate_eval({eval, Temp, {icon, Value}}) ->
+translate_eval({eval, Temp, {icon, Value}}, Env0) ->
+    {{sp,Offset},Env1} = ?ENV:lookup(Temp, Env0),
     Instructions =
-        li(Temp, Value). % xxxxxxxxxxxx
+        li(t0, Value) ++
+        sw(t0, Offset, t1),
+    {Env1, Instructions}.
+translate_eval({eval, TempDst, TempSrc={temp,_}}, Env0) ->
+    {{sp,Offset},Env1} = ?ENV:lookup(TempSrc, Env0),
+    Instructions =
+        li(t0, Value) ++
+        sw(t0, Offset, t1),
+    {Env1, Instructions}.
 
 move(Dst, Src) ->
     [{move, Dst, Src}].
@@ -115,11 +124,11 @@ jr(Dst) ->
 beqz(Rsrc, Label) ->
     [{beqz, Rsrc, Label}].
 
-addi(Dst, Src1, Value) ->
-    [{addi, Dst, Src1, Value}].
-
 li(Dst, Value) ->
     [{li, Dst, Value}].
+
+addi(Dst, Src1, Value) ->
+    [{addi, Dst, Src1, Value}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].
