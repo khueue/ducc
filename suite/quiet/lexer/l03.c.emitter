@@ -1,9 +1,33 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',{badarg,[{erlang,integer_to_list,['0']},
-                                  {emitter,instruction_to_string,1},
-                                  {emitter,toplevel_to_string,1},
-                                  {emitter,toplevel_to_string,1},
-                                  {emitter_driver,asm_to_string,3},
-                                  {erl_eval,do_apply,5},
-                                  {erl_eval,expr,5},
-                                  {erl_eval,exprs,5}]}}
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 32
+	sw 	$fp, 28($sp)
+	sw 	$ra, 24($sp)
+	addu 	$fp, $sp, 32
+	li 	$t0, 123456789
+	sw 	$t0, 0($sp)
+	lw 	$t0, 0($sp)
+	sw 	$t0, 4($sp)
+	li 	$t0, 48
+	sw 	$t0, 8($sp)
+	lw 	$t0, 8($sp)
+	sw 	$t0, 4($sp)
+	li 	$t0, 97
+	sw 	$t0, 12($sp)
+	lw 	$t0, 12($sp)
+	sw 	$t0, 4($sp)
+	li 	$t0, 32
+	sw 	$t0, 16($sp)
+	lw 	$t0, 16($sp)
+	sw 	$t0, 4($sp)
+	li 	$t0, 10
+	sw 	$t0, 20($sp)
+	lw 	$t0, 20($sp)
+	sw 	$t0, 4($sp)
+L100_main_end:
+	lw 	$ra, 24($sp)
+	lw 	$fp, 28($sp)
+	addu 	$sp, $sp, 32
+	jr 	$ra
+

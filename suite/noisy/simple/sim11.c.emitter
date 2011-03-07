@@ -1,11 +1,119 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen_env,lookup,[{temp,17},nil]},
-                          {codegen,translate_eval_icon,3},
-                          {codegen,translate_instructions,2},
-                          {codegen,translate_instructions,2},
-                          {codegen,translate_proc,1},
-                          {codegen,translate_toplevels,1},
-                          {codegen,translate_toplevels,1},
-                          {codegen_driver,generate_code,3}]}}
+	.text
+	.globl 	Lf
+Lf:
+	subu 	$sp, $sp, 24
+	sw 	$fp, 20($sp)
+	sw 	$ra, 16($sp)
+	addu 	$fp, $sp, 24
+	li 	$t0, 0
+	sw 	$t0, 0($sp)
+	li 	$t0, 1
+	sw 	$t0, 4($sp)
+	lw 	$t0, 0($sp)
+	lw 	$t1, 4($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 8($sp)
+	lw 	$t0, 4($fp)
+	lw 	$t1, 8($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 12($sp)
+	--- XXX UNHANDLED: store byte
+L100_f_end:
+	lw 	$ra, 16($sp)
+	lw 	$fp, 20($sp)
+	addu 	$sp, $sp, 24
+	jr 	$ra
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 124
+	sw 	$fp, 116($sp)
+	sw 	$ra, 112($sp)
+	addu 	$fp, $sp, 124
+	li 	$t0, 10
+	sw 	$t0, 0($sp)
+	lw 	$t0, 0($sp)
+	sw 	$t0, 4($sp)
+	li 	$t0, 0
+	sw 	$t0, 8($sp)
+	li 	$t0, 1
+	sw 	$t0, 12($sp)
+	li 	$t0, 1
+	sw 	$t0, 16($sp)
+	lw 	$t0, 12($sp)
+	lw 	$t1, 16($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 20($sp)
+	li 	$t0, 0
+	sw 	$t0, 24($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 20($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 28($sp)
+	lw 	$t0, 32($sp)
+	lw 	$t1, 28($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 36($sp)
+	--- XXX UNHANDLED: store byte
+	--- XXX UNHANDLED: jump
+L103_while_body:
+	li 	$t0, 48
+	sw 	$t0, 40($sp)
+	lw 	$t0, 40($sp)
+	lw 	$t1, 4($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 44($sp)
+	li 	$t0, 1
+	sw 	$t0, 48($sp)
+	lw 	$t0, 44($sp)
+	lw 	$t1, 48($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 52($sp)
+	li 	$t0, 0
+	sw 	$t0, 56($sp)
+	lw 	$t0, 32($sp)
+	lw 	$t1, 56($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 60($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 64($sp)
+	lw 	$t0, 32($sp)
+	lw 	$t1, 64($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 68($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 1
+	sw 	$t0, 72($sp)
+	lw 	$t0, 4($sp)
+	lw 	$t1, 72($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 76($sp)
+	lw 	$t0, 76($sp)
+	sw 	$t0, 4($sp)
+L102_while_test:
+	--- XXX UNHANDLED: cjump
+L104_while_end:
+	li 	$t0, 10
+	sw 	$t0, 80($sp)
+	li 	$t0, 0
+	sw 	$t0, 84($sp)
+	lw 	$t0, 32($sp)
+	lw 	$t1, 84($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 88($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 92($sp)
+	lw 	$t0, 32($sp)
+	lw 	$t1, 92($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 96($sp)
+	--- XXX UNHANDLED: call
+L101_main_end:
+	lw 	$ra, 112($sp)
+	lw 	$fp, 116($sp)
+	addu 	$sp, $sp, 124
+	jr 	$ra
+

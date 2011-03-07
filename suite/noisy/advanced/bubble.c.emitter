@@ -1,11 +1,337 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen_env,lookup,[{temp,21},nil]},
-                          {codegen,translate_eval_icon,3},
-                          {codegen,translate_instructions,2},
-                          {codegen,translate_instructions,2},
-                          {codegen,translate_proc,1},
-                          {codegen,translate_toplevels,1},
-                          {codegen,translate_toplevels,1},
-                          {codegen_driver,generate_code,3}]}}
+	.data
+	.align 	4
+Leol:
+	.space 	1
+
+	.data
+	.align 	4
+Ln:
+	.space 	4
+
+	.text
+	.globl 	Lbubble
+Lbubble:
+	subu 	$sp, $sp, 208
+	sw 	$fp, 204($sp)
+	sw 	$ra, 200($sp)
+	addu 	$fp, $sp, 208
+	--- XXX UNHANDLED: call
+	la 	$t0, Leol
+	sw 	$t0, 0($sp)
+	--- XXX UNHANDLED: call
+	la 	$t0, Ln
+	sw 	$t0, 4($sp)
+	lw 	$t0, 4($sp)
+	sw 	$t0, 8($sp)
+	li 	$t0, 1
+	sw 	$t0, 12($sp)
+	lw 	$t0, 8($sp)
+	lw 	$t1, 12($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 16($sp)
+	lw 	$t0, 16($sp)
+	sw 	$t0, 20($sp)
+	--- XXX UNHANDLED: jump
+L102_while_body:
+	li 	$t0, 0
+	sw 	$t0, 24($sp)
+	lw 	$t0, 24($sp)
+	sw 	$t0, 28($sp)
+	--- XXX UNHANDLED: jump
+L105_while_body:
+	li 	$t0, 1
+	sw 	$t0, 32($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 32($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 36($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 36($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 40($sp)
+	--- XXX UNHANDLED: load byte
+	li 	$t0, 1
+	sw 	$t0, 44($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 44($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 48($sp)
+	li 	$t0, 1
+	sw 	$t0, 52($sp)
+	lw 	$t0, 48($sp)
+	lw 	$t1, 52($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 56($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 56($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 60($sp)
+	--- XXX UNHANDLED: load byte
+	lw 	$t0, 64($sp)
+	lw 	$t1, 68($sp)
+	sgt 	$t2, $t0, $t1
+	sw 	$t2, 72($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 1
+	sw 	$t0, 76($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 76($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 80($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 80($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 84($sp)
+	--- XXX UNHANDLED: load byte
+	lw 	$t0, 88($sp)
+	sw 	$t0, 92($sp)
+	li 	$t0, 1
+	sw 	$t0, 96($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 96($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 100($sp)
+	li 	$t0, 1
+	sw 	$t0, 104($sp)
+	lw 	$t0, 100($sp)
+	lw 	$t1, 104($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 108($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 108($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 112($sp)
+	--- XXX UNHANDLED: load byte
+	li 	$t0, 1
+	sw 	$t0, 116($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 116($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 120($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 120($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 124($sp)
+	--- XXX UNHANDLED: store byte
+	li 	$t0, 1
+	sw 	$t0, 128($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 128($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 132($sp)
+	li 	$t0, 1
+	sw 	$t0, 136($sp)
+	lw 	$t0, 132($sp)
+	lw 	$t1, 136($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 140($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 140($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 144($sp)
+	--- XXX UNHANDLED: store byte
+L107_if_end:
+	li 	$t0, 1
+	sw 	$t0, 148($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 148($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 152($sp)
+	lw 	$t0, 152($sp)
+	sw 	$t0, 28($sp)
+L104_while_test:
+	lw 	$t0, 28($sp)
+	lw 	$t1, 20($sp)
+	slt 	$t2, $t0, $t1
+	sw 	$t2, 156($sp)
+	--- XXX UNHANDLED: cjump
+L106_while_end:
+	--- XXX UNHANDLED: call
+	la 	$t0, Leol
+	sw 	$t0, 160($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 1
+	sw 	$t0, 164($sp)
+	lw 	$t0, 20($sp)
+	lw 	$t1, 164($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 168($sp)
+	lw 	$t0, 168($sp)
+	sw 	$t0, 20($sp)
+L101_while_test:
+	li 	$t0, 0
+	sw 	$t0, 172($sp)
+	lw 	$t0, 20($sp)
+	lw 	$t1, 172($sp)
+	sgt 	$t2, $t0, $t1
+	sw 	$t2, 176($sp)
+	--- XXX UNHANDLED: cjump
+L103_while_end:
+L100_bubble_end:
+	lw 	$ra, 200($sp)
+	lw 	$fp, 204($sp)
+	addu 	$sp, $sp, 208
+	jr 	$ra
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 232
+	sw 	$fp, 200($sp)
+	sw 	$ra, 196($sp)
+	addu 	$fp, $sp, 232
+	li 	$t0, 10
+	sw 	$t0, 0($sp)
+	li 	$t0, 0
+	sw 	$t0, 4($sp)
+	li 	$t0, 1
+	sw 	$t0, 8($sp)
+	lw 	$t0, 4($sp)
+	lw 	$t1, 8($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 12($sp)
+	la 	$t0, Leol
+	sw 	$t0, 16($sp)
+	lw 	$t0, 16($sp)
+	lw 	$t1, 12($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 20($sp)
+	--- XXX UNHANDLED: store byte
+	li 	$t0, 0
+	sw 	$t0, 24($sp)
+	li 	$t0, 1
+	sw 	$t0, 28($sp)
+	li 	$t0, 1
+	sw 	$t0, 32($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 32($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 36($sp)
+	la 	$t0, Leol
+	sw 	$t0, 40($sp)
+	lw 	$t0, 40($sp)
+	lw 	$t1, 36($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 44($sp)
+	--- XXX UNHANDLED: store byte
+	li 	$t0, 26
+	sw 	$t0, 48($sp)
+	la 	$t0, Ln
+	sw 	$t0, 52($sp)
+	lw 	$t0, 52($sp)
+	lw 	$t1, 48($sp)
+	sw 	$t1, 0($t0)
+	li 	$t0, 0
+	sw 	$t0, 56($sp)
+	la 	$t0, Ln
+	sw 	$t0, 60($sp)
+	lw 	$t0, 60($sp)
+	sw 	$t0, 64($sp)
+	li 	$t0, 1
+	sw 	$t0, 68($sp)
+	lw 	$t0, 64($sp)
+	lw 	$t1, 68($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 72($sp)
+	li 	$t0, 0
+	sw 	$t0, 76($sp)
+	lw 	$t0, 76($sp)
+	lw 	$t1, 72($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 80($sp)
+	lw 	$t0, 84($sp)
+	lw 	$t1, 80($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 88($sp)
+	--- XXX UNHANDLED: store byte
+	li 	$t0, 0
+	sw 	$t0, 92($sp)
+	lw 	$t0, 92($sp)
+	sw 	$t0, 96($sp)
+	li 	$t0, 11
+	sw 	$t0, 100($sp)
+	lw 	$t0, 100($sp)
+	sw 	$t0, 104($sp)
+	--- XXX UNHANDLED: jump
+L110_while_body:
+	li 	$t0, 26
+	sw 	$t0, 108($sp)
+	lw 	$t0, 104($sp)
+	lw 	$t1, 108($sp)
+	div 	$t2, $t0, $t1
+	sw 	$t2, 112($sp)
+	li 	$t0, 26
+	sw 	$t0, 116($sp)
+	lw 	$t0, 112($sp)
+	lw 	$t1, 116($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 120($sp)
+	lw 	$t0, 104($sp)
+	lw 	$t1, 120($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 124($sp)
+	lw 	$t0, 124($sp)
+	sw 	$t0, 128($sp)
+	li 	$t0, 97
+	sw 	$t0, 132($sp)
+	lw 	$t0, 132($sp)
+	lw 	$t1, 128($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 136($sp)
+	li 	$t0, 1
+	sw 	$t0, 140($sp)
+	lw 	$t0, 96($sp)
+	lw 	$t1, 140($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 144($sp)
+	li 	$t0, 0
+	sw 	$t0, 148($sp)
+	lw 	$t0, 148($sp)
+	lw 	$t1, 144($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 152($sp)
+	lw 	$t0, 84($sp)
+	lw 	$t1, 152($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 156($sp)
+	--- XXX UNHANDLED: store byte
+	li 	$t0, 1
+	sw 	$t0, 160($sp)
+	lw 	$t0, 96($sp)
+	lw 	$t1, 160($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 164($sp)
+	lw 	$t0, 164($sp)
+	sw 	$t0, 96($sp)
+	li 	$t0, 17
+	sw 	$t0, 168($sp)
+	lw 	$t0, 104($sp)
+	lw 	$t1, 168($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 172($sp)
+	lw 	$t0, 172($sp)
+	sw 	$t0, 104($sp)
+L109_while_test:
+	la 	$t0, Ln
+	sw 	$t0, 176($sp)
+	lw 	$t0, 176($sp)
+	sw 	$t0, 180($sp)
+	lw 	$t0, 96($sp)
+	lw 	$t1, 180($sp)
+	slt 	$t2, $t0, $t1
+	sw 	$t2, 184($sp)
+	--- XXX UNHANDLED: cjump
+L111_while_end:
+	li 	$t0, 0
+	sw 	$t0, 188($sp)
+	lw 	$t0, 84($sp)
+	lw 	$t1, 188($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 192($sp)
+	--- XXX UNHANDLED: call
+L108_main_end:
+	lw 	$ra, 196($sp)
+	lw 	$fp, 200($sp)
+	addu 	$sp, $sp, 232
+	jr 	$ra
+
