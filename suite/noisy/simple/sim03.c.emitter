@@ -95,4 +95,3 @@ L100_main_end:
 	lw	$fp, 116($sp)
 	addu	$sp, $sp, 160
 	jr	$ra
-

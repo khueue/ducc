@@ -69,4 +69,3 @@ L103_main_end:
 	lw	$fp, 28($sp)
 	addu	$sp, $sp, 32
 	jr	$ra
-

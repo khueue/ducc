@@ -218,4 +218,3 @@ L105_main_end:
 	lw	$fp, 244($sp)
 	addu	$sp, $sp, 248
 	jr	$ra
-

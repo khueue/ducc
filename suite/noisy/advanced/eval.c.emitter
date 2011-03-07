@@ -1767,4 +1767,3 @@ L131_main_end:
 	lw	$fp, 1456($sp)
 	addu	$sp, $sp, 1460
 	jr	$ra
-

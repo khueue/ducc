@@ -304,4 +304,3 @@ L121_main_end:
 	lw	$fp, 32($sp)
 	addu	$sp, $sp, 36
 	jr	$ra
-

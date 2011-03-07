@@ -14,4 +14,3 @@ L100_foo_end:
 	lw	$fp, 8($sp)
 	addu	$sp, $sp, 12
 	jr	$ra
-

@@ -404,4 +404,3 @@ L104_main_end:
 	lw	$fp, 448($sp)
 	addu	$sp, $sp, 504
 	jr	$ra
-

@@ -181,4 +181,3 @@ L103_main_end:
 	lw	$fp, 176($sp)
 	addu	$sp, $sp, 188
 	jr	$ra
-

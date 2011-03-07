@@ -334,4 +334,3 @@ L108_main_end:
 	lw	$fp, 200($sp)
 	addu	$sp, $sp, 232
 	jr	$ra
-

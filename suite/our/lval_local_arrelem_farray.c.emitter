@@ -27,4 +27,3 @@ L100_main_end:
 	lw	$fp, 24($sp)
 	addu	$sp, $sp, 28
 	jr	$ra
-
