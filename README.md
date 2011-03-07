@@ -4,8 +4,15 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## TODO
 
- * Start with environment and "444;"
  * Assignment 5
+    - labdef
+    - jump
+    - cjump
+    - call
+    - syscalls
+    - load byte
+    - store byte
+    - report
 
 ## Before Hand-In
 
