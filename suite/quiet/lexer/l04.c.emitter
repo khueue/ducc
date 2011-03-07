@@ -1,55 +1,55 @@
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 56
-	sw 	$fp, 52($sp)
-	sw 	$ra, 48($sp)
-	addu 	$fp, $sp, 56
-	li 	$t0, 1
-	sw 	$t0, 0($sp)
-	li 	$t0, 0
-	sw 	$t0, 4($sp)
-	lw 	$t0, 0($sp)
-	lw 	$t1, 4($sp)
-	seq 	$t2, $t0, $t1
-	sw 	$t2, 8($sp)
+	subu	$sp, $sp, 56
+	sw	$fp, 52($sp)
+	sw	$ra, 48($sp)
+	addu	$fp, $sp, 56
+	li	$t0, 1
+	sw	$t0, 0($sp)
+	li	$t0, 0
+	sw	$t0, 4($sp)
+	lw	$t0, 0($sp)
+	lw	$t1, 4($sp)
+	seq	$t2, $t0, $t1
+	sw	$t2, 8($sp)
 	--- XXX UNHANDLED: cjump
-	li 	$t0, 0
-	sw 	$t0, 12($sp)
-	lw 	$t0, 12($sp)
-	sw 	$t0, 16($sp)
+	li	$t0, 0
+	sw	$t0, 12($sp)
+	lw	$t0, 12($sp)
+	sw	$t0, 16($sp)
 	--- XXX UNHANDLED: jump
 L101_if_else:
-	li 	$t0, 1
-	sw 	$t0, 20($sp)
-	lw 	$t0, 20($sp)
-	sw 	$t0, 16($sp)
+	li	$t0, 1
+	sw	$t0, 20($sp)
+	lw	$t0, 20($sp)
+	sw	$t0, 16($sp)
 L102_if_end:
 	--- XXX UNHANDLED: jump
 L104_while_body:
-	li 	$t0, 0
-	sw 	$t0, 24($sp)
-	lw 	$t0, 24($sp)
-	sw 	$t0, 16($sp)
+	li	$t0, 0
+	sw	$t0, 24($sp)
+	lw	$t0, 24($sp)
+	sw	$t0, 16($sp)
 L103_while_test:
-	li 	$t0, 1
-	sw 	$t0, 28($sp)
-	li 	$t0, 0
-	sw 	$t0, 32($sp)
-	lw 	$t0, 28($sp)
-	lw 	$t1, 32($sp)
-	seq 	$t2, $t0, $t1
-	sw 	$t2, 36($sp)
+	li	$t0, 1
+	sw	$t0, 28($sp)
+	li	$t0, 0
+	sw	$t0, 32($sp)
+	lw	$t0, 28($sp)
+	lw	$t1, 32($sp)
+	seq	$t2, $t0, $t1
+	sw	$t2, 36($sp)
 	--- XXX UNHANDLED: cjump
 L105_while_end:
-	li 	$t0, 42
-	sw 	$t0, 40($sp)
-	lw 	$t0, 40($sp)
-	sw 	$t0, 44($sp)
+	li	$t0, 42
+	sw	$t0, 40($sp)
+	lw	$t0, 40($sp)
+	sw	$t0, 44($sp)
 	--- XXX UNHANDLED: jump
 L100_main_end:
-	lw 	$ra, 48($sp)
-	lw 	$fp, 52($sp)
-	addu 	$sp, $sp, 56
-	jr 	$ra
+	lw	$ra, 48($sp)
+	lw	$fp, 52($sp)
+	addu	$sp, $sp, 56
+	jr	$ra
 

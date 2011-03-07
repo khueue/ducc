@@ -1,17 +1,17 @@
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 16
-	sw 	$fp, 12($sp)
-	sw 	$ra, 8($sp)
-	addu 	$fp, $sp, 16
-	li 	$t0, 333
-	sw 	$t0, 0($sp)
-	lw 	$t0, 0($sp)
-	sw 	$t0, 4($sp)
+	subu	$sp, $sp, 16
+	sw	$fp, 12($sp)
+	sw	$ra, 8($sp)
+	addu	$fp, $sp, 16
+	li	$t0, 333
+	sw	$t0, 0($sp)
+	lw	$t0, 0($sp)
+	sw	$t0, 4($sp)
 L100_main_end:
-	lw 	$ra, 8($sp)
-	lw 	$fp, 12($sp)
-	addu 	$sp, $sp, 16
-	jr 	$ra
+	lw	$ra, 8($sp)
+	lw	$fp, 12($sp)
+	addu	$sp, $sp, 16
+	jr	$ra
 

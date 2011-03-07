@@ -1,36 +1,36 @@
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 76
-	sw 	$fp, 32($sp)
-	sw 	$ra, 28($sp)
-	addu 	$fp, $sp, 76
-	li 	$t0, 333
-	sw 	$t0, 0($sp)
-	li 	$t0, 9
-	sw 	$t0, 4($sp)
-	li 	$t0, 4
-	sw 	$t0, 8($sp)
-	lw 	$t0, 4($sp)
-	lw 	$t1, 8($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 12($sp)
-	li 	$t0, 0
-	sw 	$t0, 16($sp)
-	lw 	$t0, 16($sp)
-	lw 	$t1, 12($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 20($sp)
-	lw 	$t0, 24($sp)
-	lw 	$t1, 20($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 28($sp)
-	lw 	$t0, 28($sp)
-	lw 	$t1, 0($sp)
-	sw 	$t1, 0($t0)
+	subu	$sp, $sp, 76
+	sw	$fp, 32($sp)
+	sw	$ra, 28($sp)
+	addu	$fp, $sp, 76
+	li	$t0, 333
+	sw	$t0, 0($sp)
+	li	$t0, 9
+	sw	$t0, 4($sp)
+	li	$t0, 4
+	sw	$t0, 8($sp)
+	lw	$t0, 4($sp)
+	lw	$t1, 8($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 12($sp)
+	li	$t0, 0
+	sw	$t0, 16($sp)
+	lw	$t0, 16($sp)
+	lw	$t1, 12($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 20($sp)
+	lw	$t0, 24($sp)
+	lw	$t1, 20($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 28($sp)
+	lw	$t0, 28($sp)
+	lw	$t1, 0($sp)
+	sw	$t1, 0($t0)
 L100_main_end:
-	lw 	$ra, 28($sp)
-	lw 	$fp, 32($sp)
-	addu 	$sp, $sp, 76
-	jr 	$ra
+	lw	$ra, 28($sp)
+	lw	$fp, 32($sp)
+	addu	$sp, $sp, 76
+	jr	$ra
 

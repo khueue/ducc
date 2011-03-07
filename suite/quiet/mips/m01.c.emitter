@@ -1,94 +1,94 @@
 	.data
-	.align 	4
+	.align	4
 Lb:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Laddi:
-	.space 	1
+	.space	1
 
 	.data
-	.align 	4
+	.align	4
 Lla:
-	.space 	4
+	.space	4
 
 	.text
-	.globl 	Ljal
+	.globl	Ljal
 Ljal:
-	subu 	$sp, $sp, 44
-	sw 	$fp, 40($sp)
-	sw 	$ra, 36($sp)
-	addu 	$fp, $sp, 44
-	la 	$t0, Lb
-	sw 	$t0, 0($sp)
-	lw 	$t0, 0($sp)
-	sw 	$t0, 4($sp)
-	la 	$t0, Laddi
-	sw 	$t0, 8($sp)
+	subu	$sp, $sp, 44
+	sw	$fp, 40($sp)
+	sw	$ra, 36($sp)
+	addu	$fp, $sp, 44
+	la	$t0, Lb
+	sw	$t0, 0($sp)
+	lw	$t0, 0($sp)
+	sw	$t0, 4($sp)
+	la	$t0, Laddi
+	sw	$t0, 8($sp)
 	--- XXX UNHANDLED: load byte
-	lw 	$t0, 4($sp)
-	lw 	$t1, 12($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 16($sp)
-	la 	$t0, Lla
-	sw 	$t0, 20($sp)
-	lw 	$t0, 20($sp)
-	sw 	$t0, 24($sp)
-	lw 	$t0, 16($sp)
-	lw 	$t1, 24($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 28($sp)
-	la 	$t0, Lb
-	sw 	$t0, 32($sp)
-	lw 	$t0, 32($sp)
-	lw 	$t1, 28($sp)
-	sw 	$t1, 0($t0)
+	lw	$t0, 4($sp)
+	lw	$t1, 12($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 16($sp)
+	la	$t0, Lla
+	sw	$t0, 20($sp)
+	lw	$t0, 20($sp)
+	sw	$t0, 24($sp)
+	lw	$t0, 16($sp)
+	lw	$t1, 24($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 28($sp)
+	la	$t0, Lb
+	sw	$t0, 32($sp)
+	lw	$t0, 32($sp)
+	lw	$t1, 28($sp)
+	sw	$t1, 0($t0)
 L100_jal_end:
-	lw 	$ra, 36($sp)
-	lw 	$fp, 40($sp)
-	addu 	$sp, $sp, 44
-	jr 	$ra
+	lw	$ra, 36($sp)
+	lw	$fp, 40($sp)
+	addu	$sp, $sp, 44
+	jr	$ra
 
 	.text
-	.globl 	Lmov
+	.globl	Lmov
 Lmov:
-	subu 	$sp, $sp, 12
-	sw 	$fp, 8($sp)
-	sw 	$ra, 4($sp)
-	addu 	$fp, $sp, 12
-	la 	$t0, Laddi
-	sw 	$t0, 0($sp)
+	subu	$sp, $sp, 12
+	sw	$fp, 8($sp)
+	sw	$ra, 4($sp)
+	addu	$fp, $sp, 12
+	la	$t0, Laddi
+	sw	$t0, 0($sp)
 	--- XXX UNHANDLED: store byte
 L101_mov_end:
-	lw 	$ra, 4($sp)
-	lw 	$fp, 8($sp)
-	addu 	$sp, $sp, 12
-	jr 	$ra
+	lw	$ra, 4($sp)
+	lw	$fp, 8($sp)
+	addu	$sp, $sp, 12
+	jr	$ra
 
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 32
-	sw 	$fp, 28($sp)
-	sw 	$ra, 24($sp)
-	addu 	$fp, $sp, 32
-	li 	$t0, 8
-	sw 	$t0, 0($sp)
-	la 	$t0, Lla
-	sw 	$t0, 4($sp)
-	lw 	$t0, 4($sp)
-	lw 	$t1, 0($sp)
-	sw 	$t1, 0($t0)
+	subu	$sp, $sp, 32
+	sw	$fp, 28($sp)
+	sw	$ra, 24($sp)
+	addu	$fp, $sp, 32
+	li	$t0, 8
+	sw	$t0, 0($sp)
+	la	$t0, Lla
+	sw	$t0, 4($sp)
+	lw	$t0, 4($sp)
+	lw	$t1, 0($sp)
+	sw	$t1, 0($t0)
 	--- XXX UNHANDLED: call
-	la 	$t0, Lla
-	sw 	$t0, 8($sp)
-	lw 	$t0, 8($sp)
-	sw 	$t0, 12($sp)
+	la	$t0, Lla
+	sw	$t0, 8($sp)
+	lw	$t0, 8($sp)
+	sw	$t0, 12($sp)
 	--- XXX UNHANDLED: call
 L102_main_end:
-	lw 	$ra, 24($sp)
-	lw 	$fp, 28($sp)
-	addu 	$sp, $sp, 32
-	jr 	$ra
+	lw	$ra, 24($sp)
+	lw	$fp, 28($sp)
+	addu	$sp, $sp, 32
+	jr	$ra
 

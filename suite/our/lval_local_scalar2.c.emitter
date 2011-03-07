@@ -1,17 +1,17 @@
 	.text
-	.globl 	Lfoo
+	.globl	Lfoo
 Lfoo:
-	subu 	$sp, $sp, 12
-	sw 	$fp, 8($sp)
-	sw 	$ra, 4($sp)
-	addu 	$fp, $sp, 12
-	li 	$t0, 333
-	sw 	$t0, 0($sp)
-	lw 	$t0, 0($sp)
-	sw 	$t0, 0($fp)
+	subu	$sp, $sp, 12
+	sw	$fp, 8($sp)
+	sw	$ra, 4($sp)
+	addu	$fp, $sp, 12
+	li	$t0, 333
+	sw	$t0, 0($sp)
+	lw	$t0, 0($sp)
+	sw	$t0, 0($fp)
 L100_foo_end:
-	lw 	$ra, 4($sp)
-	lw 	$fp, 8($sp)
-	addu 	$sp, $sp, 12
-	jr 	$ra
+	lw	$ra, 4($sp)
+	lw	$fp, 8($sp)
+	addu	$sp, $sp, 12
+	jr	$ra
 

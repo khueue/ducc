@@ -1,23 +1,23 @@
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 24
-	sw 	$fp, 20($sp)
-	sw 	$ra, 16($sp)
-	addu 	$fp, $sp, 24
-	li 	$t0, 42
-	sw 	$t0, 0($sp)
-	lw 	$t0, 0($sp)
-	sw 	$t0, 4($sp)
-	li 	$t0, 4711
-	sw 	$t0, 8($sp)
-	lw 	$t0, 8($sp)
-	sw 	$t0, 12($sp)
-	lw 	$t0, 8($sp)
-	sw 	$t0, 4($sp)
+	subu	$sp, $sp, 24
+	sw	$fp, 20($sp)
+	sw	$ra, 16($sp)
+	addu	$fp, $sp, 24
+	li	$t0, 42
+	sw	$t0, 0($sp)
+	lw	$t0, 0($sp)
+	sw	$t0, 4($sp)
+	li	$t0, 4711
+	sw	$t0, 8($sp)
+	lw	$t0, 8($sp)
+	sw	$t0, 12($sp)
+	lw	$t0, 8($sp)
+	sw	$t0, 4($sp)
 L100_main_end:
-	lw 	$ra, 16($sp)
-	lw 	$fp, 20($sp)
-	addu 	$sp, $sp, 24
-	jr 	$ra
+	lw	$ra, 16($sp)
+	lw	$fp, 20($sp)
+	addu	$sp, $sp, 24
+	jr	$ra
 

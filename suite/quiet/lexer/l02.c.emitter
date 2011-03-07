@@ -1,48 +1,48 @@
 	.data
-	.align 	4
+	.align	4
 Lfoo:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Lbar:
-	.space 	1
+	.space	1
 
 	.data
-	.align 	4
+	.align	4
 LBarBara:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Lbar_bara:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Lbar4711:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Lb4rb4r4:
-	.space 	4
+	.space	4
 
 	.data
-	.align 	4
+	.align	4
 Labcdefghijklmnopqrstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ_0123456789:
-	.space 	4
+	.space	4
 
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 8
-	sw 	$fp, 4($sp)
-	sw 	$ra, 0($sp)
-	addu 	$fp, $sp, 8
+	subu	$sp, $sp, 8
+	sw	$fp, 4($sp)
+	sw	$ra, 0($sp)
+	addu	$fp, $sp, 8
 L100_main_end:
-	lw 	$ra, 0($sp)
-	lw 	$fp, 4($sp)
-	addu 	$sp, $sp, 8
-	jr 	$ra
+	lw	$ra, 0($sp)
+	lw	$fp, 4($sp)
+	addu	$sp, $sp, 8
+	jr	$ra
 

@@ -1,98 +1,98 @@
 	.data
-	.align 	4
+	.align	4
 La:
-	.space 	40
+	.space	40
 
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 160
-	sw 	$fp, 116($sp)
-	sw 	$ra, 112($sp)
-	addu 	$fp, $sp, 160
-	li 	$t0, 123
-	sw 	$t0, 0($sp)
-	li 	$t0, 7
-	sw 	$t0, 4($sp)
-	li 	$t0, 4
-	sw 	$t0, 8($sp)
-	lw 	$t0, 4($sp)
-	lw 	$t1, 8($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 12($sp)
-	la 	$t0, La
-	sw 	$t0, 16($sp)
-	lw 	$t0, 16($sp)
-	lw 	$t1, 12($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 20($sp)
-	lw 	$t0, 20($sp)
-	lw 	$t1, 0($sp)
-	sw 	$t1, 0($t0)
-	li 	$t0, 456
-	sw 	$t0, 24($sp)
-	li 	$t0, 5
-	sw 	$t0, 28($sp)
-	li 	$t0, 4
-	sw 	$t0, 32($sp)
-	lw 	$t0, 28($sp)
-	lw 	$t1, 32($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 36($sp)
-	li 	$t0, 0
-	sw 	$t0, 40($sp)
-	lw 	$t0, 40($sp)
-	lw 	$t1, 36($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 44($sp)
-	lw 	$t0, 48($sp)
-	lw 	$t1, 44($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 52($sp)
-	lw 	$t0, 52($sp)
-	lw 	$t1, 24($sp)
-	sw 	$t1, 0($t0)
-	li 	$t0, 7
-	sw 	$t0, 56($sp)
-	li 	$t0, 4
-	sw 	$t0, 60($sp)
-	lw 	$t0, 56($sp)
-	lw 	$t1, 60($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 64($sp)
-	la 	$t0, La
-	sw 	$t0, 68($sp)
-	lw 	$t0, 68($sp)
-	lw 	$t1, 64($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 72($sp)
-	lw 	$t0, 72($sp)
-	sw 	$t0, 76($sp)
+	subu	$sp, $sp, 160
+	sw	$fp, 116($sp)
+	sw	$ra, 112($sp)
+	addu	$fp, $sp, 160
+	li	$t0, 123
+	sw	$t0, 0($sp)
+	li	$t0, 7
+	sw	$t0, 4($sp)
+	li	$t0, 4
+	sw	$t0, 8($sp)
+	lw	$t0, 4($sp)
+	lw	$t1, 8($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 12($sp)
+	la	$t0, La
+	sw	$t0, 16($sp)
+	lw	$t0, 16($sp)
+	lw	$t1, 12($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 20($sp)
+	lw	$t0, 20($sp)
+	lw	$t1, 0($sp)
+	sw	$t1, 0($t0)
+	li	$t0, 456
+	sw	$t0, 24($sp)
+	li	$t0, 5
+	sw	$t0, 28($sp)
+	li	$t0, 4
+	sw	$t0, 32($sp)
+	lw	$t0, 28($sp)
+	lw	$t1, 32($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 36($sp)
+	li	$t0, 0
+	sw	$t0, 40($sp)
+	lw	$t0, 40($sp)
+	lw	$t1, 36($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 44($sp)
+	lw	$t0, 48($sp)
+	lw	$t1, 44($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 52($sp)
+	lw	$t0, 52($sp)
+	lw	$t1, 24($sp)
+	sw	$t1, 0($t0)
+	li	$t0, 7
+	sw	$t0, 56($sp)
+	li	$t0, 4
+	sw	$t0, 60($sp)
+	lw	$t0, 56($sp)
+	lw	$t1, 60($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 64($sp)
+	la	$t0, La
+	sw	$t0, 68($sp)
+	lw	$t0, 68($sp)
+	lw	$t1, 64($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 72($sp)
+	lw	$t0, 72($sp)
+	sw	$t0, 76($sp)
 	--- XXX UNHANDLED: call
-	li 	$t0, 5
-	sw 	$t0, 80($sp)
-	li 	$t0, 4
-	sw 	$t0, 84($sp)
-	lw 	$t0, 80($sp)
-	lw 	$t1, 84($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 88($sp)
-	li 	$t0, 0
-	sw 	$t0, 92($sp)
-	lw 	$t0, 92($sp)
-	lw 	$t1, 88($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 96($sp)
-	lw 	$t0, 48($sp)
-	lw 	$t1, 96($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 100($sp)
-	lw 	$t0, 100($sp)
-	sw 	$t0, 104($sp)
+	li	$t0, 5
+	sw	$t0, 80($sp)
+	li	$t0, 4
+	sw	$t0, 84($sp)
+	lw	$t0, 80($sp)
+	lw	$t1, 84($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 88($sp)
+	li	$t0, 0
+	sw	$t0, 92($sp)
+	lw	$t0, 92($sp)
+	lw	$t1, 88($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 96($sp)
+	lw	$t0, 48($sp)
+	lw	$t1, 96($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 100($sp)
+	lw	$t0, 100($sp)
+	sw	$t0, 104($sp)
 	--- XXX UNHANDLED: call
 L100_main_end:
-	lw 	$ra, 112($sp)
-	lw 	$fp, 116($sp)
-	addu 	$sp, $sp, 160
-	jr 	$ra
+	lw	$ra, 112($sp)
+	lw	$fp, 116($sp)
+	addu	$sp, $sp, 160
+	jr	$ra
 

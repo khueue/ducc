@@ -1,26 +1,26 @@
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 20
-	sw 	$fp, 16($sp)
-	sw 	$ra, 12($sp)
-	addu 	$fp, $sp, 20
-	li 	$t0, 111
-	sw 	$t0, 0($sp)
+	subu	$sp, $sp, 20
+	sw	$fp, 16($sp)
+	sw	$ra, 12($sp)
+	addu	$fp, $sp, 20
+	li	$t0, 111
+	sw	$t0, 0($sp)
 	--- XXX UNHANDLED: cjump
-	li 	$t0, 222
-	sw 	$t0, 4($sp)
+	li	$t0, 222
+	sw	$t0, 4($sp)
 	--- XXX UNHANDLED: cjump
-	li 	$t0, 0
-	sw 	$t0, 8($sp)
+	li	$t0, 0
+	sw	$t0, 8($sp)
 	--- XXX UNHANDLED: jump
 L101_or_true:
-	li 	$t0, 1
-	sw 	$t0, 8($sp)
+	li	$t0, 1
+	sw	$t0, 8($sp)
 L102_or_end:
 L100_main_end:
-	lw 	$ra, 12($sp)
-	lw 	$fp, 16($sp)
-	addu 	$sp, $sp, 20
-	jr 	$ra
+	lw	$ra, 12($sp)
+	lw	$fp, 16($sp)
+	addu	$sp, $sp, 20
+	jr	$ra
 

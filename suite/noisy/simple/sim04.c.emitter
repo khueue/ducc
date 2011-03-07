@@ -1,357 +1,357 @@
 	.data
-	.align 	4
+	.align	4
 Lx:
-	.space 	7
+	.space	7
 
 	.text
-	.globl 	main
+	.globl	main
 main:
-	subu 	$sp, $sp, 488
-	sw 	$fp, 472($sp)
-	sw 	$ra, 468($sp)
-	addu 	$fp, $sp, 488
-	li 	$t0, 72
-	sw 	$t0, 0($sp)
-	li 	$t0, 0
-	sw 	$t0, 4($sp)
-	li 	$t0, 1
-	sw 	$t0, 8($sp)
-	lw 	$t0, 4($sp)
-	lw 	$t1, 8($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 12($sp)
-	la 	$t0, Lx
-	sw 	$t0, 16($sp)
-	lw 	$t0, 16($sp)
-	lw 	$t1, 12($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 20($sp)
+	subu	$sp, $sp, 488
+	sw	$fp, 472($sp)
+	sw	$ra, 468($sp)
+	addu	$fp, $sp, 488
+	li	$t0, 72
+	sw	$t0, 0($sp)
+	li	$t0, 0
+	sw	$t0, 4($sp)
+	li	$t0, 1
+	sw	$t0, 8($sp)
+	lw	$t0, 4($sp)
+	lw	$t1, 8($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 12($sp)
+	la	$t0, Lx
+	sw	$t0, 16($sp)
+	lw	$t0, 16($sp)
+	lw	$t1, 12($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 20($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 101
-	sw 	$t0, 24($sp)
-	li 	$t0, 1
-	sw 	$t0, 28($sp)
-	li 	$t0, 1
-	sw 	$t0, 32($sp)
-	lw 	$t0, 28($sp)
-	lw 	$t1, 32($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 36($sp)
-	la 	$t0, Lx
-	sw 	$t0, 40($sp)
-	lw 	$t0, 40($sp)
-	lw 	$t1, 36($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 44($sp)
+	li	$t0, 101
+	sw	$t0, 24($sp)
+	li	$t0, 1
+	sw	$t0, 28($sp)
+	li	$t0, 1
+	sw	$t0, 32($sp)
+	lw	$t0, 28($sp)
+	lw	$t1, 32($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 36($sp)
+	la	$t0, Lx
+	sw	$t0, 40($sp)
+	lw	$t0, 40($sp)
+	lw	$t1, 36($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 44($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 108
-	sw 	$t0, 48($sp)
-	li 	$t0, 2
-	sw 	$t0, 52($sp)
-	li 	$t0, 1
-	sw 	$t0, 56($sp)
-	lw 	$t0, 52($sp)
-	lw 	$t1, 56($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 60($sp)
-	la 	$t0, Lx
-	sw 	$t0, 64($sp)
-	lw 	$t0, 64($sp)
-	lw 	$t1, 60($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 68($sp)
+	li	$t0, 108
+	sw	$t0, 48($sp)
+	li	$t0, 2
+	sw	$t0, 52($sp)
+	li	$t0, 1
+	sw	$t0, 56($sp)
+	lw	$t0, 52($sp)
+	lw	$t1, 56($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 60($sp)
+	la	$t0, Lx
+	sw	$t0, 64($sp)
+	lw	$t0, 64($sp)
+	lw	$t1, 60($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 68($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 108
-	sw 	$t0, 72($sp)
-	li 	$t0, 3
-	sw 	$t0, 76($sp)
-	li 	$t0, 1
-	sw 	$t0, 80($sp)
-	lw 	$t0, 76($sp)
-	lw 	$t1, 80($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 84($sp)
-	la 	$t0, Lx
-	sw 	$t0, 88($sp)
-	lw 	$t0, 88($sp)
-	lw 	$t1, 84($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 92($sp)
+	li	$t0, 108
+	sw	$t0, 72($sp)
+	li	$t0, 3
+	sw	$t0, 76($sp)
+	li	$t0, 1
+	sw	$t0, 80($sp)
+	lw	$t0, 76($sp)
+	lw	$t1, 80($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 84($sp)
+	la	$t0, Lx
+	sw	$t0, 88($sp)
+	lw	$t0, 88($sp)
+	lw	$t1, 84($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 92($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 111
-	sw 	$t0, 96($sp)
-	li 	$t0, 4
-	sw 	$t0, 100($sp)
-	li 	$t0, 1
-	sw 	$t0, 104($sp)
-	lw 	$t0, 100($sp)
-	lw 	$t1, 104($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 108($sp)
-	la 	$t0, Lx
-	sw 	$t0, 112($sp)
-	lw 	$t0, 112($sp)
-	lw 	$t1, 108($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 116($sp)
+	li	$t0, 111
+	sw	$t0, 96($sp)
+	li	$t0, 4
+	sw	$t0, 100($sp)
+	li	$t0, 1
+	sw	$t0, 104($sp)
+	lw	$t0, 100($sp)
+	lw	$t1, 104($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 108($sp)
+	la	$t0, Lx
+	sw	$t0, 112($sp)
+	lw	$t0, 112($sp)
+	lw	$t1, 108($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 116($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 10
-	sw 	$t0, 120($sp)
-	li 	$t0, 5
-	sw 	$t0, 124($sp)
-	li 	$t0, 1
-	sw 	$t0, 128($sp)
-	lw 	$t0, 124($sp)
-	lw 	$t1, 128($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 132($sp)
-	la 	$t0, Lx
-	sw 	$t0, 136($sp)
-	lw 	$t0, 136($sp)
-	lw 	$t1, 132($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 140($sp)
+	li	$t0, 10
+	sw	$t0, 120($sp)
+	li	$t0, 5
+	sw	$t0, 124($sp)
+	li	$t0, 1
+	sw	$t0, 128($sp)
+	lw	$t0, 124($sp)
+	lw	$t1, 128($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 132($sp)
+	la	$t0, Lx
+	sw	$t0, 136($sp)
+	lw	$t0, 136($sp)
+	lw	$t1, 132($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 140($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 0
-	sw 	$t0, 144($sp)
-	li 	$t0, 6
-	sw 	$t0, 148($sp)
-	li 	$t0, 1
-	sw 	$t0, 152($sp)
-	lw 	$t0, 148($sp)
-	lw 	$t1, 152($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 156($sp)
-	la 	$t0, Lx
-	sw 	$t0, 160($sp)
-	lw 	$t0, 160($sp)
-	lw 	$t1, 156($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 164($sp)
+	li	$t0, 0
+	sw	$t0, 144($sp)
+	li	$t0, 6
+	sw	$t0, 148($sp)
+	li	$t0, 1
+	sw	$t0, 152($sp)
+	lw	$t0, 148($sp)
+	lw	$t1, 152($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 156($sp)
+	la	$t0, Lx
+	sw	$t0, 160($sp)
+	lw	$t0, 160($sp)
+	lw	$t1, 156($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 164($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 71
-	sw 	$t0, 168($sp)
-	li 	$t0, 0
-	sw 	$t0, 172($sp)
-	li 	$t0, 1
-	sw 	$t0, 176($sp)
-	lw 	$t0, 172($sp)
-	lw 	$t1, 176($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 180($sp)
-	li 	$t0, 0
-	sw 	$t0, 184($sp)
-	lw 	$t0, 184($sp)
-	lw 	$t1, 180($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 188($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 188($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 196($sp)
+	li	$t0, 71
+	sw	$t0, 168($sp)
+	li	$t0, 0
+	sw	$t0, 172($sp)
+	li	$t0, 1
+	sw	$t0, 176($sp)
+	lw	$t0, 172($sp)
+	lw	$t1, 176($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 180($sp)
+	li	$t0, 0
+	sw	$t0, 184($sp)
+	lw	$t0, 184($sp)
+	lw	$t1, 180($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 188($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 188($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 196($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 111
-	sw 	$t0, 200($sp)
-	li 	$t0, 1
-	sw 	$t0, 204($sp)
-	li 	$t0, 1
-	sw 	$t0, 208($sp)
-	lw 	$t0, 204($sp)
-	lw 	$t1, 208($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 212($sp)
-	li 	$t0, 0
-	sw 	$t0, 216($sp)
-	lw 	$t0, 216($sp)
-	lw 	$t1, 212($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 220($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 220($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 224($sp)
+	li	$t0, 111
+	sw	$t0, 200($sp)
+	li	$t0, 1
+	sw	$t0, 204($sp)
+	li	$t0, 1
+	sw	$t0, 208($sp)
+	lw	$t0, 204($sp)
+	lw	$t1, 208($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 212($sp)
+	li	$t0, 0
+	sw	$t0, 216($sp)
+	lw	$t0, 216($sp)
+	lw	$t1, 212($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 220($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 220($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 224($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 111
-	sw 	$t0, 228($sp)
-	li 	$t0, 2
-	sw 	$t0, 232($sp)
-	li 	$t0, 1
-	sw 	$t0, 236($sp)
-	lw 	$t0, 232($sp)
-	lw 	$t1, 236($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 240($sp)
-	li 	$t0, 0
-	sw 	$t0, 244($sp)
-	lw 	$t0, 244($sp)
-	lw 	$t1, 240($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 248($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 248($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 252($sp)
+	li	$t0, 111
+	sw	$t0, 228($sp)
+	li	$t0, 2
+	sw	$t0, 232($sp)
+	li	$t0, 1
+	sw	$t0, 236($sp)
+	lw	$t0, 232($sp)
+	lw	$t1, 236($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 240($sp)
+	li	$t0, 0
+	sw	$t0, 244($sp)
+	lw	$t0, 244($sp)
+	lw	$t1, 240($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 248($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 248($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 252($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 100
-	sw 	$t0, 256($sp)
-	li 	$t0, 3
-	sw 	$t0, 260($sp)
-	li 	$t0, 1
-	sw 	$t0, 264($sp)
-	lw 	$t0, 260($sp)
-	lw 	$t1, 264($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 268($sp)
-	li 	$t0, 0
-	sw 	$t0, 272($sp)
-	lw 	$t0, 272($sp)
-	lw 	$t1, 268($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 276($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 276($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 280($sp)
+	li	$t0, 100
+	sw	$t0, 256($sp)
+	li	$t0, 3
+	sw	$t0, 260($sp)
+	li	$t0, 1
+	sw	$t0, 264($sp)
+	lw	$t0, 260($sp)
+	lw	$t1, 264($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 268($sp)
+	li	$t0, 0
+	sw	$t0, 272($sp)
+	lw	$t0, 272($sp)
+	lw	$t1, 268($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 276($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 276($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 280($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 32
-	sw 	$t0, 284($sp)
-	li 	$t0, 4
-	sw 	$t0, 288($sp)
-	li 	$t0, 1
-	sw 	$t0, 292($sp)
-	lw 	$t0, 288($sp)
-	lw 	$t1, 292($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 296($sp)
-	li 	$t0, 0
-	sw 	$t0, 300($sp)
-	lw 	$t0, 300($sp)
-	lw 	$t1, 296($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 304($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 304($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 308($sp)
+	li	$t0, 32
+	sw	$t0, 284($sp)
+	li	$t0, 4
+	sw	$t0, 288($sp)
+	li	$t0, 1
+	sw	$t0, 292($sp)
+	lw	$t0, 288($sp)
+	lw	$t1, 292($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 296($sp)
+	li	$t0, 0
+	sw	$t0, 300($sp)
+	lw	$t0, 300($sp)
+	lw	$t1, 296($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 304($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 304($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 308($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 98
-	sw 	$t0, 312($sp)
-	li 	$t0, 5
-	sw 	$t0, 316($sp)
-	li 	$t0, 1
-	sw 	$t0, 320($sp)
-	lw 	$t0, 316($sp)
-	lw 	$t1, 320($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 324($sp)
-	li 	$t0, 0
-	sw 	$t0, 328($sp)
-	lw 	$t0, 328($sp)
-	lw 	$t1, 324($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 332($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 332($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 336($sp)
+	li	$t0, 98
+	sw	$t0, 312($sp)
+	li	$t0, 5
+	sw	$t0, 316($sp)
+	li	$t0, 1
+	sw	$t0, 320($sp)
+	lw	$t0, 316($sp)
+	lw	$t1, 320($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 324($sp)
+	li	$t0, 0
+	sw	$t0, 328($sp)
+	lw	$t0, 328($sp)
+	lw	$t1, 324($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 332($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 332($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 336($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 121
-	sw 	$t0, 340($sp)
-	li 	$t0, 6
-	sw 	$t0, 344($sp)
-	li 	$t0, 1
-	sw 	$t0, 348($sp)
-	lw 	$t0, 344($sp)
-	lw 	$t1, 348($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 352($sp)
-	li 	$t0, 0
-	sw 	$t0, 356($sp)
-	lw 	$t0, 356($sp)
-	lw 	$t1, 352($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 360($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 360($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 364($sp)
+	li	$t0, 121
+	sw	$t0, 340($sp)
+	li	$t0, 6
+	sw	$t0, 344($sp)
+	li	$t0, 1
+	sw	$t0, 348($sp)
+	lw	$t0, 344($sp)
+	lw	$t1, 348($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 352($sp)
+	li	$t0, 0
+	sw	$t0, 356($sp)
+	lw	$t0, 356($sp)
+	lw	$t1, 352($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 360($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 360($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 364($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 101
-	sw 	$t0, 368($sp)
-	li 	$t0, 7
-	sw 	$t0, 372($sp)
-	li 	$t0, 1
-	sw 	$t0, 376($sp)
-	lw 	$t0, 372($sp)
-	lw 	$t1, 376($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 380($sp)
-	li 	$t0, 0
-	sw 	$t0, 384($sp)
-	lw 	$t0, 384($sp)
-	lw 	$t1, 380($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 388($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 388($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 392($sp)
+	li	$t0, 101
+	sw	$t0, 368($sp)
+	li	$t0, 7
+	sw	$t0, 372($sp)
+	li	$t0, 1
+	sw	$t0, 376($sp)
+	lw	$t0, 372($sp)
+	lw	$t1, 376($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 380($sp)
+	li	$t0, 0
+	sw	$t0, 384($sp)
+	lw	$t0, 384($sp)
+	lw	$t1, 380($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 388($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 388($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 392($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 10
-	sw 	$t0, 396($sp)
-	li 	$t0, 8
-	sw 	$t0, 400($sp)
-	li 	$t0, 1
-	sw 	$t0, 404($sp)
-	lw 	$t0, 400($sp)
-	lw 	$t1, 404($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 408($sp)
-	li 	$t0, 0
-	sw 	$t0, 412($sp)
-	lw 	$t0, 412($sp)
-	lw 	$t1, 408($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 416($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 416($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 420($sp)
+	li	$t0, 10
+	sw	$t0, 396($sp)
+	li	$t0, 8
+	sw	$t0, 400($sp)
+	li	$t0, 1
+	sw	$t0, 404($sp)
+	lw	$t0, 400($sp)
+	lw	$t1, 404($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 408($sp)
+	li	$t0, 0
+	sw	$t0, 412($sp)
+	lw	$t0, 412($sp)
+	lw	$t1, 408($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 416($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 416($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 420($sp)
 	--- XXX UNHANDLED: store byte
-	li 	$t0, 0
-	sw 	$t0, 424($sp)
-	li 	$t0, 9
-	sw 	$t0, 428($sp)
-	li 	$t0, 1
-	sw 	$t0, 432($sp)
-	lw 	$t0, 428($sp)
-	lw 	$t1, 432($sp)
-	mul 	$t2, $t0, $t1
-	sw 	$t2, 436($sp)
-	li 	$t0, 0
-	sw 	$t0, 440($sp)
-	lw 	$t0, 440($sp)
-	lw 	$t1, 436($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 444($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 444($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 448($sp)
+	li	$t0, 0
+	sw	$t0, 424($sp)
+	li	$t0, 9
+	sw	$t0, 428($sp)
+	li	$t0, 1
+	sw	$t0, 432($sp)
+	lw	$t0, 428($sp)
+	lw	$t1, 432($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 436($sp)
+	li	$t0, 0
+	sw	$t0, 440($sp)
+	lw	$t0, 440($sp)
+	lw	$t1, 436($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 444($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 444($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 448($sp)
 	--- XXX UNHANDLED: store byte
-	la 	$t0, Lx
-	sw 	$t0, 452($sp)
+	la	$t0, Lx
+	sw	$t0, 452($sp)
 	--- XXX UNHANDLED: call
-	li 	$t0, 0
-	sw 	$t0, 456($sp)
-	lw 	$t0, 192($sp)
-	lw 	$t1, 456($sp)
-	add 	$t2, $t0, $t1
-	sw 	$t2, 460($sp)
+	li	$t0, 0
+	sw	$t0, 456($sp)
+	lw	$t0, 192($sp)
+	lw	$t1, 456($sp)
+	add	$t2, $t0, $t1
+	sw	$t2, 460($sp)
 	--- XXX UNHANDLED: call
 L100_main_end:
-	lw 	$ra, 468($sp)
-	lw 	$fp, 472($sp)
-	addu 	$sp, $sp, 488
-	jr 	$ra
+	lw	$ra, 468($sp)
+	lw	$fp, 472($sp)
+	addu	$sp, $sp, 488
+	jr	$ra
 
