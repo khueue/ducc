@@ -2,8 +2,8 @@
 -export([
     asm_fun/1,
     calculate_frame_size/2,
-    function_prologue/2,
-    function_epilogue/3]).
+    setup_function_prologue/2,
+    setup_function_epilogue/3]).
 
 -define(ASM, codegen_asm).
 
@@ -23,7 +23,7 @@ calculate_frame_size(Locals, ArraysSize) ->
     ArraysSize +
     4 * erlang:length(Locals).
 
-function_prologue(FS, ArraysSize) ->
+setup_function_prologue(FS, ArraysSize) ->
     [
         ?ASM:asm_subu(sp, sp, FS),
         ?ASM:asm_sw(fp, FS-ArraysSize-4, sp),
@@ -31,7 +31,7 @@ function_prologue(FS, ArraysSize) ->
         ?ASM:asm_addu(fp, sp, FS)
     ].
 
-function_epilogue(FS, ArraysSize, LabelEnd) ->
+setup_function_epilogue(FS, ArraysSize, LabelEnd) ->
     [
         ?ASM:asm_labdef(LabelEnd),
         ?ASM:asm_lw(ra, FS-ArraysSize-8, sp),

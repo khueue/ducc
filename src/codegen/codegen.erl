@@ -32,17 +32,22 @@ translate_data({data,Label,Bytes}) ->
     Instructions.
 
 translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
+    BeforeFunction =
+    [
+        ?ASM:asm_segment_text(),
+        ?ASM:asm_globl(LabelStart),
+        ?ASM:asm_labdef(LabelStart)
+    ],
     FS = ?HELPER:calculate_frame_size(Locals, ArraysSize),
+    Prologue = ?HELPER:setup_function_prologue(FS, ArraysSize),
+    Epilogue = ?HELPER:setup_function_epilogue(FS, ArraysSize, LabelEnd),
     Env = ?ENV:new(Formals, Locals),
+    Body = translate_instructions(Ins, Env),
     Instructions =
-        [
-            ?ASM:asm_segment_text(),
-            ?ASM:asm_globl(LabelStart),
-            ?ASM:asm_labdef(LabelStart)
-        ] ++
-        ?HELPER:function_prologue(FS, ArraysSize) ++
-        translate_instructions(Ins, Env) ++
-        ?HELPER:function_epilogue(FS, ArraysSize, LabelEnd),
+        BeforeFunction ++
+        Prologue ++
+        Body ++
+        Epilogue,
     Instructions.
 
 translate_instructions([], _Env) -> [];
