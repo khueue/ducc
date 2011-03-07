@@ -1,12 +1,34 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen,translate_eval,
-                              [{eval,{temp,3},{labref,{label,"a"}}}]},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_proc,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen_driver,generate_code,3},
-                          {erl_eval,do_apply,5},
-                          {erl_eval,expr,5}]}}
+	.text
+	.globl 	Lf
+Lf:
+	subu 	$sp, $sp, 8
+	sw 	$fp, 4($sp)
+	sw 	$ra, 0($sp)
+	addu 	$fp, $sp, 8
+L100_f_end:
+	lw 	$ra, 0($sp)
+	lw 	$fp, 4($sp)
+	addu 	$sp, $sp, 8
+	jr 	$ra
+
+	.data
+	.align 	4
+La:
+	.space 	40
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 16
+	sw 	$fp, 12($sp)
+	sw 	$ra, 8($sp)
+	addu 	$fp, $sp, 16
+	la 	$t0, La
+	sw 	$t0, 0($sp)
+	--- XXX UNHANDLED: call
+L101_main_end:
+	lw 	$ra, 8($sp)
+	lw 	$fp, 12($sp)
+	addu 	$sp, $sp, 16
+	jr 	$ra
+

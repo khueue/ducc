@@ -1,12 +1,9 @@
 escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen,translate_eval,
-                              [{eval,{temp,4},{binop,'+',{temp,3},{temp,2}}}]},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_proc,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen_driver,generate_code,3},
-                          {erl_eval,do_apply,5},
-                          {erl_eval,expr,5}]}}
+                 {'EXIT',{badarg,[{erlang,integer_to_list,[a]},
+                                  {emitter,instruction_to_string,1},
+                                  {emitter,toplevel_to_string,1},
+                                  {emitter,toplevel_to_string,1},
+                                  {emitter_driver,asm_to_string,3},
+                                  {erl_eval,do_apply,5},
+                                  {erl_eval,expr,5},
+                                  {erl_eval,exprs,5}]}}

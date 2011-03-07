@@ -1,12 +1,128 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen,translate_eval,
-                              [{eval,{temp,7},{binop,'*',{temp,5},{temp,6}}}]},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_proc,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen_driver,generate_code,3},
-                          {erl_eval,do_apply,5}]}}
+	.data
+	.align 	4
+Lx:
+	.space 	4
+
+	.text
+	.globl 	Lfoo
+Lfoo:
+	subu 	$sp, $sp, 8
+	sw 	$fp, 4($sp)
+	sw 	$ra, 0($sp)
+	addu 	$fp, $sp, 8
+L100_foo_end:
+	lw 	$ra, 0($sp)
+	lw 	$fp, 4($sp)
+	addu 	$sp, $sp, 8
+	jr 	$ra
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 136
+	sw 	$fp, 132($sp)
+	sw 	$ra, 128($sp)
+	addu 	$fp, $sp, 136
+	li 	$t0, 10
+	sw 	$t0, 0($sp)
+	li 	$t0, 2
+	sw 	$t0, 4($sp)
+	li 	$t0, 2
+	sw 	$t0, 8($sp)
+	lw 	$t0, 4($sp)
+	lw 	$t1, 8($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 12($sp)
+	lw 	$t0, 0($sp)
+	lw 	$t1, 12($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 16($sp)
+	li 	$t0, 1
+	sw 	$t0, 20($sp)
+	lw 	$t0, 16($sp)
+	lw 	$t1, 20($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 24($sp)
+	la 	$t0, Lx
+	sw 	$t0, 28($sp)
+	lw 	$t0, 28($sp)
+	lw 	$t1, 24($sp)
+	sw 	$t1, 0($t0)
+	la 	$t0, Lx
+	sw 	$t0, 32($sp)
+	lw 	$t0, 32($sp)
+	sw 	$t0, 36($sp)
+	li 	$t0, 100
+	sw 	$t0, 40($sp)
+	la 	$t0, Lx
+	sw 	$t0, 44($sp)
+	lw 	$t0, 44($sp)
+	sw 	$t0, 48($sp)
+	lw 	$t0, 40($sp)
+	lw 	$t1, 48($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 52($sp)
+	li 	$t0, 1
+	sw 	$t0, 56($sp)
+	lw 	$t0, 52($sp)
+	lw 	$t1, 56($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 60($sp)
+	li 	$t0, 71
+	sw 	$t0, 64($sp)
+	lw 	$t0, 60($sp)
+	lw 	$t1, 64($sp)
+	div 	$t2, $t0, $t1
+	sw 	$t2, 68($sp)
+	lw 	$t0, 36($sp)
+	lw 	$t1, 68($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 72($sp)
+	lw 	$t0, 72($sp)
+	sw 	$t0, 76($sp)
+	la 	$t0, Lx
+	sw 	$t0, 80($sp)
+	lw 	$t0, 80($sp)
+	lw 	$t1, 72($sp)
+	sw 	$t1, 0($t0)
+	la 	$t0, Lx
+	sw 	$t0, 84($sp)
+	lw 	$t0, 84($sp)
+	sw 	$t0, 88($sp)
+	lw 	$t0, 88($sp)
+	lw 	$t1, 76($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 92($sp)
+	li 	$t0, 99
+	sw 	$t0, 96($sp)
+	lw 	$t0, 92($sp)
+	lw 	$t1, 96($sp)
+	slt 	$t2, $t0, $t1
+	sw 	$t2, 100($sp)
+	la 	$t0, Lx
+	sw 	$t0, 104($sp)
+	lw 	$t0, 104($sp)
+	sw 	$t0, 108($sp)
+	li 	$t0, 0
+	sw 	$t0, 112($sp)
+	lw 	$t0, 108($sp)
+	lw 	$t1, 112($sp)
+	seq 	$t2, $t0, $t1
+	sw 	$t2, 116($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 0
+	sw 	$t0, 120($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 1
+	sw 	$t0, 124($sp)
+	--- XXX UNHANDLED: jump
+L102_and_false:
+	li 	$t0, 0
+	sw 	$t0, 124($sp)
+L103_and_end:
+L101_main_end:
+	lw 	$ra, 128($sp)
+	lw 	$fp, 132($sp)
+	addu 	$sp, $sp, 136
+	jr 	$ra
+

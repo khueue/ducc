@@ -1,12 +1,11 @@
 escript: exception error: no case clause matching 
                  {'EXIT',
                      {function_clause,
-                         [{codegen,translate_eval,
-                              [{eval,{temp,5},{binop,'*',{temp,3},{temp,4}}}]},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_proc,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen_driver,generate_code,3},
-                          {erl_eval,do_apply,5}]}}
+                         [{codegen_env,lookup,[{temp,8},nil]},
+                          {codegen,translate_eval_icon,3},
+                          {codegen,translate_instructions,2},
+                          {codegen,translate_instructions,2},
+                          {codegen,translate_proc,1},
+                          {codegen,translate_toplevels,1},
+                          {codegen,translate_toplevels,1},
+                          {codegen_driver,generate_code,3}]}}

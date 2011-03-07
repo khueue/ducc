@@ -1,10 +1,26 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',{{case_clause,cjump},
-                          [{codegen,translate_instruction,1},
-                           {codegen,translate_instructions,1},
-                           {codegen,translate_instructions,1},
-                           {codegen,translate_proc,2},
-                           {codegen,translate_toplevels,2},
-                           {codegen_driver,generate_code,3},
-                           {erl_eval,do_apply,5},
-                           {erl_eval,expr,5}]}}
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 20
+	sw 	$fp, 16($sp)
+	sw 	$ra, 12($sp)
+	addu 	$fp, $sp, 20
+	li 	$t0, 111
+	sw 	$t0, 0($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 222
+	sw 	$t0, 4($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 1
+	sw 	$t0, 8($sp)
+	--- XXX UNHANDLED: jump
+L101_and_false:
+	li 	$t0, 0
+	sw 	$t0, 8($sp)
+L102_and_end:
+L100_main_end:
+	lw 	$ra, 12($sp)
+	lw 	$fp, 16($sp)
+	addu 	$sp, $sp, 20
+	jr 	$ra
+

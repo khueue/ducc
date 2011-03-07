@@ -1,10 +1,221 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',{{case_clause,call},
-                          [{codegen,translate_instruction,1},
-                           {codegen,translate_instructions,1},
-                           {codegen,translate_proc,2},
-                           {codegen,translate_toplevels,2},
-                           {codegen_driver,generate_code,3},
-                           {erl_eval,do_apply,5},
-                           {erl_eval,expr,5},
-                           {erl_eval,exprs,5}]}}
+	.text
+	.globl 	Lfoo
+Lfoo:
+	subu 	$sp, $sp, 28
+	sw 	$fp, 24($sp)
+	sw 	$ra, 20($sp)
+	addu 	$fp, $sp, 28
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+L100_foo_end:
+	lw 	$ra, 20($sp)
+	lw 	$fp, 24($sp)
+	addu 	$sp, $sp, 28
+	jr 	$ra
+
+	.text
+	.globl 	Lf
+Lf:
+	subu 	$sp, $sp, 16
+	sw 	$fp, 12($sp)
+	sw 	$ra, 8($sp)
+	addu 	$fp, $sp, 16
+	li 	$t0, 1
+	sw 	$t0, 0($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 0($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 4($sp)
+	lw 	$t0, 4($sp)
+	sw 	$t0, 8($sp)
+	--- XXX UNHANDLED: jump
+L101_f_end:
+	lw 	$ra, 8($sp)
+	lw 	$fp, 12($sp)
+	addu 	$sp, $sp, 16
+	jr 	$ra
+
+	.text
+	.globl 	Lg
+Lg:
+	subu 	$sp, $sp, 40
+	sw 	$fp, 36($sp)
+	sw 	$ra, 32($sp)
+	addu 	$fp, $sp, 40
+	li 	$t0, 0
+	sw 	$t0, 0($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 0($sp)
+	seq 	$t2, $t0, $t1
+	sw 	$t2, 4($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 1
+	sw 	$t0, 8($sp)
+	lw 	$t0, 8($sp)
+	sw 	$t0, 12($sp)
+	--- XXX UNHANDLED: jump
+	--- XXX UNHANDLED: jump
+L103_if_else:
+	li 	$t0, 2
+	sw 	$t0, 16($sp)
+	li 	$t0, 1
+	sw 	$t0, 20($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 20($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 24($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 16($sp)
+	lw 	$t1, 28($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 32($sp)
+	lw 	$t0, 32($sp)
+	sw 	$t0, 12($sp)
+	--- XXX UNHANDLED: jump
+L104_if_end:
+L102_g_end:
+	lw 	$ra, 32($sp)
+	lw 	$fp, 36($sp)
+	addu 	$sp, $sp, 40
+	jr 	$ra
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 248
+	sw 	$fp, 244($sp)
+	sw 	$ra, 240($sp)
+	addu 	$fp, $sp, 248
+	li 	$t0, 0
+	sw 	$t0, 0($sp)
+	li 	$t0, 1
+	sw 	$t0, 4($sp)
+	li 	$t0, 2
+	sw 	$t0, 8($sp)
+	li 	$t0, 3
+	sw 	$t0, 12($sp)
+	li 	$t0, 4
+	sw 	$t0, 16($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 5
+	sw 	$t0, 20($sp)
+	lw 	$t0, 20($sp)
+	sw 	$t0, 24($sp)
+	li 	$t0, 0
+	sw 	$t0, 28($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 28($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 32($sp)
+	li 	$t0, 1
+	sw 	$t0, 36($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 36($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 40($sp)
+	li 	$t0, 2
+	sw 	$t0, 44($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 44($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 48($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 24($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 52($sp)
+	li 	$t0, 2
+	sw 	$t0, 56($sp)
+	lw 	$t0, 52($sp)
+	lw 	$t1, 56($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 60($sp)
+	li 	$t0, 2
+	sw 	$t0, 64($sp)
+	lw 	$t0, 24($sp)
+	lw 	$t1, 64($sp)
+	mul 	$t2, $t0, $t1
+	sw 	$t2, 68($sp)
+	li 	$t0, 1
+	sw 	$t0, 72($sp)
+	lw 	$t0, 68($sp)
+	lw 	$t1, 72($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 76($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 80($sp)
+	li 	$t0, 0
+	sw 	$t0, 84($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 88($sp)
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 92($sp)
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	li 	$t0, 2
+	sw 	$t0, 96($sp)
+	--- XXX UNHANDLED: call
+	--- XXX UNHANDLED: call
+	li 	$t0, 2
+	sw 	$t0, 100($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 0
+	sw 	$t0, 104($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 108($sp)
+	lw 	$t1, 112($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 116($sp)
+	li 	$t0, 2
+	sw 	$t0, 120($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 1
+	sw 	$t0, 124($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 128($sp)
+	lw 	$t1, 132($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 136($sp)
+	li 	$t0, 0
+	sw 	$t0, 140($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 1
+	sw 	$t0, 144($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 148($sp)
+	lw 	$t1, 152($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 156($sp)
+	li 	$t0, 2
+	sw 	$t0, 160($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 156($sp)
+	lw 	$t1, 164($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 168($sp)
+	li 	$t0, 3
+	sw 	$t0, 172($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 4
+	sw 	$t0, 176($sp)
+	--- XXX UNHANDLED: call
+	li 	$t0, 7
+	sw 	$t0, 180($sp)
+	lw 	$t0, 184($sp)
+	lw 	$t1, 180($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 188($sp)
+	--- XXX UNHANDLED: call
+L105_main_end:
+	lw 	$ra, 240($sp)
+	lw 	$fp, 244($sp)
+	addu 	$sp, $sp, 248
+	jr 	$ra
+

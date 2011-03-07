@@ -1,12 +1,58 @@
-escript: exception error: no case clause matching 
-                 {'EXIT',
-                     {function_clause,
-                         [{codegen,translate_eval,
-                              [{eval,{temp,4},{binop,'>',{temp,2},{temp,3}}}]},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_instructions,1},
-                          {codegen,translate_proc,2},
-                          {codegen,translate_toplevels,2},
-                          {codegen_driver,generate_code,3},
-                          {erl_eval,do_apply,5},
-                          {erl_eval,expr,5}]}}
+	.text
+	.globl 	Lf
+Lf:
+	subu 	$sp, $sp, 40
+	sw 	$fp, 36($sp)
+	sw 	$ra, 32($sp)
+	addu 	$fp, $sp, 40
+	li 	$t0, 0
+	sw 	$t0, 0($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 0($sp)
+	sgt 	$t2, $t0, $t1
+	sw 	$t2, 4($sp)
+	--- XXX UNHANDLED: cjump
+	li 	$t0, 2
+	sw 	$t0, 8($sp)
+	li 	$t0, 1
+	sw 	$t0, 12($sp)
+	lw 	$t0, 0($fp)
+	lw 	$t1, 12($sp)
+	sub 	$t2, $t0, $t1
+	sw 	$t2, 16($sp)
+	--- XXX UNHANDLED: call
+	lw 	$t0, 8($sp)
+	lw 	$t1, 20($sp)
+	add 	$t2, $t0, $t1
+	sw 	$t2, 24($sp)
+	lw 	$t0, 24($sp)
+	sw 	$t0, 28($sp)
+	--- XXX UNHANDLED: jump
+L101_if_end:
+	li 	$t0, 112
+	sw 	$t0, 32($sp)
+	lw 	$t0, 32($sp)
+	sw 	$t0, 28($sp)
+	--- XXX UNHANDLED: jump
+L100_f_end:
+	lw 	$ra, 32($sp)
+	lw 	$fp, 36($sp)
+	addu 	$sp, $sp, 40
+	jr 	$ra
+
+	.text
+	.globl 	main
+main:
+	subu 	$sp, $sp, 16
+	sw 	$fp, 12($sp)
+	sw 	$ra, 8($sp)
+	addu 	$fp, $sp, 16
+	li 	$t0, 8
+	sw 	$t0, 0($sp)
+	--- XXX UNHANDLED: call
+L102_main_end:
+	lw 	$ra, 8($sp)
+	lw 	$fp, 12($sp)
+	addu 	$sp, $sp, 16
+	jr 	$ra
+
