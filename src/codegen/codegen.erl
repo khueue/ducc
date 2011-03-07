@@ -55,7 +55,7 @@ translate_instruction(Instr) ->
 
 translate_eval({eval, Temp, {icon, Value}}) ->
     Instructions =
-        li(Temp, Value).
+        li(Temp, Value). % xxxxxxxxxxxx
 
 move(Dst, Src) ->
     [{move, Dst, Src}].
@@ -117,6 +117,9 @@ beqz(Rsrc, Label) ->
 
 addi(Dst, Src1, Value) ->
     [{addi, Dst, Src1, Value}].
+
+li(Dst, Value) ->
+    [{li, Dst, Value}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].
