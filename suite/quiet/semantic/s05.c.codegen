@@ -35,6 +35,7 @@
         {lw,t1,28,sp},
         {add,t2,t0,t1},
         {sw,t2,36,sp},
+        {xxx,"--- XXX UNHANDLED: store byte"},
         {labdef,{label,100,"main_end"}},
         {lw,ra,36,sp},
         {lw,fp,40,sp},

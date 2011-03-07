@@ -1,9 +1,9 @@
 -module(codegen_env).
 -export([
-    new/3,
+    new/2,
     lookup/2]).
 
-new(_Lines, Formals, Locals) ->
+new(Formals, Locals) ->
     SymTab = dict:new(),
     SpOffset = 0,
     FpOffset = 0,
