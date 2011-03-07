@@ -38,9 +38,14 @@ instruction_to_string({subu, Dst, Src1, Src2}) ->
 instruction_to_string({addi, Dst, Src1, Icon}) when erlang:is_integer(Icon) ->
     indent() ++ "addi " ++ indent() ++
     commalist([reg(Dst), reg(Src1), erlang:integer_to_list(Icon)]);
-instruction_to_string({li, Dst, Icon}) ->
+
+instruction_to_string({li, Dst, Icon}) when erlang:is_integer(Icon) ->
     indent() ++ "li " ++ indent() ++ % xxxxxxxxx
     commalist([reg(Dst), erlang:integer_to_list(Icon)]);
+instruction_to_string({li, Dst, Char}) ->
+    Icon = char_to_int(Char),
+    instruction_to_string({li,Dst,Icon});
+
 instruction_to_string({la, Dst, Label}) ->
     indent() ++ "la " ++ indent() ++
     commalist([reg(Dst), label_string(Label)]);
@@ -102,6 +107,12 @@ label_string({label, Id, ""}) ->
     "L" ++ erlang:integer_to_list(Id);
 label_string({label, Id, Name}) ->
     "L" ++ erlang:integer_to_list(Id) ++ "_" ++ Name.
+
+char_to_int(Value) ->
+    case atom_to_list(Value) of
+        [$\\,$n] -> 10; % ASCII newline.
+        [Int]    -> Int
+    end.
 
 commalist([X]) ->
     X;

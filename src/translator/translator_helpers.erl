@@ -9,8 +9,7 @@
     get_return_temp/1,
     type_size/1,
     round4/1,
-    source_line_header/2,
-    char_to_int/1]).
+    source_line_header/2]).
 
 -define(ENV, translator_env).
 
@@ -64,10 +63,3 @@ source_line_header(Node, Env) ->
         _ -> ?ENV:get_source_line(LineNum, Env)
     end,
     {'- SOURCE -', LineNum, Tag, SourceLine}.
-
-% XXX Move to emitter step.
-char_to_int(Value) ->
-    case atom_to_list(Value) of
-        [$\\,$n] -> 10; % ASCII newline.
-        [Int]    -> Int
-    end.
