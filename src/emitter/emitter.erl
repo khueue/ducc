@@ -53,6 +53,26 @@ instruction_to_string({addu, Dst, Src1, Src2}) ->
 instruction_to_string({add, Dst, Src1, Src2}) ->
     indent() ++ "add " ++ indent() ++
     commalist([reg(Dst), reg(Src1), reg(Src2)]);
+
+instruction_to_string({slt, Dst, Src1, Src2}) ->
+    indent() ++ "slt " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({sle, Dst, Src1, Src2}) ->
+    indent() ++ "sle " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({sgt, Dst, Src1, Src2}) ->
+    indent() ++ "sgt " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({sge, Dst, Src1, Src2}) ->
+    indent() ++ "sge " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({seq, Dst, Src1, Src2}) ->
+    indent() ++ "seq " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+instruction_to_string({sne, Dst, Src1, Src2}) ->
+    indent() ++ "sne " ++ indent() ++
+    commalist([reg(Dst), reg(Src1), reg(Src2)]);
+
 instruction_to_string({sub, Dst, Src1, Src2}) ->
     indent() ++ "sub " ++ indent() ++
     commalist([reg(Dst), reg(Src1), reg(Src2)]);

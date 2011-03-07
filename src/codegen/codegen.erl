@@ -4,7 +4,7 @@
 % -define(HELPER, codegen_helpers).
 -define(ENV, codegen_env).
 
-generate_code(RtlCode, Lines) ->
+generate_code(RtlCode, _Lines) ->
     AsmCode = translate_toplevels(RtlCode),
     AsmCode.
 
@@ -126,11 +126,83 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
 
 translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env) ->
     case Op of
-        '+' -> translate_eval_binop_addition(TempDst, Lhs, Rhs, Env);
-        '-' -> translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env);
-        '*' -> translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env);
-        '/' -> translate_eval_binop_division(TempDst, Lhs, Rhs, Env)
+        '+'  -> translate_eval_binop_addition(TempDst, Lhs, Rhs, Env);
+        '-'  -> translate_eval_binop_subtraction(TempDst, Lhs, Rhs, Env);
+        '*'  -> translate_eval_binop_multiplication(TempDst, Lhs, Rhs, Env);
+        '/'  -> translate_eval_binop_division(TempDst, Lhs, Rhs, Env);
+        '<'  -> translate_eval_binop_compare_lt(TempDst, Lhs, Rhs, Env);
+        '<=' -> translate_eval_binop_compare_lte(TempDst, Lhs, Rhs, Env);
+        '>'  -> translate_eval_binop_compare_gt(TempDst, Lhs, Rhs, Env);
+        '>=' -> translate_eval_binop_compare_gte(TempDst, Lhs, Rhs, Env);
+        '==' -> translate_eval_binop_compare_equal(TempDst, Lhs, Rhs, Env);
+        '!=' -> translate_eval_binop_compare_not_equal(TempDst, Lhs, Rhs, Env)
     end.
+
+translate_eval_binop_compare_lt(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        slt(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_compare_lte(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        sle(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_compare_gt(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        sgt(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_compare_gte(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        sge(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_compare_equal(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        seq(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
+
+translate_eval_binop_compare_not_equal(TempDst, Lhs, Rhs, Env0) ->
+    {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
+    {{RegRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
+    {{RegDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    Instructions =
+        lw(t0, OffsetLhs, RegLhs) ++
+        lw(t1, OffsetRhs, RegRhs) ++
+        sne(t2, t0, t1) ++
+        sw(t2, OffsetDst, RegDst),
+    {Env3, Instructions}.
 
 translate_eval_binop_addition(TempDst, Lhs, Rhs, Env0) ->
     {{RegLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
@@ -176,10 +248,7 @@ translate_eval_binop_division(TempDst, Lhs, Rhs, Env0) ->
         sw(t2, OffsetDst, RegDst),
     {Env3, Instructions}.
 
-move(Dst, Src) ->
-    [{move, Dst, Src}].
-
-calc_frame_size({proc, _Label, _Formals, Temps, ArraysSize, _Ins, LabelEnd}) ->
+calc_frame_size({proc, _Label, _Formals, Temps, ArraysSize, _Ins, _LabelEnd}) ->
     4 + 4 + ArraysSize + erlang:length(Temps)*4.
 
 prologue(FS, ArraysSize) ->
@@ -216,6 +285,24 @@ space(Bytes) ->
 subu(Dst, Src1, Src2) ->
     [{subu, Dst, Src1, Src2}].
 
+slt(Dst, Src1, Src2) ->
+    [{slt, Dst, Src1, Src2}].
+
+sle(Dst, Src1, Src2) ->
+    [{sle, Dst, Src1, Src2}].
+
+sgt(Dst, Src1, Src2) ->
+    [{sgt, Dst, Src1, Src2}].
+
+sge(Dst, Src1, Src2) ->
+    [{sge, Dst, Src1, Src2}].
+
+seq(Dst, Src1, Src2) ->
+    [{seq, Dst, Src1, Src2}].
+
+sne(Dst, Src1, Src2) ->
+    [{sne, Dst, Src1, Src2}].
+
 sub(Dst, Src1, Src2) ->
     [{sub, Dst, Src1, Src2}].
 
@@ -228,14 +315,14 @@ sw(Src, Offset, Dst) ->
 lw(Dst, Offset, Src) ->
     [{lw, Dst, Offset, Src}].
 
-j(Label) ->
-    [{j, Label}].
+%j(Label) ->
+%    [{j, Label}].
 
 jr(Dst) ->
     [{jr, Dst}].
 
-beqz(Rsrc, Label) ->
-    [{beqz, Rsrc, Label}].
+%beqz(Rsrc, Label) ->
+%    [{beqz, Rsrc, Label}].
 
 li(Dst, Value) ->
     [{li, Dst, Value}].
@@ -249,8 +336,8 @@ asm_div(Dst, Src1, Src2) ->
 add(Dst, Src1, Src2) ->
     [{add, Dst, Src1, Src2}].
 
-addi(Dst, Src1, Value) ->
-    [{addi, Dst, Src1, Value}].
+%addi(Dst, Src1, Value) ->
+%    [{addi, Dst, Src1, Value}].
 
 addu(Dst, Src1, Src2) ->
     [{addu, Dst, Src1, Src2}].

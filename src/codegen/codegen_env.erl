@@ -12,7 +12,7 @@ new(_Lines, Formals, Locals) ->
 env(SymTab, Formals, Locals, SpOffset, FpOffset) ->
     {SymTab, Formals, Locals, SpOffset, FpOffset}.
 
-lookup(Temp, Env0={SymTab,Formals,Locals,_,_}) ->
+lookup(Temp, Env0={SymTab,_Formals,_Locals,_,_}) ->
     case dict:find(Temp, SymTab) of
         {ok, Value} ->
             {Value,Env0};
