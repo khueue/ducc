@@ -28,9 +28,9 @@ translate_data({data, Label, Bytes}) ->
         space(Bytes),
     Instructions.
 
-translate_proc(Proc = {proc, Label, Formals, Temps, ArraysSize, Ins, LabelEnd}) ->
+translate_proc(Proc = {proc, Label, Formals, Locals, ArraysSize, Ins, LabelEnd}) ->
     FS = calc_frame_size(Proc),
-    Env = ?ENV:new(nil), % xxxxxxxxx
+    Env = ?ENV:new(nil, Formals, Locals), % xxxxxxxxx
     Instructions =
         segment_text() ++
         globl(Label) ++
@@ -57,14 +57,15 @@ translate_eval({eval, Temp, {icon, Value}}, Env0) ->
     {{sp,Offset},Env1} = ?ENV:lookup(Temp, Env0),
     Instructions =
         li(t0, Value) ++
-        sw(t0, Offset, t1),
-    {Env1, Instructions}.
+        sw(t0, Offset, sp),
+    {Env1, Instructions};
 translate_eval({eval, TempDst, TempSrc={temp,_}}, Env0) ->
-    {{sp,Offset},Env1} = ?ENV:lookup(TempSrc, Env0),
+    {{BaseRegSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
+    {{BaseRegDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
-        li(t0, Value) ++
-        sw(t0, Offset, t1),
-    {Env1, Instructions}.
+        lw(t0, OffsetSrc, BaseRegSrc) ++
+        sw(t0, OffsetDst, BaseRegDst),
+    {Env2, Instructions}.
 
 move(Dst, Src) ->
     [{move, Dst, Src}].

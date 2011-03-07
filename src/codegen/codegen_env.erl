@@ -1,27 +1,42 @@
 -module(codegen_env).
 -export([
-    new/1,
-    set_symbol/3,
+    new/3,
     lookup/2]).
 
-new(_Lines) ->
+new(_Lines, Formals, Locals) ->
     SymTab = dict:new(),
     SpOffset = 0,
-    env(SymTab, SpOffset).
+    FpOffset = 0,
+    env(SymTab, Formals, Locals, SpOffset, FpOffset).
 
-env(SymTab, SpOffset) ->
-    {SymTab, SpOffset}.
+env(SymTab, Formals, Locals, SpOffset, FpOffset) ->
+    {SymTab, Formals, Locals, SpOffset, FpOffset}.
 
-lookup(Temp, Env0={SymTab,SpOffset}) ->
+lookup(Temp, Env0={SymTab,Formals,Locals,_,_}) ->
     case dict:find(Temp, SymTab) of
         {ok, Value} ->
             {Value,Env0};
         error ->
-            Value = {sp,SpOffset},
-            Env1 = set_symbol(Temp, Value, Env0),
+            create_value(Temp, Env0)
+    end.
+
+list_pos(X, [X|_]) ->
+    0;
+list_pos(X, [_|L]) ->
+    1 + list_pos(X, L).
+
+create_value(Temp, Env0={_SymTab,Formals,_Locals,SpOffset,_FpOffset}) ->
+    case lists:member(Temp, Formals) of
+        true  ->
+            Pos = list_pos(Temp, Formals),
+            Value = {fp, Pos*4},
+            {Value,Env0};
+        false ->
+            Value = {sp, SpOffset},
+            Env1 = set_sp_symbol(Temp, Value, Env0),
             {Value,Env1}
     end.
 
-set_symbol(Key, Value, {SymTab,SpOffset}) ->
+set_sp_symbol(Key, Value, {SymTab,Formals,Locals,SpOffset,FpOffset}) ->
     Updated = dict:store(Key, Value, SymTab),
-    env(Updated, SpOffset+4).
+    env(Updated, Formals, Locals, SpOffset+4, FpOffset).
