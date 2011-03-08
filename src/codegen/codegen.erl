@@ -64,8 +64,16 @@ translate_instruction(Instr, Env) ->
         load   -> translate_load(Instr, Env);
         store  -> translate_store(Instr, Env);
         labdef -> translate_labdef(Instr, Env);
+        jump   -> translate_jump(Instr, Env);
         _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
     end.
+
+translate_jump({jump,Label}, Env) ->
+    Instructions =
+    [
+        ?ASM:asm_j(Label)
+    ],
+    {Env, Instructions}.
 
 translate_labdef({labdef,Label}, Env) ->
     Instructions =

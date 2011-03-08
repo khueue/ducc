@@ -90,6 +90,9 @@ instruction_to_string({lw, Dst, Offset, Src}) ->
     indent() ++ "lw" ++ indent() ++
     commalist([reg(Dst), mem(Offset, Src)]);
 
+instruction_to_string({j, Label}) ->
+    indent() ++ "j" ++ indent() ++
+    label_string(Label);
 instruction_to_string({jr, Dst}) ->
     indent() ++ "jr" ++ indent() ++
     reg(Dst);
