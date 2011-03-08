@@ -26,7 +26,8 @@ Ljal:
 	sw	$t0, 4($sp)
 	la	$t0, Laddi
 	sw	$t0, 8($sp)
-	--- XXX UNHANDLED: load byte
+	lb	$t0, 8($sp)
+	sb	$t0, 12($sp)
 	lw	$t0, 4($sp)
 	lw	$t1, 12($sp)
 	mul	$t2, $t0, $t1
@@ -59,7 +60,9 @@ Lmov:
 	addu	$fp, $sp, 12
 	la	$t0, Laddi
 	sw	$t0, 0($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 0($sp)
+	lb	$t1, 0($fp)
+	sb	$t1, 0($t0)
 L101_mov_end:
 	lw	$ra, 4($sp)
 	lw	$fp, 8($sp)

@@ -26,7 +26,9 @@ main:
 	sw	$t0, 8($sp)
 	la	$t0, Ly
 	sw	$t0, 12($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 12($sp)
+	lb	$t1, 8($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 44
 	sw	$t0, 16($sp)
 	lw	$t0, 16($sp)
@@ -46,7 +48,9 @@ main:
 	sw	$t0, 40($sp)
 	la	$t0, Ly
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 44($sp)
+	lb	$t1, 40($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 67
 	sw	$t0, 48($sp)
 	lw	$t0, 48($sp)

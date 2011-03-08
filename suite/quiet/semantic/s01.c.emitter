@@ -21,7 +21,8 @@ main:
 	sw	$t0, 4($sp)
 	la	$t0, Ly
 	sw	$t0, 8($sp)
-	--- XXX UNHANDLED: load byte
+	lb	$t0, 8($sp)
+	sb	$t0, 12($sp)
 	lw	$t0, 4($sp)
 	lw	$t1, 12($sp)
 	add	$t2, $t0, $t1
@@ -97,14 +98,18 @@ L103_while_end:
 	sw	$t0, 104($sp)
 	la	$t0, Ly
 	sw	$t0, 108($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 108($sp)
+	lb	$t1, 104($sp)
+	sb	$t1, 0($t0)
 	j	L105_if_end
 L104_if_else:
 	li	$t0, 7
 	sw	$t0, 112($sp)
 	la	$t0, Ly
 	sw	$t0, 116($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 116($sp)
+	lb	$t1, 112($sp)
+	sb	$t1, 0($t0)
 L105_if_end:
 	la	$t0, Lx
 	sw	$t0, 120($sp)
@@ -112,7 +117,8 @@ L105_if_end:
 	sw	$t0, 124($sp)
 	la	$t0, Ly
 	sw	$t0, 128($sp)
-	--- XXX UNHANDLED: load byte
+	lb	$t0, 128($sp)
+	sb	$t0, 132($sp)
 	lw	$t0, 124($sp)
 	lw	$t1, 132($sp)
 	sgt	$t2, $t0, $t1
@@ -137,7 +143,9 @@ L105_if_end:
 	sw	$t2, 160($sp)
 	la	$t0, Ly
 	sw	$t0, 164($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 164($sp)
+	lb	$t1, 160($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 42
 	sw	$t0, 168($sp)
 L100_main_end:

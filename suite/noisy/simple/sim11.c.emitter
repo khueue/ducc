@@ -17,7 +17,9 @@ Lf:
 	lw	$t1, 8($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 12($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 12($sp)
+	lb	$t1, 0($fp)
+	sb	$t1, 0($t0)
 L100_f_end:
 	lw	$ra, 16($sp)
 	lw	$fp, 20($sp)
@@ -55,7 +57,9 @@ main:
 	lw	$t1, 28($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 36($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 36($sp)
+	lb	$t1, 8($sp)
+	sb	$t1, 0($t0)
 	j	L102_while_test
 L103_while_body:
 	li	$t0, 48

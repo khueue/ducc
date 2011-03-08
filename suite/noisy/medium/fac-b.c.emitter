@@ -72,7 +72,9 @@ main:
 	lw	$t1, 20($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 28($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 28($sp)
+	lb	$t1, 0($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 32($sp)
 	li	$t0, 1
@@ -93,7 +95,9 @@ main:
 	lw	$t1, 52($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 56($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 56($sp)
+	lb	$t1, 32($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 10
 	sw	$t0, 60($sp)
 	li	$t0, 0
@@ -114,7 +118,9 @@ main:
 	lw	$t1, 80($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 84($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 84($sp)
+	lb	$t1, 60($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 88($sp)
 	li	$t0, 1
@@ -135,7 +141,9 @@ main:
 	lw	$t1, 108($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 112($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 112($sp)
+	lb	$t1, 88($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 116($sp)
 	lw	$t0, 116($sp)

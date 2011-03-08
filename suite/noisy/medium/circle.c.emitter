@@ -26,7 +26,9 @@ Ldrawpos:
 	lw	$t1, 20($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 28($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 28($sp)
+	lb	$t1, 0($sp)
+	sb	$t1, 0($t0)
 	j	L102_if_end
 L101_if_else:
 	li	$t0, 32
@@ -49,7 +51,9 @@ L101_if_else:
 	lw	$t1, 52($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 56($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 56($sp)
+	lb	$t1, 32($sp)
+	sb	$t1, 0($t0)
 L102_if_end:
 	li	$t0, 0
 	sw	$t0, 60($sp)
@@ -71,7 +75,9 @@ L102_if_end:
 	lw	$t1, 80($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 84($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 84($sp)
+	lb	$t1, 60($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 88($sp)
 	lw	$t0, 24($sp)
@@ -112,7 +118,9 @@ Lnl:
 	lw	$t1, 20($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 28($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 28($sp)
+	lb	$t1, 0($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 32($sp)
 	li	$t0, 1
@@ -133,7 +141,9 @@ Lnl:
 	lw	$t1, 52($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 56($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 56($sp)
+	lb	$t1, 32($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 0
 	sw	$t0, 60($sp)
 	lw	$t0, 24($sp)

@@ -56,7 +56,9 @@ Lf:
 	lw	$t1, 32($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 36($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 36($sp)
+	lb	$t1, 20($sp)
+	sb	$t1, 0($t0)
 L100_f_end:
 	lw	$ra, 40($sp)
 	lw	$fp, 44($sp)
@@ -138,7 +140,9 @@ main:
 	lw	$t1, 88($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 96($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 96($sp)
+	lb	$t1, 76($sp)
+	sb	$t1, 0($t0)
 	li	$t0, 17
 	sw	$t0, 100($sp)
 	li	$t0, 6
@@ -182,7 +186,9 @@ main:
 	lw	$t1, 148($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 152($sp)
-	--- XXX UNHANDLED: store byte
+	lw	$t0, 152($sp)
+	lb	$t1, 128($sp)
+	sb	$t1, 0($t0)
 L101_main_end:
 	lw	$ra, 164($sp)
 	lw	$fp, 168($sp)
