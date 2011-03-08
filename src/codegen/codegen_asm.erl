@@ -28,6 +28,8 @@
     % Loads and stores.
     asm_sw/3,
     asm_lw/3,
+    asm_sb/3,
+    asm_lb/3,
     % Jumps.
     asm_j/1,
     asm_jr/1,
@@ -66,6 +68,8 @@ asm_li(Dst, Value) -> {li, Dst, Value}.
 % Loads and stores.
 asm_sw(Src, Offset, Dst) -> {sw, Src, Offset, Dst}.
 asm_lw(Dst, Offset, Src) -> {lw, Dst, Offset, Src}.
+asm_sb(Src, Offset, Dst) -> {sb, Src, Offset, Dst}.
+asm_lb(Dst, Offset, Src) -> {lb, Dst, Offset, Src}.
 
 % Jumps.
 asm_j(Label) -> {j, Label}.

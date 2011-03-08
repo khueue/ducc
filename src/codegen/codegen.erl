@@ -90,8 +90,15 @@ translate_load_long(TempDst, TempSrcAddr, Env0) ->
     ],
     {Env2, Instructions}.
 
-translate_load_byte(_TempDst, _TempSrcAddr, Env0) ->
-    {Env0, [{xxx,"--- XXX UNHANDLED: load byte"}]}.
+translate_load_byte(TempDst, TempSrcAddr, Env0) ->
+    {{BaseSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrcAddr, Env0),
+    {{BaseDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
+    Instructions =
+    [
+        ?ASM:asm_lb(t0, OffsetSrc, BaseSrc),
+        ?ASM:asm_sb(t0, OffsetDst, BaseDst)
+    ],
+    {Env2, Instructions}.
 
 translate_store({store,Size,TempDstAddr,TempValue}, Env) ->
     case Size of
@@ -110,8 +117,16 @@ translate_store_long(TempDstAddr, TempValue, Env0) ->
     ],
     {Env2, Instructions}.
 
-translate_store_byte(_TempDstAddr, _TempValue, Env0) ->
-    {Env0, [{xxx,"--- XXX UNHANDLED: store byte"}]}.
+translate_store_byte(TempDstAddr, TempValue, Env0) ->
+    {{BaseDst,OffsetDst},Env1} = ?ENV:lookup(TempDstAddr, Env0),
+    {{BaseVal,OffsetVal},Env2} = ?ENV:lookup(TempValue, Env1),
+    Instructions =
+    [
+        ?ASM:asm_lw(t0, OffsetDst, BaseDst),
+        ?ASM:asm_lb(t1, OffsetVal, BaseVal),
+        ?ASM:asm_sb(t1, 0, t0)
+    ],
+    {Env2, Instructions}.
 
 translate_eval({eval,TempDst,RtlExpr}, Env) ->
     Type = erlang:element(1, RtlExpr),
