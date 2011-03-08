@@ -102,6 +102,14 @@ instruction_to_string({j, Label}) ->
 instruction_to_string({jr, Dst}) ->
     indent() ++ "jr" ++ indent() ++
     reg(Dst);
+
+instruction_to_string({beqz, Rsrc, Label}) ->
+    indent() ++ "beqz" ++ indent() ++
+    commalist([reg(Rsrc), label_string(Label)]);
+instruction_to_string({bnez, Rsrc, Label}) ->
+    indent() ++ "bnez" ++ indent() ++
+    commalist([reg(Rsrc), label_string(Label)]);
+
 instruction_to_string({xxx,Str}) ->
     indent() ++ Str.
 

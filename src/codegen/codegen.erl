@@ -65,6 +65,7 @@ translate_instruction(Instr, Env) ->
         store  -> translate_store(Instr, Env);
         labdef -> translate_labdef(Instr, Env);
         jump   -> translate_jump(Instr, Env);
+        cjump  -> translate_cjump(Instr, Env);
         _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
     end.
 
@@ -74,6 +75,32 @@ translate_jump({jump,Label}, Env) ->
         ?ASM:asm_j(Label)
     ],
     {Env, Instructions}.
+
+translate_cjump({cjump,Comp,TempDst,Icon,Label}, Env) ->
+    case Comp of
+        eq  -> translate_cjump_eq(TempDst, Icon, Label, Env);
+        neq -> translate_cjump_neq(TempDst, Icon, Label, Env)
+    end.
+
+% XXX: Only {icon,0}?
+translate_cjump_eq(Temp, {icon,0}, Label, Env0) ->
+    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(Temp, Env0),
+    Instructions =
+    [
+        ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
+        ?ASM:asm_beqz(t0, Label)
+    ],
+    {Env1, Instructions}.
+
+% XXX: Only {icon,0}?
+translate_cjump_neq(Temp, {icon,0}, Label, Env0) ->
+    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(Temp, Env0),
+    Instructions =
+    [
+        ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
+        ?ASM:asm_bnez(t0, Label)
+    ],
+    {Env1, Instructions}.
 
 translate_labdef({labdef,Label}, Env) ->
     Instructions =

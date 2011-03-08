@@ -34,7 +34,8 @@
     asm_j/1,
     asm_jr/1,
     % Branches.
-    asm_beqz/2]).
+    asm_beqz/2,
+    asm_bnez/2]).
 
 % Various.
 asm_segment_data() -> {segment, data}.
@@ -77,3 +78,4 @@ asm_jr(Dst)  -> {jr, Dst}.
 
 % Branches.
 asm_beqz(Rsrc, Label) -> {beqz, Rsrc, Label}.
+asm_bnez(Rsrc, Label) -> {bnez, Rsrc, Label}.
