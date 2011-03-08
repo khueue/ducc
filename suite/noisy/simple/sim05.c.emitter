@@ -466,7 +466,8 @@ main:
 	lw	$t1, 588($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 592($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 592($sp)
+	beqz	$t0, L101_and_false
 	li	$t0, 0
 	sw	$t0, 596($sp)
 	li	$t0, 1
@@ -475,7 +476,8 @@ main:
 	lw	$t1, 600($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 604($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 604($sp)
+	beqz	$t0, L101_and_false
 	li	$t0, 1
 	sw	$t0, 608($sp)
 	j	L102_and_end
@@ -492,7 +494,8 @@ L102_and_end:
 	lw	$t1, 616($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 620($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 620($sp)
+	beqz	$t0, L103_and_false
 	li	$t0, 1
 	sw	$t0, 624($sp)
 	li	$t0, 0
@@ -501,7 +504,8 @@ L102_and_end:
 	lw	$t1, 628($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 632($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 632($sp)
+	beqz	$t0, L103_and_false
 	li	$t0, 1
 	sw	$t0, 636($sp)
 	j	L104_and_end
@@ -518,7 +522,8 @@ L104_and_end:
 	lw	$t1, 644($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 648($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 648($sp)
+	beqz	$t0, L105_and_false
 	li	$t0, 0
 	sw	$t0, 652($sp)
 	li	$t0, 1
@@ -527,7 +532,8 @@ L104_and_end:
 	lw	$t1, 656($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 660($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 660($sp)
+	beqz	$t0, L105_and_false
 	li	$t0, 1
 	sw	$t0, 664($sp)
 	j	L106_and_end
@@ -544,7 +550,8 @@ L106_and_end:
 	lw	$t1, 672($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 676($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 676($sp)
+	beqz	$t0, L107_and_false
 	li	$t0, 1
 	sw	$t0, 680($sp)
 	li	$t0, 0
@@ -553,7 +560,8 @@ L106_and_end:
 	lw	$t1, 684($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 688($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 688($sp)
+	beqz	$t0, L107_and_false
 	li	$t0, 1
 	sw	$t0, 692($sp)
 	j	L108_and_end

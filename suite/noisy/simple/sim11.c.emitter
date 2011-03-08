@@ -97,7 +97,8 @@ L103_while_body:
 	lw	$t0, 76($sp)
 	sw	$t0, 4($sp)
 L102_while_test:
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 4($sp)
+	bnez	$t0, L103_while_body
 L104_while_end:
 	li	$t0, 10
 	sw	$t0, 80($sp)

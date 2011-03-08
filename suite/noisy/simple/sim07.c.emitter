@@ -265,7 +265,8 @@ L102_while_body:
 	lw	$t1, 288($sp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 316($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 316($sp)
+	beqz	$t0, L104_if_end
 	li	$t0, 4
 	sw	$t0, 320($sp)
 	lw	$t0, 24($sp)
@@ -290,7 +291,8 @@ L104_if_end:
 	lw	$t1, 288($sp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 344($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 344($sp)
+	beqz	$t0, L105_if_else
 	li	$t0, 8
 	sw	$t0, 348($sp)
 	lw	$t0, 24($sp)
@@ -306,7 +308,8 @@ L105_if_else:
 	lw	$t1, 356($sp)
 	sgt	$t2, $t0, $t1
 	sw	$t2, 360($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 360($sp)
+	beqz	$t0, L107_if_end
 	li	$t0, 12
 	sw	$t0, 364($sp)
 	lw	$t0, 24($sp)
@@ -338,7 +341,8 @@ L101_while_test:
 	lw	$t1, 388($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 392($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 392($sp)
+	bnez	$t0, L102_while_body
 L103_while_end:
 L100_main_end:
 	lw	$ra, 416($sp)

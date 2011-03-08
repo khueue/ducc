@@ -89,11 +89,13 @@ L101_while_test:
 	sw	$t0, 92($sp)
 	lw	$t0, 92($sp)
 	sw	$t0, 96($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 96($sp)
+	bnez	$t0, L102_while_body
 L103_while_end:
 	li	$t0, 123
 	sw	$t0, 100($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 100($sp)
+	beqz	$t0, L104_if_else
 	li	$t0, 4
 	sw	$t0, 104($sp)
 	la	$t0, Ly

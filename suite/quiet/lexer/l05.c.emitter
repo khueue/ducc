@@ -41,10 +41,12 @@ main:
 	sw	$t2, 16($sp)
 	li	$t0, 4
 	sw	$t0, 20($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 20($sp)
+	beqz	$t0, L102_and_false
 	li	$t0, 6
 	sw	$t0, 24($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 24($sp)
+	beqz	$t0, L102_and_false
 	li	$t0, 1
 	sw	$t0, 28($sp)
 	j	L103_and_end

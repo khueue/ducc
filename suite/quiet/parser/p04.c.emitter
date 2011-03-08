@@ -109,10 +109,12 @@ main:
 	lw	$t1, 112($sp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 116($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 116($sp)
+	beqz	$t0, L102_and_false
 	li	$t0, 0
 	sw	$t0, 120($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 120($sp)
+	beqz	$t0, L102_and_false
 	li	$t0, 1
 	sw	$t0, 124($sp)
 	j	L103_and_end

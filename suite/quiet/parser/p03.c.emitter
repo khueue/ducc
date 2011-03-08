@@ -13,7 +13,8 @@ main:
 	lw	$t1, 4($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 8($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 8($sp)
+	beqz	$t0, L101_if_else
 	li	$t0, 1
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)

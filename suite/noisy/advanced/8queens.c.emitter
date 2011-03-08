@@ -51,7 +51,8 @@ L101_while_test:
 	lw	$t1, 36($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 40($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 40($sp)
+	bnez	$t0, L102_while_body
 L103_while_end:
 L100_printboard_end:
 	lw	$ra, 48($sp)
@@ -96,7 +97,8 @@ L106_while_body:
 	lw	$t1, 4($fp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 36($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 36($sp)
+	beqz	$t0, L108_if_end
 	li	$t0, 0
 	sw	$t0, 40($sp)
 	lw	$t0, 40($sp)
@@ -107,7 +109,8 @@ L108_if_end:
 	lw	$t1, 4($fp)
 	sgt	$t2, $t0, $t1
 	sw	$t2, 48($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 48($sp)
+	beqz	$t0, L110_and_false
 	lw	$t0, 0($fp)
 	lw	$t1, 8($sp)
 	sub	$t2, $t0, $t1
@@ -120,7 +123,8 @@ L108_if_end:
 	lw	$t1, 56($sp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 60($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 60($sp)
+	beqz	$t0, L110_and_false
 	li	$t0, 1
 	sw	$t0, 64($sp)
 	j	L111_and_end
@@ -128,7 +132,8 @@ L110_and_false:
 	li	$t0, 0
 	sw	$t0, 64($sp)
 L111_and_end:
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 64($sp)
+	beqz	$t0, L109_if_end
 	li	$t0, 0
 	sw	$t0, 68($sp)
 	lw	$t0, 68($sp)
@@ -147,7 +152,8 @@ L109_if_end:
 	lw	$t1, 76($sp)
 	seq	$t2, $t0, $t1
 	sw	$t2, 80($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 80($sp)
+	beqz	$t0, L112_if_end
 	li	$t0, 0
 	sw	$t0, 84($sp)
 	lw	$t0, 84($sp)
@@ -169,7 +175,8 @@ L105_while_test:
 	lw	$t1, 96($sp)
 	sge	$t2, $t0, $t1
 	sw	$t2, 100($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 100($sp)
+	bnez	$t0, L106_while_body
 L107_while_end:
 	li	$t0, 1
 	sw	$t0, 104($sp)
@@ -197,7 +204,8 @@ Lqueen:
 	lw	$t1, 4($sp)
 	sge	$t2, $t0, $t1
 	sw	$t2, 8($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 8($sp)
+	beqz	$t0, L114_if_end
 	li	$t0, 1
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)
@@ -222,53 +230,57 @@ L116_while_body:
 	lw	$t1, 4($fp)
 	sw	$t1, 0($t0)
 	--- XXX UNHANDLED: call
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 36($sp)
+	beqz	$t0, L119_and_false
 	li	$t0, 1
-	sw	$t0, 36($sp)
+	sw	$t0, 40($sp)
 	lw	$t0, 0($fp)
-	lw	$t1, 36($sp)
+	lw	$t1, 40($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 40($sp)
+	sw	$t2, 44($sp)
 	li	$t0, 0
-	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: call
-	--- XXX UNHANDLED: cjump
-	li	$t0, 1
 	sw	$t0, 48($sp)
+	--- XXX UNHANDLED: call
+	lw	$t0, 52($sp)
+	beqz	$t0, L119_and_false
+	li	$t0, 1
+	sw	$t0, 56($sp)
 	j	L120_and_end
 L119_and_false:
 	li	$t0, 0
-	sw	$t0, 48($sp)
+	sw	$t0, 56($sp)
 L120_and_end:
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 56($sp)
+	beqz	$t0, L118_if_end
 	li	$t0, 1
-	sw	$t0, 52($sp)
-	lw	$t0, 52($sp)
+	sw	$t0, 60($sp)
+	lw	$t0, 60($sp)
 	sw	$t0, 16($sp)
 	j	L113_queen_end
 L118_if_end:
 	li	$t0, 1
-	sw	$t0, 56($sp)
+	sw	$t0, 64($sp)
 	lw	$t0, 4($fp)
-	lw	$t1, 56($sp)
+	lw	$t1, 64($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 60($sp)
-	lw	$t0, 60($sp)
+	sw	$t2, 68($sp)
+	lw	$t0, 68($sp)
 	sw	$t0, 4($fp)
 L115_while_test:
 	la	$t0, Ln
-	sw	$t0, 64($sp)
-	lw	$t0, 64($sp)
-	sw	$t0, 68($sp)
+	sw	$t0, 72($sp)
+	lw	$t0, 72($sp)
+	sw	$t0, 76($sp)
 	lw	$t0, 4($fp)
-	lw	$t1, 68($sp)
+	lw	$t1, 76($sp)
 	slt	$t2, $t0, $t1
-	sw	$t2, 72($sp)
-	--- XXX UNHANDLED: cjump
+	sw	$t2, 80($sp)
+	lw	$t0, 80($sp)
+	bnez	$t0, L116_while_body
 L117_while_end:
 	li	$t0, 0
-	sw	$t0, 76($sp)
-	lw	$t0, 76($sp)
+	sw	$t0, 84($sp)
+	lw	$t0, 84($sp)
 	sw	$t0, 16($sp)
 	j	L113_queen_end
 L113_queen_end:

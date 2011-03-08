@@ -73,7 +73,8 @@ L105_while_body:
 	lw	$t1, 68($sp)
 	sgt	$t2, $t0, $t1
 	sw	$t2, 72($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 72($sp)
+	beqz	$t0, L107_if_end
 	li	$t0, 1
 	sw	$t0, 76($sp)
 	lw	$t0, 28($sp)
@@ -152,7 +153,8 @@ L104_while_test:
 	lw	$t1, 20($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 160($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 160($sp)
+	bnez	$t0, L105_while_body
 L106_while_end:
 	--- XXX UNHANDLED: call
 	la	$t0, Leol
@@ -173,7 +175,8 @@ L101_while_test:
 	lw	$t1, 176($sp)
 	sgt	$t2, $t0, $t1
 	sw	$t2, 180($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 180($sp)
+	bnez	$t0, L102_while_body
 L103_while_end:
 L100_bubble_end:
 	lw	$ra, 200($sp)
@@ -336,7 +339,8 @@ L109_while_test:
 	lw	$t1, 180($sp)
 	slt	$t2, $t0, $t1
 	sw	$t2, 184($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 184($sp)
+	bnez	$t0, L110_while_body
 L111_while_end:
 	li	$t0, 0
 	sw	$t0, 188($sp)

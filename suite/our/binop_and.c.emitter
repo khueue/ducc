@@ -7,10 +7,12 @@ main:
 	addu	$fp, $sp, 20
 	li	$t0, 111
 	sw	$t0, 0($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 0($sp)
+	beqz	$t0, L101_and_false
 	li	$t0, 222
 	sw	$t0, 4($sp)
-	--- XXX UNHANDLED: cjump
+	lw	$t0, 4($sp)
+	beqz	$t0, L101_and_false
 	li	$t0, 1
 	sw	$t0, 8($sp)
 	j	L102_and_end
