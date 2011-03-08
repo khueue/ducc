@@ -13,8 +13,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
         - putstring
         - getint
         - getstring
-    - load byte
-    - store byte
     - report
 
 ## Before Hand-In
