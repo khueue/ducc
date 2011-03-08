@@ -86,8 +86,14 @@ instruction_to_string({sne, Dst, Src1, Src2}) ->
 instruction_to_string({sw, Src, Offset, Dst}) ->
     indent() ++ "sw" ++ indent() ++
     commalist([reg(Src), mem(Offset, Dst)]);
+instruction_to_string({sb, Src, Offset, Dst}) ->
+    indent() ++ "sb" ++ indent() ++
+    commalist([reg(Src), mem(Offset, Dst)]);
 instruction_to_string({lw, Dst, Offset, Src}) ->
     indent() ++ "lw" ++ indent() ++
+    commalist([reg(Dst), mem(Offset, Src)]);
+instruction_to_string({lb, Dst, Offset, Src}) ->
+    indent() ++ "lb" ++ indent() ++
     commalist([reg(Dst), mem(Offset, Src)]);
 
 instruction_to_string({j, Label}) ->
