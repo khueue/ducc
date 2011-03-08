@@ -120,8 +120,9 @@ translate_load_long(TempDst, TempSrcAddr, Env0) ->
     {{BaseDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
     [
-        ?ASM:asm_lw(t0, OffsetSrc, BaseSrc),
-        ?ASM:asm_sw(t0, OffsetDst, BaseDst)
+        ?ASM:asm_lw(t0, OffsetSrc, BaseSrc), % t0 = addr
+        ?ASM:asm_lw(t1, 0, t0),              % t1 = addr[0]
+        ?ASM:asm_sw(t1, OffsetDst, BaseDst)  % dst = t1
     ],
     {Env2, Instructions}.
 
@@ -130,8 +131,9 @@ translate_load_byte(TempDst, TempSrcAddr, Env0) ->
     {{BaseDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =
     [
-        ?ASM:asm_lb(t0, OffsetSrc, BaseSrc),
-        ?ASM:asm_sb(t0, OffsetDst, BaseDst)
+        ?ASM:asm_lw(t0, OffsetSrc, BaseSrc), % t0 = addr
+        ?ASM:asm_lb(t1, 0, t0),              % t1 = addr[0]
+        ?ASM:asm_sb(t1, OffsetDst, BaseDst)  % dst = t1
     ],
     {Env2, Instructions}.
 
