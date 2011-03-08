@@ -113,13 +113,13 @@ translate_store_long(TempDstAddr, TempValue, Env0) ->
 translate_store_byte(_TempDstAddr, _TempValue, Env0) ->
     {Env0, [{xxx,"--- XXX UNHANDLED: store byte"}]}.
 
-translate_eval({eval,Temp,RtlExpr}, Env) ->
+translate_eval({eval,TempDst,RtlExpr}, Env) ->
     Type = erlang:element(1, RtlExpr),
     case Type of
-        icon   -> translate_eval_icon(Temp, RtlExpr, Env);
-        temp   -> translate_eval_temp(Temp, RtlExpr, Env);
-        labref -> translate_eval_labref(Temp, RtlExpr, Env);
-        binop  -> translate_eval_binop(Temp, RtlExpr, Env)
+        icon   -> translate_eval_icon(TempDst, RtlExpr, Env);
+        temp   -> translate_eval_temp(TempDst, RtlExpr, Env);
+        labref -> translate_eval_labref(TempDst, RtlExpr, Env);
+        binop  -> translate_eval_binop(TempDst, RtlExpr, Env)
     end.
 
 translate_eval_icon(TempDst, {icon,Value}, Env0) ->
