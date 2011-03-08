@@ -76,29 +76,14 @@ translate_jump({jump,Label}, Env) ->
     ],
     {Env, Instructions}.
 
-translate_cjump({cjump,Comp,TempDst,Icon,Label}, Env) ->
-    case Comp of
-        eq  -> translate_cjump_eq(TempDst, Icon, Label, Env);
-        neq -> translate_cjump_neq(TempDst, Icon, Label, Env)
-    end.
-
 % XXX: Only {icon,0}?
-translate_cjump_eq(Temp, {icon,0}, Label, Env0) ->
-    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(Temp, Env0),
+translate_cjump({cjump,Comp,TempDst,{icon,0},Label}, Env0) ->
+    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(TempDst, Env0),
+    CjumpFun = ?HELPER:asm_cjump_fun(Comp),
     Instructions =
     [
         ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
-        ?ASM:asm_beqz(t0, Label)
-    ],
-    {Env1, Instructions}.
-
-% XXX: Only {icon,0}?
-translate_cjump_neq(Temp, {icon,0}, Label, Env0) ->
-    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(Temp, Env0),
-    Instructions =
-    [
-        ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
-        ?ASM:asm_bnez(t0, Label)
+        CjumpFun(t0, Label)
     ],
     {Env1, Instructions}.
 
@@ -206,7 +191,7 @@ translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env0) ->
     {{BaseLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
     {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    BinopFun = ?HELPER:asm_fun(Op),
+    BinopFun = ?HELPER:asm_binop_fun(Op),
     Instructions =
     [
         ?ASM:asm_lw(t0, OffsetLhs, BaseLhs),
