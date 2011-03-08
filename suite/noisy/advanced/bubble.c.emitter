@@ -31,13 +31,13 @@ Lbubble:
 	sw	$t2, 16($sp)
 	lw	$t0, 16($sp)
 	sw	$t0, 20($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_while_test
 L102_while_body:
 	li	$t0, 0
 	sw	$t0, 24($sp)
 	lw	$t0, 24($sp)
 	sw	$t0, 28($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_while_test
 L105_while_body:
 	li	$t0, 1
 	sw	$t0, 32($sp)
@@ -252,7 +252,7 @@ main:
 	sw	$t0, 100($sp)
 	lw	$t0, 100($sp)
 	sw	$t0, 104($sp)
-	--- XXX UNHANDLED: jump
+	j	L109_while_test
 L110_while_body:
 	li	$t0, 26
 	sw	$t0, 108($sp)

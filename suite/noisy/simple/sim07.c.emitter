@@ -219,7 +219,7 @@ main:
 	sw	$t0, 284($sp)
 	lw	$t0, 284($sp)
 	sw	$t0, 288($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_while_test
 L102_while_body:
 	--- XXX UNHANDLED: call
 	li	$t0, 0
@@ -278,7 +278,7 @@ L104_if_end:
 	add	$t2, $t0, $t1
 	sw	$t2, 352($sp)
 	--- XXX UNHANDLED: call
-	--- XXX UNHANDLED: jump
+	j	L106_if_end
 L105_if_else:
 	li	$t0, 10
 	sw	$t0, 356($sp)

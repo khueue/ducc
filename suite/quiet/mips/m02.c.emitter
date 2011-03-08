@@ -27,13 +27,13 @@ Lf:
 	sw	$t2, 24($sp)
 	lw	$t0, 24($sp)
 	sw	$t0, 28($sp)
-	--- XXX UNHANDLED: jump
+	j	L100_f_end
 L101_if_end:
 	li	$t0, 112
 	sw	$t0, 32($sp)
 	lw	$t0, 32($sp)
 	sw	$t0, 28($sp)
-	--- XXX UNHANDLED: jump
+	j	L100_f_end
 L100_f_end:
 	lw	$ra, 32($sp)
 	lw	$fp, 36($sp)

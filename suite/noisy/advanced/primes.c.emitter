@@ -110,7 +110,7 @@ main:
 	sw	$t0, 124($sp)
 	lw	$t0, 124($sp)
 	sw	$t0, 128($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_while_test
 L102_while_body:
 	li	$t0, 0
 	sw	$t0, 132($sp)
@@ -138,7 +138,7 @@ L102_while_body:
 	sw	$t2, 160($sp)
 	lw	$t0, 160($sp)
 	sw	$t0, 164($sp)
-	--- XXX UNHANDLED: jump
+	j	L105_while_test
 L106_while_body:
 	li	$t0, 1
 	sw	$t0, 168($sp)
@@ -196,7 +196,7 @@ L103_while_end:
 	sw	$t0, 224($sp)
 	lw	$t0, 224($sp)
 	sw	$t0, 128($sp)
-	--- XXX UNHANDLED: jump
+	j	L108_while_test
 L109_while_body:
 	lw	$t0, 128($sp)
 	sw	$t0, 164($sp)
@@ -207,7 +207,7 @@ L109_while_body:
 	add	$t2, $t0, $t1
 	sw	$t2, 232($sp)
 	--- XXX UNHANDLED: call
-	--- XXX UNHANDLED: jump
+	j	L111_while_test
 L112_while_body:
 	li	$t0, 0
 	sw	$t0, 236($sp)

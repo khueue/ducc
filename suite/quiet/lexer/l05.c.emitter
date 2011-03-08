@@ -11,7 +11,7 @@ Lf:
 	sw	$t2, 0($sp)
 	lw	$t0, 0($sp)
 	sw	$t0, 4($sp)
-	--- XXX UNHANDLED: jump
+	j	L100_f_end
 L100_f_end:
 	lw	$ra, 4($sp)
 	lw	$fp, 8($sp)
@@ -47,7 +47,7 @@ main:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 28($sp)
-	--- XXX UNHANDLED: jump
+	j	L103_and_end
 L102_and_false:
 	li	$t0, 0
 	sw	$t0, 28($sp)

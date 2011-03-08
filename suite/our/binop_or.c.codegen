@@ -14,7 +14,7 @@
         {xxx,"--- XXX UNHANDLED: cjump"},
         {li,t0,0},
         {sw,t0,8,sp},
-        {xxx,"--- XXX UNHANDLED: jump"},
+        {j,{label,102,"or_end"}},
         {labdef,{label,101,"or_true"}},
         {li,t0,1},
         {sw,t0,8,sp},

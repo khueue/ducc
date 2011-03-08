@@ -18,7 +18,7 @@ main:
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_if_end
 L101_if_else:
 	li	$t0, 2
 	sw	$t0, 20($sp)

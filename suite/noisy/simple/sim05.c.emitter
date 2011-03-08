@@ -474,7 +474,7 @@ main:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 608($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_and_end
 L101_and_false:
 	li	$t0, 0
 	sw	$t0, 608($sp)
@@ -500,7 +500,7 @@ L102_and_end:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 636($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_and_end
 L103_and_false:
 	li	$t0, 0
 	sw	$t0, 636($sp)
@@ -526,7 +526,7 @@ L104_and_end:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 664($sp)
-	--- XXX UNHANDLED: jump
+	j	L106_and_end
 L105_and_false:
 	li	$t0, 0
 	sw	$t0, 664($sp)
@@ -552,7 +552,7 @@ L106_and_end:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 692($sp)
-	--- XXX UNHANDLED: jump
+	j	L108_and_end
 L107_and_false:
 	li	$t0, 0
 	sw	$t0, 692($sp)

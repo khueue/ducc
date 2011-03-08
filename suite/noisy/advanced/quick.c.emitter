@@ -42,9 +42,9 @@ Lsort:
 	--- XXX UNHANDLED: load byte
 	lw	$t0, 32($sp)
 	sw	$t0, 36($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_while_test
 L102_while_body:
-	--- XXX UNHANDLED: jump
+	j	L104_while_test
 L105_while_body:
 	li	$t0, 1
 	sw	$t0, 40($sp)
@@ -72,7 +72,7 @@ L104_while_test:
 	sw	$t2, 64($sp)
 	--- XXX UNHANDLED: cjump
 L106_while_end:
-	--- XXX UNHANDLED: jump
+	j	L107_while_test
 L108_while_body:
 	li	$t0, 1
 	sw	$t0, 68($sp)
@@ -278,7 +278,7 @@ main:
 	sw	$t0, 100($sp)
 	lw	$t0, 100($sp)
 	sw	$t0, 104($sp)
-	--- XXX UNHANDLED: jump
+	j	L114_while_test
 L115_while_body:
 	li	$t0, 26
 	sw	$t0, 108($sp)

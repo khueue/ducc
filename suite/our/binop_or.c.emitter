@@ -13,7 +13,7 @@ main:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 0
 	sw	$t0, 8($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_or_end
 L101_or_true:
 	li	$t0, 1
 	sw	$t0, 8($sp)

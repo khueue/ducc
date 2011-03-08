@@ -19,7 +19,7 @@ Lprintboard:
 	sw	$t0, 0($sp)
 	lw	$t0, 0($sp)
 	sw	$t0, 4($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_while_test
 L102_while_body:
 	li	$t0, 4
 	sw	$t0, 8($sp)
@@ -74,7 +74,7 @@ Lcheck:
 	sw	$t2, 4($sp)
 	lw	$t0, 4($sp)
 	sw	$t0, 8($sp)
-	--- XXX UNHANDLED: jump
+	j	L105_while_test
 L106_while_body:
 	li	$t0, 4
 	sw	$t0, 12($sp)
@@ -101,7 +101,7 @@ L106_while_body:
 	sw	$t0, 40($sp)
 	lw	$t0, 40($sp)
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_check_end
 L108_if_end:
 	lw	$t0, 32($sp)
 	lw	$t1, 4($fp)
@@ -123,7 +123,7 @@ L108_if_end:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 64($sp)
-	--- XXX UNHANDLED: jump
+	j	L111_and_end
 L110_and_false:
 	li	$t0, 0
 	sw	$t0, 64($sp)
@@ -133,7 +133,7 @@ L111_and_end:
 	sw	$t0, 68($sp)
 	lw	$t0, 68($sp)
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_check_end
 L109_if_end:
 	lw	$t0, 0($fp)
 	lw	$t1, 8($sp)
@@ -152,7 +152,7 @@ L109_if_end:
 	sw	$t0, 84($sp)
 	lw	$t0, 84($sp)
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_check_end
 L112_if_end:
 	li	$t0, 1
 	sw	$t0, 88($sp)
@@ -175,7 +175,7 @@ L107_while_end:
 	sw	$t0, 104($sp)
 	lw	$t0, 104($sp)
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: jump
+	j	L104_check_end
 L104_check_end:
 	lw	$ra, 104($sp)
 	lw	$fp, 108($sp)
@@ -202,9 +202,9 @@ Lqueen:
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L113_queen_end
 L114_if_end:
-	--- XXX UNHANDLED: jump
+	j	L115_while_test
 L116_while_body:
 	li	$t0, 4
 	sw	$t0, 20($sp)
@@ -235,7 +235,7 @@ L116_while_body:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 48($sp)
-	--- XXX UNHANDLED: jump
+	j	L120_and_end
 L119_and_false:
 	li	$t0, 0
 	sw	$t0, 48($sp)
@@ -245,7 +245,7 @@ L120_and_end:
 	sw	$t0, 52($sp)
 	lw	$t0, 52($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L113_queen_end
 L118_if_end:
 	li	$t0, 1
 	sw	$t0, 56($sp)
@@ -270,7 +270,7 @@ L117_while_end:
 	sw	$t0, 76($sp)
 	lw	$t0, 76($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L113_queen_end
 L113_queen_end:
 	lw	$ra, 84($sp)
 	lw	$fp, 88($sp)

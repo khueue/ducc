@@ -27,7 +27,7 @@ Ldrawpos:
 	add	$t2, $t0, $t1
 	sw	$t2, 28($sp)
 	--- XXX UNHANDLED: store byte
-	--- XXX UNHANDLED: jump
+	j	L102_if_end
 L101_if_else:
 	li	$t0, 32
 	sw	$t0, 32($sp)
@@ -164,7 +164,7 @@ main:
 	sw	$t2, 8($sp)
 	lw	$t0, 8($sp)
 	sw	$t0, 12($sp)
-	--- XXX UNHANDLED: jump
+	j	L105_while_test
 L106_while_body:
 	li	$t0, 0
 	sw	$t0, 16($sp)
@@ -177,7 +177,7 @@ L106_while_body:
 	lw	$t0, 24($sp)
 	sw	$t0, 28($sp)
 	--- XXX UNHANDLED: call
-	--- XXX UNHANDLED: jump
+	j	L108_while_test
 L109_while_body:
 	lw	$t0, 12($sp)
 	lw	$t1, 12($sp)

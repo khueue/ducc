@@ -24,7 +24,7 @@
         {sw,t0,12,sp},
         {lw,t0,12,sp},
         {sw,t0,16,sp},
-        {xxx,"--- XXX UNHANDLED: jump"},
+        {j,{label,102,"if_end"}},
         {labdef,{label,101,"if_else"}},
         {li,t0,2},
         {sw,t0,20,sp},

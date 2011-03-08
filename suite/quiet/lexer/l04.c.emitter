@@ -18,14 +18,14 @@ main:
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_if_end
 L101_if_else:
 	li	$t0, 1
 	sw	$t0, 20($sp)
 	lw	$t0, 20($sp)
 	sw	$t0, 16($sp)
 L102_if_end:
-	--- XXX UNHANDLED: jump
+	j	L103_while_test
 L104_while_body:
 	li	$t0, 0
 	sw	$t0, 24($sp)
@@ -46,7 +46,7 @@ L105_while_end:
 	sw	$t0, 40($sp)
 	lw	$t0, 40($sp)
 	sw	$t0, 44($sp)
-	--- XXX UNHANDLED: jump
+	j	L100_main_end
 L100_main_end:
 	lw	$ra, 48($sp)
 	lw	$fp, 52($sp)

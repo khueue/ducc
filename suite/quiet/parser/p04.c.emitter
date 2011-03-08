@@ -115,7 +115,7 @@ main:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 124($sp)
-	--- XXX UNHANDLED: jump
+	j	L103_and_end
 L102_and_false:
 	li	$t0, 0
 	sw	$t0, 124($sp)

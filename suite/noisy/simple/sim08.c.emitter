@@ -31,7 +31,7 @@ Lf:
 	sw	$t2, 4($sp)
 	lw	$t0, 4($sp)
 	sw	$t0, 8($sp)
-	--- XXX UNHANDLED: jump
+	j	L101_f_end
 L101_f_end:
 	lw	$ra, 8($sp)
 	lw	$fp, 12($sp)
@@ -56,8 +56,8 @@ Lg:
 	sw	$t0, 8($sp)
 	lw	$t0, 8($sp)
 	sw	$t0, 12($sp)
-	--- XXX UNHANDLED: jump
-	--- XXX UNHANDLED: jump
+	j	L102_g_end
+	j	L104_if_end
 L103_if_else:
 	li	$t0, 2
 	sw	$t0, 16($sp)
@@ -74,7 +74,7 @@ L103_if_else:
 	sw	$t2, 32($sp)
 	lw	$t0, 32($sp)
 	sw	$t0, 12($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_g_end
 L104_if_end:
 L102_g_end:
 	lw	$ra, 32($sp)

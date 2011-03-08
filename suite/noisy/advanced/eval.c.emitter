@@ -129,14 +129,14 @@ LisNumber:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 80($sp)
-	--- XXX UNHANDLED: jump
+	j	L102_and_end
 L101_and_false:
 	li	$t0, 0
 	sw	$t0, 80($sp)
 L102_and_end:
 	lw	$t0, 80($sp)
 	sw	$t0, 84($sp)
-	--- XXX UNHANDLED: jump
+	j	L100_isNumber_end
 L100_isNumber_end:
 	lw	$ra, 84($sp)
 	lw	$fp, 88($sp)
@@ -162,7 +162,7 @@ Lexpr:
 	--- XXX UNHANDLED: call
 	lw	$t0, 12($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L106_while_test
 L107_while_body:
 	la	$t0, Lp
 	sw	$t0, 20($sp)
@@ -216,7 +216,7 @@ L107_while_body:
 	sw	$t2, 92($sp)
 	lw	$t0, 92($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L112_if_end
 L111_if_else:
 	la	$t0, Lp
 	sw	$t0, 96($sp)
@@ -302,7 +302,7 @@ L106_while_test:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 212($sp)
-	--- XXX UNHANDLED: jump
+	j	L110_and_end
 L109_and_false:
 	li	$t0, 0
 	sw	$t0, 212($sp)
@@ -315,8 +315,8 @@ L110_and_end:
 L108_while_end:
 	lw	$t0, 16($sp)
 	sw	$t0, 220($sp)
-	--- XXX UNHANDLED: jump
-	--- XXX UNHANDLED: jump
+	j	L103_expr_end
+	j	L105_if_end
 L104_if_else:
 	li	$t0, 1
 	sw	$t0, 224($sp)
@@ -330,7 +330,7 @@ L104_if_else:
 	--- XXX UNHANDLED: call
 	lw	$t0, 236($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L115_while_test
 L116_while_body:
 	la	$t0, Lp
 	sw	$t0, 240($sp)
@@ -384,7 +384,7 @@ L116_while_body:
 	sw	$t2, 308($sp)
 	lw	$t0, 308($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L121_if_end
 L120_if_else:
 	la	$t0, Lp
 	sw	$t0, 312($sp)
@@ -470,7 +470,7 @@ L115_while_test:
 	--- XXX UNHANDLED: cjump
 	li	$t0, 1
 	sw	$t0, 428($sp)
-	--- XXX UNHANDLED: jump
+	j	L119_and_end
 L118_and_false:
 	li	$t0, 0
 	sw	$t0, 428($sp)
@@ -483,8 +483,8 @@ L119_and_end:
 L117_while_end:
 	lw	$t0, 16($sp)
 	sw	$t0, 220($sp)
-	--- XXX UNHANDLED: jump
-	--- XXX UNHANDLED: jump
+	j	L103_expr_end
+	j	L114_if_end
 L113_if_else:
 	li	$t0, 2
 	sw	$t0, 436($sp)
@@ -589,8 +589,8 @@ L125_if_end:
 	sw	$t1, 0($t0)
 	lw	$t0, 16($sp)
 	sw	$t0, 220($sp)
-	--- XXX UNHANDLED: jump
-	--- XXX UNHANDLED: jump
+	j	L103_expr_end
+	j	L124_if_end
 L123_if_else:
 	li	$t0, 0
 	sw	$t0, 580($sp)
@@ -627,14 +627,14 @@ L123_if_else:
 	sw	$t0, 624($sp)
 	lw	$t0, 624($sp)
 	sw	$t0, 220($sp)
-	--- XXX UNHANDLED: jump
-	--- XXX UNHANDLED: jump
+	j	L103_expr_end
+	j	L127_if_end
 L126_if_else:
 	li	$t0, 0
 	sw	$t0, 628($sp)
 	lw	$t0, 628($sp)
 	sw	$t0, 16($sp)
-	--- XXX UNHANDLED: jump
+	j	L128_while_test
 L129_while_body:
 	li	$t0, 10
 	sw	$t0, 632($sp)
@@ -711,7 +711,7 @@ L128_while_test:
 L130_while_end:
 	lw	$t0, 16($sp)
 	sw	$t0, 220($sp)
-	--- XXX UNHANDLED: jump
+	j	L103_expr_end
 L127_if_end:
 L124_if_end:
 L122_if_end:
@@ -1651,7 +1651,7 @@ main:
 	lw	$t0, 1280($sp)
 	lw	$t1, 1276($sp)
 	sw	$t1, 0($t0)
-	--- XXX UNHANDLED: jump
+	j	L133_while_test
 L134_while_body:
 	la	$t0, Lp
 	sw	$t0, 1284($sp)

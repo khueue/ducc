@@ -35,7 +35,7 @@ L101_if_end:
 	lw	$t0, 28($sp)
 	lw	$t1, 24($sp)
 	sw	$t1, 0($t0)
-	--- XXX UNHANDLED: jump
+	j	L103_if_end
 L102_if_else:
 	li	$t0, 3
 	sw	$t0, 32($sp)
@@ -45,7 +45,7 @@ L102_if_else:
 	lw	$t1, 32($sp)
 	sw	$t1, 0($t0)
 L103_if_end:
-	--- XXX UNHANDLED: jump
+	j	L104_while_test
 L105_while_body:
 	li	$t0, 3
 	sw	$t0, 40($sp)
@@ -61,7 +61,7 @@ L104_while_test:
 	sw	$t0, 52($sp)
 	--- XXX UNHANDLED: cjump
 L106_while_end:
-	--- XXX UNHANDLED: jump
+	j	L107_while_test
 L108_while_body:
 	li	$t0, 5
 	sw	$t0, 56($sp)
@@ -70,7 +70,7 @@ L108_while_body:
 	lw	$t0, 60($sp)
 	lw	$t1, 56($sp)
 	sw	$t1, 0($t0)
-	--- XXX UNHANDLED: jump
+	j	L110_while_test
 L111_while_body:
 	li	$t0, 7
 	sw	$t0, 64($sp)
