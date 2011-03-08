@@ -168,7 +168,23 @@ translate_eval_icon(TempDst, {icon,Value}, Env0) ->
     ],
     {Env1, Instructions}.
 
-translate_eval_temp(TempDst, TempSrc, Env0) ->
+translate_eval_temp(TempDst, TempSrc, Env) ->
+    case TempDst of
+        {temp,0} -> translate_eval_temp_return(TempSrc, Env);
+        _Other   -> translate_eval_temp_other(TempDst, TempSrc, Env)
+    end.
+
+% XXX Fix for return?
+translate_eval_temp_return(TempSrc, Env0) ->
+    {{BaseSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
+    Instructions =
+    [
+        ?ASM:asm_lw(t0, OffsetSrc, BaseSrc),
+        ?ASM:asm_move(v0, t0)
+    ],
+    {Env1, Instructions}.
+
+translate_eval_temp_other(TempDst, TempSrc, Env0) ->
     {{BaseSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
     {{BaseDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
     Instructions =

@@ -63,6 +63,9 @@ instruction_to_string({li, Dst, Char}) ->
 instruction_to_string({la, Dst, Label}) ->
     indent() ++ "la" ++ indent() ++
     commalist([reg(Dst), label_string(Label)]);
+instruction_to_string({move, Dst, Src}) ->
+    indent() ++ "move" ++ indent() ++
+    commalist([reg(Dst), reg(Src)]);
 
 instruction_to_string({slt, Dst, Src1, Src2}) ->
     indent() ++ "slt" ++ indent() ++
