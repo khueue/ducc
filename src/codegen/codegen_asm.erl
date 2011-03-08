@@ -22,9 +22,10 @@
     asm_sge/3,
     asm_seq/3,
     asm_sne/3,
-    % Simple loads.
+    % Simple transfers.
     asm_la/2,
     asm_li/2,
+    asm_move/2,
     % Loads and stores.
     asm_sw/3,
     asm_lw/3,
@@ -62,9 +63,10 @@ asm_sge(Dst, Src1, Src2) -> {sge, Dst, Src1, Src2}.
 asm_seq(Dst, Src1, Src2) -> {seq, Dst, Src1, Src2}.
 asm_sne(Dst, Src1, Src2) -> {sne, Dst, Src1, Src2}.
 
-% Simple loads.
+% Simple transfers.
 asm_la(Dst, Label) -> {la, Dst, Label}.
 asm_li(Dst, Value) -> {li, Dst, Value}.
+asm_move(Dst, Src) -> {move, Dst, Src}.
 
 % Loads and stores.
 asm_sw(Src, Offset, Dst) -> {sw, Src, Offset, Dst}.
