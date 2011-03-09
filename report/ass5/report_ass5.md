@@ -69,6 +69,10 @@ The layout of the activation records:
     |----------------|
     |   arr1[0]      |   (0*sizeof(arr1[0])) (fp - ArraysSize + offset_arr1)
     |----------------|
+    |   arr0[N]      |   (N*sizeof(arr0[N])) (fp - ArraysSize + offset_arr0)
+    |----------------|
+    |   ...          |
+    |----------------|
     |   arr0[1]      |   (1*sizeof(arr0[1])) (fp - ArraysSize + offset_arr0)
     |----------------|
     |   arr0[0]      |   (0*sizeof(arr0[0])) (fp - ArraysSize + offset_arr0)
