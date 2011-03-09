@@ -193,10 +193,7 @@ instruction_to_string({beqz, Rsrc, Label}) ->
     commalist([reg(Rsrc), label_string(Label)]);
 instruction_to_string({bnez, Rsrc, Label}) ->
     indent() ++ "bnez" ++ indent() ++
-    commalist([reg(Rsrc), label_string(Label)]);
-
-instruction_to_string({xxx,Str}) ->
-    indent() ++ Str.
+    commalist([reg(Rsrc), label_string(Label)]).
 
 label_string({label, "main"}) ->
     "main";

@@ -217,7 +217,6 @@ translate_eval_temp(TempDst, TempSrc, Env) ->
         _Other   -> translate_eval_temp_other(TempDst, TempSrc, Env)
     end.
 
-% XXX Fix for return?
 translate_eval_temp_return(TempSrc, Env0) ->
     {{BaseSrc,OffsetSrc},Env1} = ?ENV:lookup(TempSrc, Env0),
     Instructions =
