@@ -32,7 +32,7 @@ translate_data({data,Label,Bytes}) ->
     Instructions.
 
 translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
-    BeforeFunction =
+    Header =
     [
         ?ASM:asm_segment_text(),
         ?ASM:asm_globl(LabelStart),
@@ -44,7 +44,7 @@ translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
     Env = ?ENV:new(Formals, Locals),
     Body = translate_instructions(Ins, Env),
     Instructions =
-        BeforeFunction ++
+        Header ++
         Prologue ++
         Body ++
         Epilogue,
