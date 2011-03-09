@@ -57,9 +57,6 @@ The layout of the activation records:
 
         Stack
 
-    |----------------|
-    |   Argument N   |
-    |----------------|
     |   ...          |
     |----------------|
     |   Argument 2   |   8(fp)
@@ -68,26 +65,14 @@ The layout of the activation records:
     |----------------|
     |   Argument 0   |   0(fp)      ^- Callers activation record
     |================|  <-- fp
-    |   a_1[0]       |  -4(fp)
-    |----------------|
-    |   a_1[1]       |  -8(fp)
-    |----------------|
     |   ...          |
     |----------------|
-    |   a_1[n]       |
+    |   arr1[0]      |   (0*sizeof(arr1[0])) (fp - ArraysSize + offset_arr1)
     |----------------|
-    |   a_2[0]       |
+    |   arr0[1]      |   (1*sizeof(arr0[1])) (fp - ArraysSize + offset_arr0)
     |----------------|
-    |   a_2[1]       |
-    |----------------|
-    |   ...          |
-    |----------------|
-    |   a_2[n]       |
-    |----------------|
-    |                |
-    |   ...          |
-    |                |
-    |----------------|
+    |   arr0[0]      |   (0*sizeof(arr0[0])) (fp - ArraysSize + offset_arr0)
+    |----------------|  <-- fp - ArraysSize
     |   Callers fp   |
     |----------------|
     |   Callers ra   |
@@ -105,7 +90,8 @@ The layout of the activation records:
 
 As indicated by the illustration, the actual parameters are accessed at the
 bottom of the callers activation record (fp + offset).
-Local arrays are accessed at the top of the activation record (fp - offset).
+Local arrays are accessed at the top of the activation record (`ArraysSize` is
+combined size of all local arrays).
 Local temporaries are accessed at the bottom of the activation record
 (sp + offset).
 
@@ -116,9 +102,10 @@ XXX describe the calling convention
 All parameters are located at the bottom in the callers activation record, as
 indicated by the illustration in the section "Activation Record".
 XXX Parameters are passed in a XXX order, such that argXXX is put on the stack
-before XXX. Hence, arg0 is located at the bottom of the activation record.
+before XXX. Hence, the first argument is located at the bottom of the
+activation record.
 
 XXX caller save
 XXX callee save
 
-The return value is placed in register XXX.
+The return value is placed in register `v0`.
