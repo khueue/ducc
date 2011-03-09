@@ -95,11 +95,11 @@ The layout of the activation records:
 Actual parameters are accessed at the bottom of the callers activation record,
 fp + offset.
 
-Local arrays are accessed at the top of the activation record using 
+Local arrays are accessed at the top of the activation record using
 `(Index*sizeof(Element))` + `(fp - ArraysSize + array_offset)`, where
 `ArraysSize` is the combined size of all local arrays.
 
-Local temporaries are accessed at the bottom of the activation record, 
+Local temporaries are accessed at the bottom of the activation record,
 sp + offset.
 
 ## Calling Convention
@@ -113,7 +113,7 @@ The calling convention looks like:
 
 ### 1 Caller: Set up call
 
-The caller pushes all arguments to the stack and calls the callee. 
+The caller pushes all arguments to the stack and calls the callee.
 As such, all parameters are located at the bottom in the callers activation
 record, as indicated by the illustration in the section _Activation Record_.
 See `translate_call/2` in `src/codegen/codegen.erl`.
@@ -127,13 +127,13 @@ and `setup_function_prologue/2` in `src/codegen/codegen_helpers.erl`.
 ### 3 Callee: Epilogue
 
 The callee reinstates the callers `ra` and `fp` registers, deallocates its
-activation record and returns to the caller. See `translate_proc/1` in 
-`src/codegen/codegen.erl` and `setup_function_epilogue/3` in 
+activation record and returns to the caller. See `translate_proc/1` in
+`src/codegen/codegen.erl` and `setup_function_epilogue/3` in
 `src/codegen/codegen_helpers.erl`.
 
 The return value is placed in register `v0`, see `translate_eval_temp/3` in
-`src/codegen/codegen.erl` which calls `translate_eval_temp_return/2` in 
-`src/codegen/codegen.erl` if the temporary which is being evaluated is 
+`src/codegen/codegen.erl` which calls `translate_eval_temp_return/2` in
+`src/codegen/codegen.erl` if the temporary which is being evaluated is
 `{temp,0}`, which was used in the RTL to indicate the return value.
 
 ### 4 Caller: Clean
@@ -141,4 +141,3 @@ The return value is placed in register `v0`, see `translate_eval_temp/3` in
 The caller pushes the return value onto the stack and restores the old
 activation record by deallocating the arguments which was pushed on the stack
 in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
-
