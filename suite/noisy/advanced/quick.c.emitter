@@ -193,25 +193,53 @@ L101_while_test:
 	lw	$t0, 176($sp)
 	bnez	$t0, L102_while_body
 L103_while_end:
-	--- XXX UNHANDLED: call
+	subu	$sp, $sp, 4
+	lw	$t0, 0($fp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 184($sp)
+	addu	$sp, $sp, 4
 	la	$t0, Leol
-	sw	$t0, 180($sp)
-	--- XXX UNHANDLED: call
+	sw	$t0, 184($sp)
+	subu	$sp, $sp, 4
+	lw	$t0, 188($sp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 192($sp)
+	addu	$sp, $sp, 4
 	lw	$t0, 4($fp)
 	lw	$t1, 4($sp)
 	slt	$t2, $t0, $t1
-	sw	$t2, 184($sp)
-	lw	$t0, 184($sp)
+	sw	$t2, 192($sp)
+	lw	$t0, 192($sp)
 	beqz	$t0, L111_if_end
-	--- XXX UNHANDLED: call
+	subu	$sp, $sp, 12
+	lw	$t0, 0($fp)
+	sw	$t0, 0($sp)
+	lw	$t0, 4($fp)
+	sw	$t0, 4($sp)
+	lw	$t0, 16($sp)
+	sw	$t0, 8($sp)
+	jal	Lsort
+	sw	$v0, 208($sp)
+	addu	$sp, $sp, 12
 L111_if_end:
 	lw	$t0, 0($sp)
 	lw	$t1, 8($fp)
 	slt	$t2, $t0, $t1
-	sw	$t2, 188($sp)
-	lw	$t0, 188($sp)
+	sw	$t2, 200($sp)
+	lw	$t0, 200($sp)
 	beqz	$t0, L112_if_end
-	--- XXX UNHANDLED: call
+	subu	$sp, $sp, 12
+	lw	$t0, 0($fp)
+	sw	$t0, 0($sp)
+	lw	$t0, 12($sp)
+	sw	$t0, 4($sp)
+	lw	$t0, 8($fp)
+	sw	$t0, 8($sp)
+	jal	Lsort
+	sw	$v0, 216($sp)
+	addu	$sp, $sp, 12
 L112_if_end:
 L100_sort_end:
 	lw	$ra, 208($sp)
@@ -290,137 +318,272 @@ main:
 	lw	$t1, 72($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 80($sp)
-	lw	$t0, 84($sp)
+	subu	$t0, $fp, 28
 	lw	$t1, 80($sp)
-	add	$t2, $t0, $t1
-	sw	$t2, 88($sp)
-	lw	$t0, 88($sp)
+	add	$t0, $t0, $t1
+	sw	$t0, 84($sp)
+	lw	$t0, 84($sp)
 	lb	$t1, 56($sp)
 	sb	$t1, 0($t0)
 	li	$t0, 0
+	sw	$t0, 88($sp)
+	lw	$t0, 88($sp)
 	sw	$t0, 92($sp)
-	lw	$t0, 92($sp)
-	sw	$t0, 96($sp)
 	li	$t0, 11
+	sw	$t0, 96($sp)
+	lw	$t0, 96($sp)
 	sw	$t0, 100($sp)
-	lw	$t0, 100($sp)
-	sw	$t0, 104($sp)
 	j	L114_while_test
 L115_while_body:
 	li	$t0, 26
-	sw	$t0, 108($sp)
-	lw	$t0, 104($sp)
-	lw	$t1, 108($sp)
+	sw	$t0, 104($sp)
+	lw	$t0, 100($sp)
+	lw	$t1, 104($sp)
 	div	$t2, $t0, $t1
-	sw	$t2, 112($sp)
+	sw	$t2, 108($sp)
 	li	$t0, 26
-	sw	$t0, 116($sp)
-	lw	$t0, 112($sp)
+	sw	$t0, 112($sp)
+	lw	$t0, 108($sp)
+	lw	$t1, 112($sp)
+	mul	$t2, $t0, $t1
+	sw	$t2, 116($sp)
+	lw	$t0, 100($sp)
 	lw	$t1, 116($sp)
-	mul	$t2, $t0, $t1
-	sw	$t2, 120($sp)
-	lw	$t0, 104($sp)
-	lw	$t1, 120($sp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 124($sp)
-	lw	$t0, 124($sp)
-	sw	$t0, 128($sp)
+	sw	$t2, 120($sp)
+	lw	$t0, 120($sp)
+	sw	$t0, 124($sp)
 	li	$t0, 97
-	sw	$t0, 132($sp)
-	lw	$t0, 132($sp)
-	lw	$t1, 128($sp)
+	sw	$t0, 128($sp)
+	lw	$t0, 128($sp)
+	lw	$t1, 124($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 136($sp)
+	sw	$t2, 132($sp)
 	li	$t0, 1
-	sw	$t0, 140($sp)
-	lw	$t0, 96($sp)
-	lw	$t1, 140($sp)
+	sw	$t0, 136($sp)
+	lw	$t0, 92($sp)
+	lw	$t1, 136($sp)
 	mul	$t2, $t0, $t1
-	sw	$t2, 144($sp)
+	sw	$t2, 140($sp)
 	li	$t0, 0
-	sw	$t0, 148($sp)
-	lw	$t0, 148($sp)
-	lw	$t1, 144($sp)
+	sw	$t0, 144($sp)
+	lw	$t0, 144($sp)
+	lw	$t1, 140($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 152($sp)
-	lw	$t0, 84($sp)
-	lw	$t1, 152($sp)
-	add	$t2, $t0, $t1
-	sw	$t2, 156($sp)
-	lw	$t0, 156($sp)
-	lb	$t1, 136($sp)
+	sw	$t2, 148($sp)
+	subu	$t0, $fp, 28
+	lw	$t1, 148($sp)
+	add	$t0, $t0, $t1
+	sw	$t0, 152($sp)
+	lw	$t0, 152($sp)
+	lb	$t1, 132($sp)
 	sb	$t1, 0($t0)
 	li	$t0, 1
-	sw	$t0, 160($sp)
-	lw	$t0, 96($sp)
-	lw	$t1, 160($sp)
+	sw	$t0, 156($sp)
+	lw	$t0, 92($sp)
+	lw	$t1, 156($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 164($sp)
-	lw	$t0, 164($sp)
-	sw	$t0, 96($sp)
+	sw	$t2, 160($sp)
+	lw	$t0, 160($sp)
+	sw	$t0, 92($sp)
 	li	$t0, 17
-	sw	$t0, 168($sp)
-	lw	$t0, 104($sp)
-	lw	$t1, 168($sp)
+	sw	$t0, 164($sp)
+	lw	$t0, 100($sp)
+	lw	$t1, 164($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 172($sp)
-	lw	$t0, 172($sp)
-	sw	$t0, 104($sp)
+	sw	$t2, 168($sp)
+	lw	$t0, 168($sp)
+	sw	$t0, 100($sp)
 L114_while_test:
 	la	$t0, Ln
-	sw	$t0, 176($sp)
-	lw	$t0, 176($sp)
+	sw	$t0, 172($sp)
+	lw	$t0, 172($sp)
 	lw	$t1, 0($t0)
-	sw	$t1, 180($sp)
-	lw	$t0, 96($sp)
-	lw	$t1, 180($sp)
+	sw	$t1, 176($sp)
+	lw	$t0, 92($sp)
+	lw	$t1, 176($sp)
 	slt	$t2, $t0, $t1
-	sw	$t2, 184($sp)
-	lw	$t0, 184($sp)
+	sw	$t2, 180($sp)
+	lw	$t0, 180($sp)
 	bnez	$t0, L115_while_body
 L116_while_end:
 	li	$t0, 0
+	sw	$t0, 184($sp)
+	subu	$t0, $fp, 28
+	lw	$t1, 184($sp)
+	add	$t0, $t0, $t1
 	sw	$t0, 188($sp)
-	lw	$t0, 84($sp)
-	lw	$t1, 188($sp)
-	add	$t2, $t0, $t1
-	sw	$t2, 192($sp)
-	--- XXX UNHANDLED: call
+	subu	$sp, $sp, 4
+	lw	$t0, 192($sp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 196($sp)
+	addu	$sp, $sp, 4
 	la	$t0, Leol
 	sw	$t0, 196($sp)
-	--- XXX UNHANDLED: call
+	subu	$sp, $sp, 4
+	lw	$t0, 200($sp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 204($sp)
+	addu	$sp, $sp, 4
 	li	$t0, 0
-	sw	$t0, 200($sp)
-	lw	$t0, 84($sp)
-	lw	$t1, 200($sp)
-	add	$t2, $t0, $t1
-	sw	$t2, 204($sp)
-	li	$t0, 0
+	sw	$t0, 204($sp)
+	subu	$t0, $fp, 28
+	lw	$t1, 204($sp)
+	add	$t0, $t0, $t1
 	sw	$t0, 208($sp)
-	la	$t0, Ln
-	sw	$t0, 212($sp)
-	lw	$t0, 212($sp)
-	lw	$t1, 0($t0)
-	sw	$t1, 216($sp)
-	li	$t0, 1
-	sw	$t0, 220($sp)
-	lw	$t0, 216($sp)
-	lw	$t1, 220($sp)
-	sub	$t2, $t0, $t1
-	sw	$t2, 224($sp)
-	--- XXX UNHANDLED: call
 	li	$t0, 0
-	sw	$t0, 228($sp)
-	lw	$t0, 84($sp)
-	lw	$t1, 228($sp)
-	add	$t2, $t0, $t1
-	sw	$t2, 232($sp)
-	--- XXX UNHANDLED: call
-	la	$t0, Leol
+	sw	$t0, 212($sp)
+	la	$t0, Ln
+	sw	$t0, 216($sp)
+	lw	$t0, 216($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 220($sp)
+	li	$t0, 1
+	sw	$t0, 224($sp)
+	lw	$t0, 220($sp)
+	lw	$t1, 224($sp)
+	sub	$t2, $t0, $t1
+	sw	$t2, 228($sp)
+	subu	$sp, $sp, 12
+	lw	$t0, 220($sp)
+	sw	$t0, 0($sp)
+	lw	$t0, 224($sp)
+	sw	$t0, 4($sp)
+	lw	$t0, 240($sp)
+	sw	$t0, 8($sp)
+	jal	Lsort
+	sw	$v0, 244($sp)
+	addu	$sp, $sp, 12
+	li	$t0, 0
 	sw	$t0, 236($sp)
-	--- XXX UNHANDLED: call
+	subu	$t0, $fp, 28
+	lw	$t1, 236($sp)
+	add	$t0, $t0, $t1
+	sw	$t0, 240($sp)
+	subu	$sp, $sp, 4
+	lw	$t0, 244($sp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 248($sp)
+	addu	$sp, $sp, 4
+	la	$t0, Leol
+	sw	$t0, 248($sp)
+	subu	$sp, $sp, 4
+	lw	$t0, 252($sp)
+	sw	$t0, 0($sp)
+	jal	Lputstring
+	sw	$v0, 256($sp)
+	addu	$sp, $sp, 4
 L113_main_end:
 	lw	$ra, 256($sp)
 	lw	$fp, 260($sp)
 	addu	$sp, $sp, 292
 	jr	$ra
+
+    .text
+    .globl    Lputint
+Lputint:
+    subu    $sp, $sp, 8
+    sw    $fp, 4($sp)
+    sw    $ra, 0($sp)
+    addu    $fp, $sp, 8
+    lw  $a0, 0($fp)
+    li  $v0, 1
+    syscall
+    lw    $ra, 0($sp)
+    lw    $fp, 4($sp)
+    addu    $sp, $sp, 8
+    jr    $ra
+
+    .text
+    .globl    Lgetint
+Lgetint:
+    subu    $sp, $sp, 8
+    sw    $fp, 4($sp)
+    sw    $ra, 0($sp)
+    addu    $fp, $sp, 8
+    li  $v0, 5
+    syscall
+    lw    $ra, 0($sp)
+    lw    $fp, 4($sp)
+    addu    $sp, $sp, 8
+    jr    $ra
+
+    .text
+    .globl    Lputstring
+Lputstring:
+    subu    $sp, $sp, 8
+    sw    $fp, 4($sp)
+    sw    $ra, 0($sp)
+    addu    $fp, $sp, 8
+    lw  $a0, 0($fp)
+    li  $v0, 4
+    syscall
+    lw    $ra, 0($sp)
+    lw    $fp, 4($sp)
+    addu    $sp, $sp, 8
+    jr    $ra
+
+    .text
+    .globl    Lgetstring
+Lgetstring:
+    subu    $sp, $sp, 8
+    sw    $fp, 4($sp)
+    sw    $ra, 0($sp)
+    addu    $fp, $sp, 8
+    lw  $a0, 0($fp)
+    li    $a1, 1024
+    li  $v0, 8
+    syscall
+    lw    $ra, 0($sp)
+    lw    $fp, 4($sp)
+    addu    $sp, $sp, 8
+    jr    $ra
+    .text
+    .globl    Lstrlen
+Lstrlen:
+    subu    $sp, $sp, 40
+    sw    $fp, 36($sp)
+    sw    $ra, 32($sp)
+    addu    $fp, $sp, 40
+    li    $t0, 0
+    sw    $t0, 0($sp)
+    lw    $t0, 0($sp)
+    sw    $t0, 4($sp)
+    j    Pstrlen_while_test
+Pstrlen_while_body:
+    li    $t0, 1
+    sw    $t0, 8($sp)
+    lw    $t0, 4($sp)
+    lw    $t1, 8($sp)
+    add    $t2, $t0, $t1
+    sw    $t2, 12($sp)
+    lw    $t0, 12($sp)
+    sw    $t0, 4($sp)
+Pstrlen_while_test:
+    li    $t0, 1
+    sw    $t0, 16($sp)
+    lw    $t0, 4($sp)
+    lw    $t1, 16($sp)
+    mul    $t2, $t0, $t1
+    sw    $t2, 20($sp)
+    lw    $t0, 0($fp)
+    lw    $t1, 20($sp)
+    add    $t2, $t0, $t1
+    sw    $t2, 24($sp)
+    lw    $t0, 24($sp)
+    lb    $t1, 0($t0)
+    sb    $t1, 28($sp)
+    lw    $t0, 28($sp)
+    bnez    $t0, Pstrlen_while_body
+Pstrlen_while_end:
+    lw    $t0, 4($sp)
+    move    $v0, $t0
+    j    Pstrlen_strlen_end
+Pstrlen_strlen_end:
+    lw    $ra, 32($sp)
+    lw    $fp, 36($sp)
+    addu    $sp, $sp, 40
+    jr    $ra
