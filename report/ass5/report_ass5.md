@@ -106,38 +106,43 @@ sp + offset.
 
 The calling convention looks like:
 
-  * 1 Caller: Set up call
-  * 2 Callee: Prologue
-  * 3 Callee: Epilogue
-  * 4 Caller: Clean
+  1. Caller - Set Up Call
+  2. Callee - Prologue
+  3. Callee - Epilogue
+  4. Caller - Clean
 
-### 1 Caller: Set up call
+### 1. Caller - Set Up Call
 
-The caller pushes all arguments to the stack and calls the callee.
-As such, all parameters are located at the bottom in the callers activation
-record, as indicated by the illustration in the section _Activation Record_.
-See `translate_call/2` in `src/codegen/codegen.erl`.
+The caller pushes all arguments to the stack and executes `jal`.  See
+`translate_call/2` in `src/codegen/codegen.erl`.
 
-### 2 Callee: Prologue
+### 2. Callee - Prologue
 
-The callee sets up its activation record and pushes the callers `ra` and `fp`
-registers on the stack. See `translate_proc/1` in `src/codegen/codegen.erl`
-and `setup_function_prologue/2` in `src/codegen/codegen_helpers.erl`.
+The callee creates its own activation record and saves the callers `fp` and 
+`ra` on the stack.
+See `translate_proc/1` in `src/codegen/codegen.erl` and 
+`setup_function_prologue/2` in `src/codegen/codegen_helpers.erl`.
 
-### 3 Callee: Epilogue
+### 3. Callee - Epilogue
 
-The callee reinstates the callers `ra` and `fp` registers, deallocates its
+The callee restores `ra` and the callers `fp`. The callee then deallocates its
 activation record and returns to the caller. See `translate_proc/1` in
 `src/codegen/codegen.erl` and `setup_function_epilogue/3` in
 `src/codegen/codegen_helpers.erl`.
 
-The return value is placed in register `v0`, see `translate_eval_temp/3` in
-`src/codegen/codegen.erl` which calls `translate_eval_temp_return/2` in
-`src/codegen/codegen.erl` if the temporary which is being evaluated is
-`{temp,0}`, which was used in the RTL to indicate the return value.
+The return value is placed in register `v0`. See `translate_eval_temp/3` in
+`src/codegen/codegen.erl`. If the temporary which is being evaluated is 
+`{temp,0}` (`{temp,0}` was used in the RTL to indicate the return value),
+then translate_eval_temp/3` calls `translate_eval_temp_return/2`
+which puts the result in `v0`.
 
-### 4 Caller: Clean
+### 4. Caller - Clean
 
-The caller pushes the return value onto the stack and restores the old
-activation record by deallocating the arguments which was pushed on the stack
-in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
+The caller saves the return value on the stack and restores the old activation
+record before the call by deallocating the arguments which was pushed on the
+stack in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
+
+## Testruns
+
+Testruns are available in `report/ass5/testruns_ass5.md` or browsable online
+at `https://github.com/khueue/ducc/tree/master/report/ass5`
