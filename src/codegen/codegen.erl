@@ -250,7 +250,6 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
 translate_eval_binop(TempDst, {binop,_Op,{temp,1},Rhs}, Env0) -> % xxx fp
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env0),
     {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    %BinopFun = ?HELPER:asm_binop_fun(Op),
     ArraysSize = ?ENV:get_arrays_size(Env3),
     Instructions =
     [
