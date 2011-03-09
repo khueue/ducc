@@ -26,7 +26,7 @@ end
 files.each do |file|
   old_data = File.read(file)
   new_data = trim_and_clean(old_data)
-  new_data = replace_tabs(new_data)
+  # new_data = replace_tabs(new_data)
   if new_data != old_data
     puts "Cleaning file #{file} ..."
     File.open(file, 'w') {|f| f.write(new_data) }
