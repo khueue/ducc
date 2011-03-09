@@ -134,8 +134,9 @@ L102_while_body:
 	lw	$t1, 140($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 148($sp)
-	lb	$t0, 148($sp)
-	sb	$t0, 152($sp)
+	lw	$t0, 148($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 152($sp)
 	lw	$t0, 132($sp)
 	lw	$t1, 152($sp)
 	seq	$t2, $t0, $t1
@@ -177,7 +178,8 @@ L105_while_test:
 	la	$t0, Lmax
 	sw	$t0, 192($sp)
 	lw	$t0, 192($sp)
-	sw	$t0, 196($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 196($sp)
 	lw	$t0, 164($sp)
 	lw	$t1, 196($sp)
 	slt	$t2, $t0, $t1
@@ -198,7 +200,8 @@ L101_while_test:
 	la	$t0, Lmax
 	sw	$t0, 212($sp)
 	lw	$t0, 212($sp)
-	sw	$t0, 216($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 216($sp)
 	lw	$t0, 128($sp)
 	lw	$t1, 216($sp)
 	slt	$t2, $t0, $t1
@@ -237,8 +240,9 @@ L112_while_body:
 	lw	$t1, 244($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 252($sp)
-	lb	$t0, 252($sp)
-	sb	$t0, 256($sp)
+	lw	$t0, 252($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 256($sp)
 	lw	$t0, 236($sp)
 	lw	$t1, 256($sp)
 	seq	$t2, $t0, $t1
@@ -294,7 +298,8 @@ L108_while_test:
 	la	$t0, Lmax
 	sw	$t0, 308($sp)
 	lw	$t0, 308($sp)
-	sw	$t0, 312($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 312($sp)
 	lw	$t0, 304($sp)
 	lw	$t1, 312($sp)
 	slt	$t2, $t0, $t1

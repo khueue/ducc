@@ -26,7 +26,8 @@ main:
 	la	$t0, La
 	sw	$t0, 0($sp)
 	lw	$t0, 0($sp)
-	sw	$t0, 4($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 4($sp)
 	--- XXX UNHANDLED: call
 	la	$t0, La
 	sw	$t0, 8($sp)

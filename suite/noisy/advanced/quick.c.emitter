@@ -39,8 +39,9 @@ Lsort:
 	lw	$t1, 24($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 28($sp)
-	lb	$t0, 28($sp)
-	sb	$t0, 32($sp)
+	lw	$t0, 28($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 32($sp)
 	lw	$t0, 32($sp)
 	sw	$t0, 36($sp)
 	j	L101_while_test
@@ -66,8 +67,9 @@ L104_while_test:
 	lw	$t1, 52($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 56($sp)
-	lb	$t0, 56($sp)
-	sb	$t0, 60($sp)
+	lw	$t0, 56($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 60($sp)
 	lw	$t0, 60($sp)
 	lw	$t1, 36($sp)
 	slt	$t2, $t0, $t1
@@ -96,8 +98,9 @@ L107_while_test:
 	lw	$t1, 80($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 84($sp)
-	lb	$t0, 84($sp)
-	sb	$t0, 88($sp)
+	lw	$t0, 84($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 88($sp)
 	lw	$t0, 36($sp)
 	lw	$t1, 88($sp)
 	slt	$t2, $t0, $t1
@@ -121,8 +124,9 @@ L109_while_end:
 	lw	$t1, 104($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 108($sp)
-	lb	$t0, 108($sp)
-	sb	$t0, 112($sp)
+	lw	$t0, 108($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 112($sp)
 	lw	$t0, 112($sp)
 	sw	$t0, 116($sp)
 	li	$t0, 1
@@ -135,8 +139,9 @@ L109_while_end:
 	lw	$t1, 124($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 128($sp)
-	lb	$t0, 128($sp)
-	sb	$t0, 132($sp)
+	lw	$t0, 128($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 132($sp)
 	li	$t0, 1
 	sw	$t0, 136($sp)
 	lw	$t0, 0($sp)
@@ -271,7 +276,8 @@ main:
 	la	$t0, Ln
 	sw	$t0, 60($sp)
 	lw	$t0, 60($sp)
-	sw	$t0, 64($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 64($sp)
 	li	$t0, 1
 	sw	$t0, 68($sp)
 	lw	$t0, 64($sp)
@@ -364,7 +370,8 @@ L114_while_test:
 	la	$t0, Ln
 	sw	$t0, 176($sp)
 	lw	$t0, 176($sp)
-	sw	$t0, 180($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 180($sp)
 	lw	$t0, 96($sp)
 	lw	$t1, 180($sp)
 	slt	$t2, $t0, $t1
@@ -393,7 +400,8 @@ L116_while_end:
 	la	$t0, Ln
 	sw	$t0, 212($sp)
 	lw	$t0, 212($sp)
-	sw	$t0, 216($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 216($sp)
 	li	$t0, 1
 	sw	$t0, 220($sp)
 	lw	$t0, 216($sp)

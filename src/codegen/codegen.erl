@@ -76,13 +76,13 @@ translate_jump({jump,Label}, Env) ->
     ],
     {Env, Instructions}.
 
-% XXX: Only {icon,0}?
-translate_cjump({cjump,Comp,TempDst,{icon,0},Label}, Env0) ->
-    {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(TempDst, Env0),
+% XXX: We only use {icon,0} for RHS.
+translate_cjump({cjump,Comp,TempLhs,{icon,0},Label}, Env0) ->
+    {{BaseLhs,OffsetLhs},Env1} = ?ENV:lookup(TempLhs, Env0),
     CjumpFun = ?HELPER:asm_cjump_fun(Comp),
     Instructions =
     [
-        ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
+        ?ASM:asm_lw(t0, OffsetLhs, BaseLhs),
         CjumpFun(t0, Label)
     ],
     {Env1, Instructions}.

@@ -24,7 +24,8 @@ main:
 	la	$t0, Lfoo
 	sw	$t0, 16($sp)
 	lw	$t0, 16($sp)
-	sw	$t0, 20($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 20($sp)
 	--- XXX UNHANDLED: call
 	--- XXX UNHANDLED: call
 L100_main_end:
