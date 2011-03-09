@@ -79,10 +79,11 @@ translate_call({call,TempRetVal,Label,TempsActuals}, Env0) ->
     ],
     {Env1, InsPushArgs} = push_args_on_stack(TempsActuals, BytesForArgs, Env0),
     {{BaseRetVal,OffsetRetVal},Env2} = ?ENV:lookup(TempRetVal, Env1),
+    ProperOffset = fix_offset(BaseRetVal, OffsetRetVal, BytesForArgs),
     InsStop =
     [
         ?ASM:asm_jal(Label),
-        ?ASM:asm_sw(v0, OffsetRetVal+BytesForArgs, BaseRetVal),
+        ?ASM:asm_sw(v0, ProperOffset, BaseRetVal),
         ?ASM:asm_addu(sp, sp, BytesForArgs)
     ],
     Instructions =
@@ -97,13 +98,20 @@ push_args_on_stack(TempsActuals, BytesForArgs, Env) ->
 push_args_on_stack([], _Index, _BytesForArgs, Env) -> {Env, []};
 push_args_on_stack([TempActual|TempsActuals], Index, BytesForArgs, Env0) ->
     {{BaseActual,OffsetActual},Env1} = ?ENV:lookup(TempActual, Env0),
+    ProperOffset = fix_offset(BaseActual, OffsetActual, BytesForArgs),
     InsActual =
     [
-        ?ASM:asm_lw(t0, OffsetActual+BytesForArgs, BaseActual),
+        ?ASM:asm_lw(t0, ProperOffset, BaseActual),
         ?ASM:asm_sw(t0, Index*4, sp)
     ],
     {Env2, InsActuals} = push_args_on_stack(TempsActuals, Index+1, BytesForArgs, Env1),
     {Env2, InsActual++InsActuals}.
+
+fix_offset(BaseReg, Offset, BytesForArgs) ->
+    case BaseReg of
+        sp -> Offset + BytesForArgs;
+        _  -> Offset
+    end.
 
 translate_jump({jump,Label}, Env) ->
     Instructions =
@@ -239,6 +247,18 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
     ],
     {Env1, Instructions}.
 
+translate_eval_binop(TempDst, {binop,Op,{temp,1},Rhs}, Env0) -> % xxx fp
+    {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env0),
+    {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
+    BinopFun = ?HELPER:asm_binop_fun(Op),
+    Instructions =
+    [
+        %%% ?ASM:asm_lw(t0, -OffsetLhs, BaseLhs),
+        ?ASM:asm_lw(t0, OffsetRhs, BaseRhs),
+        ?ASM:asm_sub(t1, fp, t0),
+        ?ASM:asm_sw(t1, OffsetDst, BaseDst)
+    ],
+    {Env3, Instructions};
 translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env0) ->
     {{BaseLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),

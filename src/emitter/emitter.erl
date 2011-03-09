@@ -2,7 +2,26 @@
 -export([asm_to_string/1]).
 
 asm_to_string(AsmCode) ->
-    toplevels_to_string(AsmCode).
+    toplevels_to_string(AsmCode) ++
+    stdlib().
+
+stdlib() ->
+"
+    .text
+    .globl    Lputint
+Lputint:
+    subu    $sp, $sp, 8
+    sw    $fp, 4($sp)
+    sw    $ra, 0($sp)
+    addu    $fp, $sp, 8
+    lw  $a0, 0($fp)
+    li  $v0, 1
+    syscall
+    lw    $ra, 0($sp)
+    lw    $fp, 4($sp)
+    addu    $sp, $sp, 8
+    jr    $ra
+".
 
 toplevels_to_string([Toplevel]) ->
     toplevel_to_string(Toplevel);
