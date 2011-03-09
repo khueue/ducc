@@ -1,6 +1,5 @@
 # Testruns
 
-
 ### ducc -e suite/quiet/lexer/l05.c gives:
 
 		.text
@@ -22,7 +21,7 @@
 		lw	$fp, 8($sp)
 		addu	$sp, $sp, 12
 		jr	$ra
-	
+
 		.text
 		.globl	main
 	main:
@@ -140,7 +139,7 @@
 		lw	$fp, 140($sp)
 		addu	$sp, $sp, 144
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -155,7 +154,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -169,7 +168,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -184,7 +183,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -200,8 +199,6 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-
-
 
 ### ducc -e suite/quiet/parser/p03.c gives:
 
@@ -238,7 +235,7 @@
 		lw	$fp, 28($sp)
 		addu	$sp, $sp, 32
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -253,7 +250,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -267,7 +264,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -282,7 +279,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -299,8 +296,6 @@
 	    addu    $sp, $sp, 8
 	    jr    $ra
 
-
-
 ### ducc -e suite/quiet/rtl/r02.c gives:
 
 		.text
@@ -315,12 +310,12 @@
 		lw	$fp, 4($sp)
 		addu	$sp, $sp, 8
 		jr	$ra
-	
+
 		.data
 		.align	4
 	La:
 		.space	40
-	
+
 		.text
 		.globl	main
 	main:
@@ -341,7 +336,7 @@
 		lw	$fp, 12($sp)
 		addu	$sp, $sp, 16
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -356,7 +351,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -370,7 +365,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -385,7 +380,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -402,8 +397,6 @@
 	    addu    $sp, $sp, 8
 	    jr    $ra
 
-
-
 ### ducc -e suite/quiet/rtl/r03.c gives:
 
 		.text
@@ -418,7 +411,7 @@
 		lw	$fp, 4($sp)
 		addu	$sp, $sp, 8
 		jr	$ra
-	
+
 		.text
 		.globl	main
 	main:
@@ -466,7 +459,7 @@
 		lw	$fp, 44($sp)
 		addu	$sp, $sp, 76
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -481,7 +474,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -495,7 +488,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -510,7 +503,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -526,8 +519,6 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-
-
 
 ### ducc -e suite/quiet/rtl/r04.c gives:
 
@@ -579,12 +570,12 @@
 		lw	$fp, 48($sp)
 		addu	$sp, $sp, 52
 		jr	$ra
-	
+
 		.data
 		.align	4
 	La:
 		.space	7
-	
+
 		.text
 		.globl	main
 	main:
@@ -624,7 +615,7 @@
 		lw	$fp, 36($sp)
 		addu	$sp, $sp, 40
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -639,7 +630,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -653,7 +644,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -668,7 +659,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -684,8 +675,6 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-
-
 
 ### ducc -e suite/quiet/rtl/r05.c gives:
 
@@ -737,7 +726,7 @@
 		lw	$fp, 48($sp)
 		addu	$sp, $sp, 52
 		jr	$ra
-	
+
 		.text
 		.globl	main
 	main:
@@ -785,7 +774,7 @@
 		lw	$fp, 44($sp)
 		addu	$sp, $sp, 60
 		jr	$ra
-	
+
 	    .text
 	    .globl    Lputint
 	Lputint:
@@ -800,7 +789,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetint
 	Lgetint:
@@ -814,7 +803,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lputstring
 	Lputstring:
@@ -829,7 +818,7 @@
 	    lw    $fp, 4($sp)
 	    addu    $sp, $sp, 8
 	    jr    $ra
-	
+
 	    .text
 	    .globl    Lgetstring
 	Lgetstring:
@@ -846,31 +835,25 @@
 	    addu    $sp, $sp, 8
 	    jr    $ra
 
-
-
 ### ducc suite/noisy/simple/sim04.c > test.s && spim -f test.s gives:
 
     Hello
     Good bye
 
-
-
 ### ducc suite/noisy/simple/sim06.c > test.s && spim -f test.s gives:
 
     9876543210
 
-
-
 ### ducc suite/noisy/simple/sim07.c > test.s && spim -f test.s gives:
 
     0 XY
-    1 
+    1
     2 X
     3 Y
     4 X
-    5 
+    5
     6 XY
-    7 
+    7
     8 X
     9 Y
     10 X
@@ -885,9 +868,7 @@
     19 W
     20 XW
 
-
-
-### ducc suite/noisy/simple/sim10.c > test.s && spim -f test.s
+### ducc suite/noisy/simple/sim10.c > test.s && spim -f test.s gives:
 
     Your name? Emil & Sebastian
     Your age 53
@@ -895,19 +876,13 @@
 
     You are: 53
 
-
-
 ### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s with input 5 gives:
 
     120
 
-
-
 ### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s with input 10 gives:
 
     3628800
-
-
 
 ### ducc suite/noisy/medium/fib.c > test.s && spim -f test.s gives:
 
@@ -925,13 +900,9 @@
     11 144
     12 233
 
-
-
 ### ducc suite/noisy/advanced/8queens.c > test.s && spim -f test.s gives:
 
     04752613
-
-
 
 ### ducc suite/noisy/advanced/quick.c > test.s && spim -f test.s gives:
 
