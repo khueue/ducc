@@ -47,7 +47,7 @@ L105_while_end:
 	li	$t0, 42
 	sw	$t0, 40($sp)
 	lw	$t0, 40($sp)
-	sw	$t0, 44($sp)
+	move	$v0, $t0
 	j	L100_main_end
 L100_main_end:
 	lw	$ra, 48($sp)

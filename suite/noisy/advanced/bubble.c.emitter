@@ -22,7 +22,8 @@ Lbubble:
 	la	$t0, Ln
 	sw	$t0, 4($sp)
 	lw	$t0, 4($sp)
-	sw	$t0, 8($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 8($sp)
 	li	$t0, 1
 	sw	$t0, 12($sp)
 	lw	$t0, 8($sp)
@@ -49,8 +50,9 @@ L105_while_body:
 	lw	$t1, 36($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 40($sp)
-	lb	$t0, 40($sp)
-	sb	$t0, 44($sp)
+	lw	$t0, 40($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 44($sp)
 	li	$t0, 1
 	sw	$t0, 48($sp)
 	lw	$t0, 28($sp)
@@ -67,8 +69,9 @@ L105_while_body:
 	lw	$t1, 60($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 64($sp)
-	lb	$t0, 64($sp)
-	sb	$t0, 68($sp)
+	lw	$t0, 64($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 68($sp)
 	lw	$t0, 44($sp)
 	lw	$t1, 68($sp)
 	sgt	$t2, $t0, $t1
@@ -85,8 +88,9 @@ L105_while_body:
 	lw	$t1, 80($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 84($sp)
-	lb	$t0, 84($sp)
-	sb	$t0, 88($sp)
+	lw	$t0, 84($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 88($sp)
 	lw	$t0, 88($sp)
 	sw	$t0, 92($sp)
 	li	$t0, 1
@@ -105,8 +109,9 @@ L105_while_body:
 	lw	$t1, 108($sp)
 	add	$t2, $t0, $t1
 	sw	$t2, 112($sp)
-	lb	$t0, 112($sp)
-	sb	$t0, 116($sp)
+	lw	$t0, 112($sp)
+	lb	$t1, 0($t0)
+	sb	$t1, 116($sp)
 	li	$t0, 1
 	sw	$t0, 120($sp)
 	lw	$t0, 28($sp)
@@ -241,7 +246,8 @@ main:
 	la	$t0, Ln
 	sw	$t0, 60($sp)
 	lw	$t0, 60($sp)
-	sw	$t0, 64($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 64($sp)
 	li	$t0, 1
 	sw	$t0, 68($sp)
 	lw	$t0, 64($sp)
@@ -334,7 +340,8 @@ L109_while_test:
 	la	$t0, Ln
 	sw	$t0, 176($sp)
 	lw	$t0, 176($sp)
-	sw	$t0, 180($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 180($sp)
 	lw	$t0, 96($sp)
 	lw	$t1, 180($sp)
 	slt	$t2, $t0, $t1

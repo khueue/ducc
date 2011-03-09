@@ -55,7 +55,7 @@
         {li,t0,42},
         {sw,t0,40,sp},
         {lw,t0,40,sp},
-        {sw,t0,44,sp},
+        {move,v0,t0},
         {j,{label,100,"main_end"}},
         {labdef,{label,100,"main_end"}},
         {lw,ra,48,sp},

@@ -67,7 +67,8 @@ main:
 	add	$t2, $t0, $t1
 	sw	$t2, 72($sp)
 	lw	$t0, 72($sp)
-	sw	$t0, 76($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 76($sp)
 	--- XXX UNHANDLED: call
 	li	$t0, 5
 	sw	$t0, 80($sp)
@@ -88,7 +89,8 @@ main:
 	add	$t2, $t0, $t1
 	sw	$t2, 100($sp)
 	lw	$t0, 100($sp)
-	sw	$t0, 104($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 104($sp)
 	--- XXX UNHANDLED: call
 L100_main_end:
 	lw	$ra, 112($sp)

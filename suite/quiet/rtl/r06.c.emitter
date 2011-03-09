@@ -13,7 +13,8 @@ main:
 	la	$t0, Lx
 	sw	$t0, 0($sp)
 	lw	$t0, 0($sp)
-	sw	$t0, 4($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 4($sp)
 	lw	$t0, 4($sp)
 	beqz	$t0, L101_if_end
 	li	$t0, 1
@@ -27,7 +28,8 @@ L101_if_end:
 	la	$t0, Lx
 	sw	$t0, 16($sp)
 	lw	$t0, 16($sp)
-	sw	$t0, 20($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 20($sp)
 	lw	$t0, 20($sp)
 	beqz	$t0, L102_if_else
 	li	$t0, 2
@@ -60,7 +62,8 @@ L104_while_test:
 	la	$t0, Lx
 	sw	$t0, 48($sp)
 	lw	$t0, 48($sp)
-	sw	$t0, 52($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 52($sp)
 	lw	$t0, 52($sp)
 	bnez	$t0, L105_while_body
 L106_while_end:
@@ -86,7 +89,8 @@ L110_while_test:
 	la	$t0, Lx
 	sw	$t0, 72($sp)
 	lw	$t0, 72($sp)
-	sw	$t0, 76($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 76($sp)
 	lw	$t0, 76($sp)
 	bnez	$t0, L111_while_body
 L112_while_end:
@@ -96,7 +100,8 @@ L107_while_test:
 	la	$t0, Lx
 	sw	$t0, 84($sp)
 	lw	$t0, 84($sp)
-	sw	$t0, 88($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 88($sp)
 	lw	$t0, 80($sp)
 	lw	$t1, 88($sp)
 	seq	$t2, $t0, $t1

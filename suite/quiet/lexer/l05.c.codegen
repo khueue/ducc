@@ -25,7 +25,7 @@
         {add,t2,t0,t1},
         {sw,t2,0,sp},
         {lw,t0,0,sp},
-        {sw,t0,4,sp},
+        {move,v0,t0},
         {j,{label,100,"f_end"}},
         {labdef,{label,100,"f_end"}},
         {lw,ra,4,sp},

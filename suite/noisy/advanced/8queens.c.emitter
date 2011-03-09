@@ -32,7 +32,8 @@ L102_while_body:
 	add	$t2, $t0, $t1
 	sw	$t2, 16($sp)
 	lw	$t0, 16($sp)
-	sw	$t0, 20($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 20($sp)
 	--- XXX UNHANDLED: call
 	li	$t0, 1
 	sw	$t0, 24($sp)
@@ -46,7 +47,8 @@ L101_while_test:
 	la	$t0, Ln
 	sw	$t0, 32($sp)
 	lw	$t0, 32($sp)
-	sw	$t0, 36($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 36($sp)
 	lw	$t0, 4($sp)
 	lw	$t1, 36($sp)
 	slt	$t2, $t0, $t1
@@ -90,7 +92,8 @@ L106_while_body:
 	add	$t2, $t0, $t1
 	sw	$t2, 24($sp)
 	lw	$t0, 24($sp)
-	sw	$t0, 28($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 28($sp)
 	lw	$t0, 28($sp)
 	sw	$t0, 32($sp)
 	lw	$t0, 32($sp)
@@ -102,86 +105,86 @@ L106_while_body:
 	li	$t0, 0
 	sw	$t0, 40($sp)
 	lw	$t0, 40($sp)
-	sw	$t0, 44($sp)
+	move	$v0, $t0
 	j	L104_check_end
 L108_if_end:
 	lw	$t0, 32($sp)
 	lw	$t1, 4($fp)
 	sgt	$t2, $t0, $t1
-	sw	$t2, 48($sp)
-	lw	$t0, 48($sp)
+	sw	$t2, 44($sp)
+	lw	$t0, 44($sp)
 	beqz	$t0, L110_and_false
 	lw	$t0, 0($fp)
 	lw	$t1, 8($sp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 52($sp)
+	sw	$t2, 48($sp)
 	lw	$t0, 32($sp)
 	lw	$t1, 4($fp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 56($sp)
-	lw	$t0, 52($sp)
-	lw	$t1, 56($sp)
+	sw	$t2, 52($sp)
+	lw	$t0, 48($sp)
+	lw	$t1, 52($sp)
 	seq	$t2, $t0, $t1
-	sw	$t2, 60($sp)
-	lw	$t0, 60($sp)
+	sw	$t2, 56($sp)
+	lw	$t0, 56($sp)
 	beqz	$t0, L110_and_false
 	li	$t0, 1
-	sw	$t0, 64($sp)
+	sw	$t0, 60($sp)
 	j	L111_and_end
 L110_and_false:
 	li	$t0, 0
-	sw	$t0, 64($sp)
+	sw	$t0, 60($sp)
 L111_and_end:
-	lw	$t0, 64($sp)
+	lw	$t0, 60($sp)
 	beqz	$t0, L109_if_end
 	li	$t0, 0
-	sw	$t0, 68($sp)
-	lw	$t0, 68($sp)
-	sw	$t0, 44($sp)
+	sw	$t0, 64($sp)
+	lw	$t0, 64($sp)
+	move	$v0, $t0
 	j	L104_check_end
 L109_if_end:
 	lw	$t0, 0($fp)
 	lw	$t1, 8($sp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 72($sp)
+	sw	$t2, 68($sp)
 	lw	$t0, 4($fp)
 	lw	$t1, 32($sp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 76($sp)
-	lw	$t0, 72($sp)
-	lw	$t1, 76($sp)
+	sw	$t2, 72($sp)
+	lw	$t0, 68($sp)
+	lw	$t1, 72($sp)
 	seq	$t2, $t0, $t1
-	sw	$t2, 80($sp)
-	lw	$t0, 80($sp)
+	sw	$t2, 76($sp)
+	lw	$t0, 76($sp)
 	beqz	$t0, L112_if_end
 	li	$t0, 0
-	sw	$t0, 84($sp)
-	lw	$t0, 84($sp)
-	sw	$t0, 44($sp)
+	sw	$t0, 80($sp)
+	lw	$t0, 80($sp)
+	move	$v0, $t0
 	j	L104_check_end
 L112_if_end:
 	li	$t0, 1
-	sw	$t0, 88($sp)
+	sw	$t0, 84($sp)
 	lw	$t0, 8($sp)
-	lw	$t1, 88($sp)
+	lw	$t1, 84($sp)
 	sub	$t2, $t0, $t1
-	sw	$t2, 92($sp)
-	lw	$t0, 92($sp)
+	sw	$t2, 88($sp)
+	lw	$t0, 88($sp)
 	sw	$t0, 8($sp)
 L105_while_test:
 	li	$t0, 0
-	sw	$t0, 96($sp)
+	sw	$t0, 92($sp)
 	lw	$t0, 8($sp)
-	lw	$t1, 96($sp)
+	lw	$t1, 92($sp)
 	sge	$t2, $t0, $t1
-	sw	$t2, 100($sp)
-	lw	$t0, 100($sp)
+	sw	$t2, 96($sp)
+	lw	$t0, 96($sp)
 	bnez	$t0, L106_while_body
 L107_while_end:
 	li	$t0, 1
-	sw	$t0, 104($sp)
-	lw	$t0, 104($sp)
-	sw	$t0, 44($sp)
+	sw	$t0, 100($sp)
+	lw	$t0, 100($sp)
+	move	$v0, $t0
 	j	L104_check_end
 L104_check_end:
 	lw	$ra, 104($sp)
@@ -199,7 +202,8 @@ Lqueen:
 	la	$t0, Ln
 	sw	$t0, 0($sp)
 	lw	$t0, 0($sp)
-	sw	$t0, 4($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 4($sp)
 	lw	$t0, 0($fp)
 	lw	$t1, 4($sp)
 	sge	$t2, $t0, $t1
@@ -209,79 +213,80 @@ Lqueen:
 	li	$t0, 1
 	sw	$t0, 12($sp)
 	lw	$t0, 12($sp)
-	sw	$t0, 16($sp)
+	move	$v0, $t0
 	j	L113_queen_end
 L114_if_end:
 	j	L115_while_test
 L116_while_body:
 	li	$t0, 4
-	sw	$t0, 20($sp)
+	sw	$t0, 16($sp)
 	lw	$t0, 0($fp)
-	lw	$t1, 20($sp)
+	lw	$t1, 16($sp)
 	mul	$t2, $t0, $t1
-	sw	$t2, 24($sp)
+	sw	$t2, 20($sp)
 	la	$t0, Lboard
-	sw	$t0, 28($sp)
-	lw	$t0, 28($sp)
-	lw	$t1, 24($sp)
+	sw	$t0, 24($sp)
+	lw	$t0, 24($sp)
+	lw	$t1, 20($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 32($sp)
-	lw	$t0, 32($sp)
+	sw	$t2, 28($sp)
+	lw	$t0, 28($sp)
 	lw	$t1, 4($fp)
 	sw	$t1, 0($t0)
 	--- XXX UNHANDLED: call
-	lw	$t0, 36($sp)
+	lw	$t0, 32($sp)
 	beqz	$t0, L119_and_false
 	li	$t0, 1
-	sw	$t0, 40($sp)
+	sw	$t0, 36($sp)
 	lw	$t0, 0($fp)
-	lw	$t1, 40($sp)
+	lw	$t1, 36($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 44($sp)
+	sw	$t2, 40($sp)
 	li	$t0, 0
-	sw	$t0, 48($sp)
+	sw	$t0, 44($sp)
 	--- XXX UNHANDLED: call
-	lw	$t0, 52($sp)
+	lw	$t0, 48($sp)
 	beqz	$t0, L119_and_false
 	li	$t0, 1
-	sw	$t0, 56($sp)
+	sw	$t0, 52($sp)
 	j	L120_and_end
 L119_and_false:
 	li	$t0, 0
-	sw	$t0, 56($sp)
+	sw	$t0, 52($sp)
 L120_and_end:
-	lw	$t0, 56($sp)
+	lw	$t0, 52($sp)
 	beqz	$t0, L118_if_end
 	li	$t0, 1
-	sw	$t0, 60($sp)
-	lw	$t0, 60($sp)
-	sw	$t0, 16($sp)
+	sw	$t0, 56($sp)
+	lw	$t0, 56($sp)
+	move	$v0, $t0
 	j	L113_queen_end
 L118_if_end:
 	li	$t0, 1
-	sw	$t0, 64($sp)
+	sw	$t0, 60($sp)
 	lw	$t0, 4($fp)
-	lw	$t1, 64($sp)
+	lw	$t1, 60($sp)
 	add	$t2, $t0, $t1
-	sw	$t2, 68($sp)
-	lw	$t0, 68($sp)
+	sw	$t2, 64($sp)
+	lw	$t0, 64($sp)
 	sw	$t0, 4($fp)
 L115_while_test:
 	la	$t0, Ln
-	sw	$t0, 72($sp)
-	lw	$t0, 72($sp)
-	sw	$t0, 76($sp)
+	sw	$t0, 68($sp)
+	lw	$t0, 68($sp)
+	lw	$t1, 0($t0)
+	sw	$t1, 72($sp)
 	lw	$t0, 4($fp)
-	lw	$t1, 76($sp)
+	lw	$t1, 72($sp)
 	slt	$t2, $t0, $t1
-	sw	$t2, 80($sp)
-	lw	$t0, 80($sp)
+	sw	$t2, 76($sp)
+	lw	$t0, 76($sp)
 	bnez	$t0, L116_while_body
 L117_while_end:
 	li	$t0, 0
-	sw	$t0, 84($sp)
-	lw	$t0, 84($sp)
-	sw	$t0, 16($sp)
+	sw	$t0, 80($sp)
+	lw	$t0, 80($sp)
+	move	$v0, $t0
 	j	L113_queen_end
 L113_queen_end:
 	lw	$ra, 84($sp)
