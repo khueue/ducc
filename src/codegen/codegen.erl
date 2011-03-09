@@ -97,7 +97,7 @@ push_args_on_stack(TempsActuals, BytesForArgs, Env) ->
 push_args_on_stack([], _Index, _BytesForArgs, Env) -> {Env, []};
 push_args_on_stack([TempActual|TempsActuals], Index, BytesForArgs, Env0) ->
     {{BaseActual,OffsetActual},Env1} = ?ENV:lookup(TempActual, Env0),
-    ProperOffset = fix_offset(BaseActual, OffsetActual, BytesForArgs),
+    ProperOffset = compensate_offset(BaseActual, OffsetActual, BytesForArgs),
     InsActual =
     [
         ?ASM:asm_lw(t0, ProperOffset, BaseActual),
@@ -106,7 +106,8 @@ push_args_on_stack([TempActual|TempsActuals], Index, BytesForArgs, Env0) ->
     {Env2, InsActuals} = push_args_on_stack(TempsActuals, Index+1, BytesForArgs, Env1),
     {Env2, InsActual++InsActuals}.
 
-fix_offset(BaseReg, Offset, BytesForArgs) ->
+% Stack pointer is changed, so we need to compensate when using sp.
+compensated_offset(BaseReg, Offset, BytesForArgs) ->
     case BaseReg of
         sp -> Offset + BytesForArgs;
         _  -> Offset
