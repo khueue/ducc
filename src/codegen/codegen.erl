@@ -253,7 +253,6 @@ translate_eval_binop(TempDst, {binop,Op,{temp,1},Rhs}, Env0) -> % xxx fp
     BinopFun = ?HELPER:asm_binop_fun(Op),
     Instructions =
     [
-        %%% ?ASM:asm_lw(t0, -OffsetLhs, BaseLhs),
         ?ASM:asm_lw(t0, OffsetRhs, BaseRhs),
         ?ASM:asm_sub(t1, fp, t0),
         ?ASM:asm_sw(t1, OffsetDst, BaseDst)

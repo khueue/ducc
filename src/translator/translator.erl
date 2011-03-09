@@ -566,7 +566,7 @@ translate_rval_farrelem({local, TempBase, farray, {Size}}, Env0, TempIndex) ->
     Instructions =
         [emit_eval(TempSizeof, rtl_icon(Sizeof))] ++
         [emit_eval(TempMult, rtl_binop('*', TempIndex, TempSizeof))] ++
-        [emit_eval(TempElementAddress, rtl_binop('+', TempBase, TempMult))] ++
+        [emit_eval(TempElementAddress, rtl_binop('-', TempBase, TempMult))] ++
         [emit_load(Size, TempResult, TempElementAddress)],
     {Env1, Instructions, Temps}.
 
