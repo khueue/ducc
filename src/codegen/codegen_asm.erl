@@ -34,6 +34,7 @@
     % Jumps.
     asm_j/1,
     asm_jr/1,
+    asm_jal/1,
     % Branches.
     asm_beqz/2,
     asm_bnez/2]).
@@ -75,8 +76,9 @@ asm_sb(Src, Offset, Dst) -> {sb, Src, Offset, Dst}.
 asm_lb(Dst, Offset, Src) -> {lb, Dst, Offset, Src}.
 
 % Jumps.
-asm_j(Label) -> {j, Label}.
-asm_jr(Dst)  -> {jr, Dst}.
+asm_j(Label)   -> {j, Label}.
+asm_jr(Dst)    -> {jr, Dst}.
+asm_jal(Label) -> {jal, Label}.
 
 % Branches.
 asm_beqz(Rsrc, Label) -> {beqz, Rsrc, Label}.

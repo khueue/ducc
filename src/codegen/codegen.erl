@@ -70,12 +70,40 @@ translate_instruction(Instr, Env) ->
         _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
     end.
 
-translate_call({call,_RetTemp,_Label,_TempsActuals}, Env0) ->
-    Instructions =
+translate_call({call,TempRetVal,Label,TempsActuals}, Env0) ->
+    NumActuals = erlang:length(TempsActuals),
+    BytesForArgs = NumActuals * 4,
+    InsStart =
     [
-        {xxx,"--- XXX IN PROGRESS: call"}
+        ?ASM:asm_subu(sp, sp, BytesForArgs)
     ],
-    {Env0, Instructions}.
+    {Env1, InsPushArgs} = push_args_on_stack(TempsActuals, BytesForArgs, Env0),
+    {{BaseRetVal,OffsetRetVal},Env2} = ?ENV:lookup(TempRetVal, Env1),
+    InsStop =
+    [
+        ?ASM:asm_jal(Label),
+        ?ASM:asm_sw(v0, OffsetRetVal+BytesForArgs, BaseRetVal),
+        ?ASM:asm_addu(sp, sp, BytesForArgs)
+    ],
+    Instructions =
+        InsStart ++
+        InsPushArgs ++
+        InsStop,
+    {Env2, Instructions}.
+
+push_args_on_stack(TempsActuals, BytesForArgs, Env) ->
+    push_args_on_stack(TempsActuals, 0, BytesForArgs, Env).
+
+push_args_on_stack([], _Index, _BytesForArgs, Env) -> {Env, []};
+push_args_on_stack([TempActual|TempsActuals], Index, BytesForArgs, Env0) ->
+    {{BaseActual,OffsetActual},Env1} = ?ENV:lookup(TempActual, Env0),
+    InsActual =
+    [
+        ?ASM:asm_lw(t0, OffsetActual+BytesForArgs, BaseActual),
+        ?ASM:asm_sw(t0, Index*4, sp)
+    ],
+    {Env2, InsActuals} = push_args_on_stack(TempsActuals, Index+1, BytesForArgs, Env1),
+    {Env2, InsActual++InsActuals}.
 
 translate_jump({jump,Label}, Env) ->
     Instructions =

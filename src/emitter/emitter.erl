@@ -105,6 +105,9 @@ instruction_to_string({j, Label}) ->
 instruction_to_string({jr, Dst}) ->
     indent() ++ "jr" ++ indent() ++
     reg(Dst);
+instruction_to_string({jal, Label}) ->
+    indent() ++ "jal" ++ indent() ++
+    label_string(Label);
 
 instruction_to_string({beqz, Rsrc, Label}) ->
     indent() ++ "beqz" ++ indent() ++
