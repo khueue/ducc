@@ -104,7 +104,7 @@ sp + offset.
 
 ## Calling Convention
 
-Division of work in the calling convention:
+Steps in the calling convention:
 
   1. Caller - Set Up Call
   2. Callee - Prologue
@@ -144,5 +144,8 @@ stack in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
 
 ## Testruns
 
-Testruns are available in `report/ass5/testruns_ass5.md` or browsable online
-at `https://github.com/khueue/ducc/tree/master/report/ass5`
+Testruns for assignment 5 are available in `report/ass5/testruns_ass5.md`
+or browsable online at
+<https://github.com/khueue/ducc/tree/master/report/ass5>. Testruns for the
+entire testsuite is available in `suite/` or browsable online at
+<https://github.com/khueue/ducc/tree/master/suite>.
