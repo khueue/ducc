@@ -104,7 +104,7 @@ sp + offset.
 
 ## Calling Convention
 
-The calling convention looks like:
+Division of work in the calling convention:
 
   1. Caller - Set Up Call
   2. Callee - Prologue
@@ -118,9 +118,9 @@ The caller pushes all arguments to the stack and executes `jal`.  See
 
 ### 2. Callee - Prologue
 
-The callee creates its own activation record and saves the callers `fp` and 
+The callee creates its own activation record and saves the callers `fp` and
 `ra` on the stack.
-See `translate_proc/1` in `src/codegen/codegen.erl` and 
+See `translate_proc/1` in `src/codegen/codegen.erl` and
 `setup_function_prologue/2` in `src/codegen/codegen_helpers.erl`.
 
 ### 3. Callee - Epilogue
@@ -131,7 +131,7 @@ activation record and returns to the caller. See `translate_proc/1` in
 `src/codegen/codegen_helpers.erl`.
 
 The return value is placed in register `v0`. See `translate_eval_temp/3` in
-`src/codegen/codegen.erl`. If the temporary which is being evaluated is 
+`src/codegen/codegen.erl`. If the temporary which is being evaluated is
 `{temp,0}` (`{temp,0}` was used in the RTL to indicate the return value),
 then translate_eval_temp/3` calls `translate_eval_temp_return/2`
 which puts the result in `v0`.
