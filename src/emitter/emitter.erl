@@ -134,7 +134,7 @@ instruction_to_string({'div', Dst, Src1, Src2}) ->
     commalist([reg(Dst), reg(Src1), reg(Src2)]);
 
 instruction_to_string({li, Dst, Icon}) when erlang:is_integer(Icon) ->
-    indent() ++ "li" ++ indent() ++ % xxxxxxxxx ???
+    indent() ++ "li" ++ indent() ++
     commalist([reg(Dst), erlang:integer_to_list(Icon)]);
 instruction_to_string({li, Dst, Char}) ->
     Icon = char_to_int(Char),

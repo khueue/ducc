@@ -66,8 +66,7 @@ translate_instruction(Instr, Env) ->
         labdef -> translate_labdef(Instr, Env);
         jump   -> translate_jump(Instr, Env);
         cjump  -> translate_cjump(Instr, Env);
-        call   -> translate_call(Instr, Env);
-        _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
+        call   -> translate_call(Instr, Env)
     end.
 
 translate_call({call,TempRetVal,Label,TempsActuals}, Env0) ->
@@ -247,10 +246,16 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
     ],
     {Env1, Instructions}.
 
-translate_eval_binop(TempDst, {binop,_Op,{temp,1},Rhs}, Env0) -> % xxx fp
-    {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env0),
-    {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    ArraysSize = ?ENV:get_arrays_size(Env3),
+translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env) ->
+    case Lhs of
+        {temp,1} -> translate_eval_binop_fp_offset(TempDst, Rhs, Env);
+        _Other   -> translate_eval_binop_other(TempDst, Op, Lhs, Rhs, Env)
+    end.
+
+translate_eval_binop_fp_offset(TempDst, Rhs, Env0) ->
+    {{BaseRhs,OffsetRhs},Env1} = ?ENV:lookup(Rhs, Env0),
+    {{BaseDst,OffsetDst},Env2} = ?ENV:lookup(TempDst, Env1),
+    ArraysSize = ?ENV:get_arrays_size(Env2),
     Instructions =
     [
         ?ASM:asm_subu(t0, fp, ArraysSize),
@@ -258,8 +263,9 @@ translate_eval_binop(TempDst, {binop,_Op,{temp,1},Rhs}, Env0) -> % xxx fp
         ?ASM:asm_add(t0, t0, t1),
         ?ASM:asm_sw(t0, OffsetDst, BaseDst)
     ],
-    {Env3, Instructions};
-translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env0) ->
+    {Env2, Instructions}.
+
+translate_eval_binop_other(TempDst, Op, Lhs, Rhs, Env0) ->
     {{BaseLhs,OffsetLhs},Env1} = ?ENV:lookup(Lhs, Env0),
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env1),
     {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
