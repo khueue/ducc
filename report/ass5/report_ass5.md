@@ -104,15 +104,41 @@ sp + offset.
 
 ## Calling Convention
 
-XXX describe the calling convention
+The calling convention looks like:
 
-All parameters are located at the bottom in the callers activation record, as
-indicated by the illustration in the section "Activation Record".
-XXX Parameters are passed in a XXX order, such that argXXX is put on the stack
-before XXX. Hence, the first argument is located at the bottom of the
-activation record.
+  * 1 Caller: Set up call
+  * 2 Callee: Prologue
+  * 3 Callee: Epilogue
+  * 4 Caller: Clean
 
-XXX caller save
-XXX callee save
+### 1 Caller: Set up call
 
-The return value is placed in register `v0`.
+The caller pushes all arguments to the stack and calls the callee. 
+As such, all parameters are located at the bottom in the callers activation
+record, as indicated by the illustration in the section _Activation Record_.
+See `translate_call/2` in `src/codegen/codegen.erl`.
+
+### 2 Callee: Prologue
+
+The callee sets up its activation record and pushes the callers `ra` and `fp`
+registers on the stack. See `translate_proc/1` in `src/codegen/codegen.erl`
+and `setup_function_prologue/2` in `src/codegen/codegen_helpers.erl`.
+
+### 3 Callee: Epilogue
+
+The callee reinstates the callers `ra` and `fp` registers, deallocates its
+activation record and returns to the caller. See `translate_proc/1` in 
+`src/codegen/codegen.erl` and `setup_function_epilogue/3` in 
+`src/codegen/codegen_helpers.erl`.
+
+The return value is placed in register `v0`, see `translate_eval_temp/3` in
+`src/codegen/codegen.erl` which calls `translate_eval_temp_return/2` in 
+`src/codegen/codegen.erl` if the temporary which is being evaluated is 
+`{temp,0}`, which was used in the RTL to indicate the return value.
+
+### 4 Caller: Clean
+
+The caller pushes the return value onto the stack and restores the old
+activation record by deallocating the arguments which was pushed on the stack
+in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
+
