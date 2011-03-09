@@ -1,18 +1,22 @@
 -module(codegen_env).
 -export([
-    new/2,
-    lookup/2]).
+    new/3,
+    lookup/2,
+    get_arrays_size/1]).
 
-new(Formals, Locals) ->
+new(Formals, Locals, ArraysSize) ->
     SymTab = dict:new(),
     SpOffset = 0,
     FpOffset = 0,
-    env(SymTab, Formals, Locals, SpOffset, FpOffset).
+    env(SymTab, Formals, Locals, SpOffset, FpOffset, ArraysSize).
 
-env(SymTab, Formals, Locals, SpOffset, FpOffset) ->
-    {SymTab, Formals, Locals, SpOffset, FpOffset}.
+get_arrays_size({_,_,_,_,_,ArraysSize}) ->
+    ArraysSize.
 
-lookup(Temp, Env0={SymTab,_Formals,_Locals,_,_}) ->
+env(SymTab, Formals, Locals, SpOffset, FpOffset, ArraysSize) ->
+    {SymTab, Formals, Locals, SpOffset, FpOffset, ArraysSize}.
+
+lookup(Temp, Env0={SymTab,_Formals,_Locals,_,_,_}) ->
     case dict:find(Temp, SymTab) of
         {ok, Value} ->
             {Value,Env0};
@@ -25,7 +29,7 @@ list_pos(X, [X|_]) ->
 list_pos(X, [_|L]) ->
     1 + list_pos(X, L).
 
-create_value(Temp, Env0={_SymTab,Formals,_Locals,SpOffset,_FpOffset}) ->
+create_value(Temp, Env0={_SymTab,Formals,_Locals,SpOffset,_FpOffset,_}) ->
     case lists:member(Temp, Formals) of
         true  ->
             Pos = list_pos(Temp, Formals),
@@ -37,6 +41,6 @@ create_value(Temp, Env0={_SymTab,Formals,_Locals,SpOffset,_FpOffset}) ->
             {Value,Env1}
     end.
 
-set_sp_symbol(Key, Value, {SymTab,Formals,Locals,SpOffset,FpOffset}) ->
+set_sp_symbol(Key, Value, {SymTab,Formals,Locals,SpOffset,FpOffset,ArraysSize}) ->
     Updated = dict:store(Key, Value, SymTab),
-    env(Updated, Formals, Locals, SpOffset+4, FpOffset).
+    env(Updated, Formals, Locals, SpOffset+4, FpOffset, ArraysSize).

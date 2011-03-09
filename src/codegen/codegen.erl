@@ -41,7 +41,7 @@ translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
     FS = ?HELPER:calculate_frame_size(Locals, ArraysSize),
     Prologue = ?HELPER:setup_function_prologue(FS, ArraysSize),
     Epilogue = ?HELPER:setup_function_epilogue(FS, ArraysSize, LabelEnd),
-    Env = ?ENV:new(Formals, Locals),
+    Env = ?ENV:new(Formals, Locals, ArraysSize),
     Body = translate_instructions(Ins, Env),
     Instructions =
         Header ++
@@ -247,15 +247,17 @@ translate_eval_labref(TempDst, {labref,Label}, Env0) ->
     ],
     {Env1, Instructions}.
 
-translate_eval_binop(TempDst, {binop,Op,{temp,1},Rhs}, Env0) -> % xxx fp
+translate_eval_binop(TempDst, {binop,_Op,{temp,1},Rhs}, Env0) -> % xxx fp
     {{BaseRhs,OffsetRhs},Env2} = ?ENV:lookup(Rhs, Env0),
     {{BaseDst,OffsetDst},Env3} = ?ENV:lookup(TempDst, Env2),
-    BinopFun = ?HELPER:asm_binop_fun(Op),
+    %BinopFun = ?HELPER:asm_binop_fun(Op),
+    ArraysSize = ?ENV:get_arrays_size(Env3),
     Instructions =
     [
-        ?ASM:asm_lw(t0, OffsetRhs, BaseRhs),
-        ?ASM:asm_sub(t1, fp, t0),
-        ?ASM:asm_sw(t1, OffsetDst, BaseDst)
+        ?ASM:asm_subu(t0, fp, ArraysSize),
+        ?ASM:asm_lw(t1, OffsetRhs, BaseRhs),
+        ?ASM:asm_add(t0, t0, t1),
+        ?ASM:asm_sw(t0, OffsetDst, BaseDst)
     ],
     {Env3, Instructions};
 translate_eval_binop(TempDst, {binop,Op,Lhs,Rhs}, Env0) ->
