@@ -2,7 +2,7 @@
 
 Compiler Project, VT11
 
-2011-XX-XX
+2011-03-XXXXX
 
 Emil Hessman (emhe9781@student...)
 
@@ -19,18 +19,39 @@ default which doesn't include Leex nor escript).
 
 ## Introduction
 
-XXX
-
-mention that codegen generates a "structure", emitter is used as the final
+XXX mention that codegen generates a "structure", emitter is used as the final
 phase which actually emits the asm instructions.
 
 ## Control Flow Statements
 
-XXX describe how control flow statements are translated
+Control flow statements are translated by `translate_cjump/2` and
+`translate_jump/2` located in `src/codegen/codegen.erl`.
+
+### Conditional Jump
+
+    translate_cjump({cjump,Comp,TempDst,{icon,0},Label}, Env0) ->
+        {{BaseTemp,OffsetTemp},Env1} = ?ENV:lookup(TempDst, Env0),
+        CjumpFun = ?HELPER:asm_cjump_fun(Comp),
+        Instructions =
+        [
+            ?ASM:asm_lw(t0, OffsetTemp, BaseTemp),
+            CjumpFun(t0, Label)
+        ],
+        {Env1, Instructions}.
+
+where `CjumpFun` is `asm_beqz/2` for `Comp` = `eq`, or `asm_bnez/2` for
+`Comp` = `neq`.
+
+### Unconditional Jump
+
+    translate_jump({jump,Label}, Env) ->
+        Instructions =
+        [
+            ?ASM:asm_j(Label)
+        ],
+        {Env, Instructions}.
 
 ## Activation Record
-
-XXX describe the layout of activation records
 
 The layout of the activation records:
 
