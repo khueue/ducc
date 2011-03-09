@@ -133,8 +133,8 @@ activation record and returns to the caller. See `translate_proc/1` in
 The return value is placed in register `v0`. See `translate_eval_temp/3` in
 `src/codegen/codegen.erl`. If the temporary which is being evaluated is
 `{temp,0}` (`{temp,0}` was used in the RTL to indicate the return value),
-then translate_eval_temp/3` calls `translate_eval_temp_return/2`
-which puts the result in `v0`.
+then `translate_eval_temp/3` calls `translate_eval_temp_return/2`
+which puts the result in register `v0`.
 
 ### 4. Caller - Clean
 
