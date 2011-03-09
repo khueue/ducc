@@ -78,7 +78,7 @@ translate_call({call,TempRetVal,Label,TempsActuals}, Env0) ->
     ],
     {Env1, InsPushArgs} = push_args_on_stack(TempsActuals, BytesForArgs, Env0),
     {{BaseRetVal,OffsetRetVal},Env2} = ?ENV:lookup(TempRetVal, Env1),
-    ProperOffset = fix_offset(BaseRetVal, OffsetRetVal, BytesForArgs),
+    ProperOffset = compensate_offset(BaseRetVal, OffsetRetVal, BytesForArgs),
     InsStop =
     [
         ?ASM:asm_jal(Label),
@@ -107,7 +107,7 @@ push_args_on_stack([TempActual|TempsActuals], Index, BytesForArgs, Env0) ->
     {Env2, InsActual++InsActuals}.
 
 % Stack pointer is changed, so we need to compensate when using sp.
-compensated_offset(BaseReg, Offset, BytesForArgs) ->
+compensate_offset(BaseReg, Offset, BytesForArgs) ->
     case BaseReg of
         sp -> Offset + BytesForArgs;
         _  -> Offset
