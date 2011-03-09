@@ -5,12 +5,6 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 ## TODO
 
  * Assignment 5
-    - call
-    - syscalls
-        - putint
-        - putstring
-        - getint
-        - getstring
     - report
 
 ## Before Hand-In
