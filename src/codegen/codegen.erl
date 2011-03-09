@@ -66,8 +66,16 @@ translate_instruction(Instr, Env) ->
         labdef -> translate_labdef(Instr, Env);
         jump   -> translate_jump(Instr, Env);
         cjump  -> translate_cjump(Instr, Env);
+        call   -> translate_call(Instr, Env);
         _ -> {Env,[{xxx,"--- XXX UNHANDLED: " ++ atom_to_list(Tag)}]}
     end.
+
+translate_call({call,_RetTemp,_Label,_TempsActuals}, Env0) ->
+    Instructions =
+    [
+        {xxx,"--- XXX IN PROGRESS: call"}
+    ],
+    {Env0, Instructions}.
 
 translate_jump({jump,Label}, Env) ->
     Instructions =
