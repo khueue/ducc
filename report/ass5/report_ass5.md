@@ -67,15 +67,15 @@ The layout of the activation records:
     |================|  <-- fp
     |   ...          |
     |----------------|
-    |   arr1[0]      |   (0*sizeof(arr1[0])) (fp - ArraysSize + offset_arr1)
+    |   arr1[0]      |   (0*sizeof(arr1[0]))(fp - ArraysSize + offset_arr1)
     |----------------|
-    |   arr0[N]      |   (N*sizeof(arr0[N])) (fp - ArraysSize + offset_arr0)
+    |   arr0[N]      |   (N*sizeof(arr0[N]))(fp - ArraysSize + offset_arr0)
     |----------------|
     |   ...          |
     |----------------|
-    |   arr0[1]      |   (1*sizeof(arr0[1])) (fp - ArraysSize + offset_arr0)
+    |   arr0[1]      |   (1*sizeof(arr0[1]))(fp - ArraysSize + offset_arr0)
     |----------------|
-    |   arr0[0]      |   (0*sizeof(arr0[0])) (fp - ArraysSize + offset_arr0)
+    |   arr0[0]      |   (0*sizeof(arr0[0]))(fp - ArraysSize + offset_arr0)
     |----------------|  <-- fp - ArraysSize
     |   Callers fp   |
     |----------------|
@@ -92,12 +92,15 @@ The layout of the activation records:
     |   Temp 0       |   0(sp)
     |================|  <-- sp
 
-As indicated by the illustration, the actual parameters are accessed at the
-bottom of the callers activation record (fp + offset).
-Local arrays are accessed at the top of the activation record (`ArraysSize` is
-combined size of all local arrays).
-Local temporaries are accessed at the bottom of the activation record
-(sp + offset).
+Actual parameters are accessed at the bottom of the callers activation record,
+fp + offset.
+
+Local arrays are accessed at the top of the activation record using 
+`(Index*sizeof(Element))` + `(fp - ArraysSize + array_offset)`, where
+`ArraysSize` is the combined size of all local arrays.
+
+Local temporaries are accessed at the bottom of the activation record, 
+sp + offset.
 
 ## Calling Convention
 
