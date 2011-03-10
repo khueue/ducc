@@ -56,8 +56,14 @@ or procedures.
 
 See `suite/noisy/advanced/8queens.c.codegen` for an extensive example of what
 the code generators output looks like.
-See also `suite/noisy/advanced/8queens.c.emitter` for the assembler code that
-the emitter outputs.
+
+## Emitter
+
+The emitter takes the code generators output and produces a string for the
+assembler instructions in `TopLevelsAsm`.
+
+See `suite/noisy/advanced/8queens.c.emitter` for an extensive example of what
+the the emitters output looks like.
 
 ## Control Flow Statements
 
