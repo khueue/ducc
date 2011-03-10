@@ -37,7 +37,9 @@
     asm_jal/1,
     % Branches.
     asm_beqz/2,
-    asm_bnez/2]).
+    asm_bnez/2,
+    % Syscall.
+    asm_syscall/0]).
 
 % Various.
 asm_segment_data() -> {segment, data}.
@@ -83,3 +85,6 @@ asm_jal(Label) -> {jal, Label}.
 % Branches.
 asm_beqz(Rsrc, Label) -> {beqz, Rsrc, Label}.
 asm_bnez(Rsrc, Label) -> {bnez, Rsrc, Label}.
+
+% Syscall.
+asm_syscall() -> {syscall}.

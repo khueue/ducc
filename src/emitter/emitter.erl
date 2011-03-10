@@ -2,86 +2,7 @@
 -export([asm_to_string/1]).
 
 asm_to_string(AsmCode) ->
-    toplevels_to_string(AsmCode) ++
-    stdlib().
-
-stdlib() ->
-    fun_putint() ++
-    fun_getint() ++
-    fun_putstring() ++
-    fun_getstring().
-
-fun_putstring() ->
-"
-    .text
-    .globl    Lputstring
-Lputstring:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li  $v0, 4
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
-".
-
-fun_getstring() ->
-"
-    .text
-    .globl    Lgetstring
-Lgetstring:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li    $a1, 1024
-    li  $v0, 8
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
-".
-
-fun_getint() ->
-"
-    .text
-    .globl    Lgetint
-Lgetint:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    li  $v0, 5
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
-".
-
-fun_putint() ->
-"
-    .text
-    .globl    Lputint
-Lputint:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li  $v0, 1
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
-".
+    toplevels_to_string(AsmCode).
 
 toplevels_to_string([Toplevel]) ->
     toplevel_to_string(Toplevel);
@@ -193,10 +114,21 @@ instruction_to_string({beqz, Rsrc, Label}) ->
     commalist([reg(Rsrc), label_string(Label)]);
 instruction_to_string({bnez, Rsrc, Label}) ->
     indent() ++ "bnez" ++ indent() ++
-    commalist([reg(Rsrc), label_string(Label)]).
+    commalist([reg(Rsrc), label_string(Label)]);
+
+instruction_to_string({syscall}) ->
+    indent() ++ "syscall".
 
 label_string({label, "main"}) ->
     "main";
+label_string({label, "putint"}) ->
+    "Sputint";
+label_string({label, "getint"}) ->
+    "Sgetint";
+label_string({label, "putstring"}) ->
+    "Sputstring";
+label_string({label, "getstring"}) ->
+    "Sgetstring";
 label_string({label, Name}) ->
     "L" ++ Name;
 label_string({label, Id, ""}) ->

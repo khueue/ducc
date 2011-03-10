@@ -9,7 +9,7 @@ generate_code(RtlCode, _Lines) ->
     AsmCode = translate_toplevels(RtlCode),
     AsmCode.
 
-translate_toplevels([]) -> [];
+translate_toplevels([]) -> ?HELPER:setup_stdio();
 translate_toplevels([Toplevel|Toplevels]) ->
     ToplevelAsm = translate_toplevel(Toplevel),
     [ToplevelAsm|translate_toplevels(Toplevels)].
