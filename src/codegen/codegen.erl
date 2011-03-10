@@ -33,12 +33,7 @@ translate_data({data,Label,Bytes}) ->
     Instructions.
 
 translate_proc({proc,LabelStart,Formals,Locals,ArraysSize,Ins,LabelEnd}) ->
-    Header =
-    [
-        ?ASM:asm_segment_text(),
-        ?ASM:asm_globl(LabelStart),
-        ?ASM:asm_labdef(LabelStart)
-    ],
+    Header = ?HELPER:setup_function_header(LabelStart),
     FS = ?HELPER:calculate_frame_size(Locals, ArraysSize),
     Prologue = ?HELPER:setup_function_prologue(FS, ArraysSize),
     Epilogue = ?HELPER:setup_function_epilogue(FS, ArraysSize, LabelEnd),

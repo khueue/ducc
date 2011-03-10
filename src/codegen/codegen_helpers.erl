@@ -3,6 +3,7 @@
     asm_binop_fun/1,
     asm_cjump_fun/1,
     calculate_frame_size/2,
+    setup_function_header/1,
     setup_function_prologue/2,
     setup_function_epilogue/3,
     setup_stdio/0]).
@@ -27,6 +28,15 @@ calculate_frame_size(Locals, ArraysSize) ->
     4 + 4 + % FP and RA.
     ArraysSize +
     4 * erlang:length(Locals).
+
+setup_function_header(Label) ->
+    Instructions =
+    [
+        ?ASM:asm_segment_text(),
+        ?ASM:asm_globl(Label),
+        ?ASM:asm_labdef(Label)
+    ],
+    Instructions.
 
 setup_function_prologue(FS, ArraysSize) ->
     [
@@ -57,12 +67,7 @@ setup_stdio() ->
 
 setup_function_putint() ->
     Label = {label, "putint"},
-    Header =
-    [
-        ?ASM:asm_segment_text(),
-        ?ASM:asm_globl(Label),
-        ?ASM:asm_labdef(Label)
-    ],
+    Header = setup_function_header(Label),
     Prologue = setup_stdio_prologue(),
     Body =
     [
@@ -80,12 +85,7 @@ setup_function_putint() ->
 
 setup_function_getint() ->
     Label = {label, "getint"},
-    Header =
-    [
-        ?ASM:asm_segment_text(),
-        ?ASM:asm_globl(Label),
-        ?ASM:asm_labdef(Label)
-    ],
+    Header = setup_function_header(Label),
     Prologue = setup_stdio_prologue(),
     Body =
     [
@@ -102,12 +102,7 @@ setup_function_getint() ->
 
 setup_function_putstring() ->
     Label = {label, "putstring"},
-    Header =
-    [
-        ?ASM:asm_segment_text(),
-        ?ASM:asm_globl(Label),
-        ?ASM:asm_labdef(Label)
-    ],
+    Header = setup_function_header(Label),
     Prologue = setup_stdio_prologue(),
     Body =
     [
@@ -125,12 +120,7 @@ setup_function_putstring() ->
 
 setup_function_getstring() ->
     Label = {label, "getstring"},
-    Header =
-    [
-        ?ASM:asm_segment_text(),
-        ?ASM:asm_globl(Label),
-        ?ASM:asm_labdef(Label)
-    ],
+    Header = setup_function_header(Label),
     Prologue = setup_stdio_prologue(),
     Body =
     [
