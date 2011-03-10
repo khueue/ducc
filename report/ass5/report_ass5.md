@@ -19,7 +19,7 @@ default which doesn't include Leex nor escript).
 
 ## Introduction
 
-We have implemented the last phase in two different steps:
+We have implemented the last phase in two separate steps:
 
   1. Code Generator
   2. Emitter
@@ -27,7 +27,7 @@ We have implemented the last phase in two different steps:
 The code generator, located in `src/codegen/`, generates a structure which
 includes the .c source file and the assembler instructions.
 The emitter, located in `src/emitter/` takes the output from the code
-generator and actually outputs the assembler instructions in its raw form
+generator and outputs the actual assembler instructions in its raw string form
 (which is executable in spim).
 
 ## Code Generator
@@ -39,7 +39,7 @@ The result from the code generator has the form:
         {asm, TopLevelsAsm}
     }
 
-where `SourceList` is a list consisting of the content if the .c source file,
+where `SourceList` is a list consisting of the content of the .c source file,
 `TopLevelsAsm` is a list of generated assembler instructions.
 
 `TopLevelsAsm` has the form:
@@ -59,11 +59,11 @@ the code generators output looks like.
 
 ## Emitter
 
-The emitter takes the code generators output and produces a string for the
+The emitter takes the code generator's output and produces a string for the
 assembler instructions in `TopLevelsAsm`.
 
 See `suite/noisy/advanced/8queens.c.emitter` for an extensive example of what
-the the emitters output looks like.
+the the emitter's output looks like.
 
 ## Control Flow Statements
 
