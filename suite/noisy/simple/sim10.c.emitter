@@ -796,7 +796,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 960($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 964($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 40
@@ -808,7 +808,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 972($sp)
 	sw	$t0, 0($sp)
-	jal	Lgetstring
+	jal	Sgetstring
 	sw	$v0, 976($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 12
@@ -820,11 +820,11 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 984($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 988($sp)
 	addu	$sp, $sp, 4
 	subu	$sp, $sp, 0
-	jal	Lgetint
+	jal	Sgetint
 	sw	$v0, 988($sp)
 	addu	$sp, $sp, 0
 	lw	$t0, 988($sp)
@@ -838,7 +838,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 1004($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 1008($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 40
@@ -850,7 +850,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 1016($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 1020($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 36
@@ -862,7 +862,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 1028($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 1032($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 24
@@ -874,13 +874,13 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 1040($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 1044($sp)
 	addu	$sp, $sp, 4
 	subu	$sp, $sp, 4
 	lw	$t0, 996($sp)
 	sw	$t0, 0($sp)
-	jal	Lputint
+	jal	Sputint
 	sw	$v0, 1048($sp)
 	addu	$sp, $sp, 4
 	li	$t0, 36
@@ -892,7 +892,7 @@ main:
 	subu	$sp, $sp, 4
 	lw	$t0, 1056($sp)
 	sw	$t0, 0($sp)
-	jal	Lputstring
+	jal	Sputstring
 	sw	$v0, 1060($sp)
 	addu	$sp, $sp, 4
 L100_main_end:
@@ -901,62 +901,62 @@ L100_main_end:
 	addu	$sp, $sp, 1188
 	jr	$ra
 
-    .text
-    .globl    Lputint
-Lputint:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li  $v0, 1
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
+	.text
+	.globl	Sputint
+Sputint:
+	subu	$sp, $sp, 8
+	sw	$fp, 4($sp)
+	sw	$ra, 0($sp)
+	addu	$fp, $sp, 8
+	lw	$a0, 0($fp)
+	li	$v0, 1
+	syscall
+	lw	$ra, 0($sp)
+	lw	$fp, 4($sp)
+	addu	$sp, $sp, 8
+	jr	$ra
 
-    .text
-    .globl    Lgetint
-Lgetint:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    li  $v0, 5
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
+	.text
+	.globl	Sgetint
+Sgetint:
+	subu	$sp, $sp, 8
+	sw	$fp, 4($sp)
+	sw	$ra, 0($sp)
+	addu	$fp, $sp, 8
+	li	$v0, 5
+	syscall
+	lw	$ra, 0($sp)
+	lw	$fp, 4($sp)
+	addu	$sp, $sp, 8
+	jr	$ra
 
-    .text
-    .globl    Lputstring
-Lputstring:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li  $v0, 4
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
+	.text
+	.globl	Sputstring
+Sputstring:
+	subu	$sp, $sp, 8
+	sw	$fp, 4($sp)
+	sw	$ra, 0($sp)
+	addu	$fp, $sp, 8
+	lw	$a0, 0($fp)
+	li	$v0, 4
+	syscall
+	lw	$ra, 0($sp)
+	lw	$fp, 4($sp)
+	addu	$sp, $sp, 8
+	jr	$ra
 
-    .text
-    .globl    Lgetstring
-Lgetstring:
-    subu    $sp, $sp, 8
-    sw    $fp, 4($sp)
-    sw    $ra, 0($sp)
-    addu    $fp, $sp, 8
-    lw  $a0, 0($fp)
-    li    $a1, 1024
-    li  $v0, 8
-    syscall
-    lw    $ra, 0($sp)
-    lw    $fp, 4($sp)
-    addu    $sp, $sp, 8
-    jr    $ra
+	.text
+	.globl	Sgetstring
+Sgetstring:
+	subu	$sp, $sp, 8
+	sw	$fp, 4($sp)
+	sw	$ra, 0($sp)
+	addu	$fp, $sp, 8
+	lw	$a0, 0($fp)
+	li	$a1, 1024
+	li	$v0, 8
+	syscall
+	lw	$ra, 0($sp)
+	lw	$fp, 4($sp)
+	addu	$sp, $sp, 8
+	jr	$ra
