@@ -2,14 +2,14 @@
 
 Compiler Project, VT11
 
-2011-03-XXXXX
+2011-03-10
 
 Emil Hessman (emhe9781@student...)
 
-Sebastian Lundström (selu7901@student...)
+Sebastian Lundstrom (selu7901@student...)
 
 The source and executables are available on the IT department server at:
-/home/emhe9781/src/XXXXXXXXXXXXXXXX
+/home/emhe9781/src/ducc-2011-03-10.tar.gz
 
 Previous reports can be found in the project folder under `report`.
 
