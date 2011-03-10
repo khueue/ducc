@@ -140,65 +140,65 @@
 		addu	$sp, $sp, 144
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc -e suite/quiet/parser/p03.c gives:
 
@@ -236,65 +236,65 @@
 		addu	$sp, $sp, 32
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc -e suite/quiet/rtl/r02.c gives:
 
@@ -337,65 +337,65 @@
 		addu	$sp, $sp, 16
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc -e suite/quiet/rtl/r03.c gives:
 
@@ -460,65 +460,65 @@
 		addu	$sp, $sp, 76
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc -e suite/quiet/rtl/r04.c gives:
 
@@ -616,65 +616,65 @@
 		addu	$sp, $sp, 40
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc -e suite/quiet/rtl/r05.c gives:
 
@@ -775,65 +775,65 @@
 		addu	$sp, $sp, 60
 		jr	$ra
 
-	    .text
-	    .globl    Lputint
-	Lputint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 1
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputint
+	Sputint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 1
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetint
-	Lgetint:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    li  $v0, 5
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetint
+	Sgetint:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		li	$v0, 5
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lputstring
-	Lputstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li  $v0, 4
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sputstring
+	Sputstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$v0, 4
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
-	    .text
-	    .globl    Lgetstring
-	Lgetstring:
-	    subu    $sp, $sp, 8
-	    sw    $fp, 4($sp)
-	    sw    $ra, 0($sp)
-	    addu    $fp, $sp, 8
-	    lw  $a0, 0($fp)
-	    li    $a1, 1024
-	    li  $v0, 8
-	    syscall
-	    lw    $ra, 0($sp)
-	    lw    $fp, 4($sp)
-	    addu    $sp, $sp, 8
-	    jr    $ra
+		.text
+		.globl	Sgetstring
+	Sgetstring:
+		subu	$sp, $sp, 8
+		sw	$fp, 4($sp)
+		sw	$ra, 0($sp)
+		addu	$fp, $sp, 8
+		lw	$a0, 0($fp)
+		li	$a1, 1024
+		li	$v0, 8
+		syscall
+		lw	$ra, 0($sp)
+		lw	$fp, 4($sp)
+		addu	$sp, $sp, 8
+		jr	$ra
 
 ### ducc suite/noisy/simple/sim04.c > test.s && spim -f test.s gives:
 
@@ -876,11 +876,11 @@
 
     You are: 53
 
-### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s with input 5 gives:
+### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s, with input 5 gives:
 
     120
 
-### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s with input 10 gives:
+### ducc suite/noisy/medium/fac.c > test.s && spim -f test.s, with input 10 gives:
 
     3628800
 
