@@ -179,6 +179,37 @@ The caller saves the return value on the stack and restores the old activation
 record before the call by deallocating the arguments which was pushed on the
 stack in step 1. See `translate_call/2` in `src/codegen/codegen.erl`.
 
+## Running the Code Generator and Emitter
+
+### Multi-Step Compilation
+
+The translator (as all previous steps) has been implemented to read from
+standard input and output to standard output.
+As such it's possible to, for example, pipe the result from the lexer to the
+parser, from the parser to the analyzer, from the analyzer to the
+translator, from the translator to the codegen, and finally from the codegen
+to the emitter:
+
+    cat suite/quiet/rtl/r01.c | lexer | parser | analyzer | translator | codegen | emitter
+
+### Single-Step Compilation
+
+For a more conventional approach to compilation, a script called `ducc` can
+be used. `ducc` takes a single file as argument and runs all (implemented)
+successive steps on it, and prints the result to standard output:
+
+    ducc file.c
+
+The script `ducc` can also be flagged to stop after a certain step. To stop
+after the codegen, one can issue the command:
+
+    ducc -c file.c
+
+To stop after the emitter, (which is currently the default), one can issue the
+command:
+
+    ducc -e file.c
+
 ## Testruns
 
 Testruns for assignment 5 are available in `report/ass5/testruns_ass5.md`
