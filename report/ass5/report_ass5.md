@@ -19,8 +19,45 @@ default which doesn't include Leex nor escript).
 
 ## Introduction
 
-XXX mention that codegen generates a "structure", emitter is used as the final
-phase which actually emits the asm instructions.
+We have implemented the last phase in two different steps:
+
+  1. Code Generator
+  2. Emitter
+
+The code generator, located in `src/codegen/`, generates a structure which
+includes the .c source file and the assembler instructions.
+The emitter, located in `src/emitter/` takes the output from the code
+generator and actually outputs the assembler instructions in its raw form
+(which is executable in spim).
+
+## Code Generator
+
+The result from the code generator has the form:
+
+    {
+        {source, SourceList},
+        {asm, TopLevelsAsm}
+    }
+
+where `SourceList` is a list consisting of the content if the .c source file,
+`TopLevelsAsm` is a list of generated assembler instructions.
+
+`TopLevelsAsm` has the form:
+
+    [
+        TopLevelAsm,
+        TopLevelAsm,
+        ...,
+        TopLevelAsm
+    ]
+
+Each `TopLevelAsm` is a list of assembler instructions, either for global data
+or procedures.
+
+See `suite/noisy/advanced/8queens.c.codegen` for an extensive example of what
+the code generators output looks like.
+See also `suite/noisy/advanced/8queens.c.emitter` for the assembler code that
+the emitter outputs.
 
 ## Control Flow Statements
 
