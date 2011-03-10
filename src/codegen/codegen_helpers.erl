@@ -125,7 +125,7 @@ setup_function_getstring() ->
     Body =
     [
         ?ASM:asm_lw(a0, 0, fp),
-        ?ASM:asm_li(a1, 1024), % XXX: Fixed length.
+        ?ASM:asm_li(a1, 1024), % XXX: Arbitrary constant length.
         ?ASM:asm_li(v0, 8),
         ?ASM:asm_syscall()
     ],
