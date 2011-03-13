@@ -39,6 +39,8 @@ command(File, Program) ->
             Ducc ++ "-t " ++ File;
         "codegen" ->
             Ducc ++ "-c " ++ File;
+        "emitter" ->
+            Ducc ++ "-e " ++ File;
         _Default ->
             Ducc ++ File
     end.
