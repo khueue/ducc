@@ -1,8 +1,8 @@
 #!/usr/bin/env escript
-%%! -pa ebin -Wall
+%%! -pa ebin -pa ../ebin -Wall
 
 usage() ->
-    io:format('Usage: translator~n'),
+    io:format('Usage: analyzer~n'),
     io:format('(Uses stdin/stdout.)~n').
 
 main([]) ->
@@ -10,8 +10,10 @@ main([]) ->
     String = tool_chain:string_from_input(),
     Result = (catch process(Stream, String)),
     case Result of
-        {_Source, {rtl,_RtlCode}} = Output ->
+        {_SourceLines, {ast,_ParseTree}} = Output ->
             tool_chain:term_to_output(Output);
+        {analyzer_exception, Message} ->
+            tool_chain:die(Message);
         {tool_chain_exception, invalid_term} ->
             tool_chain:die(String)
     end;
@@ -19,6 +21,6 @@ main(_) ->
     usage().
 
 process(Stream, String) ->
-    {{source,Lines}, {ast,ParseTree}} = tool_chain:term_from_string(String),
-    {ok, RtlCode} = translator_driver:translate(Stream, ParseTree, Lines),
-    {{source,Lines}, {rtl,RtlCode}}.
+    {SourceLines, {ast,ParseTree}} = tool_chain:term_from_string(String),
+    {ok, _ParseTree1} = analyzer_driver:analyze(Stream, ParseTree),
+    {SourceLines, {ast,ParseTree}}.

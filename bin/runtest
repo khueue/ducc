@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%! -pa ebin -Wall
+%%! -pa ebin -pa ../ebin -Wall
 
 usage() ->
     io:format('usage: runtest [-a|-c|-e|-l|-p|-t]~n').

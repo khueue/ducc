@@ -1,5 +1,5 @@
 #!/usr/bin/env escript
-%%! -pa ebin -Wall
+%%! -pa ebin -pa ../ebin -Wall
 
 version() ->
     '1.0.0'.
