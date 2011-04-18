@@ -27,7 +27,7 @@ run_test(File, ExpectedFun, CommandFun) ->
     ?assertCmdOutput(Expected, Command).
 
 command(File, Program) ->
-    Ducc = "ducc ",
+    Ducc = "bin/ducc ",
     case Program of
         "lexer" ->
             Ducc ++ "-l " ++ File;

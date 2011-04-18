@@ -36,22 +36,22 @@ end
 command = case ARGV[0]
     when "-l"
         program = "lexer"
-        "ducc -l"
+        "bin/ducc -l"
     when "-p"
         program = "parser"
-        "ducc -p"
+        "bin/ducc -p"
     when "-a"
         program = "analyzer"
-        "ducc -a"
+        "bin/ducc -a"
     when "-t"
         program = "translator"
-        "ducc -t"
+        "bin/ducc -t"
     when "-c"
         program = "codegen"
-        "ducc -c"
+        "bin/ducc -c"
     when "-e"
         program = "emitter"
-        "ducc -e"
+        "bin/ducc -e"
     else
         usage()
 end
