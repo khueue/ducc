@@ -13,3 +13,7 @@ Also play around with: `cat file.c | bin/lexer | bin/parser | etc...`
 
 See the tests in `/suite` for many examples on how the compiler operates
 at every step.
+
+Although the reports in `/report` became a bit outdated with each subsequent
+step, they still accurately convey most of the thoughts and details of the
+design of the compiler.
