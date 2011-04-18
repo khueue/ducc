@@ -7,8 +7,9 @@ Rationale: <http://www.youtube.com/watch?v=FJ_VAh-V0EE>
 
 ## Dependencies
 
-Requires a recent enough Erlang to have eunit and escript available. SPIM is
-useful to make any interesting sense of the generated assembly.
+Requires a recent enough Erlang to have eunit/escript/leex/yecc available
+(or installed manually, I guess). SPIM is useful to make any interesting
+sense of the generated assembly.
 
 ## Usage
 
