@@ -48,8 +48,9 @@ read_lines_and_string(Stream) ->
 compile(Program, Stream, String, Lines) ->
     Result = (catch process(Program, Stream, String, Lines)),
     case Result of
-        {ok, {string,AsmString}} ->
-            tool_chain:raw_string_to_output(AsmString);
+        % This is for steps (i.e. emitter) that do not emit valid terms.
+        {ok, {string,RawString}} ->
+            tool_chain:raw_string_to_output(RawString);
         {ok, Output} ->
             tool_chain:term_to_output({{source,Lines}, Output});
         {lexer_exception, Message} ->
